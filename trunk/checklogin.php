@@ -1,7 +1,7 @@
 <?php
 
 include 'config/db.php.inc';
-//echo $dbpassword;
+
 ob_start();
 
 $tbl_name="members"; // Table name
@@ -25,15 +25,22 @@ $mypassword = mysql_real_escape_string($mypassword);
 //encrypt password
 $mypassword = md5($mypassword);
 
-$sql="SELECT * FROM $tbl_name WHERE username='$myusername' and password='$mypassword' and active=1";
+$sql = "";
+$sql .= "SELECT * ";
+$sql .= "FROM   $tbl_name ";
+$sql .= "WHERE  username = '$myusername' ";
+$sql .= "       AND PASSWORD = '$mypassword' ";
+$sql .= "       AND active = 1 " ;
+
 $result=mysql_query($sql);
 
 // Mysql_num_row is counting table row
 $count=mysql_num_rows($result);
+
 // If result matched $myusername and $mypassword, table row must be 1 row
 
 if($count==1){
-	// Register $myusername, $mypassword and redirect to file "login_success.php"
+	// Register $myusername, $mypassword and redirect to file "index.php"
 	session_start();
 	$row = mysql_fetch_array($result);
 
@@ -41,15 +48,13 @@ if($count==1){
 	$_SESSION['superuser'] = $row['superuser'];
 	$_SESSION['useradmin'] = $row['admin'];
 	$_SESSION['username'] = $myusername;
-	
+
 	session_register("myusername");
 	session_register("mypassword");
 	header("location:index.php");
 }
 else {
 	echo "Wrong Username or Password";
-	//echo "input: $mypassword<br>";
-	//echo "sql: $sql";
 }
 
 ob_end_flush();
