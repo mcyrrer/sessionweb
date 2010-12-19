@@ -16,7 +16,6 @@ if($logout=="yes")
 
 if(!session_is_registered(myusername)){
 
-	//header("location:main_login.php");
 	echo "         <form name=\"loginform\" method=\"post\" action=\"checklogin.php\">\n";
 	echo "             <table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" bgcolor=\"#FFFFFF\">\n";
 	echo "                 <tr>\n";

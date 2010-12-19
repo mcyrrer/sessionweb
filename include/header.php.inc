@@ -6,9 +6,18 @@ echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\
 echo "      <title>Sessionweb</title>\n";
 echo "  </head>\n";
 echo "  <body>\n";
+if($_SESSION['useradmin']==1)
+{
+	echo "      <a href=\"settings.php\">Settings</a> |";
+}
+
+
 if(isset($_SESSION['user']))
 {
 	echo "      <a href=\"index.php?logout=yes\">Log out</a> |";
 }
+
+
+
 echo "      A nice header with grapics etc...\n";
 ?>
