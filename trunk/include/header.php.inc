@@ -6,10 +6,9 @@ echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\
 echo "      <title>Sessionweb</title>\n";
 echo "  </head>\n";
 echo "  <body>\n";
-if($_SESSION['useradmin']==1)
-{
-	echo "      <a href=\"settings.php\">Settings</a> |";
-}
+echo "      <a href=\"index.php\">Main page</a> |";
+echo "      <a href=\"settings.php\">Settings</a> |";
+
 
 
 if(isset($_SESSION['user']))
@@ -18,6 +17,5 @@ if(isset($_SESSION['user']))
 }
 
 
-
-echo "      A nice header with grapics etc...\n";
+echo "<p><img src=\"pictures/logo.png\" alt=\"Sessionweb logo\"></p>\n";
 ?>
