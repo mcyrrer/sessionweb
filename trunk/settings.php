@@ -307,7 +307,7 @@ function createNewUser($username,$password,$fullname,$active,$admin,$superuser)
 		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 		$sqlInsert = "";
-		$sqlInsert .= "INSERT INTO `sessionwebopensource`.`members` ";
+		$sqlInsert .= "INSERT INTO `members` ";
 		$sqlInsert .= "            (`username`, ";
 		$sqlInsert .= "             `password`, ";
 		$sqlInsert .= "             `fullname`, ";
@@ -366,7 +366,7 @@ function updateUserSettings($userToChange,$active,$admin,$superuser)
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 	$sqlUpdate = "";
-	$sqlUpdate .= "UPDATE `sessionwebopensource`.`members` ";
+	$sqlUpdate .= "UPDATE `members` ";
 	$sqlUpdate .= "SET    `active` = '$activeToDb', ";
 	$sqlUpdate .= "       `admin` = '$adminToDb', ";
 	$sqlUpdate .= "       `superuser` = '$superuserToDb' ";

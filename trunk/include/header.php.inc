@@ -4,9 +4,26 @@ echo "<html>\n";
 echo "  <head>\n";
 echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\">\n";
 echo "      <title>Sessionweb</title>\n";
+if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
+{
+	$new = $_GET["new"];
+	if($new==true)
+	{
+		echo "              <!-- \n";
+		echo "                  Include the WYSIWYG javascript files\n";
+		echo "      -->\n";
+		echo "              <script type=\"text/javascript\" src=\"editor/scripts/wysiwyg.js\"></script>\n";
+		echo "              <script type=\"text/javascript\" src=\"editor/scripts/wysiwyg-settings.js\"></script>\n";
+		echo "              <script type=\"text/javascript\">\n";
+		echo "                  WYSIWYG.attach('textarea1',full); // default setup\n";
+		echo "                  WYSIWYG.attach('textarea2',full); // default setup\n";
+		echo "              </script>\n";
+	}
+}
 echo "  </head>\n";
 echo "  <body>\n";
 echo "      <a href=\"index.php\">Main page</a> |";
+echo "      <a href=\"session.php?new=true\">New session</a> |";
 echo "      <a href=\"settings.php\">Settings</a> |";
 
 

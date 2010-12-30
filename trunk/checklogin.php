@@ -32,8 +32,12 @@ $sql .= "       AND active = 1 " ;
 
 $result=mysql_query($sql);
 
+if($result!=FALSE)
+{
+	$count=mysql_num_rows($result);
+
+}
 // Mysql_num_row is counting table row
-$count=mysql_num_rows($result);
 
 mysql_close($con);
 
