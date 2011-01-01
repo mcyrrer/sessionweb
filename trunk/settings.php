@@ -49,7 +49,7 @@ else
 
 	if($_SESSION['useradmin']==1)
 	{
-		echo "<div><a href=\"settings.php?command=listusers\">List users</a> | <a href=\"settings.php?command=adduser\">Add user</a></div>";
+		echo "<div>Admin menu: <a href=\"settings.php?command=listusers\">List users</a> | <a href=\"settings.php?command=adduser\">Add user</a></div>";
 
 		if(strcmp($command,"listusers")==0)
 		{
