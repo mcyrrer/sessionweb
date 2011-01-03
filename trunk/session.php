@@ -7,14 +7,110 @@ include("include/header.php.inc");
 include_once('config/db.php.inc');
 include_once 'include/commonFunctions.php.inc';
 
-echoSessionForm();
+if(strstr($_REQUEST["newsession"],"true")!=false)
+{
+	//RapidReporter importer
+	if(strstr(substr($_REQUEST["notes"],0,26),'Time,Reporter,Type,Content')!=false)
+	{
+		echo "RapidReporter Note<br>";
+		$_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
+        echo $_REQUEST["notes"];
+	}
+
+	//BB test assistant importer
+	elseif(strstr(    substr($_REQUEST["notes"],0,43)   ,"xml version"   )!=false)
+	{
+		$_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
+		echo "BB TESTASSISTANT NOTE<br>";
+		echo $_REQUEST["notes"];
+	}
+}
+
+elseif (strstr($_GET["new"],"true")!=false)
+{
+	echoSessionForm();
+}
 
 include("include/footer.php.inc");
 
+
+
+/**
+ * @return unknown_type
+ */
+function saveSession()
+{
+	$sessionid = false;
+	//	$_REQUEST["swpassword1"];
+	//create sessionid
+	//create mission
+	//create missionstatus
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+
+	//Will create a new session id to map to a session
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO sessionid ";
+	$sqlInsert .= "            (`createdby`) ";
+	$sqlInsert .= "VALUES      ('".$_SESSION['username']."') " ;
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo mysql_error();
+	}
+
+	//Get the new session id for user x
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   sessionid ";
+	$sqlSelect .= "WHERE  createdby = '".$_SESSION['username']."' ";
+	$sqlSelect .= "ORDER  BY sessionid DESC ";
+	$sqlSelect .= "LIMIT  1" ;
+
+	$result = mysql_query($sqlInsert);
+
+	if($result)
+	{
+		$row = mysql_fetch_array($result);
+		$sessionid = $row["sessionid"];
+	}
+	else
+	{
+		echo mysql_error();
+	}
+
+	//Insert sessiondata to mission table
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO `sw_dbtryout`.`mission` ";
+	$sqlInsert .= "            (`sessionid`, ";
+	$sqlInsert .= "             `title`, ";
+	$sqlInsert .= "             `charter`, ";
+	$sqlInsert .= "             `notes`, ";
+	$sqlInsert .= "             `username`, ";
+	$sqlInsert .= "             `teamname`) ";
+	$sqlInsert .= "VALUES      ('$sessionid', ";
+	$sqlInsert .= "             '".$_REQUEST["title"]."', ";
+	$sqlInsert .= "             '".$_REQUEST["charter"]."', ";
+	$sqlInsert .= "             '".$_REQUEST["notes"]."', ";
+	$sqlInsert .= "             '".$_SESSION['username']."', ";
+	$sqlInsert .= "             '".$_REQUEST['team']."')" ;
+
+	mysql_close($con);
+
+}
+
+
+/**
+ * 
+ * @return unknown_type
+ */
 function echoSessionForm()
 {
 	echo "<form action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
-
+	echo "<input type=\"hidden\" name=\"newsession\" value=\"true\">\n";
 	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
@@ -60,9 +156,9 @@ function echoSessionForm()
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
-	echo "                              <td valign=\"top\">Mission: </td>\n";
+	echo "                              <td valign=\"top\">Charter: </td>\n";
 	echo "                              <td>\n";
-	echo "                                  <textarea id=\"textarea1\" name=\"mission\"  rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">\n";
+	echo "                                  <textarea id=\"textarea1\" name=\"charter\"  rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">\n";
 	echo "                                  </textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
@@ -162,6 +258,11 @@ function echoSessionForm()
 	echo "</form>\n";
 }
 
+
+/**
+ * Prints percent (belongs to a HTML select item) to screen. E.g 5,10,15,20...
+ * 
+ */
 function echoPercentSelection()
 {
 	for ($index  = 0; $index  <= 100; $index = $index + 5) {
@@ -169,9 +270,93 @@ function echoPercentSelection()
 	}
 }
 
+/**
+ * Prints duration option (belongs to a HTML select item) to screen
+ * 
+ */
 function echoDurationSelection()
 {
 	for ($index  = 15; $index  <= 480; $index = $index + 15) {
 		echo "                                      <option>$index</option>";
 	}
+}
+
+/**
+ * Parse RapidReporter CVS notes to HTML
+ * @param $notes RapidReporter CVS notes
+ * @return parsed notes as HTML
+ */
+
+function parseRapidReporterNotes($notes)
+{
+
+	$explodedCharterNotes =  explode("<br>",$notes);
+
+	$charterParsed =  "<table width=\"1024\" border=\"0\">\n";
+	$charterParsed .= "    <tr>\n";
+	$charterParsed .= "      <td><b>Time</b></td>\n";
+	$charterParsed .= "        <td><b>Type</b></td>\n";
+	$charterParsed .= "        <td><b>Note</b></td>\n";
+
+	$charterParsed .= "    </tr>\n";
+
+	for ($index = 1; $index < count($explodedCharterNotes); $index++) {
+		$charterParsed .= "   <tr>\n";
+		$time = substr($explodedCharterNotes[$index],11,8);
+
+		$commaArray = explode(",",$explodedCharterNotes[$index],4);
+		$type = $commaArray[2];
+
+		//Reverse the string to minimize the effort to strip the 2 last , chars.
+		$reverseString = strrev($commaArray[3]);
+		$stringArray = (explode(",",$reverseString,3));
+		$string = strrev($stringArray[2]);
+
+		$note = substr($string,1,strlen($string)-2);
+
+		$charterParsed .= "       <td valign=\"top\">$time</td>\n";
+		$charterParsed .= "       <td valign=\"top\">".htmlspecialchars($type)."</td>\n";
+		$charterParsed .= "       <td valign=\"top\">".htmlspecialchars($note)."</td>\n";
+
+		$charterParsed .= "   </tr>\n";
+	}
+	$charterParsed .= "</table>\n";
+	return $charterParsed;
+}
+
+
+/**
+ * Parse BB TestAssistant XML notes to HTML
+ * @param $notes BB TestAssistant XML notes
+ * @return parsed notes as HTML
+ */
+function parseBBTestAssistantNotes($notes)
+{
+	$notes = htmlspecialchars_decode($notes);
+	$notes = str_replace("<br>","",$notes);
+	$notes = str_replace("&nbsp;","",$notes);
+	$charterParsed     =  "<table width=\"1024\" border=\"0\">\n";
+	$charterParsed     .=  "    <tr>\n";
+	$charterParsed     .=   "      <td width=\"100\"><b>Time</b></td>\n";
+	$charterParsed     .= "        <td><b>Note</b></td>\n";
+	$charterParsed     .= "    </tr>\n";
+
+
+	$xmlDoc = new DOMDocument();
+	$xmlDoc->loadXML( $notes );
+
+	$searchNode = $xmlDoc->getElementsByTagName( "Note" );
+
+	foreach( $searchNode as $searchNode )
+	{
+		$valueTimestamp   = $searchNode->getAttribute('timestamp');
+		$valueNode        = $searchNode->nodeValue;
+		
+		$charterParsed    .= "   <tr>\n";
+		$charterParsed    .= "       <td valign=\"top\">$valueTimestamp</td>\n";
+		$charterParsed    .= "       <td valign=\"top\">".htmlspecialchars($valueNode)."</td>\n";
+		$charterParsed    .= "   </tr>\n";
+	}
+
+	return $charterParsed;
 }
