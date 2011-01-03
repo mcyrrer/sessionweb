@@ -7,14 +7,17 @@ include("include/header.php.inc");
 include_once('config/db.php.inc');
 include_once 'include/commonFunctions.php.inc';
 
-if(strstr($_REQUEST["newsession"],"true")!=false)
+
+
+if(strstr($_REQUEST["savesession"],"true")!=false)
 {
+
 	//RapidReporter importer
-	if(strstr(substr($_REQUEST["notes"],0,26),'Time,Reporter,Type,Content')!=false)
+	if(strstr( substr($_REQUEST["notes"],0,26)     ,'Time,Reporter,Type,Content')!=false)
 	{
 		echo "RapidReporter Note<br>";
 		$_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
-        echo $_REQUEST["notes"];
+		echo $_REQUEST["notes"];
 	}
 
 	//BB test assistant importer
@@ -24,6 +27,9 @@ if(strstr($_REQUEST["newsession"],"true")!=false)
 		echo "BB TESTASSISTANT NOTE<br>";
 		echo $_REQUEST["notes"];
 	}
+
+	saveSession();
+
 }
 
 elseif (strstr($_GET["new"],"true")!=false)
@@ -36,11 +42,22 @@ include("include/footer.php.inc");
 
 
 /**
- * @return unknown_type
+ * Save session to database
  */
 function saveSession()
 {
+	$_TITLELENGTH = 500;
+
+	echo "<h1>Save session</h1>\n";
+	if(strlen($_REQUEST["title"])>$_TITLELENGTH)
+	{
+		echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br>\n";
+	}
+
+
 	$sessionid = false;
+	$versionid = false;
+
 	//	$_REQUEST["swpassword1"];
 	//create sessionid
 	//create mission
@@ -70,7 +87,7 @@ function saveSession()
 	$sqlSelect .= "ORDER  BY sessionid DESC ";
 	$sqlSelect .= "LIMIT  1" ;
 
-	$result = mysql_query($sqlInsert);
+	$result = mysql_query($sqlSelect);
 
 	if($result)
 	{
@@ -90,27 +107,118 @@ function saveSession()
 	$sqlInsert .= "             `charter`, ";
 	$sqlInsert .= "             `notes`, ";
 	$sqlInsert .= "             `username`, ";
+	$sqlInsert .= "             `sprintname`, ";
 	$sqlInsert .= "             `teamname`) ";
 	$sqlInsert .= "VALUES      ('$sessionid', ";
-	$sqlInsert .= "             '".$_REQUEST["title"]."', ";
-	$sqlInsert .= "             '".$_REQUEST["charter"]."', ";
-	$sqlInsert .= "             '".$_REQUEST["notes"]."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["title"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["charter"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["notes"])."', ";
 	$sqlInsert .= "             '".$_SESSION['username']."', ";
-	$sqlInsert .= "             '".$_REQUEST['team']."')" ;
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."')" ;
+
+	//	echo $sqlInsert."<br>";
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo mysql_error();
+	}
+
+	//Get versionId from db
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission ";
+	$sqlSelect .= "WHERE  username = '".$_SESSION['username']."' ";
+	$sqlSelect .= "ORDER  BY versionid DESC ";
+	$sqlSelect .= "LIMIT  1" ;
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo mysql_error();
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		$versionid = $row["versionid"];
+	}
+
+	//Create missionstatus record in Db
+	$executed = false;
+	if(strstr($_REQUEST["executed"],"yes")==0)
+	{
+		$executed = true;
+	}
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mission_status ";
+	$sqlInsert .= "            (`versionid`, ";
+	$sqlInsert .= "             `executed`, ";
+	$sqlInsert .= "             `debriefed`, ";
+	$sqlInsert .= "             `masterdibriefed`, ";
+	$sqlInsert .= "             `executed_timestamp` ) ";
+	$sqlInsert .= "VALUES      ('$versionid', ";
+	$sqlInsert .= "             '$executed', ";
+	$sqlInsert .= "             'false', ";
+	$sqlInsert .= "             'false', " ;
+	$sqlInsert .= "             '".date("Y-d-j H:i:s")."')" ;
+
+	//echo $sqlInsert;
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo mysql_error();
+	}
+
+	//Create metrics record for session
+
+	$totalPercent = $_REQUEST["setuppercent"] + $_REQUEST["testpercent"] + $_REQUEST["bugpercent"] + $_REQUEST["oppertunitypercent"];
+	if($totalPercent!=100)
+	{
+		echo "<b>Warning:</b> Percentage for Session metrics is $totalPercent% and not 100%. Session will be saved but session metrics will be missleading<br>\n";
+	}
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mision_sessionmetrics ";
+	$sqlInsert .= "            (`versionid`, ";
+	$sqlInsert .= "             `setup_percent`, ";
+	$sqlInsert .= "             `test_percent`, ";
+	$sqlInsert .= "             `bug_percent`, ";
+	$sqlInsert .= "             `opportunity_percent`, ";
+	$sqlInsert .= "             `duration_time`) ";
+	$sqlInsert .= "VALUES      ('$versionid', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["setuppercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["testpercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["bugpercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["oppertunitypercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["duration"])."')" ;
+
+	//echo $sqlInsert;
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo mysql_error();
+	}
 
 	mysql_close($con);
+
+	echo "<p/>Session saved as (sessionid = $sessionid, versionid = $versionid)";
 
 }
 
 
 /**
- * 
+ *
  * @return unknown_type
  */
 function echoSessionForm()
 {
 	echo "<form action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
-	echo "<input type=\"hidden\" name=\"newsession\" value=\"true\">\n";
+	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
 	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
@@ -158,7 +266,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Charter: </td>\n";
 	echo "                              <td>\n";
-	echo "                                  <textarea id=\"textarea1\" name=\"charter\"  rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">\n";
+	echo "                                  <textarea id=\"textarea1\" name=\"charter\"  rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
 	echo "                                  </textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
@@ -182,8 +290,8 @@ function echoSessionForm()
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Notes: </td>\n";
-	echo "                              <td>\n";
-	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">\n";
+	echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
+	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
 	echo "                                  </textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
@@ -224,7 +332,7 @@ function echoSessionForm()
 	echo "                                                </td>\n";
 	echo "                                                <td>Session duration (min): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select name=\"tester\">\n";
+	echo "                                                      <select name=\"duration\">\n";
 	echoDurationSelection();
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
@@ -261,7 +369,7 @@ function echoSessionForm()
 
 /**
  * Prints percent (belongs to a HTML select item) to screen. E.g 5,10,15,20...
- * 
+ *
  */
 function echoPercentSelection()
 {
@@ -272,7 +380,7 @@ function echoPercentSelection()
 
 /**
  * Prints duration option (belongs to a HTML select item) to screen
- * 
+ *
  */
 function echoDurationSelection()
 {
@@ -351,7 +459,7 @@ function parseBBTestAssistantNotes($notes)
 	{
 		$valueTimestamp   = $searchNode->getAttribute('timestamp');
 		$valueNode        = $searchNode->nodeValue;
-		
+
 		$charterParsed    .= "   <tr>\n";
 		$charterParsed    .= "       <td valign=\"top\">$valueTimestamp</td>\n";
 		$charterParsed    .= "       <td valign=\"top\">".htmlspecialchars($valueNode)."</td>\n";
