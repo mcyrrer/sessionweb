@@ -24,6 +24,7 @@ echo "  </head>\n";
 echo "  <body>\n";
 echo "      <a href=\"index.php\">Main page</a> |";
 echo "      <a href=\"session.php?new=true\">New session</a> |";
+echo "      <a href=\"list.php\">List sessions</a> |";
 echo "      <a href=\"settings.php\">Settings</a> |";
 
 

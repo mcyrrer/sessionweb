@@ -81,7 +81,7 @@ function saveSession_GetSessionIdForNewSession()
 function saveSession_InsertSessionDataToDb($sessionid)
 {
 	$sqlInsert = "";
-	$sqlInsert .= "INSERT INTO `sw_dbtryout`.`mission` ";
+	$sqlInsert .= "INSERT INTO mission ";
 	$sqlInsert .= "            (`sessionid`, ";
 	$sqlInsert .= "             `title`, ";
 	$sqlInsert .= "             `charter`, ";
@@ -165,7 +165,7 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 		echo "<b>Warning:</b> Percentage for Session metrics is $totalPercent% and not 100%. Session will be saved but session metrics will be missleading<br>\n";
 	}
 	$sqlInsert = "";
-	$sqlInsert .= "INSERT INTO mision_sessionmetrics ";
+	$sqlInsert .= "INSERT INTO mission_sessionmetrics ";
 	$sqlInsert .= "            (`versionid`, ";
 	$sqlInsert .= "             `setup_percent`, ";
 	$sqlInsert .= "             `test_percent`, ";
