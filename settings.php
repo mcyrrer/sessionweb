@@ -85,6 +85,8 @@ function echoChangeUserInfo($username)
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
+	$username = mysql_real_escape_string($username);
+	
 	$sqlSelect = "";
 	$sqlSelect .= "SELECT * ";
 	$sqlSelect .= "FROM   `members` ";
@@ -95,9 +97,9 @@ function echoChangeUserInfo($username)
 
 	$row = mysql_fetch_array($result);
 
-	echo "<h2>Edit user ". $row['fullname'] ."</h2>";
+	echo "<h2>Edit user ". htmlspecialchars($row['fullname']) ."</h2>";
 	echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
-	echo " <input type=\"hidden\" name=\"usernametoupdate\" value=\"$username\">\n";
+	echo " <input type=\"hidden\" name=\"usernametoupdate\" value=\"".urlencode($username)."\">\n";
 	echo " <input type=\"hidden\" name=\"usersettings\" value=\"true\">\n";
 	echo "<table style=\"text-align: left; width: 1000px;\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\">";
 	echo "<tr>";
@@ -108,8 +110,8 @@ function echoChangeUserInfo($username)
 	echo "<td><b>Superuser</b></td>";
 	echo "</tr>";
 	echo "<tr>";
-	echo "<td>".  $row['fullname']. "</td>";
-	echo "<td>" . $row['username'] . "</td>";
+	echo "<td>".  htmlspecialchars($row['fullname']). "</td>";
+	echo "<td>" . htmlspecialchars($row['username']). "</td>";
 	if ($row['active']=="1")
 	{
 		echo "<td><input type=\"checkbox\" name=\"active\" value=\"checked\" checked=\"checked\"></td>";
@@ -171,7 +173,7 @@ function echoAllUsersInfo()
 	while($row = mysql_fetch_array($result))
 	{
 		echo "<tr>";
-		echo "<td><a href=\"settings.php?user=".urlencode($row['username']). "\">".$row['fullname']. "</a></td>";
+		echo "<td><a href=\"settings.php?user=".urlencode($row['username']). "\">".htmlspecialchars($row['fullname']). "</a></td>";
 		echo "<td>" . urldecode($row['username']) . "</td>";
 		echo "<td>" . urldecode($row['active']) . "</td>";
 		echo "<td>" . urldecode($row['admin']) . "</td>";
@@ -190,7 +192,7 @@ function echoChangePassword($username)
 	echo "<h2>Change Password</h2>\n";
 	echo "<form name=\"password\" action=\"settings.php\" method=\"POST\">\n";
 	echo "<table style=\"text-align: left; width: 1000px;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
-	echo "    <input type=\"hidden\" name=\"usernametoupdate\" value=\"$username\">\n";
+	echo "    <input type=\"hidden\" name=\"usernametoupdate\" value=\"".urlencode($username)."\">\n";
 	echo "    <tr>\n";
 	echo "        <td align=\"left\">\n";
 	echo "            New password\n";
@@ -252,6 +254,8 @@ function updateUserPassword($username,$password1, $password2)
 		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
+		$username = mysql_real_escape_string($username);
+		
 		$md5password = md5($password1);
 
 		$sqlUpdate = "";
@@ -306,6 +310,12 @@ function createNewUser($username,$password,$fullname,$active,$admin,$superuser)
 		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
+		$username = mysql_real_escape_string($username);
+		$fullname = mysql_real_escape_string($fullname);
+		$activeToDb = mysql_real_escape_string($activeToDb);
+		$adminToDb = mysql_real_escape_string($adminToDb);
+		$superuserToDb = mysql_real_escape_string($superuserToDb);
+		
 		$sqlInsert = "";
 		$sqlInsert .= "INSERT INTO `members` ";
 		$sqlInsert .= "            (`username`, ";
@@ -365,6 +375,11 @@ function updateUserSettings($userToChange,$active,$admin,$superuser)
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
+	$activeToDb = mysql_real_escape_string($activeToDb);
+	$adminToDb = mysql_real_escape_string($adminToDb);
+	$superuserToDb = mysql_real_escape_string($superuserToDb);
+	$userToChange = mysql_real_escape_string(urldecode($userToChange));
+	
 	$sqlUpdate = "";
 	$sqlUpdate .= "UPDATE `members` ";
 	$sqlUpdate .= "SET    `active` = '$activeToDb', ";
