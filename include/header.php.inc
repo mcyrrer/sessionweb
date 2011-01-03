@@ -18,9 +18,6 @@ if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 		echo "                  WYSIWYG.attach('textarea1',full); // default setup\n";
 		echo "                  WYSIWYG.attach('textarea2',full); // default setup\n";
 		echo "              </script>\n";
-		echo "              <script type=\"text/javascript\">\n";
-		echo "                    document.getElementById(text1).title=\"It is possible to paste RapidReporter CVS notes or BB TestAssistant XML notes\"\n";
-		echo "              </script>\n";
 	}
 }
 echo "  </head>\n";

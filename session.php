@@ -15,17 +15,15 @@ if(strstr($_REQUEST["savesession"],"true")!=false)
 	//RapidReporter importer
 	if(strstr( substr($_REQUEST["notes"],0,26)     ,'Time,Reporter,Type,Content')!=false)
 	{
-		echo "RapidReporter Note<br>";
 		$_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
-		echo $_REQUEST["notes"];
+		echo "RapidReporter CVS notes parsed to HTML<br>\n";
 	}
 
 	//BB test assistant importer
 	elseif(strstr(    substr($_REQUEST["notes"],0,43)   ,"xml version"   )!=false)
 	{
 		$_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
-		echo "BB TESTASSISTANT NOTE<br>";
-		echo $_REQUEST["notes"];
+		echo "BB Test Assistant XML notes parsed to HTML<br>\n";
 	}
 
 	saveSession();
@@ -40,33 +38,8 @@ elseif (strstr($_GET["new"],"true")!=false)
 include("include/footer.php.inc");
 
 
-
-/**
- * Save session to database
- */
-function saveSession()
+function saveSession_CreateNewSessionId()
 {
-	$_TITLELENGTH = 500;
-
-	echo "<h1>Save session</h1>\n";
-	if(strlen($_REQUEST["title"])>$_TITLELENGTH)
-	{
-		echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br>\n";
-	}
-
-
-	$sessionid = false;
-	$versionid = false;
-
-	//	$_REQUEST["swpassword1"];
-	//create sessionid
-	//create mission
-	//create missionstatus
-	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-
-
-	//Will create a new session id to map to a session
 	$sqlInsert = "";
 	$sqlInsert .= "INSERT INTO sessionid ";
 	$sqlInsert .= "            (`createdby`) ";
@@ -76,10 +49,12 @@ function saveSession()
 
 	if(!$result)
 	{
-		echo mysql_error();
+		echo "saveSession_CreateNewSessionId: ".mysql_error()."<br>";
 	}
+}
 
-	//Get the new session id for user x
+function saveSession_GetSessionIdForNewSession()
+{
 	$sqlSelect = "";
 	$sqlSelect .= "SELECT * ";
 	$sqlSelect .= "FROM   sessionid ";
@@ -96,10 +71,15 @@ function saveSession()
 	}
 	else
 	{
-		echo mysql_error();
+		echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br>";
 	}
 
-	//Insert sessiondata to mission table
+	return $sessionid;
+}
+
+
+function saveSession_InsertSessionDataToDb($sessionid)
+{
 	$sqlInsert = "";
 	$sqlInsert .= "INSERT INTO `sw_dbtryout`.`mission` ";
 	$sqlInsert .= "            (`sessionid`, ";
@@ -117,16 +97,16 @@ function saveSession()
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."')" ;
 
-	//	echo $sqlInsert."<br>";
-
 	$result = mysql_query($sqlInsert);
 
 	if(!$result)
 	{
-		echo mysql_error();
+		echo "saveSession_InsertSessionDataToDb: ".mysql_error()."<br>";
 	}
+}
 
-	//Get versionId from db
+function saveSession_GetVersionIdForNewSession()
+{
 	$sqlSelect = "";
 	$sqlSelect .= "SELECT * ";
 	$sqlSelect .= "FROM   mission ";
@@ -138,15 +118,18 @@ function saveSession()
 
 	if(!$result)
 	{
-		echo mysql_error();
+		echo "saveSession_GetVersionIdForNewSession: ".mysql_error()."<br>";
 	}
 	else
 	{
 		$row = mysql_fetch_array($result);
 		$versionid = $row["versionid"];
 	}
+	return $versionid;
+}
 
-	//Create missionstatus record in Db
+function saveSession_InsertSessionStatusToDb($versionid)
+{
 	$executed = false;
 	if(strstr($_REQUEST["executed"],"yes")==0)
 	{
@@ -166,16 +149,16 @@ function saveSession()
 	$sqlInsert .= "             'false', " ;
 	$sqlInsert .= "             '".date("Y-d-j H:i:s")."')" ;
 
-	//echo $sqlInsert;
 	$result = mysql_query($sqlInsert);
 
 	if(!$result)
 	{
-		echo mysql_error();
+		echo "saveSession_InsertSessionStatusToDb: ".mysql_error()."<br>";
 	}
+}
 
-	//Create metrics record for session
-
+function saveSession_InsertSessionMetricsToDb($versionid)
+{
 	$totalPercent = $_REQUEST["setuppercent"] + $_REQUEST["testpercent"] + $_REQUEST["bugpercent"] + $_REQUEST["oppertunitypercent"];
 	if($totalPercent!=100)
 	{
@@ -196,19 +179,61 @@ function saveSession()
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["oppertunitypercent"])."', ";
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["duration"])."')" ;
 
-	//echo $sqlInsert;
 	$result = mysql_query($sqlInsert);
 
 	if(!$result)
 	{
-		echo mysql_error();
+		echo "saveSession_InsertSessionMetricsToDb: ".mysql_error()."<br>";
 	}
+}
+
+/**
+ * Save session to database
+ */
+function saveSession()
+{
+	$_TITLELENGTH = 500;
+
+	echo "<h1>Save session</h1>\n";
+	if(strlen($_REQUEST["title"])>$_TITLELENGTH)
+	{
+		echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br>\n";
+	}
+
+
+	$sessionid = false;
+	$versionid = false;
+
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+
+	//Will create a new session id to map to a session
+	saveSession_CreateNewSessionId();
+
+
+	//Get the new session id for user x
+	$sessionid = saveSession_GetSessionIdForNewSession();
+
+	//Insert sessiondata to mission table
+	saveSession_InsertSessionDataToDb($sessionid);
+
+	//Get versionId from db
+	$versionid = saveSession_GetVersionIdForNewSession();
+
+	//Create missionstatus record in Db
+	saveSession_InsertSessionStatusToDb($versionid);
+
+	//Create metrics record for session
+	saveSession_InsertSessionMetricsToDb($versionid);
 
 	mysql_close($con);
 
 	echo "<p/>Session saved as (sessionid = $sessionid, versionid = $versionid)";
 
 }
+
+
 
 
 /**
