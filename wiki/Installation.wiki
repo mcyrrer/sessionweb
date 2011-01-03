@@ -2,7 +2,7 @@
 
 = Installation =
 
-  # Check out the latest code from the svn repository
+  # Export the latest code from the svn repository
    * svn checkout http://sessionweb.googlecode.com/svn/trunk/ sessionweb
   # Edit config/db.php.inc with your mysql settings
   # Create mysql database and user according to your db.php.inc settings
