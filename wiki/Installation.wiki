@@ -4,8 +4,8 @@
 
   # Check out the latest code from the svn repository
    * svn checkout http://sessionweb.googlecode.com/svn/trunk/ sessionweb-read-only
-  # Edit config/db.php.inc with your MySql settings
-  # Create MySql database and user according to your db.php.inc settings
+  # Edit config/db.php.inc with your mysql settings
+  # Create mysql database and user according to your db.php.inc settings
    * CREATE USER '*USERNAME*'@'localhost' IDENTIFIED BY '*YOURPASSWORD*';
    * GRANT USAGE ON `*` . `*` TO '*USERNAME*'@'localhost' IDENTIFIED BY '*YOURPASSWORD* WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
    * GRANT SELECT , INSERT , UPDATE , DELETE , REFERENCES , LOCK TABLES ON '*DATABASENAME*' . `*` TO '*USERNAME*'@'localhost' WITH GRANT OPTION ;
