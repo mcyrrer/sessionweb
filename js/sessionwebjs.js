@@ -54,6 +54,7 @@ function validate_metrics(setuppercent, testpercent, bugpercent,
 }
 
 function validate_form(thisform) {
+
 	with (thisform) {
 		if (validate_required(title, "Title must be filled out!") == false) {
 			title.focus();

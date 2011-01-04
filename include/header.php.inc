@@ -6,32 +6,8 @@ echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\
 echo "      <title>Sessionweb</title>\n";
 if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 {
-		echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
-//	echo "<script type=\"text/javascript\">";
-//	echo "function validate_required(field,alerttxt)";
-//	echo "{";
-//	echo "with (field)";
-//	echo "  {";
-//	echo "  if (value==null||value==\"\")";
-//	echo "    {";
-//	echo "    alert(alerttxt);return false;";
-//	echo "    }";
-//	echo "  else";
-//	echo "   {";
-//	echo "    return true;";
-//	echo "    }";
-//	echo " }";
-//	echo "}";
-//
-//	echo "function validate_form(thisform)";
-//	echo "{";
-//	echo "with (thisform)";
-//	echo "  {";
-//	echo " if (validate_required(title,\"Title must be filled out!\")==false)";
-//	echo "  {title.focus();return false;}";
-//	echo "  }";
-//	echo "}";
-//	echo "</script>";
+	echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
+//	echo "     <script src=\"http://code.jquery.com/jquery-1.4.4.js\"></script>\n";
 
 	$new = $_GET["new"];
 	if($new==true)
