@@ -60,16 +60,16 @@ function getSessionMetrics($versionid)
 
 function getSessionStatus($versionid)
 {
-	       $sqlSelectSessionStatus = "";
-        $sqlSelectSessionStatus .= "SELECT * ";
-        $sqlSelectSessionStatus .= "FROM   mission_status ";
-        $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
-        $resultSessionStatus = mysql_query($sqlSelectSessionStatus);
-        if(!$resultSessionStatus)
-        {
-            echo "echoViewSession: ".mysql_error()."<br>";
-        }
-        return mysql_fetch_array($resultSessionStatus);
+	$sqlSelectSessionStatus = "";
+	$sqlSelectSessionStatus .= "SELECT * ";
+	$sqlSelectSessionStatus .= "FROM   mission_status ";
+	$sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
+	$resultSessionStatus = mysql_query($sqlSelectSessionStatus);
+	if(!$resultSessionStatus)
+	{
+		echo "echoViewSession: ".mysql_error()."<br>";
+	}
+	return mysql_fetch_array($resultSessionStatus);
 }
 
 
@@ -542,13 +542,7 @@ function echoSessionForm()
 	echo "                              <td>Session title: </td>\n";
 	echo "                              <td><input type=\"text\" size=\"133\" value=\"\" name=\"title\"></td>\n";
 	echo "                        </tr>\n";
-	//	echo "                        <tr>\n";
-	//	echo "                              <td>Tester: </td>\n";
-	//	echo "                              <td>\n";
 	echo "                                 <input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
-	//	echoTesterSelect();
-	//	echo "                              </td>\n";
-	//	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td>Team: </td>\n";
 	echo "                              <td>\n";
