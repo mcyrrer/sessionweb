@@ -431,11 +431,7 @@ function saveSession_InsertSessionStatusToDb($versionid)
 
 function saveSession_InsertSessionMetricsToDb($versionid)
 {
-	$totalPercent = $_REQUEST["setuppercent"] + $_REQUEST["testpercent"] + $_REQUEST["bugpercent"] + $_REQUEST["oppertunitypercent"];
-	if($totalPercent!=100)
-	{
-		echo "<b>Warning:</b> Percentage for Session metrics is $totalPercent% and not 100%. Session will be saved but session metrics will be missleading<br>\n";
-	}
+
 	$sqlInsert = "";
 	$sqlInsert .= "INSERT INTO mission_sessionmetrics ";
 	$sqlInsert .= "            (`versionid`, ";
@@ -518,7 +514,7 @@ function saveSession()
  */
 function echoSessionForm()
 {
-	echo "<form action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
+	echo "<form name=\"sessionform\" action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
 	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
 	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
