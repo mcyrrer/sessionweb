@@ -35,8 +35,274 @@ elseif (strstr($_GET["new"],"true")!=false)
 	echoSessionForm();
 }
 
+//Display a readonly version of the session
+elseif ($_GET["sessionid"]!="")
+{
+	echoViewSession();
+}
+
 include("include/footer.php.inc");
 
+
+function getSessionMetrics($versionid)
+{
+	$sqlSelectSessionMetrics = "";
+	$sqlSelectSessionMetrics .= "SELECT * ";
+	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
+	$sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
+	$resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
+	if(!$resultSessionMetrics)
+	{
+		echo "echoViewSession: ".mysql_error()."<br>";
+	}
+	return mysql_fetch_array($resultSessionMetrics);
+}
+
+function getSessionStatus($versionid)
+{
+	       $sqlSelectSessionStatus = "";
+        $sqlSelectSessionStatus .= "SELECT * ";
+        $sqlSelectSessionStatus .= "FROM   mission_status ";
+        $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
+        $resultSessionStatus = mysql_query($sqlSelectSessionStatus);
+        if(!$resultSessionStatus)
+        {
+            echo "echoViewSession: ".mysql_error()."<br>";
+        }
+        return mysql_fetch_array($resultSessionStatus);
+}
+
+
+function echoViewSession()
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelectSession = "";
+	$sqlSelectSession .= "SELECT * ";
+	$sqlSelectSession .= "FROM   mission ";
+	$sqlSelectSession .= "WHERE  sessionid = ".$_GET["sessionid"] ;
+
+	$resultSession = mysql_query($sqlSelectSession);
+
+	if(!$resultSession)
+	{
+		echo "echoViewSession: ".mysql_error()."<br>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($resultSession);
+
+		$rowSessionMetric = getSessionMetrics($row["versionid"]);//mysql_fetch_array($resultSessionMetrics);
+
+		$rowSessionStatus = getSessionStatus($row["versionid"]);
+
+		echo "<h1>View Session</h1>\n";
+
+		echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"5\">";
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            <h2>Session title</h2>\n";
+		echo "            <div style=\"background-color:#efefef;\">\n";
+		echo "                ".$row["title"]."\n";
+		echo "            </div>\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td align=\"left\">\n";
+		echo "            &nbsp;&nbsp;&nbsp;\n";
+		echo "        </td>\n";
+		echo "        <td align=\"left\">\n";
+		echo "        <table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"4\">";
+		echo "            <tr>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                    <h4>Sessionid</h4>\n";
+		echo "                    <div style=\"background-color:#efefef;\">\n";
+		echo "                        ".$row["sessionid"]."\n";
+		echo "                    </div>\n";
+		echo "                </td>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                    <h4>Username</h4>\n";
+		echo "                    <div style=\"background-color:#efefef;\">\n";
+		echo "                        ".$row["username"]."\n";
+		echo "                    </div>\n";
+		echo "                </td>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                    <h4>Teamname</h4>\n";
+		echo "                    <div style=\"background-color:#efefef;\">\n";
+		echo "                        ".$row["teamname"]."\n";
+		echo "                    </div>\n";
+		echo "                </td>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                    <h4>Sprintname</h4>\n";
+		echo "                    <div style=\"background-color:#efefef;\">\n";
+		echo "                        ".$row["sprintname"]."\n";
+		echo "                    </div>\n";
+		echo "                </td>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                      <h4>Status</h4>\n";
+		echo "                      <div style=\"background-color:#efefef;\">\n";
+		echo "                          Executed\n";
+		echo "                      </div>\n";
+		echo "                </td>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                      <h4>Debriefed</h4>\n";
+		echo "                      <div style=\"background-color:#efefef;\">\n";
+		echo "                          Not debriefed\n";
+		echo "                      </div>\n";
+		echo "                </td>\n";
+		echo "                <td align=\"left\">\n";
+		echo "                    <h4>Updated</h4>\n";
+		echo "                    <div style=\"background-color:#efefef;\">\n";
+		echo "                        ".$row["updated"]."\n";
+		echo "                    </div>\n";
+		echo "                </td>\n";
+		echo "            <tr>\n";
+		echo "        </table>";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            <img src=\"pictures/line2.png\" alt=\"line\">\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td align=\"left\" valign=\"top\">\n";
+		echo "            \n";
+		echo "        </td>\n";
+		echo "        <td align=\"left\">\n";
+		echo "        <h2>Charter</h2>\n";
+		echo "            <div style=\"background-color:#efefef;\">\n";
+		echo "                ".$row["charter"]."\n";
+		echo "            </div>\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td align=\"left\" valign=\"top\">\n";
+		echo "            \n";
+		echo "        </td>\n";
+		echo "        <td align=\"left\">\n";
+		echo "        <h2>Session notes</h2>\n";
+		echo "            <div style=\"background-color:#efefef;\">\n";
+		echo "                ".$row["notes"]."\n";
+		echo "            </div>\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echoSessionMetrics($rowSessionMetric,$row["versionid"]);
+
+
+		echo "</table>";
+	}
+
+	mysql_close($con);
+}
+
+function echoSessionMetrics($rowSessionMetric, $versionid)
+{
+	$settings = $_SESSION['settings'];
+
+	$setup_percent = $rowSessionMetric["setup_percent"];
+	$test_percent = $rowSessionMetric["test_percent"];
+	$bug_percent = $rowSessionMetric["bug_percent"];
+	$opportunity_percent = $rowSessionMetric["opportunity_percent"];
+	$duration_time = $rowSessionMetric["duration_time"];
+
+	$normalized_session_time = $settings['normalized_session_time'];
+	$nbrOfSession = round($duration_time/$normalized_session_time,1);
+
+	echo "    <tr>\n";
+	echo "        <td></td>\n";
+	echo "        <td>\n";
+	echo "            <h2>Session metrics</h2>\n";
+	echo "        <table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"4\">";
+	echo "            <tr>\n";
+	echo "                <td align=\"left\" width=\"60\">\n";
+	echo "                    <h4>Setup</h4>\n";
+	echo "                    <div style=\"background-color:#efefef;\">\n";
+	echo "                        $setup_percent %\n";
+	echo "                    </div>\n";
+	echo "                </td>\n";
+	echo "                <td align=\"left\" width=\"60\">\n";
+	echo "                    <h4>Test</h4>\n";
+	echo "                    <div style=\"background-color:#efefef;\">\n";
+	echo "                        $test_percent %\n";
+	echo "                    </div>\n";
+	echo "                </td>\n";
+	echo "                <td align=\"left\" width=\"60\">\n";
+	echo "                    <h4>Bug</h4>\n";
+	echo "                    <div style=\"background-color:#efefef;\">\n";
+	echo "                        $bug_percent %\n";
+	echo "                    </div>\n";
+	echo "                </td>\n";
+	echo "                <td align=\"left\">\n";
+	echo "                    <h4>Oppertunity</h4>\n";
+	echo "                    <div style=\"background-color:#efefef;\">\n";
+	echo "                        $opportunity_percent %\n";
+	echo "                    </div>\n";
+	echo "                </td>\n";
+	echo "                <td align=\"left\">\n";
+	echo "                      <h4>Sessions duration</h4>\n";
+	echo "                      <div style=\"background-color:#efefef;\">\n";
+	echo "                          $duration_time (min)\n";
+	echo "                      </div>\n";
+	echo "                </td>\n";
+	echo "                <td align=\"left\">\n";
+	echo "                      <h4>Normalized Sessions count</h4>\n";
+	echo "                      <div style=\"background-color:#efefef;\">\n";
+	echo "                          $nbrOfSession\n";
+	echo "                      </div>\n";
+	echo "                </td>\n";
+	echo "            <tr>\n";
+	echo "        </table>";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "    <tr>\n";
+	echo "        <td></td>\n";
+	echo "        <td>\n";
+	echo "            <img alt=\"pie chart\" src=\"".getSessionMetricsPieChartUrl($versionid)."\" /\">\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+}
+
+function getSessionMetricsPieChartUrl($versionid)
+{
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_sessionmetrics ";
+	$sqlSelect .= "WHERE  versionid = $versionid";
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "getSessionMetrics: ".mysql_error()."<br>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+
+		$setup_percent = $row["setup_percent"];
+		$test_percent = $row["test_percent"];
+		$bug_percent = $row["bug_percent"];
+		$opportunity_percent = $row["opportunity_percent"];
+
+		return createPercentPieChart($setup_percent,$test_percent,$bug_percent,$opportunity_percent);
+	}
+}
 
 function saveSession_CreateNewSessionId()
 {
@@ -80,6 +346,12 @@ function saveSession_GetSessionIdForNewSession()
 
 function saveSession_InsertSessionDataToDb($sessionid)
 {
+
+	if($_REQUEST["title"]=="")
+	{
+		$_REQUEST["title"]="Unnamed Session";
+		echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br>\n";
+	}
 	$sqlInsert = "";
 	$sqlInsert .= "INSERT INTO mission ";
 	$sqlInsert .= "            (`sessionid`, ";
@@ -187,10 +459,7 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 	}
 }
 
-/**
- * Save session to database
- */
-function saveSession()
+function checkSessionTitleNotToLong()
 {
 	$_TITLELENGTH = 500;
 
@@ -199,7 +468,14 @@ function saveSession()
 	{
 		echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br>\n";
 	}
+}
+/**
+ * Save session to database
+ */
+function saveSession()
+{
 
+	checkSessionTitleNotToLong();
 
 	$sessionid = false;
 	$versionid = false;
@@ -229,7 +505,7 @@ function saveSession()
 
 	mysql_close($con);
 
-	echo "<p/>Session saved as (sessionid = $sessionid, versionid = $versionid)";
+	echo "<p/><b>Session saved</b><br>(sessionid = $sessionid, versionid = $versionid)";
 
 }
 
@@ -270,12 +546,13 @@ function echoSessionForm()
 	echo "                              <td>Session title: </td>\n";
 	echo "                              <td><input type=\"text\" size=\"133\" value=\"\" name=\"title\"></td>\n";
 	echo "                        </tr>\n";
-	echo "                        <tr>\n";
-	echo "                              <td>Tester: </td>\n";
-	echo "                              <td>\n";
-	echoTesterSelect();
-	echo "                              </td>\n";
-	echo "                        </tr>\n";
+	//	echo "                        <tr>\n";
+	//	echo "                              <td>Tester: </td>\n";
+	//	echo "                              <td>\n";
+	echo "                                 <input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
+	//	echoTesterSelect();
+	//	echo "                              </td>\n";
+	//	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td>Team: </td>\n";
 	echo "                              <td>\n";
@@ -374,7 +651,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td>Executed:</td>\n";
 	echo "                              <td>\n";
-	echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" checked=\"checked\">\n";
+	echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" >\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";

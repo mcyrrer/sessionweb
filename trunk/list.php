@@ -25,6 +25,7 @@ mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 $sqlSelect = "";
 $sqlSelect .= "SELECT * ";
 $sqlSelect .= "FROM   `mission` ";
+$sqlSelect .= "ORDER BY updated DESC " ;
 $sqlSelect .= "LIMIT  0, 30 " ;
 
 $result = mysql_query($sqlSelect);

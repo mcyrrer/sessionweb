@@ -49,7 +49,17 @@ else
 
 	if($_SESSION['useradmin']==1)
 	{
-		echo "<div>Admin menu: <a href=\"settings.php?command=listusers\">List users</a> | <a href=\"settings.php?command=adduser\">Add user</a></div>";
+		echo "<div>Admin menu: <a href=\"settings.php?command=addteam\">Add team</a> | <a href=\"settings.php?command=listusers\">List users</a> | <a href=\"settings.php?command=adduser\">Add user</a></div>";
+	}
+	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
+	{
+		echo "<div>Superuser menu: <a href=\"settings.php?command=addsprint\">Add sprintname</a></div>";
+	}
+	echo "<div>User menu: <a href=\"settings.php?command=changepassword\">Change password</a></div>";
+
+
+	if($_SESSION['useradmin']==1)
+	{
 
 		if(strcmp($command,"listusers")==0)
 		{
@@ -63,14 +73,34 @@ else
 		{
 			createNewUser($username,$password1,$fullname,1,$admin,$superuser);
 		}
+		elseif(strcmp($command,"addteam")==0)
+		{
+			echoAddTeamName();
+		}
+		elseif (strcmp($command_post,"insertteamnametodb")==0)
+		{
+			InsertTeamNameToDb($_REQUEST["teamtname"]);
+		}
 		if($user!="")
 		{
 			echoChangeUserInfo($user);
 		}
 
 	}
-	else
+	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
 	{
+		if(strcmp($command,"addsprint")==0)
+		{
+			echoAddSprintName();
+		}
+		elseif (strcmp($command_post,"insertsprintnametodb")==0)
+		{
+			InsertSprintNameToDb($_REQUEST["sprintname"]);
+		}
+	}
+
+	if(strcmp($command,"changepassword")==0)	{
+
 		echoChangePassword($_SESSION['username']);
 	}
 }
@@ -80,13 +110,110 @@ include("include/footer.php.inc");
 //*************************************************************************************
 //Function is located below
 //*************************************************************************************s
+
+
+function echoAddTeamName()
+{
+	echo "<h2>Add new team name</h2>\n";
+	echo "<form name=\"teamname\" action=\"settings.php\" method=\"POST\">\n";
+	echo "<input type=\"hidden\" name=\"command\" value= \"insertteamnametodb\">\n";
+	echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
+	echo "    <tr>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            New team name\n";
+	echo "        </td>\n";
+	echo "        <td><input type=\"text\" size=\"50\" value=\"\" name=\"teamtname\">\n";
+	echo "        </td>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            <input align=left type=\"submit\" value=\"Add team\" />\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "</table>";
+	echo "</form>\n";
+}
+
+function InsertTeamNameToDb($teamName)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$teamName = mysql_real_escape_string($teamName);
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO teamnames ";
+	$sqlInsert .= "            (`teamname`) ";
+	$sqlInsert .= "VALUES      ('$teamName')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "InsertTeamNameToDb: ".mysql_error()."<br>";
+	}
+	else
+	{
+		echo "<p>Team name $teamName insert to datbase</p>\n";
+	}
+
+	mysql_close($con);
+}
+
+
+function echoAddSprintName()
+{
+	echo "<h2>Add new sprint name</h2>\n";
+	echo "<form name=\"sprintname\" action=\"settings.php\" method=\"POST\">\n";
+	echo "<input type=\"hidden\" name=\"command\" value= \"insertsprintnametodb\">\n";
+	echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
+	echo "    <tr>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            New sprint name\n";
+	echo "        </td>\n";
+	echo "        <td><input type=\"text\" size=\"50\" value=\"\" name=\"sprintname\">\n";
+	echo "        </td>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            <input align=left type=\"submit\" value=\"Add name\" />\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "</table>";
+	echo "</form>\n";
+}
+
+function InsertSprintNameToDb($sprintName)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sprintName = mysql_real_escape_string($sprintName);
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO sprintnames ";
+	$sqlInsert .= "            (`sprintname`) ";
+	$sqlInsert .= "VALUES      ('$sprintName')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "InsertSprintNameToDb: ".mysql_error()."<br>";
+	}
+	else
+	{
+		echo "<p>Sprint name $sprintName insert to datbase</p>\n";
+	}
+
+	mysql_close($con);
+}
+
 function echoChangeUserInfo($username)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 	$username = mysql_real_escape_string($username);
-	
+
 	$sqlSelect = "";
 	$sqlSelect .= "SELECT * ";
 	$sqlSelect .= "FROM   `members` ";
@@ -255,7 +382,7 @@ function updateUserPassword($username,$password1, $password2)
 		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 		$username = mysql_real_escape_string($username);
-		
+
 		$md5password = md5($password1);
 
 		$sqlUpdate = "";
@@ -315,7 +442,7 @@ function createNewUser($username,$password,$fullname,$active,$admin,$superuser)
 		$activeToDb = mysql_real_escape_string($activeToDb);
 		$adminToDb = mysql_real_escape_string($adminToDb);
 		$superuserToDb = mysql_real_escape_string($superuserToDb);
-		
+
 		$sqlInsert = "";
 		$sqlInsert .= "INSERT INTO `members` ";
 		$sqlInsert .= "            (`username`, ";
@@ -379,7 +506,7 @@ function updateUserSettings($userToChange,$active,$admin,$superuser)
 	$adminToDb = mysql_real_escape_string($adminToDb);
 	$superuserToDb = mysql_real_escape_string($superuserToDb);
 	$userToChange = mysql_real_escape_string(urldecode($userToChange));
-	
+
 	$sqlUpdate = "";
 	$sqlUpdate .= "UPDATE `members` ";
 	$sqlUpdate .= "SET    `active` = '$activeToDb', ";
