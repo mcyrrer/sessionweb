@@ -39,7 +39,7 @@ if($result!=FALSE)
 }
 // Mysql_num_row is counting table row
 
-mysql_close($con);
+
 
 // If result matched $myusername and $mypassword, table row must be 1 row
 
@@ -52,6 +52,8 @@ if($count==1){
 	$_SESSION['superuser'] = $row['superuser'];
 	$_SESSION['useradmin'] = $row['admin'];
 	$_SESSION['username'] = $myusername;
+	
+	$_SESSION['settings'] = getSessionWebSettings();
 
 	session_register("myusername");
 	session_register("mypassword");
@@ -61,6 +63,26 @@ else {
 	echo "Wrong Username or Password";
 }
 
+mysql_close($con);
 ob_end_flush();
+
+function getSessionWebSettings()
+{
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT * ";
+    $sqlSelect .= "FROM   settings ";
+
+    $result = mysql_query($sqlSelect);
+
+    if(!$result)
+    {
+        echo "getSessionWebSettings: ".mysql_error()."<br>";
+    }
+    else
+    {
+        $row = mysql_fetch_array($result);
+        return $row;
+    }
+}
 
 ?>

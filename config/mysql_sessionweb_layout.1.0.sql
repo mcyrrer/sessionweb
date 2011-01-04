@@ -2,6 +2,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
+DROP SCHEMA IF EXISTS `sessionwebos` ;
+CREATE SCHEMA IF NOT EXISTS `sessionwebos` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+USE `sessionwebos` ;
 
 -- -----------------------------------------------------
 -- Table `sessionwebos`.`members`
@@ -192,6 +195,18 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_debriefnotes` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`settings`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`settings` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `normalized_session_time` INT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -203,5 +218,14 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
 INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', '1', '1', '1', NULL, '21232f297a57a5a743894a0e4a801fc3');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `sessionwebos`.`settings`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `sessionwebos`;
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`) VALUES (NULL, '90');
 
 COMMIT;

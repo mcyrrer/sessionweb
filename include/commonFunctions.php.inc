@@ -1,5 +1,16 @@
 <?php
 
+
+function createPercentPieChart($setup,$test,$bug,$oppertunity)
+{
+
+	$totalTime = $setup +$test+$bug+$oppertunity;
+
+	$imgURL = "http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=450x150&chd=t:$setup,$test,$bug,$oppertunity&chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Oppertunity($oppertunity%)|&chco=FF0000|00FF00|0000FF|000000&";
+	//	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
+	return $imgURL;
+}
+
 function echoTeamSelect()
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
@@ -53,27 +64,27 @@ function echoTesterSelect()
 
 function echoSprintSelect()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT sprintname ";
-    $sqlSelect .= "FROM   sprintnames ";
-    $sqlSelect .= "ORDER  BY sprintname ASC" ;
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT sprintname ";
+	$sqlSelect .= "FROM   sprintnames ";
+	$sqlSelect .= "ORDER  BY sprintname ASC" ;
 
-    $result = mysql_query($sqlSelect);
+	$result = mysql_query($sqlSelect);
 
-    echo "                                  <select name=\"sprint\">\n";
+	echo "                                  <select name=\"sprint\">\n";
 
 
-    while($row = mysql_fetch_array($result))
-    {
-        echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
-    }
+	while($row = mysql_fetch_array($result))
+	{
+		echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
+	}
 
-    echo "                                  </select>\n";
+	echo "                                  </select>\n";
 
-    mysql_close($con);
+	mysql_close($con);
 }
 
 ?>
