@@ -514,8 +514,7 @@ function saveSession()
  */
 function echoSessionForm()
 {
-
-	echo "<form name=\"sessionform\" action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+	echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
 	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
 	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
@@ -601,25 +600,25 @@ function echoSessionForm()
 	echo "                                          <tr>\n";
 	echo "                                                <td>Setup(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select name=\"setuppercent\">\n";
+	echo "                                                      <select class=\"metricoption\" name=\"setuppercent\">\n";
 	echoPercentSelection();
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Test(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select name=\"testpercent\">\n";
+	echo "                                                      <select class=\"metricoption\" name=\"testpercent\">\n";
 	echoPercentSelection();
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Bug(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select name=\"bugpercent\">\n";
+	echo "                                                      <select class=\"metricoption\" name=\"bugpercent\">\n";
 	echoPercentSelection();
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Oppertunity(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select name=\"oppertunitypercent\">\n";
+	echo "                                                      <select class=\"metricoption\" name=\"oppertunitypercent\">\n";
 	echoPercentSelection();
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";

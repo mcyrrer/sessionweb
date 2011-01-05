@@ -11,13 +11,14 @@ function validate_required(field, alerttxt) {
 
 function validate_metrics(setuppercent, testpercent, bugpercent,
 		oppertunitypercent, executed) {
-	
+
 	if (executed.checked == 1) {
 		var setup;
 		var test;
 		var bug;
 		var oppertunity;
 
+		
 		with (setuppercent) {
 			setup = value;
 		}
@@ -40,6 +41,7 @@ function validate_metrics(setuppercent, testpercent, bugpercent,
 
 		var percent = parseInt(setup) + parseInt(test) + parseInt(bug)
 				+ parseInt(oppertunity);
+
 		if (parseInt(percent) != 100) {
 			alert("Percentage for session is " + parseInt(percent)
 					+ "%. It has to be 100%.");
@@ -60,7 +62,7 @@ function validate_form(thisform) {
 			title.focus();
 			return false;
 		}
-
+		
 		if (validate_metrics(setuppercent, testpercent, bugpercent,
 				oppertunitypercent, executed) == false) {
 			setuppercent.focus();

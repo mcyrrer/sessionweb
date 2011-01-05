@@ -311,7 +311,7 @@ var WYSIWYG = {
 	 * @return {HtmlDivElement} Iframe object
 	 */
 	getEditorDiv: function(n) {
-		return $("wysiwyg_div_" + n);
+		return ID("wysiwyg_div_" + n);
 	},
 	
 	/**
@@ -321,7 +321,7 @@ var WYSIWYG = {
 	 * @return {HtmlTableElement} Iframe object
 	 */
 	getEditorTable: function(n) {
-		return $("wysiwyg_table_" + n);
+		return ID("wysiwyg_table_" + n);
 	},
 	
 	/**
@@ -331,7 +331,7 @@ var WYSIWYG = {
 	 * @return {HtmlIframeElement} Iframe object
 	 */
 	getEditor: function(n) {
-		return $("wysiwyg" + n);
+		return ID("wysiwyg" + n);
 	},
 	
 	/**
@@ -609,7 +609,7 @@ var WYSIWYG = {
 	_display: function(n, settings) {
 			
 		// Get the textarea element
-		var textarea = $(n);
+		var textarea = ID(n);
 		
 		// Validate if textarea exists
 		if(textarea == null) {
@@ -691,7 +691,7 @@ var WYSIWYG = {
 	_generate: function(n, settings) {
 				    
 		// Get the textarea element
-		var textarea = $(n);
+		var textarea = ID(n);
 		// Validate if textarea exists
 		if(textarea == null) {
 			alert("No textarea found with the given identifier (ID: " + n + ").");
@@ -809,8 +809,8 @@ var WYSIWYG = {
 	    					
 		// Hide the "Text Mode" button
 		// Validate if textMode Elements are prensent
-		if($("textMode" + n)) {
-			$("textMode" + n).style.display = 'none'; 
+		if(ID("textMode" + n)) {
+			ID("textMode" + n).style.display = 'none'; 
 		}
 						
 		// Pass the textarea's existing text over to the content variable
@@ -1050,7 +1050,7 @@ var WYSIWYG = {
 		}
 			
 		// update the status bar 	
-		var statusbar = $("wysiwyg_statusbar_" + n);
+		var statusbar = ID("wysiwyg_statusbar_" + n);
 		if(statusbar){ 
 			statusbar.innerHTML = outputTree; 
 		}
@@ -1376,7 +1376,7 @@ var WYSIWYG = {
 		
 		var output = "";
 		output += '<table border="0" cellpadding="0" cellspacing="0"><tr>';
-		output += '<td onMouseOver="$(\'img_' + dropdown.id + '_' + n + '\').src=\'' + imageOn + '\';" onMouseOut="$(\'img_' + dropdown.id + '_' + n + '\').src=\'' + image + '\';">';
+		output += '<td onMouseOver="ID(\'img_' + dropdown.id + '_' + n + '\').src=\'' + imageOn + '\';" onMouseOut="ID(\'img_' + dropdown.id + '_' + n + '\').src=\'' + image + '\';">';
 		output += '<img src="' + image + '" id="img_' + dropdown.id + '_' + n + '" height="20" onClick="WYSIWYG.openDropDown(\'' + n + '\',\'' + dropdown.id + '\');" unselectable="on" border="0"><br/>';
 		output += '<span id="elm_' + dropdown.id + '_' + n + '" class="dropdown" style="width: 145px;display:none;">';
 		for (var i = 0; i < dropdown.elements.length;i++) {
@@ -1408,7 +1408,7 @@ var WYSIWYG = {
 			var dropdown = dropdowns[id];
 			if(dropdown.id != exid) {
 				var divId = "elm_" + dropdown.id + "_" + n;
-				if($(divId)) $(divId).style.display = 'none';
+				if(ID(divId)) ID(divId).style.display = 'none';
 			}
 		}			
 	},
@@ -1421,13 +1421,13 @@ var WYSIWYG = {
 	 */
 	openDropDown: function(n, id) {
 		var divId = "elm_" + id + "_" + n;
-		if($(divId).style.display == "none") {	
-			$(divId).style.display = "block"; 
+		if(ID(divId).style.display == "none") {	
+			ID(divId).style.display = "block"; 
 		}
 		else {
-			$(divId).style.display = "none"; 
+			ID(divId).style.display = "none"; 
 		}
-		$(divId).style.position = "absolute";
+		ID(divId).style.position = "absolute";
 		this.closeDropDowns(n, id);
 	},
 	
@@ -1464,11 +1464,11 @@ var WYSIWYG = {
 	  
 		// Hide the HTML Mode button and show the Text Mode button
 		// Validate if Elements are present
-		if($('HTMLMode' + n)) {
-		    $('HTMLMode' + n).style.display = 'none'; 
+		if(ID('HTMLMode' + n)) {
+		    ID('HTMLMode' + n).style.display = 'none'; 
 		}
-	    if($('textMode' + n)) {
-		    $('textMode' + n).style.display = 'block';
+	    if(ID('textMode' + n)) {
+		    ID('textMode' + n).style.display = 'block';
 		}
 		
 		// set the font values for displaying HTML source
@@ -1512,11 +1512,11 @@ var WYSIWYG = {
 					  
 		// Hide the Text Mode button and show the HTML Mode button
 		// Validate if Elements are present
-		if($('textMode' + n)) {
-			$('textMode' + n).style.display = 'none'; 
+		if(ID('textMode' + n)) {
+			ID('textMode' + n).style.display = 'none'; 
 		}
-		if($('HTMLMode' + n)) {
-			$('HTMLMode' + n).style.display = 'block';
+		if(ID('HTMLMode' + n)) {
+			ID('HTMLMode' + n).style.display = 'block';
 		}
 		
 		// reset the font values (changed)
@@ -1682,7 +1682,7 @@ var WYSIWYG = {
 		// remove line breaks before content will be updated
 		if(this.config[n].ReplaceLineBreaks) { content = content.replace(/(\r\n)|(\n)/ig, ""); }
 		// set content back in textarea
-		$(n).value = content;
+		ID(n).value = content;
 	},
 		
 	/* ---------------------------------------------------------------------- *\
@@ -1693,7 +1693,7 @@ var WYSIWYG = {
 	\* ---------------------------------------------------------------------- */
 	hideToolbars: function(n) {
 		for(var i=0;i<this.config[n].Toolbar.length;i++) {
-			var toolbar = $("toolbar" + i + "_" + n);
+			var toolbar = ID("toolbar" + i + "_" + n);
 			if(toolbar) { toolbar.style.display = "none"; }
 		}	
 	},
@@ -1706,7 +1706,7 @@ var WYSIWYG = {
 	\* ---------------------------------------------------------------------- */
 	showToolbars: function(n) {
 		for(var i=0;i<this.config[n].Toolbar.length;i++) {
-			var toolbar = $("toolbar" + i + "_" + n);
+			var toolbar = ID("toolbar" + i + "_" + n);
 			if(toolbar) { toolbar.style.display = ""; }
 		}	
 	},
@@ -1718,7 +1718,7 @@ var WYSIWYG = {
 	  Arguments   : n - The editor identifier (the textarea's ID)
 	\* ---------------------------------------------------------------------- */
 	hideStatusBar: function(n) {
-		var statusbar = $('wysiwyg_statusbar_' + n);
+		var statusbar = ID('wysiwyg_statusbar_' + n);
 		if(statusbar) {	statusbar.style.display = "none"; }
 	},
 	
@@ -1729,7 +1729,7 @@ var WYSIWYG = {
 	  Arguments   : n - The editor identifier (the textarea's ID)
 	\* ---------------------------------------------------------------------- */
 	showStatusBar: function(n) {
-		var statusbar = $('wysiwyg_statusbar_' + n);
+		var statusbar = ID('wysiwyg_statusbar_' + n);
 		if(statusbar) { statusbar.style.display = ""; }
 	},
 	
@@ -2717,7 +2717,7 @@ var WYSIWYG_Table = {
  *
  * @param id Element identifier
  */
-function $(id) {
+function ID(id) {
 	return document.getElementById(id);
 }
 
