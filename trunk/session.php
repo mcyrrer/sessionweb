@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if(!session_is_registered(myusername)){
 	header("location:index.php");
@@ -41,9 +42,6 @@ elseif(strcmp($_REQUEST["command"],"save")==0)
 }
 
 include("include/footer.php.inc");
-
-
-
 
 function echoExecutedStatus($rowSessionStatus)
 {
@@ -544,6 +542,7 @@ function echoSessionForm()
 
 	echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
 	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
+	echo "<input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
 	echo "<table width=\"1024\" border=\"0\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
@@ -570,7 +569,6 @@ function echoSessionForm()
 	echo "                              <td>Session title: </td>\n";
 	echo "                              <td><input type=\"text\" size=\"133\" value=\"$title\" name=\"title\"></td>\n";
 	echo "                        </tr>\n";
-	echo "                                 <input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
 	echo "                        <tr>\n";
 	echo "                              <td>Team: </td>\n";
 	echo "                              <td>\n";
@@ -586,8 +584,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Charter: </td>\n";
 	echo "                              <td>\n";
-	echo "                                  <textarea id=\"textarea1\" name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
-	echo "                                  $charter</textarea>\n";
+	echo "                                  <textarea id=\"textarea1\" name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$charter</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
@@ -611,8 +608,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Notes: </td>\n";
 	echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
-	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
-	echo "                                  $notes</textarea>\n";
+	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$notes</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
@@ -663,7 +659,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
 	echo "                              <td>\n";
-	echo "                                   <div id=\"metricscalculation\"></div\n";
+	echo "                                   <div id=\"metricscalculation\"></div>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
