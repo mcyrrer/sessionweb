@@ -76,7 +76,7 @@ function getSessionWebSettings()
 
     if(!$result)
     {
-        echo "getSessionWebSettings: ".mysql_error()."<br>";
+        echo "getSessionWebSettings: ".mysql_error()."<br/>";
     }
     else
     {

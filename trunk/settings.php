@@ -149,7 +149,7 @@ function InsertTeamNameToDb($teamName)
 
 	if(!$result)
 	{
-		echo "InsertTeamNameToDb: ".mysql_error()."<br>";
+		echo "InsertTeamNameToDb: ".mysql_error()."<br/>";
 	}
 	else
 	{
@@ -197,7 +197,7 @@ function InsertSprintNameToDb($sprintName)
 
 	if(!$result)
 	{
-		echo "InsertSprintNameToDb: ".mysql_error()."<br>";
+		echo "InsertSprintNameToDb: ".mysql_error()."<br/>";
 	}
 	else
 	{

@@ -16,14 +16,14 @@ if(strstr($_REQUEST["savesession"],"true")!=false)
 	if(strstr( substr($_REQUEST["notes"],0,26)     ,'Time,Reporter,Type,Content')!=false)
 	{
 		$_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
-		echo "RapidReporter CVS notes parsed to HTML<br>\n";
+		echo "RapidReporter CVS notes parsed to HTML<br/>\n";
 	}
 
 	//BB test assistant importer
 	elseif(strstr(    substr($_REQUEST["notes"],0,43)   ,"xml version"   )!=false)
 	{
 		$_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
-		echo "BB Test Assistant XML notes parsed to HTML<br>\n";
+		echo "BB Test Assistant XML notes parsed to HTML<br/>\n";
 	}
 
 	saveSession();
@@ -53,7 +53,7 @@ function getSessionMetrics($versionid)
 	$resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
 	if(!$resultSessionMetrics)
 	{
-		echo "echoViewSession: ".mysql_error()."<br>";
+		echo "echoViewSession: ".mysql_error()."<br/>";
 	}
 	return mysql_fetch_array($resultSessionMetrics);
 }
@@ -67,7 +67,7 @@ function getSessionStatus($versionid)
 	$resultSessionStatus = mysql_query($sqlSelectSessionStatus);
 	if(!$resultSessionStatus)
 	{
-		echo "echoViewSession: ".mysql_error()."<br>";
+		echo "echoViewSession: ".mysql_error()."<br/>";
 	}
 	return mysql_fetch_array($resultSessionStatus);
 }
@@ -87,7 +87,7 @@ function echoViewSession()
 
 	if(!$resultSession)
 	{
-		echo "echoViewSession: ".mysql_error()."<br>";
+		echo "echoViewSession: ".mysql_error()."<br/>";
 	}
 	else
 	{
@@ -289,7 +289,7 @@ function getSessionMetricsPieChartUrl($versionid)
 
 	if(!$result)
 	{
-		echo "getSessionMetrics: ".mysql_error()."<br>";
+		echo "getSessionMetrics: ".mysql_error()."<br/>";
 	}
 	else
 	{
@@ -315,7 +315,7 @@ function saveSession_CreateNewSessionId()
 
 	if(!$result)
 	{
-		echo "saveSession_CreateNewSessionId: ".mysql_error()."<br>";
+		echo "saveSession_CreateNewSessionId: ".mysql_error()."<br/>";
 	}
 }
 
@@ -337,7 +337,7 @@ function saveSession_GetSessionIdForNewSession()
 	}
 	else
 	{
-		echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br>";
+		echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br/>";
 	}
 
 	return $sessionid;
@@ -350,7 +350,7 @@ function saveSession_InsertSessionDataToDb($sessionid)
 	if($_REQUEST["title"]=="")
 	{
 		$_REQUEST["title"]="Unnamed Session";
-		echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br>\n";
+		echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
 	}
 	$sqlInsert = "";
 	$sqlInsert .= "INSERT INTO mission ";
@@ -373,7 +373,7 @@ function saveSession_InsertSessionDataToDb($sessionid)
 
 	if(!$result)
 	{
-		echo "saveSession_InsertSessionDataToDb: ".mysql_error()."<br>";
+		echo "saveSession_InsertSessionDataToDb: ".mysql_error()."<br/>";
 	}
 }
 
@@ -390,7 +390,7 @@ function saveSession_GetVersionIdForNewSession()
 
 	if(!$result)
 	{
-		echo "saveSession_GetVersionIdForNewSession: ".mysql_error()."<br>";
+		echo "saveSession_GetVersionIdForNewSession: ".mysql_error()."<br/>";
 	}
 	else
 	{
@@ -425,7 +425,7 @@ function saveSession_InsertSessionStatusToDb($versionid)
 
 	if(!$result)
 	{
-		echo "saveSession_InsertSessionStatusToDb: ".mysql_error()."<br>";
+		echo "saveSession_InsertSessionStatusToDb: ".mysql_error()."<br/>";
 	}
 }
 
@@ -451,7 +451,7 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 
 	if(!$result)
 	{
-		echo "saveSession_InsertSessionMetricsToDb: ".mysql_error()."<br>";
+		echo "saveSession_InsertSessionMetricsToDb: ".mysql_error()."<br/>";
 	}
 }
 
@@ -462,7 +462,7 @@ function checkSessionTitleNotToLong()
 	echo "<h1>Save session</h1>\n";
 	if(strlen($_REQUEST["title"])>$_TITLELENGTH)
 	{
-		echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br>\n";
+		echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br/>\n";
 	}
 }
 /**
@@ -501,7 +501,7 @@ function saveSession()
 
 	mysql_close($con);
 
-	echo "<p/><b>Session saved</b><br>(sessionid = $sessionid, versionid = $versionid)";
+	echo "<p/><b>Session saved</b><br/>(sessionid = $sessionid, versionid = $versionid)";
 
 }
 
@@ -514,6 +514,7 @@ function saveSession()
  */
 function echoSessionForm()
 {
+
 	echo "<form name=\"sessionform\" action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
 	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
 	echo "<table width=\"1024\" border=\"1\">\n";
@@ -633,6 +634,12 @@ function echoSessionForm()
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
+    echo "                              <td></td>\n";
+    echo "                              <td>\n";
+    echo "                                   <div id=\"metricscalculation\"></div\n";
+    echo "                              </td>\n";
+    echo "                        </tr>\n";
+	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
 	echo "                              <td>\n";
 	echo "                                   <p><img src=\"pictures/line2.png\" alt=\"line\"></p>\n";
@@ -690,7 +697,7 @@ function echoDurationSelection()
 function parseRapidReporterNotes($notes)
 {
 
-	$explodedCharterNotes =  explode("<br>",$notes);
+	$explodedCharterNotes =  explode("<br/>",$notes);
 
 	$charterParsed =  "<table width=\"1024\" border=\"0\">\n";
 	$charterParsed .= "    <tr>\n";
@@ -733,7 +740,7 @@ function parseRapidReporterNotes($notes)
 function parseBBTestAssistantNotes($notes)
 {
 	$notes = htmlspecialchars_decode($notes);
-	$notes = str_replace("<br>","",$notes);
+	$notes = str_replace("<br/>","",$notes);
 	$notes = str_replace("&nbsp;","",$notes);
 	$charterParsed     =  "<table width=\"1024\" border=\"0\">\n";
 	$charterParsed     .=  "    <tr>\n";

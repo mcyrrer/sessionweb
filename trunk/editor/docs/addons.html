@@ -21,7 +21,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<br>
+				<br/>
 				<table border="0" cellpadding="2" cellspacing="0" style="width:100%;">
 				<tbody>
 					<tr>
@@ -36,38 +36,38 @@
 					</tr>
 					<tr>
 						<td style="">
-							<br>
-							<h2>openImageLibrary addon (PHP)<br></h2>
+							<br/>
+							<h2>openImageLibrary addon (PHP)<br/></h2>
 							<p> 
-								Here we want to explain how you can use the openImageLibrary addon (for now PHP only) to let your users uploading, browsing and selecting images on your webserver.<br>
-								First you have to download the latest version of the openWYSIWYG modification, which includes the openImageLibrary addon.<br>
-								You will find a directory called <i>addons</i> in the root of the openWYSIWYG directory. If it not there you do not have the latest version of the openWYSIWYG editor.<br><br>
-								To enable the openImageLibrary addon you have to customize the insert image popup implementation of the openWYSIWYG.<br>
+								Here we want to explain how you can use the openImageLibrary addon (for now PHP only) to let your users uploading, browsing and selecting images on your webserver.<br/>
+								First you have to download the latest version of the openWYSIWYG modification, which includes the openImageLibrary addon.<br/>
+								You will find a directory called <i>addons</i> in the root of the openWYSIWYG directory. If it not there you do not have the latest version of the openWYSIWYG editor.<br/><br/>
+								To enable the openImageLibrary addon you have to customize the insert image popup implementation of the openWYSIWYG.<br/>
 								The following shows how you change the implementation of the insert image popup.
 								<div class="codeblock">
 									<span class="darkblue">var <span class="red">mysettings</span> = new WYSIWYG.Settings();</span>
-									<br><br>
-									<span class="green">// define the location of the openImageLibrary addon</span><br>
+									<br/><br/>
+									<span class="green">// define the location of the openImageLibrary addon</span><br/>
 									<span class="darkblue"><span class="red">mysettings</span>.<b>ImagePopupFile</b> = "addons/imagelibrary/insert_image.php";</span>
-									<br>
-									<span class="green">// define the width of the insert image popup</span><br>
+									<br/>
+									<span class="green">// define the width of the insert image popup</span><br/>
 									<span class="darkblue"><span class="red">mysettings</span>.<b>ImagePopupWidth</b> = 600;</span>
-									<br>
-									<span class="green">// define the height of the insert image popup</span><br>
+									<br/>
+									<span class="green">// define the height of the insert image popup</span><br/>
 									<span class="darkblue"><span class="red">mysettings</span>.<b>ImagePopupHeight</b> = 245;</span>
-									<br>
+									<br/>
 								</div>
-								<br>Attach the editor on the textarea with the previously defined <span class="red"><i>mysettings</i></span> object.
+								<br/>Attach the editor on the textarea with the previously defined <span class="red"><i>mysettings</i></span> object.
 								<div class="codeblock">
-									<span class="blue"></span><span class="blue">&#060;script language=</span><span class="green">"javascript1.2"</span><span class="blue">&#062;</span><br>
-									&nbsp;&nbsp;&nbsp;<span class="darkblue">WYSIWYG.<b>attach</b>('textareaID', <span class="red">mysettings</span><span class="darkblue">);</span><br>
+									<span class="blue"></span><span class="blue">&#060;script language=</span><span class="green">"javascript1.2"</span><span class="blue">&#062;</span><br/>
+									&nbsp;&nbsp;&nbsp;<span class="darkblue">WYSIWYG.<b>attach</b>('textareaID', <span class="red">mysettings</span><span class="darkblue">);</span><br/>
 									<span class="blue">&#060;/script&#062;</span>
 								</div>
-								<br>
+								<br/>
 								Now try it out! 
-								<br>
+								<br/>
 							</p>
-							<br><br>
+							<br/><br/>
 						</td>
 					</tr>
 					<tr>
@@ -75,12 +75,12 @@
 							<h2>
 								Customize the openImageLibrary addon
 							</h2>								
-							This section describe how you can customize the openImageLibrary addon.<br><br>
+							This section describe how you can customize the openImageLibrary addon.<br/><br/>
 							
 							<h3>Settings of the openImageLibrary addon:</h3>
-							<br>
+							<br/>
 							The following settings can be modified within the config file <i>(addons/imagelibrary/config.inc.php)</i>
-							<br>
+							<br/>
 							<table border="0" cellpadding="2" cellspacing="0" class="codeblock" style="width:91%">
 								<colgroup>
 									<col width="35%">
@@ -146,7 +146,7 @@
 									</td>
 									<td>
 										<span class="green">
-											Define the extentions you want to show within the directory listing.<br>
+											Define the extentions you want to show within the directory listing.<br/>
 											The extensions also limit the files the user can upload to your image folders. 
 										</span>
 									</td>
@@ -158,14 +158,14 @@
 									<td>
 										<span class="green">
 											If you want to add your own special file icons use this section below. 
-											Each entry relates to the extension of the given file, in the form &lt;extension&gt; => &lt;filename&gt;. <br>
+											Each entry relates to the extension of the given file, in the form &lt;extension&gt; => &lt;filename&gt;. <br/>
 											These files must be located within the dlf directory.
 										</span>
 									</td>
 								</tr>
 								</tbody>
 							</table>
-							<br>					
+							<br/>					
 						</td>
 					</tr>	
 					</tbody>
