@@ -4,12 +4,15 @@ echo "<html>\n";
 echo "  <head>\n";
 echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\">\n";
 echo "      <title>Sessionweb</title>\n";
-	echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery.js\"></script>\n";
-	echo "     <script type=\"text/javascript\" src=\"js/jquery-1.4.4.js\"></script>\n";
+
+echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\" />\n";
+
+echo "     <script src=\"js/jquery-1.4.4.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/sessionwebjquery.js\" type=\"text/javascript\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
+
 if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 {
-	echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
-
 	$new = $_GET["new"];
 	if($new==true)
 	{
@@ -39,5 +42,5 @@ if(isset($_SESSION['user']))
 }
 
 
-echo "<p><img src=\"pictures/logo.png\" alt=\"Sessionweb logo\"></p>\n";
+echo "<p><img src=\"pictures/logo.png\" alt=\"Sessionweb logo\"/></p>\n";
 ?>

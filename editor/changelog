@@ -95,7 +95,7 @@ v0.4.1 (2006-10-14)
     * added - Custom context menu for images and links
     * added - Remove option for images and links on the context menu
     * added - New functions removeLink() and removeImages()
-    * added - New function $() implemented, its a replacement for document.getElementById()
+    * added - New function ID() implemented, its a replacement for document.getElementById()
     * changed - Some small other code changes
 
 v0.4 (2006-10-12)

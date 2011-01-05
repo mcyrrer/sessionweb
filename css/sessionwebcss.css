@@ -1,0 +1,39 @@
+body {
+    background-color: #ffffff;
+	font-family: "Times New Roman";
+	font-size: 17px;
+}
+
+h1 {
+    color: #2e2e2e;
+    text-align: center;
+}
+
+h2 {
+    color: #2e2e2e;
+    text-align: left;
+}
+
+h3 {
+    color: #000000;
+    text-align: left;
+}
+
+p {
+    font-family: "Times New Roman";
+    font-size: 20px;
+}
+
+#metricscalculation
+{
+text-align:center;
+color:black;
+background-color: green;
+} 
+
+#metricscalculation_red
+{
+text-align:center;
+color:black;
+background-color: red;
+} 
