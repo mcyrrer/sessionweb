@@ -9,9 +9,20 @@ include_once 'include/commonFunctions.php.inc';
 
 
 
-if(strstr($_REQUEST["savesession"],"true")!=false)
+if(strcmp($_REQUEST["command"],"new")==0)
 {
-
+	echoSessionForm();
+}
+elseif(strcmp($_REQUEST["command"],"view")==0)
+{
+	echoViewSession();
+}
+elseif(strcmp($_REQUEST["command"],"edit")==0)
+{
+	echoSessionForm();
+}
+elseif(strcmp($_REQUEST["command"],"save")==0)
+{
 	//RapidReporter importer
 	if(strstr( substr($_REQUEST["notes"],0,26)     ,'Time,Reporter,Type,Content')!=false)
 	{
@@ -27,18 +38,6 @@ if(strstr($_REQUEST["savesession"],"true")!=false)
 	}
 
 	saveSession();
-
-}
-
-elseif (strstr($_GET["new"],"true")!=false)
-{
-	echoSessionForm();
-}
-
-//Display a readonly version of the session
-elseif ($_GET["sessionid"]!="")
-{
-	echoViewSession();
 }
 
 include("include/footer.php.inc");
@@ -512,9 +511,40 @@ function saveSession()
  */
 function echoSessionForm()
 {
-	echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+	
+	//TODO: Add edit functiality for metrics and executed. Add update session instead of always create a new one.
+	
+	$title = "";
+	$team ="";
+	$charter = "";
+	$notes = "";
+	$sprint = "";
+
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$insertSessionData = false;
+	if(strcmp($_REQUEST["command"],"edit")==0)
+	{
+		$rowSessionData = getSessionData($_GET["sessionid"]);
+		$insertSessionData = true;
+	}
+
+
+	mysql_close($con);
+
+	if($insertSessionData)
+	{
+		$title = $rowSessionData["title"];
+		$charter = $rowSessionData["charter"];
+		$notes = $rowSessionData["notes"];
+		$sprint = $rowSessionData["sprintname"];
+		$team = $rowSessionData["teamname"];
+	}
+
+	echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
 	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
-	echo "<table width=\"1024\" border=\"1\">\n";
+	echo "<table width=\"1024\" border=\"0\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
 	echo "                  <table width=\"1024\" border=\"0\">\n";
@@ -538,26 +568,26 @@ function echoSessionForm()
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td>Session title: </td>\n";
-	echo "                              <td><input type=\"text\" size=\"133\" value=\"\" name=\"title\"></td>\n";
+	echo "                              <td><input type=\"text\" size=\"133\" value=\"$title\" name=\"title\"></td>\n";
 	echo "                        </tr>\n";
 	echo "                                 <input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
 	echo "                        <tr>\n";
 	echo "                              <td>Team: </td>\n";
 	echo "                              <td>\n";
-	echoTeamSelect();
+	echoTeamSelect($team);
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Sprint: </td>\n";
 	echo "                              <td>\n";
-	echoSprintSelect();
+	echoSprintSelect($sprint);
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Charter: </td>\n";
 	echo "                              <td>\n";
-	echo "                                  <textarea id=\"textarea1\" name=\"charter\"  rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
-	echo "                                  </textarea>\n";
+	echo "                                  <textarea id=\"textarea1\" name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
+	echo "                                  $charter</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
@@ -582,7 +612,7 @@ function echoSessionForm()
 	echo "                              <td valign=\"top\">Notes: </td>\n";
 	echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
 	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">";
-	echo "                                  </textarea>\n";
+	echo "                                  $notes</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";

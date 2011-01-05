@@ -20,7 +20,7 @@ if($currentPage=="")
 echo "<table width=\"1024\" border=\"0\">\n";
 echo "  <tr>\n";
 echo "      <td width=\"25\">Id</td>\n";
-echo "      <td width=\"25\">Action</td>\n";
+echo "      <td width=\"25\">Actions</td>\n";
 echo "      <td>Title</td>\n";
 echo "      <td>User</td>\n";
 echo "      <td>Sprint</td>\n";
@@ -50,8 +50,15 @@ if($result)
 		$color = getSessionColorCode($rowSessionStatus);
 		echo "  <tr bgcolor=\"$color\">\n";
 		echo "      <td>".$row["sessionid"]."</td>\n";
-		echo "      <td><img src=\"pictures/edit.png\" alt=\"Sessionweb logo\"/></td>\n";
-		echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."\">".$row["title"]."</a></td>\n";
+		if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['admin'],"1")==0)
+		{
+			echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img src=\"pictures/edit.png\" border=\"0\" alt=\"Sessionweb logo\"/></a></td>\n";
+		}
+		else
+		{
+			echo "      <td></td>\n";
+		}
+		echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=view\">".$row["title"]."</a></td>\n";
 		echo "      <td>".$row["username"]."</td>\n";
 		echo "      <td>".$row["sprintname"]."</td>\n";
 		echo "      <td>".$row["teamname"]."</td>\n";
@@ -74,15 +81,15 @@ include("include/footer.php.inc");
 function getSessionColorCode($rowSessionStatus)
 {
 	$color = "#c2c287";
-    if($rowSessionStatus["executed"]==1)
-    {
-    	$color = "#ffff77";
-    }
-    if($rowSessionStatus["debriefed"]==1)
-    {
-        $color = "#99ff99";
-    }
-    return $color;
+	if($rowSessionStatus["executed"]==1)
+	{
+		$color = "#ffff77";
+	}
+	if($rowSessionStatus["debriefed"]==1)
+	{
+		$color = "#99ff99";
+	}
+	return $color;
 }
 
 function echoPreviouseAndNextLink($currentPage,$num_rows)
