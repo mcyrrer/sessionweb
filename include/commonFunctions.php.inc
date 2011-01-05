@@ -7,11 +7,29 @@ function getSessionMetrics($versionid)
 	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
 	$sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
 	$resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
+
 	if(!$resultSessionMetrics)
 	{
 		echo "getSessionMetrics: ".mysql_error()."<br/>";
 	}
 	return mysql_fetch_array($resultSessionMetrics);
+}
+
+function getSessionData($sessionid)
+{
+	$sqlSelectSession = "";
+	$sqlSelectSession .= "SELECT * ";
+	$sqlSelectSession .= "FROM   mission ";
+	$sqlSelectSession .= "WHERE  sessionid = $sessionid" ;
+
+	$resultSession = mysql_query($sqlSelectSession);
+
+	if(!$resultSession)
+	{
+		echo "getSessionData: ".mysql_error()."<br/>";
+	}
+
+	return mysql_fetch_array($resultSession);
 }
 
 function getSessionStatus($versionid)
@@ -38,7 +56,7 @@ function createPercentPieChart($setup,$test,$bug,$oppertunity)
 	return $imgURL;
 }
 
-function echoTeamSelect()
+function echoTeamSelect($team)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -55,7 +73,14 @@ function echoTeamSelect()
 
 	while($row = mysql_fetch_array($result))
 	{
-		echo "                                      <option>" . htmlspecialchars($row['teamname']) . "</option>\n";
+		if(strcmp($team,$row['teamname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['teamname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['teamname']) . "</option>\n";
+		}
 	}
 
 	echo "                                  </select>\n";
@@ -63,7 +88,7 @@ function echoTeamSelect()
 	mysql_close($con);
 }
 
-function echoTesterSelect()
+function echoTesterSelect($name)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -81,7 +106,14 @@ function echoTesterSelect()
 
 	while($row = mysql_fetch_array($result))
 	{
-		echo "                                      <option>" . htmlspecialchars($row['fullname']) . "</option>\n";
+		if(strcmp($name,$row['fullname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['fullname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['fullname']) . "</option>\n";
+		}
 	}
 
 	echo "                                  </select>\n";
@@ -89,7 +121,7 @@ function echoTesterSelect()
 	mysql_close($con);
 }
 
-function echoSprintSelect()
+function echoSprintSelect($sprint)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -106,7 +138,14 @@ function echoSprintSelect()
 
 	while($row = mysql_fetch_array($result))
 	{
-		echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
+		if(strcmp($sprint,$row['sprintname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['sprintname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
+		}
 	}
 
 	echo "                                  </select>\n";

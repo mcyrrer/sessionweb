@@ -13,8 +13,8 @@ echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>
 
 if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 {
-	$new = $_GET["new"];
-	if($new==true)
+
+	if(strcmp($_REQUEST["command"],"new")==0 || strcmp($_REQUEST["command"],"edit")==0)
 	{
 		echo "<!-- \n";
 		echo "                  Include the WYSIWYG javascript files\n";
@@ -29,8 +29,9 @@ if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 }
 echo "  </head>\n";
 echo "  <body>\n";
+echo "      [".$_SESSION['user']."]";
 echo "      <a href=\"index.php\">Main page</a> |";
-echo "      <a href=\"session.php?new=true\">New session</a> |";
+echo "      <a href=\"session.php?command=new\">New session</a> |";
 echo "      <a href=\"list.php\">List sessions</a> |";
 echo "      <a href=\"settings.php\">Settings</a> |";
 
