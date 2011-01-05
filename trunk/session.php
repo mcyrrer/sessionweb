@@ -44,34 +44,31 @@ elseif ($_GET["sessionid"]!="")
 include("include/footer.php.inc");
 
 
-function getSessionMetrics($versionid)
+
+
+function echoExecutedStatus($rowSessionStatus)
 {
-	$sqlSelectSessionMetrics = "";
-	$sqlSelectSessionMetrics .= "SELECT * ";
-	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
-	$sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
-	$resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
-	if(!$resultSessionMetrics)
+	if($rowSessionStatus["executed"]==1)
 	{
-		echo "echoViewSession: ".mysql_error()."<br/>";
+		echo "                          Executed\n";
 	}
-	return mysql_fetch_array($resultSessionMetrics);
+	else
+	{
+		echo "                          Not Executed\n";
+	}
 }
 
-function getSessionStatus($versionid)
+function echoDebriefedStatus($rowSessionStatus)
 {
-	$sqlSelectSessionStatus = "";
-	$sqlSelectSessionStatus .= "SELECT * ";
-	$sqlSelectSessionStatus .= "FROM   mission_status ";
-	$sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
-	$resultSessionStatus = mysql_query($sqlSelectSessionStatus);
-	if(!$resultSessionStatus)
+	if($rowSessionStatus["debriefed"]==1)
 	{
-		echo "echoViewSession: ".mysql_error()."<br/>";
+		echo "                          Debriefed\n";
 	}
-	return mysql_fetch_array($resultSessionStatus);
+	else
+	{
+		echo "                          Not debriefed\n";
+	}
 }
-
 
 function echoViewSession()
 {
@@ -143,13 +140,13 @@ function echoViewSession()
 		echo "                <td align=\"left\">\n";
 		echo "                      <h4>Status</h4>\n";
 		echo "                      <div style=\"background-color:#efefef;\">\n";
-		echo "                          Executed\n";
+		echoExecutedStatus($rowSessionStatus);
 		echo "                      </div>\n";
 		echo "                </td>\n";
 		echo "                <td align=\"left\">\n";
 		echo "                      <h4>Debriefed</h4>\n";
 		echo "                      <div style=\"background-color:#efefef;\">\n";
-		echo "                          Not debriefed\n";
+		echoDebriefedStatus($rowSessionStatus);
 		echo "                      </div>\n";
 		echo "                </td>\n";
 		echo "                <td align=\"left\">\n";
@@ -403,7 +400,8 @@ function saveSession_GetVersionIdForNewSession()
 function saveSession_InsertSessionStatusToDb($versionid)
 {
 	$executed = false;
-	if(strstr($_REQUEST["executed"],"yes")==0)
+
+	if($_REQUEST["executed"]!="")
 	{
 		$executed = true;
 	}
@@ -633,11 +631,11 @@ function echoSessionForm()
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
-    echo "                              <td></td>\n";
-    echo "                              <td>\n";
-    echo "                                   <div id=\"metricscalculation\"></div\n";
-    echo "                              </td>\n";
-    echo "                        </tr>\n";
+	echo "                              <td></td>\n";
+	echo "                              <td>\n";
+	echo "                                   <div id=\"metricscalculation\"></div\n";
+	echo "                              </td>\n";
+	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
 	echo "                              <td>\n";
