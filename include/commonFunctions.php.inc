@@ -1,5 +1,32 @@
 <?php
 
+function getSessionMetrics($versionid)
+{
+	$sqlSelectSessionMetrics = "";
+	$sqlSelectSessionMetrics .= "SELECT * ";
+	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
+	$sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
+	$resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
+	if(!$resultSessionMetrics)
+	{
+		echo "getSessionMetrics: ".mysql_error()."<br/>";
+	}
+	return mysql_fetch_array($resultSessionMetrics);
+}
+
+function getSessionStatus($versionid)
+{
+	$sqlSelectSessionStatus = "";
+	$sqlSelectSessionStatus .= "SELECT * ";
+	$sqlSelectSessionStatus .= "FROM   mission_status ";
+	$sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
+	$resultSessionStatus = mysql_query($sqlSelectSessionStatus);
+	if(!$resultSessionStatus)
+	{
+		echo "getSessionStatus: ".mysql_error()."<br/>";
+	}
+	return mysql_fetch_array($resultSessionStatus);
+}
 
 function createPercentPieChart($setup,$test,$bug,$oppertunity)
 {
