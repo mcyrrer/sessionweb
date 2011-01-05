@@ -45,7 +45,7 @@ if($result)
 }
 else
 {
-    echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br>";
+    echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br/>";
 }
 echo "</table>\n";
 include("include/footer.php.inc");

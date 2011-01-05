@@ -21,7 +21,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<br>
+				<br/>
 				<table border="0" cellpadding="2" cellspacing="0" style="width:100%;">
 				<tbody>
 					<tr>
@@ -36,39 +36,39 @@
 					</tr>
 					<tr>
 						<td style="">
-							<br>
+							<br/>
 							<h2>Setup the openWYSIWYG editor</h2>
 							<p>
 								Include the javascript files like the following:
-								<br>
+								<br/>
 								<div class="codeblock">
 									<span class="blue">&lt;script language=</span><span class="green">"JavaScript"</span> <span class="blue">type=</span><span class="green">"text/javascript"</span> <span class="blue">src=</span><span class="green">"<span class="red">scripts</span>/wysiwyg.js"</span><span class="blue">&gt;&lt;/script&gt;</span>
-									<br>
+									<br/>
 									<span class="blue">&lt;script language=</span><span class="green">"JavaScript"</span> <span class="blue">type=</span><span class="green">"text/javascript"</span> <span class="blue">src=</span><span class="green">"<span class="red">scripts</span>/wysiwyg-settings.js"</span><span class="blue">&gt;&lt;/script&gt;<span class="green"> // optional</span></span>
 								</div>
-								<br>
+								<br/>
 								Note: You might need to change the src path (red), depending on where you put the files.
 							</p>
-							<p>Now you have to attach the openWYSIWYG editor to all or to defined textareas of your page.<br>
+							<p>Now you have to attach the openWYSIWYG editor to all or to defined textareas of your page.<br/>
 								<div class="codeblock">
-									<span class="blue"></span><span class="blue">&#060;script language=</span><span class="green">"javascript1.2"</span><span class="blue">&gt;<br>&nbsp;&nbsp; </span><span class="darkblue"><span class="green">// attach the editor to all textareas of your page.</span></span><br>
-									&nbsp;&nbsp;&nbsp;<span class="darkblue">WYSIWYG.<strong>attach</strong>('all'); <br>&nbsp;&nbsp; <br></span><span class="darkblue">&nbsp;&nbsp; <span class="green">// attach the editor to the textarea with the identifier 'textarea1'.</span></span><br><span class="darkblue">&nbsp;&nbsp; WYSIWYG.<strong>attach</strong>('textarea1');<br></span><span class="darkblue"></span>
+									<span class="blue"></span><span class="blue">&#060;script language=</span><span class="green">"javascript1.2"</span><span class="blue">&gt;<br/>&nbsp;&nbsp; </span><span class="darkblue"><span class="green">// attach the editor to all textareas of your page.</span></span><br/>
+									&nbsp;&nbsp;&nbsp;<span class="darkblue">WYSIWYG.<strong>attach</strong>('all'); <br/>&nbsp;&nbsp; <br/></span><span class="darkblue">&nbsp;&nbsp; <span class="green">// attach the editor to the textarea with the identifier 'textarea1'.</span></span><br/><span class="darkblue">&nbsp;&nbsp; WYSIWYG.<strong>attach</strong>('textarea1');<br/></span><span class="darkblue"></span>
 									<span class="blue">&#060;/script&#062;</span>
 								</div>
-								<br>
+								<br/>
 								Now try it out! 
-								<br><br>
-								If you don't see any images on the toolbar then you have to change the image path.<br>
+								<br/><br/>
+								If you don't see any images on the toolbar then you have to change the image path.<br/>
 								Have a look at the customize section.
-								<br><br>
+								<br/><br/>
 								If you need to display contents of textarea's with HTML output support, but without the editing possibilities, you can use a function called display.
 								<div class="codeblock">
-									<span class="blue"></span><span class="blue">&#060;script language=</span><span class="green">"javascript1.2"</span><span class="blue">&gt;<br>&nbsp;&nbsp; </span><span class="darkblue"><span class="green">// display iframes instead of textareas. It apply's to all textareas of your page.</span></span><br>
-									&nbsp;&nbsp;&nbsp;<span class="darkblue">WYSIWYG.<strong>display</strong>('all'); <br>&nbsp;&nbsp; <br></span><span class="darkblue">&nbsp;&nbsp; <span class="green">// display an iframe instead of the textarea with the identifier 'textarea1'</span></span><br><span class="darkblue">&nbsp;&nbsp; WYSIWYG.<strong>display</strong>('textarea1');<br></span><span class="darkblue"></span>
+									<span class="blue"></span><span class="blue">&#060;script language=</span><span class="green">"javascript1.2"</span><span class="blue">&gt;<br/>&nbsp;&nbsp; </span><span class="darkblue"><span class="green">// display iframes instead of textareas. It apply's to all textareas of your page.</span></span><br/>
+									&nbsp;&nbsp;&nbsp;<span class="darkblue">WYSIWYG.<strong>display</strong>('all'); <br/>&nbsp;&nbsp; <br/></span><span class="darkblue">&nbsp;&nbsp; <span class="green">// display an iframe instead of the textarea with the identifier 'textarea1'</span></span><br/><span class="darkblue">&nbsp;&nbsp; WYSIWYG.<strong>display</strong>('textarea1');<br/></span><span class="darkblue"></span>
 									<span class="blue">&#060;/script&#062;</span>
 								</div>
 							</p>
-							<br><br>
+							<br/><br/>
 						</td>
 					</tr>
 					<tr>
@@ -76,22 +76,22 @@
 							<h2>
 								Customize the openWYSIWYG
 							</h2>								
-							This section describe how you can customize the openWYSIWYG editor.<br><br>
-							<h3>The Settings object:</h3><br>
+							This section describe how you can customize the openWYSIWYG editor.<br/><br/>
+							<h3>The Settings object:</h3><br/>
 							You can create a new instance of the settings object. 
 							This object will be used to customize your editor.
 							<div class="codeblock">
 								<span class="darkblue">var <span class="red">mysettings</span> = new WYSIWYG.Settings();</span>
 							</div>
-							<br>Now attach the editor to all or to defined textareas of your page.<br> 
+							<br/>Now attach the editor to all or to defined textareas of your page.<br/> 
 							<div class="codeblock">
-							<span class="darkblue">WYSIWYG.<b>attach</b>(</span><span class="green">'all'</span><span class="darkblue">, <span class="red">mysettings</span><span class="darkblue">);</span><br>
+							<span class="darkblue">WYSIWYG.<b>attach</b>(</span><span class="green">'all'</span><span class="darkblue">, <span class="red">mysettings</span><span class="darkblue">);</span><br/>
 							</div>
-							<br><br>
+							<br/><br/>
 							<h3>Properties of the Settings object:</h3>
-							<br>
+							<br/>
 							Here is a list of all properties you can change to customize the look and feel of your editor.
-							<br>
+							<br/>
 							<table border="0" cellpadding="2" cellspacing="0" class="codeblock" style="width:91%">
 								<colgroup>
 									<col width="35%">
@@ -120,11 +120,11 @@
 								</tr>
 								<tr>
 									<td><span class="red">mysettings</span>.<b>DefaultStyle</b> = "&lt;stylesheet&gt;"; </td>
-									<td><span class="green">The default stylesheet of the editor window <br>(default: 'font-family: Arial; font-size: 12px; background-color: #FFFFFF')</span></td>
+									<td><span class="green">The default stylesheet of the editor window <br/>(default: 'font-family: Arial; font-size: 12px; background-color: #FFFFFF')</span></td>
 								</tr>
 								<tr>
 									<td><span class="red">mysettings</span>.<b>DisabledStyle</b> = "&lt;stylesheet&gt;"; </td>
-									<td><span class="green">The style which appears if the editor is disabled<br> (default: 'font-family: Arial; font-size: 12px; background-color: #EEEEEE')</span></td>
+									<td><span class="green">The style which appears if the editor is disabled<br/> (default: 'font-family: Arial; font-size: 12px; background-color: #EEEEEE')</span></td>
 								</tr>
 								<tr>
 									<td><span class="red">mysettings</span>.<b>ReplaceLineBreaks</b> = &lt;true/false&gt;; </td>
@@ -168,7 +168,7 @@
 								</tr>
 								<tr>
 									<td><span class="red">mysettings</span>.<b>InsertImagePopup</b> = &lt;path/file&gt;;</td>
-									<td><span class="green">If you use another implementation like an image library written in PHP, then you can use this setting to customize the location of the implementation file. No need to edit the main javascript file.<br>(It's used for future upcoming image library addons)</span></td>
+									<td><span class="green">If you use another implementation like an image library written in PHP, then you can use this setting to customize the location of the implementation file. No need to edit the main javascript file.<br/>(It's used for future upcoming image library addons)</span></td>
 								</tr>
 								<tr>
 									<td><span class="red">mysettings</span>.<b>InsertImageWith</b> = &lt;width&gt;;</td>
@@ -180,11 +180,11 @@
 								</tr>
 								</tbody>
 							</table>
-							<br>
+							<br/>
 							<h3>Methods of the Settings object:</h3>
-							<br>
+							<br/>
 							There are three methods to customize the toolbar elements. (Recommended if you newly to javascript)
-							<br>	
+							<br/>	
 							<table border="0" cellpadding="2" cellspacing="0" class="codeblock" style="width:91%">
 								<colgroup>
 									<col width="50%">
@@ -195,52 +195,52 @@
 									<td><span class="red">mysettings</span>.<b>addToolbarElement</b>("&lt;element&gt;", &lt;toolbar&gt;, &lt;position&gt;);</td>
 									<td>
 										<span class="green">
-											Add the given &lt;element&gt; to the defined &lt;toolbar&gt; on the defined &lt;position&gt;.<br><br>
-											Valid elements are:<br>
+											Add the given &lt;element&gt; to the defined &lt;toolbar&gt; on the defined &lt;position&gt;.<br/><br/>
+											Valid elements are:<br/>
 											<i>font, fontsize,	bold, italic, underline, forecolor, backcolor, justifyleft, justifycenter, justifyright, 
 											unorderedlist, orderedlist, outdent, indent, subscript, superscript, cut, copy, paste, removeformat,
 											undo, redo, inserttable, insertimage, createlink, seperator, undo, redo, seperator, preview, print, 
 											viewSource, help</i>
-											<br><br>
+											<br/><br/>
 											The element <i>seperator</i> adds a line seperator between elements
-											<br><br>
+											<br/><br/>
 											&lt;toolbar&gt; is an integer starts with 1.
-											<br>
+											<br/>
 											&lt;position&gt; is an integer starts with 1.
-											<br><br>
+											<br/><br/>
 											Example:
 										</span>
 										<span color="darkblue"> mysettings.addToolbarElement("bold", 1, 1);</span>
-										<br><br>
+										<br/><br/>
 									</td>
 								</tr>		
 								<tr>	
 									<td><span class="red">mysettings</span>.<b>removeToolbarElement</b>("&lt;element&gt;");</td>
 									<td>
 										<span class="green">
-											Removes the given &lt;element&gt; on the toolbar.<br><br>
-											Valid elements are:<br>
+											Removes the given &lt;element&gt; on the toolbar.<br/><br/>
+											Valid elements are:<br/>
 											<i>font, fontsize,	bold, italic, underline, forecolor, backcolor, justifyleft, justifycenter, justifyright, 
 											unorderedlist, orderedlist, outdent, indent, subscript, superscript, cut, copy, paste, removeformat,
 											undo, redo, inserttable, insertimage, createlink, seperator, undo, redo, seperator, preview, print, 
 											viewSource, help</i>
-											<br><br>
+											<br/><br/>
 											You can not remove the element <i>seperator</i> only overriding with the function addToolbarElement()
-											<br><br>
+											<br/><br/>
 											Example:
 										</span>
 										<span color="darkblue"> mysettings.removeToolbarElement("bold");</span>
-										<br><br>
+										<br/><br/>
 									</td>
 								</tr>		
 								<tr>	
 									<td><span class="red">mysettings</span>.<b>clearToolbar</b>(&lt;toolbar&gt;);</td>
 									<td>
 										<span class="green">
-											Clears the given &lt;toolbar&gt;. If the element &lt;toolbar&gt; is not defined then the functions clear all existing toolbars.<br><br>
-											<br><br>
+											Clears the given &lt;toolbar&gt;. If the element &lt;toolbar&gt; is not defined then the functions clear all existing toolbars.<br/><br/>
+											<br/><br/>
 											&lt;toolbar&gt; is an integer starts with 1.
-											<br><br>
+											<br/><br/>
 											Example:
 										</span>
 										<span color="darkblue"> mysettings.clearToolbar(1);</span>
@@ -248,13 +248,13 @@
 								</tr>		
 								</tbody>
 							</table>
-							<br><br>
-							<br>
+							<br/><br/>
+							<br/>
 							<h3>Array of the Settings object:</h3>
-							<br>
+							<br/>
 							There are some arrays within the Settings object you can define directly. So let`s show how does it works.
-							<br>
-							<br>	
+							<br/>
+							<br/>	
 							<table border="0" cellpadding="2" cellspacing="0" class="codeblock" style="width:91%">
 								<colgroup>
 									<col width="50%">
@@ -272,11 +272,11 @@
 										<span class="darkblue">
 											mysettings.Toolbar[1][2] = "bold";
 										</span>
-										<br><br>
+										<br/><br/>
 										<span class="green">
 											Valid elements can be found on addToolbarElement().
 										</span>
-										<br><br>
+										<br/><br/>
 									</td>
 								</tr>	
 								<tr>	
@@ -289,12 +289,12 @@
 										<span class="darkblue">
 											mysettings.Fonts[1] = "Arial";
 										</span>
-										<br><br>
+										<br/><br/>
 										<span class=green>
-											Valid elements are:<br>
+											Valid elements are:<br/>
 											All font family elements (look at a stylesheet description of the tag font-family)
 										</span>
-										<br><br>
+										<br/><br/>
 									</td>
 								</tr>	
 								<tr>	
@@ -308,9 +308,9 @@
 										<span class="darkblue">
 											mysettings.Fontsizes[0] = "5";
 										</span>
-										<br><br>
+										<br/><br/>
 										<span class=green>
-											Valid sizes are:<br>
+											Valid sizes are:<br/>
 											1 - ... (i dont know if the size attribute is limit)
 											
 										</span>
@@ -319,7 +319,7 @@
 								</tbody>
 							</table>	
 							
-							<br><br><br><br>	
+							<br/><br/><br/><br/>	
 						</td>
 					</tr>	
 					<tr>
@@ -328,8 +328,8 @@
 								Change Log
 							</h2>								
 								<p>
-								<b>v1.4.7 (Released: September 9, 2007)</b><br> 
-								Addresses the following: <br></p>
+								<b>v1.4.7 (Released: September 9, 2007)</b><br/> 
+								Addresses the following: <br/></p>
 								<ul>
 								<li>added - Possibilty to maximize the editor window</li>
 								<li>fixed - Correct relative image path on preview, now it works for all images</li>
@@ -349,21 +349,21 @@
 								<li>added - Full justify text (code by tim)</li>
 								</ul>
 								<p>
-								<b>v1.4.6c (Released: December 25, 2006)</b><br> 
-								Addresses the following: <br></p>
+								<b>v1.4.6c (Released: December 25, 2006)</b><br/> 
+								Addresses the following: <br/></p>
 								<ul>
 								<li>fixed - Solved issue with backcolor command on IE</li>
 								<li>changed - Add parameter value to WYSIWYG_Core.execCommand() function</li>
 								</ul>
-								<b>v1.4.6b (Released: December 23, 2006)</b><br> 
-								Addresses the following: <br></p>
+								<b>v1.4.6b (Released: December 23, 2006)</b><br/> 
+								Addresses the following: <br/></p>
 								<ul>
 								<li>changed - Debug code on context menu removed</li>
 								<li>fixed - Add "px" to left and top style information on context menu</li>
 								<li>changed - Correct comment of wyswiwyg-settings.js</li>
 								</ul>
-								<b>v1.4.6a (Released: December 21, 2006)</b><br> 
-								Addresses the following: <br></p>
+								<b>v1.4.6a (Released: December 21, 2006)</b><br/> 
+								Addresses the following: <br/></p>
 								<ul>
 								<li>fixed - bad class name on mouse over of toolbar buttons fixed</li>
 								<li>changed - Rewritten function to get the current position of an element (iframe)</li>
@@ -371,8 +371,8 @@
 								<li>fixed - Wrong variable call fixed</li>
 								<li>fixed - Problem while removing elements with the context menu solved</li>
 								</ul>
-								<b>v1.4.6 (Released: December 17, 2006)</b><br> 
-								Addresses the following: <br></p>
+								<b>v1.4.6 (Released: December 17, 2006)</b><br/> 
+								Addresses the following: <br/></p>
 								<ul>
 								<li>changed - Modification changed to be the official version of openWYSIWYG</li>
 								<li>fixed - Child nodes will be copied to the parent if a node is removed</li>
@@ -391,7 +391,7 @@
 								<li>changed - Include of stylesheet files changed, now using the includeCSS function</li>
 								<li>changed - Complete rewritten display function, now you can use it like like function attach()</li>
 								</ul>
-								<b>Modification v0.4.5 (Released: November 12, 2006)</b><br> 
+								<b>Modification v0.4.5 (Released: November 12, 2006)</b><br/> 
 								Addresses the following: 
 								</p><ul>
 								<li>added - openImageLibrary addon (for now PHP only)</li>

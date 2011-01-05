@@ -77,11 +77,11 @@ var WYSIWYG = {
 		this.StatusBarEnabled = true;
 		
 		// If enabled than the capability of the IE inserting line breaks will be inverted.
-		// Normal: ENTER = <p> , SHIFT + ENTER = <br>
-		// Inverted: ENTER = <br>, SHIFT + ENTER = <p>
+		// Normal: ENTER = <p> , SHIFT + ENTER = <br/>
+		// Inverted: ENTER = <br/>, SHIFT + ENTER = <p>
 		this.InvertIELineBreaks = false;
 		
-		// Replace line breaks with <br> tags
+		// Replace line breaks with <br/> tags
 		this.ReplaceLineBreaks = false;
       
 		// Page that opened the WYSIWYG (Used for the return command)
@@ -667,9 +667,9 @@ var WYSIWYG = {
 	    var content = textarea.value;
 		var doc = this.getEditorWindow(n).document;
 		
-		// Replace all \n with <br> 
+		// Replace all \n with <br/> 
 		if(this.config[n].ReplaceLineBreaks) {
-			content = content.replace(/(\r\n)|(\n)/ig, "<br>");
+			content = content.replace(/(\r\n)|(\n)/ig, "<br/>");
 		}
 			
 		// Write the textarea's content into the iframe
@@ -818,9 +818,9 @@ var WYSIWYG = {
 		var doc = this.getEditorWindow(n).document;		
 		
 
-		// Replace all \n with <br> 
+		// Replace all \n with <br/> 
 		if(this.config[n].ReplaceLineBreaks) {
-			content = content.replace(/\n\r|\n/ig, "<br>");
+			content = content.replace(/\n\r|\n/ig, "<br/>");
 		}
 				
 		// Write the textarea's content into the iframe
@@ -1377,7 +1377,7 @@ var WYSIWYG = {
 		var output = "";
 		output += '<table border="0" cellpadding="0" cellspacing="0"><tr>';
 		output += '<td onMouseOver="$(\'img_' + dropdown.id + '_' + n + '\').src=\'' + imageOn + '\';" onMouseOut="$(\'img_' + dropdown.id + '_' + n + '\').src=\'' + image + '\';">';
-		output += '<img src="' + image + '" id="img_' + dropdown.id + '_' + n + '" height="20" onClick="WYSIWYG.openDropDown(\'' + n + '\',\'' + dropdown.id + '\');" unselectable="on" border="0"><br>';
+		output += '<img src="' + image + '" id="img_' + dropdown.id + '_' + n + '" height="20" onClick="WYSIWYG.openDropDown(\'' + n + '\',\'' + dropdown.id + '\');" unselectable="on" border="0"><br/>';
 		output += '<span id="elm_' + dropdown.id + '_' + n + '" class="dropdown" style="width: 145px;display:none;">';
 		for (var i = 0; i < dropdown.elements.length;i++) {
 			if (dropdown.elements[i]) {
@@ -1387,7 +1387,7 @@ var WYSIWYG = {
 		  		output += '<button type="button" onClick="WYSIWYG.execCommand(\'' + n + '\',\'' + dropdown.command + '\',\'' + value + '\')\;" onMouseOver="this.className=\'mouseOver\'" onMouseOut="this.className=\'mouseOut\'" class="mouseOut" style="width: 120px;">';
 		  		output += '<table cellpadding="0" cellspacing="0" border="0"><tr>';
 		  		output += '<td align="left">' + label + '</td>';
-		  		output += '</tr></table></button><br>';	
+		  		output += '</tr></table></button><br/>';	
 		  	}
 	  	}
   		output += '</span></td></tr></table>';	
@@ -1833,8 +1833,8 @@ var WYSIWYG = {
 	/* ---------------------------------------------------------------------- *\
 	  Function    : invertIELineBreakCapability()
 	  Description : Inverts the line break capability of IE (Thx to richyrich)
-	  				Normal: ENTER = <p> , SHIFT + ENTER = <br>
-	  				Inverted: ENTER = <br>, SHIFT + ENTER = <p>
+	  				Normal: ENTER = <p> , SHIFT + ENTER = <br/>
+	  				Inverted: ENTER = <br/>, SHIFT + ENTER = <p>
 	  Usage       : WYSIWYG.invertIELineBreakCapability(n)
 	  Arguments   : n   - The editor identifier (the textarea's ID)
 	\* ---------------------------------------------------------------------- */
@@ -1846,7 +1846,7 @@ var WYSIWYG = {
 		if (editor.event.keyCode==13) {
 	    	if (!editor.event.shiftKey) {
 				sel = this.getRange(this.getSelection(n));
-	            sel.pasteHTML("<br>");
+	            sel.pasteHTML("<br/>");
 	            editor.event.cancelBubble = true;
 	            editor.event.returnValue = false;
 	            sel.select();

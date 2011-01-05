@@ -60,8 +60,8 @@ v0.4.4 (2006-11-11)
     * fixed - corrupt font + font size selection html
 
 v0.4.3 (2006-10-20)
-    * added - Possibility to invert the line break print outs of IE (ENTER = <br>, SHIFT + ENTER = <p>)
-    * fixed - Replace of <p> with <br> on carriage return prevented the IE to set ordered and unordered lists.
+    * added - Possibility to invert the line break print outs of IE (ENTER = <br/>, SHIFT + ENTER = <p>)
+    * fixed - Replace of <p> with <br/> on carriage return prevented the IE to set ordered and unordered lists.
     * added - Settings object to customize the Editor
     * fixed - Solve javascript error on example.html
     * fixed - Change html layout of the editor to solve the minimum width problem on dynamic editor size.
@@ -100,10 +100,10 @@ v0.4.1 (2006-10-14)
 
 v0.4 (2006-10-12)
     * fixed - Dublicated id attribute in color chooser popup
-    * fixed - Preventing IE to insert <p> tags on carriage return. IE will insert a normal <br> instead. (Thx to richyrich)
+    * fixed - Preventing IE to insert <p> tags on carriage return. IE will insert a normal <br/> instead. (Thx to richyrich)
     * fixed - Crappy layout of hyperlink popup on IE (fields: class and name)
     * fixed - With multiple editors on one form, the global var viewTextMode is not unique for each editor. Used an Array instead to set the var for each editor individually
-    * fixed - Submitting the editor while in text mode then it will submit escaped html (<br> -> submit -> &lt;br&gt;). Auto switch to HTML Mode if submit
+    * fixed - Submitting the editor while in text mode then it will submit escaped html (<br/> -> submit -> &lt;br&gt;). Auto switch to HTML Mode if submit
     * fixed - Validate objects on hideFonts() and hideFontSizes() function
     * changed - Improvements on closing font + font size selection. Add a unique event listener for each selection.
 
@@ -123,7 +123,7 @@ v0.3 (2006-10-09)
     * added - Default style now also applies to the preview window
     * added - Print button + function
     * fixed - A little mistake within the function setAttribute, attr.toLowerCase -> attr.toLowerCase() it prevented the script to apply the styles in IE correctly
-    * fixed - Problem while replacing \n with <br> after submitting data in IE solved.
+    * fixed - Problem while replacing \n with <br/> after submitting data in IE solved.
     * fixed - Complete rewritten function insertLink + insertImage. Improving edit capabiltity on both links and images.
 
 v0.2 (2006-10-08)
@@ -135,7 +135,7 @@ v0.2 (2006-10-08)
     * added - Validation of browser versions (thx to TIM)
 
 v0.1 (2006-10-06)
-    * added - Possibility to replace \n with <br> to be compatible with previous content coming from a database, for example.
+    * added - Possibility to replace \n with <br/> to be compatible with previous content coming from a database, for example.
     * added - Button to strip any HTML added by word
     * changed - Modified generate_wysiwyg() method (added width and height to customize size of each editor, width and height are optional parameter)
     * added - Possibility to set the default font family, font size and font color of the editor area
