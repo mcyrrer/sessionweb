@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!session_is_registered(myusername)){
-	header("location:index.php");
+    header("location:index.php");
 }
 include("include/header.php.inc");
 include_once('config/db.php.inc');
@@ -13,9 +13,38 @@ $currentPage=$_GET["page"];
 
 if($currentPage=="")
 {
-	$currentPage=1;
+    $currentPage=1;
 }
 
+echo "<a id=\"showoption\" href=\"#\">Toggle column options</a>\n";
+echo "<a id=\"cvs\" href=\"#\">Export to cvs</a>\n";
+
+echo "<div id=\"option_list\">\n";
+echo "<form id=\"narrowform\" name=\"narrowform\" action=\"list.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
+
+echo "<table width=\"1024\" border=\"0\">\n";
+echo "    <tr>\n";
+echo "        <td>User";
+echoTesterSelect("");
+echo "        </td>\n";
+echo "        <td>Sprint:";
+echoSprintSelect("");
+echo "        </td>\n";
+echo "        <td>Team:";
+echoTeamSelect("");
+
+echo "        </td>\n";
+echo "        <td>Status:\n";
+echoStatusTypes();
+echo "        </td>\n";
+echo "    </tr>\n";
+echo "</table>\n";
+echo "Number of session to show on each page\n";
+echoNumberOfRowToDisplay();
+echo "    <p><input type=\"submit\" value=\"Continue\" /></p>\n";
+echo "</form>\n";
+
+echo "</div>\n";
 
 echo "<table width=\"1024\" border=\"0\">\n";
 echo "  <tr>\n";
@@ -45,76 +74,99 @@ $num_rows = mysql_num_rows($result);
 
 if($result)
 {
-	while($row = mysql_fetch_array($result)) {
-		$rowSessionStatus = getSessionStatus($row["versionid"]);
-		$color = getSessionColorCode($rowSessionStatus);
-		echo "  <tr bgcolor=\"$color\">\n";
-		echo "      <td>".$row["sessionid"]."</td>\n";
-		if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['admin'],"1")==0)
-		{
-			echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img src=\"pictures/edit.png\" border=\"0\" alt=\"Sessionweb logo\"/></a></td>\n";
-		}
-		else
-		{
-			echo "      <td></td>\n";
-		}
-		echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=view\">".$row["title"]."</a></td>\n";
-		echo "      <td>".$row["username"]."</td>\n";
-		echo "      <td>".$row["sprintname"]."</td>\n";
-		echo "      <td>".$row["teamname"]."</td>\n";
-		echo "      <td>".$row["updated"]."</td>\n";
-		echo "  </tr>\n";
-	}
+    while($row = mysql_fetch_array($result)) {
+        $rowSessionStatus = getSessionStatus($row["versionid"]);
+        $color = getSessionColorCode($rowSessionStatus);
+        echo "  <tr bgcolor=\"$color\">\n";
+        echo "      <td>".$row["sessionid"]."</td>\n";
+        if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['admin'],"1")==0)
+        {
+            echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img src=\"pictures/edit.png\" border=\"0\" alt=\"Sessionweb logo\"/></a></td>\n";
+        }
+        else
+        {
+            echo "      <td></td>\n";
+        }
+        echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=view\">".$row["title"]."</a></td>\n";
+        echo "      <td>".$row["username"]."</td>\n";
+        echo "      <td>".$row["sprintname"]."</td>\n";
+        echo "      <td>".$row["teamname"]."</td>\n";
+        echo "      <td>".$row["updated"]."</td>\n";
+        echo "  </tr>\n";
+    }
 }
 else
 {
-	echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br/>";
+    echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br/>";
 }
 
 echo "</table>\n";
 
 echoPreviouseAndNextLink($currentPage,$num_rows);
 
+echoColorExplanation();
+
 
 include("include/footer.php.inc");
 
+function echoColorExplanation()
+{  
+    echo "<table width=\"120\" border=\"0\">\n";
+    echo "    <tr bgcolor=\"#c2c287\">\n";
+    echo "        <td>Not Executed\n";
+    echo "        </td>\n";
+    echo "    </tr>\n";
+    echo "    <tr bgcolor=\"#ffff77\">\n";
+    echo "        <td>Executed\n";
+    echo "        </td>\n";
+    echo "    </tr>\n";
+    echo "    <tr bgcolor=\"#99ff99\">\n";
+    echo "        <td>Debriefed\n";
+    echo "        </td>\n";
+    echo "    </tr>\n";
+    echo "    </table>\n";
+
+
+
+}
+
 function getSessionColorCode($rowSessionStatus)
 {
-	$color = "#c2c287";
-	if($rowSessionStatus["executed"]==1)
-	{
-		$color = "#ffff77";
-	}
-	if($rowSessionStatus["debriefed"]==1)
-	{
-		$color = "#99ff99";
-	}
-	return $color;
+    $color = "#c2c287";
+    if($rowSessionStatus["executed"]==1)
+    {
+        $color = "#ffff77";
+    }
+    if($rowSessionStatus["debriefed"]==1)
+    {
+        $color = "#99ff99";
+    }
+    return $color;
 }
 
 function echoPreviouseAndNextLink($currentPage,$num_rows)
 {
-	$nextPage = $currentPage+1;
-	echo "<table width=\"1024\" border=\"0\">\n";
-	echo "  <tr>\n";
-	if($currentPage!=1)
-	{
-		$prevPage = $currentPage-1;
-		echo "     <td><a href=\"list.php?page=$prevPage\">Previous page</a></td>";
-	}
-	else
-	{
-		echo "     <td></td>\n";
-	}
-	if($num_rows==30)
-	{
-		echo "      <td align=\"right\"><a href=\"list.php?page=$nextPage\">Next page</a><br/></td>\n";
-	}
-	else
-	{
-		echo "     <td></td>\n";
-	}
-	echo "  </tr>\n";
+    $nextPage = $currentPage+1;
+    echo "<table width=\"1024\" border=\"0\">\n";
+    echo "  <tr>\n";
+    if($currentPage!=1)
+    {
+        $prevPage = $currentPage-1;
+        echo "     <td><a href=\"list.php?page=$prevPage\">Previous page</a></td>";
+    }
+    else
+    {
+        echo "     <td></td>\n";
+    }
+    if($num_rows==30)
+    {
+        echo "      <td align=\"right\"><a href=\"list.php?page=$nextPage\">Next page</a><br/></td>\n";
+    }
+    else
+    {
+        echo "     <td></td>\n";
+    }
+    echo "  </tr>\n";
 
-	echo "</table>\n";
+    echo "</table>\n";
 }

@@ -1,6 +1,9 @@
 $(document)
 		.ready(
+
 				function() {
+
+					$("#option_list").hide();
 
 					$("[class=metricoption]")
 							.change(
@@ -30,4 +33,16 @@ $(document)
 															+ "%");
 										}
 									});
-				});
+
+					// $("showoption").change(function() {
+					// $("option_list").html("Tjoho!");
+					// });
+					//					
+
+					$("#showoption").click(function() {
+							$("#option_list").fadeIn("slow");
+					});
+
+				}
+
+		);
