@@ -37,7 +37,7 @@ function executeCommand()
 		}
 		elseif (strcmp($_REQUEST["command"],"insertusertodb")==0)
 		{
-			createNewUser($username,$password1,$fullname,1,$admin,$superuser);
+			createNewUser();
 		}
 		elseif(strcmp($_GET["command"],"addteam")==0)
 		{
@@ -641,8 +641,25 @@ function updateUserPassword($username,$password1, $password2)
 }
 
 
-function createNewUser($username,$password,$fullname,$active,$admin,$superuser)
+function createNewUser()
 {
+	$username = $_REQUEST["username"];
+	$password = $_REQUEST["swpassword1"];
+	$fullname = $_REQUEST["fullname"];
+	$active = 1;
+	$admin = 0;
+	if(strcmp($_REQUEST["admin"],"yes")==0)
+	{
+		$admin = 1;
+	}
+	
+   $superuser = 0;
+    if(strcmp($_REQUEST["superuser"],"yes")==0)
+    {
+        $superuser = 1;
+    }
+
+
 	if($username!="" && $password!="")
 	{
 
@@ -689,8 +706,6 @@ function createNewUser($username,$password,$fullname,$active,$admin,$superuser)
 		$sqlInsert .= "             '$activeToDb', ";
 		$sqlInsert .= "             '$adminToDb', ";
 		$sqlInsert .= "             '$superuserToDb')" ;
-
-		echo $sqlUpdate;
 
 		$result = mysql_query($sqlInsert);
 
