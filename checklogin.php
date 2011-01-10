@@ -1,6 +1,7 @@
 <?php
 
 include 'config/db.php.inc';
+include_once 'include/commonFunctions.php.inc';
 
 ob_start();
 
@@ -66,23 +67,6 @@ else {
 mysql_close($con);
 ob_end_flush();
 
-function getSessionWebSettings()
-{
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT * ";
-    $sqlSelect .= "FROM   settings ";
 
-    $result = mysql_query($sqlSelect);
-
-    if(!$result)
-    {
-        echo "getSessionWebSettings: ".mysql_error()."<br/>";
-    }
-    else
-    {
-        $row = mysql_fetch_array($result);
-        return $row;
-    }
-}
 
 ?>

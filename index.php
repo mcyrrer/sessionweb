@@ -1,17 +1,18 @@
 <?php
 $logout = $_GET["logout"];
-
 session_start();
+
 if($logout=="yes")
 {
 	session_destroy();
+	unset($_SESSION);
 }
 
 include("include/header.php.inc");
 
 if($logout=="yes")
 {
-	echo "         You are loged out. Please log in again to use Sessionweb\n";
+	echo "         You are logged out. Please log in again to use Sessionweb\n";
 }
 
 if(!session_is_registered(myusername)){
@@ -40,7 +41,7 @@ else
 {
 	echo "         You are logged in\n";
 
-	
+
 }
 
 include("include/footer.php.inc");

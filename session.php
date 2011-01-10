@@ -87,7 +87,7 @@ function echoViewSession()
 	{
 		$row = mysql_fetch_array($resultSession);
 
-		$rowSessionMetric = getSessionMetrics($row["versionid"]);//mysql_fetch_array($resultSessionMetrics);
+		$rowSessionMetric = getSessionMetrics($row["versionid"]);
 
 		$rowSessionStatus = getSessionStatus($row["versionid"]);
 
@@ -122,18 +122,49 @@ function echoViewSession()
 		echo "                        ".$row["username"]."\n";
 		echo "                    </div>\n";
 		echo "                </td>\n";
-		echo "                <td align=\"left\">\n";
-		echo "                    <h4>Teamname</h4>\n";
-		echo "                    <div style=\"background-color:#efefef;\">\n";
-		echo "                        ".$row["teamname"]."\n";
-		echo "                    </div>\n";
-		echo "                </td>\n";
-		echo "                <td align=\"left\">\n";
-		echo "                    <h4>Sprintname</h4>\n";
-		echo "                    <div style=\"background-color:#efefef;\">\n";
-		echo "                        ".$row["sprintname"]."\n";
-		echo "                    </div>\n";
-		echo "                </td>\n";
+		if($_SESSION['settings']['team']==1 )
+		{
+			$value=$row["teamname"];
+			if($row["teamname"]=="")
+			{
+				$value = "&nbsp;";
+			}
+			echo "                <td align=\"left\">\n";
+			echo "                    <h4>Teamname</h4>\n";
+			echo "                    <div style=\"background-color:#efefef;\">\n";
+			echo "                        $value\n";
+			echo "                    </div>\n";
+			echo "                </td>\n";
+		}
+		if($_SESSION['settings']['sprint']==1 )
+		{
+			$value=$row["sprintname"];
+			if($row["sprintname"]=="")
+			{
+				$value = "&nbsp;";
+			}
+			echo "                <td align=\"left\">\n";
+			echo "                    <h4>Sprintname</h4>\n";
+			echo "                    <div style=\"background-color:#efefef;\">\n";
+			echo "                        $value\n";
+			echo "                    </div>\n";
+			echo "                </td>\n";
+		}
+		if($_SESSION['settings']['teamsprint']==1 )
+		{
+			$value=$row["teamsprintname"];
+			if($row["teamsprintname"]=="")
+			{
+				$value = "&nbsp;";
+			}
+			echo "                <td align=\"left\">\n";
+			echo "                    <h4>Team sprintname</h4>\n";
+			echo "                    <div style=\"background-color:#efefef;\">\n";
+			echo "                        $value\n";
+			echo "                    </div>\n";
+			echo "                </td>\n";
+		}
+
 		echo "                <td align=\"left\">\n";
 		echo "                      <h4>Status</h4>\n";
 		echo "                      <div style=\"background-color:#efefef;\">\n";
@@ -341,6 +372,7 @@ function saveSession_GetSessionIdForNewSession()
 function saveSession_InsertSessionDataToDb($sessionid)
 {
 
+
 	if($_REQUEST["title"]=="")
 	{
 		$_REQUEST["title"]="Unnamed Session";
@@ -354,20 +386,100 @@ function saveSession_InsertSessionDataToDb($sessionid)
 	$sqlInsert .= "             `notes`, ";
 	$sqlInsert .= "             `username`, ";
 	$sqlInsert .= "             `sprintname`, ";
+	$sqlInsert .= "             `teamsprintname`, ";
 	$sqlInsert .= "             `teamname`) ";
 	$sqlInsert .= "VALUES      ('$sessionid', ";
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["title"])."', ";
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["charter"])."', ";
 	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["notes"])."', ";
 	$sqlInsert .= "             '".$_SESSION['username']."', ";
-	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
-	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."')" ;
+	if($_REQUEST['sprint']=="")
+	{
+		$sqlInsert .= "             null, ";
+	}
+	else
+	{
+		$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
+	}
+	if($_REQUEST['teamsprint']=="")
+	{
+		$sqlInsert .= "             null, ";
+	}
+	else
+	{
 
+		$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['teamsprint'])."', ";
+	}
+	if($_REQUEST['team']=="")
+	{
+		$sqlInsert .= "             null ";
+	}
+	else
+	{
+		$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."'";
+	}
+	$sqlInsert .= ") " ;
+
+	echo $sqlInsert;
+	echo "<br><br>";
 	$result = mysql_query($sqlInsert);
 
 	if(!$result)
 	{
 		echo "saveSession_InsertSessionDataToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_UpdateSessionDataToDb($sessionid)
+{
+	print_r($_REQUEST);
+	if($_REQUEST["title"]=="")
+	{
+		$_REQUEST["title"]="Unnamed Session";
+		echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
+	}
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission ";
+	$sqlUpdate .= "SET    `title` = '".mysql_real_escape_string($_REQUEST["title"])."', ";
+	$sqlUpdate .= "       `charter` = '".mysql_real_escape_string($_REQUEST["charter"])."', ";
+	$sqlUpdate .= "       `notes` = '".mysql_real_escape_string($_REQUEST["notes"])."', ";
+	$sqlUpdate .= "       `username` = '".$_SESSION['username']."', ";
+	if($_REQUEST['sprint']=="")
+	{
+		$sqlUpdate .= "       `sprintname` = null, ";
+	}
+	else
+	{
+		$sqlUpdate .= "       `sprintname` = '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
+	}
+
+	if($_REQUEST['teamsprint']=="")
+	{
+		$sqlUpdate .= "       `teamsprintname` = null, ";
+	}
+	else
+	{
+		$sqlUpdate .= "       `teamsprintname` = '".mysql_real_escape_string($_REQUEST['teamsprint'])."', ";
+	}
+
+	if($_REQUEST['team']=="")
+	{
+		$sqlUpdate .= "       `teamname` = null ";
+	}
+	else
+	{
+		$sqlUpdate .= "       `teamname` = '".mysql_real_escape_string($_REQUEST['team'])."' ";
+	}
+	$sqlUpdate .= "WHERE sessionid='$sessionid'" ;
+
+	echo $sqlUpdate."<br>";
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionDataToDb: ".mysql_error()."<br/>";
 	}
 }
 
@@ -424,6 +536,35 @@ function saveSession_InsertSessionStatusToDb($versionid)
 	}
 }
 
+function saveSession_UpdateSessionStatusToDb($versionid)
+{
+	$executed = false;
+
+	if($_REQUEST["executed"]!="")
+	{
+		$executed = true;
+	}
+
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission_status ";
+	$sqlUpdate .= "SET    `executed` = '$executed', ";
+	$sqlUpdate .= "       `debriefed` = 'false', ";
+	$sqlUpdate .= "       `masterdibriefed` = 'false', ";
+	$sqlUpdate .= "       `executed_timestamp` = '".date("Y-d-j H:i:s")."' ";
+	$sqlUpdate .= "WHERE versionid='$versionid'" ;
+
+	$result = mysql_query($sqlUpdate);
+
+	echo "<br>";
+	echo $sqlUpdate."<br>";
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionStatusToDb: ".mysql_error()."<br><br>";
+	}
+}
+
 function saveSession_InsertSessionMetricsToDb($versionid)
 {
 
@@ -447,6 +588,29 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 	if(!$result)
 	{
 		echo "saveSession_InsertSessionMetricsToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_UpdateSessionMetricsToDb($versionid)
+{
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission_sessionmetrics ";
+	$sqlUpdate .= "SET    `setup_percent` = '".mysql_real_escape_string($_REQUEST["setuppercent"])."', ";
+	$sqlUpdate .= "       `test_percent` = '".mysql_real_escape_string($_REQUEST["testpercent"])."', ";
+	$sqlUpdate .= "       `bug_percent` = '".mysql_real_escape_string($_REQUEST["bugpercent"])."', ";
+	$sqlUpdate .= "       `opportunity_percent` = '".mysql_real_escape_string($_REQUEST["oppertunitypercent"])."', ";
+	$sqlUpdate .= "       `duration_time` = '".mysql_real_escape_string($_REQUEST["duration"])."' ";
+	$sqlUpdate .= "WHERE versionid='$versionid'" ;
+
+	echo "<br>";
+	echo $sqlUpdate;
+
+	echo "<br>";
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionMetricsToDb: ".mysql_error()."<br/>";
 	}
 }
 
@@ -474,25 +638,41 @@ function saveSession()
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
+	//New session
+	if($_REQUEST["sessionid"]=="")
+	{
 
-	//Will create a new session id to map to a session
-	saveSession_CreateNewSessionId();
+		//Will create a new session id to map to a session
+		saveSession_CreateNewSessionId();
 
+		//Get the new session id for user x
+		$sessionid = saveSession_GetSessionIdForNewSession();
 
-	//Get the new session id for user x
-	$sessionid = saveSession_GetSessionIdForNewSession();
+		//Insert sessiondata to mission table
+		saveSession_InsertSessionDataToDb($sessionid);
 
-	//Insert sessiondata to mission table
-	saveSession_InsertSessionDataToDb($sessionid);
+		//Get versionId from db
+		$versionid = saveSession_GetVersionIdForNewSession();
 
-	//Get versionId from db
-	$versionid = saveSession_GetVersionIdForNewSession();
+		//Create missionstatus record in Db
+		saveSession_InsertSessionStatusToDb($versionid);
 
-	//Create missionstatus record in Db
-	saveSession_InsertSessionStatusToDb($versionid);
+		//Create metrics record for session
+		saveSession_InsertSessionMetricsToDb($versionid);
+	}
+	//Update existing session
+	else
+	{
+		$sessionid = $_REQUEST["sessionid"];
+		$versionid = $_REQUEST["versionid"];
 
-	//Create metrics record for session
-	saveSession_InsertSessionMetricsToDb($versionid);
+		saveSession_UpdateSessionDataToDb($sessionid);
+
+		saveSession_UpdateSessionStatusToDb($versionid);
+
+		saveSession_UpdateSessionMetricsToDb($versionid);
+	}
+
 
 	mysql_close($con);
 
@@ -509,26 +689,32 @@ function saveSession()
  */
 function echoSessionForm()
 {
-	
-	//TODO: Add edit functiality for metrics and executed. Add update session instead of always create a new one.
-	
+
 	$title = "";
 	$team ="";
 	$charter = "";
 	$notes = "";
 	$sprint = "";
+	$teamsprint = "";
 
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 	$insertSessionData = false;
+
 	if(strcmp($_REQUEST["command"],"edit")==0)
 	{
 		$rowSessionData = getSessionData($_GET["sessionid"]);
 		$insertSessionData = true;
 	}
 
-
+	if($_GET["sessionid"]!="")
+	{
+		$rowSessionMetric = getSessionMetrics($rowSessionData["versionid"]);
+		print_r($rowSessionMetric);
+			
+		$rowSessionStatus = getSessionStatus($rowSessionData["versionid"]);
+	}
 	mysql_close($con);
 
 	if($insertSessionData)
@@ -537,11 +723,14 @@ function echoSessionForm()
 		$charter = $rowSessionData["charter"];
 		$notes = $rowSessionData["notes"];
 		$sprint = $rowSessionData["sprintname"];
+		$teamsprint = $rowSessionData["teamsprintname"];
 		$team = $rowSessionData["teamname"];
 	}
 
 	echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
 	echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
+	echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$rowSessionData["sessionid"]."\">\n";
+	echo "<input type=\"hidden\" name=\"versionid\" value=\"".$rowSessionData["versionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
 	echo "<table width=\"1024\" border=\"0\">\n";
 	echo "      <tr>\n";
@@ -569,18 +758,33 @@ function echoSessionForm()
 	echo "                              <td>Session title: </td>\n";
 	echo "                              <td><input type=\"text\" size=\"133\" value=\"$title\" name=\"title\"></td>\n";
 	echo "                        </tr>\n";
-	echo "                        <tr>\n";
-	echo "                              <td>Team: </td>\n";
-	echo "                              <td>\n";
-	echoTeamSelect($team);
-	echo "                              </td>\n";
-	echo "                        </tr>\n";
-	echo "                        <tr>\n";
-	echo "                              <td valign=\"top\">Sprint: </td>\n";
-	echo "                              <td>\n";
-	echoSprintSelect($sprint);
-	echo "                              </td>\n";
-	echo "                        </tr>\n";
+	if($_SESSION['settings']['team']==1)
+	{
+		echo "                        <tr>\n";
+		echo "                              <td>Team: </td>\n";
+		echo "                              <td>\n";
+		echoTeamSelect($team);
+		echo "                              </td>\n";
+		echo "                        </tr>\n";
+	}
+	if($_SESSION['settings']['sprint']==1)
+	{
+		echo "                        <tr>\n";
+		echo "                              <td valign=\"top\">Sprint: </td>\n";
+		echo "                              <td>\n";
+		echoSprintSelect($sprint);
+		echo "                              </td>\n";
+		echo "                        </tr>\n";
+	}
+	if($_SESSION['settings']['teamsprint']==1)
+	{
+		echo "                        <tr>\n";
+		echo "                              <td valign=\"top\">Team sprint: </td>\n";
+		echo "                              <td>\n";
+		echoTeamSprintSelect($teamsprint);
+		echo "                              </td>\n";
+		echo "                        </tr>\n";
+	}
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Charter: </td>\n";
 	echo "                              <td>\n";
@@ -625,25 +829,25 @@ function echoSessionForm()
 	echo "                                                <td>Setup(%): </td>\n";
 	echo "                                                <td>\n";
 	echo "                                                      <select class=\"metricoption\" name=\"setuppercent\">\n";
-	echoPercentSelection();
+	echoPercentSelection($rowSessionMetric["setup_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Test(%): </td>\n";
 	echo "                                                <td>\n";
 	echo "                                                      <select class=\"metricoption\" name=\"testpercent\">\n";
-	echoPercentSelection();
+	echoPercentSelection($rowSessionMetric["test_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Bug(%): </td>\n";
 	echo "                                                <td>\n";
 	echo "                                                      <select class=\"metricoption\" name=\"bugpercent\">\n";
-	echoPercentSelection();
+	echoPercentSelection($rowSessionMetric["bug_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Oppertunity(%): </td>\n";
 	echo "                                                <td>\n";
 	echo "                                                      <select class=\"metricoption\" name=\"oppertunitypercent\">\n";
-	echoPercentSelection();
+	echoPercentSelection($rowSessionMetric["opportunity_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Session duration (min): </td>\n";
@@ -671,7 +875,14 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td>Executed:</td>\n";
 	echo "                              <td>\n";
-	echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" >\n";
+	if($rowSessionStatus['executed']==1)
+	{
+		echo "                                  <input type=\"checkbox\" name=\"executed\" checked=\"checked\" value=\"yes\" >\n";
+	}
+	else
+	{
+		echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" >\n";
+	}
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
@@ -693,10 +904,18 @@ function echoSessionForm()
  * Prints percent (belongs to a HTML select item) to screen. E.g 5,10,15,20...
  *
  */
-function echoPercentSelection()
+function echoPercentSelection($selected)
 {
+	echo "                                      <option>$selected</option>";
 	for ($index  = 0; $index  <= 100; $index = $index + 5) {
-		echo "                                      <option>$index</option>";
+		if($index==$selected)
+		{
+			echo "                                      <option selected=\"selected\">$index</option>";
+		}
+		else
+		{
+			echo "                                      <option>$index</option>";
+		}
 	}
 }
 

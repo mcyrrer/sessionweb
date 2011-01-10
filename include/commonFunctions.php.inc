@@ -1,178 +1,236 @@
 <?php
 
+function getSessionWebSettings()
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   settings ";
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "getSessionWebSettings: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		return $row;
+	}
+}
+
 function getSessionMetrics($versionid)
 {
-    $sqlSelectSessionMetrics = "";
-    $sqlSelectSessionMetrics .= "SELECT * ";
-    $sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
-    $sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
-    $resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
+	$sqlSelectSessionMetrics = "";
+	$sqlSelectSessionMetrics .= "SELECT * ";
+	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
+	$sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
+	$resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
 
-    if(!$resultSessionMetrics)
-    {
-        echo "getSessionMetrics: ".mysql_error()."<br/>";
-    }
-    return mysql_fetch_array($resultSessionMetrics);
+	if(!$resultSessionMetrics)
+	{
+		echo "getSessionMetrics: ".mysql_error()."<br/>";
+	}
+	return mysql_fetch_array($resultSessionMetrics);
 }
 
 function getSessionData($sessionid)
 {
-    $sqlSelectSession = "";
-    $sqlSelectSession .= "SELECT * ";
-    $sqlSelectSession .= "FROM   mission ";
-    $sqlSelectSession .= "WHERE  sessionid = $sessionid" ;
+	$sqlSelectSession = "";
+	$sqlSelectSession .= "SELECT * ";
+	$sqlSelectSession .= "FROM   mission ";
+	$sqlSelectSession .= "WHERE  sessionid = $sessionid" ;
 
-    $resultSession = mysql_query($sqlSelectSession);
+	$resultSession = mysql_query($sqlSelectSession);
 
-    if(!$resultSession)
-    {
-        echo "getSessionData: ".mysql_error()."<br/>";
-    }
+	if(!$resultSession)
+	{
+		echo "getSessionData: ".mysql_error()."<br/>";
+	}
 
-    return mysql_fetch_array($resultSession);
+	return mysql_fetch_array($resultSession);
 }
 
 function getSessionStatus($versionid)
 {
-    $sqlSelectSessionStatus = "";
-    $sqlSelectSessionStatus .= "SELECT * ";
-    $sqlSelectSessionStatus .= "FROM   mission_status ";
-    $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
-    $resultSessionStatus = mysql_query($sqlSelectSessionStatus);
-    if(!$resultSessionStatus)
-    {
-        echo "getSessionStatus: ".mysql_error()."<br/>";
-    }
-    return mysql_fetch_array($resultSessionStatus);
+	$sqlSelectSessionStatus = "";
+	$sqlSelectSessionStatus .= "SELECT * ";
+	$sqlSelectSessionStatus .= "FROM   mission_status ";
+	$sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
+	$resultSessionStatus = mysql_query($sqlSelectSessionStatus);
+	if(!$resultSessionStatus)
+	{
+		echo "getSessionStatus: ".mysql_error()."<br/>";
+	}
+	return mysql_fetch_array($resultSessionStatus);
 }
 
 function createPercentPieChart($setup,$test,$bug,$oppertunity)
 {
 
-    $totalTime = $setup +$test+$bug+$oppertunity;
+	$totalTime = $setup +$test+$bug+$oppertunity;
 
-    $imgURL = "http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=450x150&chd=t:$setup,$test,$bug,$oppertunity&chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Oppertunity($oppertunity%)|&chco=FF0000|00FF00|0000FF|000000&";
-    //	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
-    return $imgURL;
+	$imgURL = "http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=450x150&chd=t:$setup,$test,$bug,$oppertunity&chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Oppertunity($oppertunity%)|&chco=FF0000|00FF00|0000FF|000000&";
+	//	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
+	return $imgURL;
 }
 
 function echoTeamSelect($team)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT teamname ";
-    $sqlSelect .= "FROM   teamnames ";
-    $sqlSelect .= "ORDER  BY `teamname` ASC " ;
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT teamname ";
+	$sqlSelect .= "FROM   teamnames ";
+	$sqlSelect .= "ORDER  BY `teamname` ASC " ;
 
-    $result = mysql_query($sqlSelect);
+	$result = mysql_query($sqlSelect);
 
-    echo "                                  <select name=\"team\">\n";
+	echo "                                  <select name=\"team\">\n";
 
 
-    while($row = mysql_fetch_array($result))
-    {
-        if(strcmp($team,$row['teamname'])==0)
-        {
-            echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['teamname']) . "</option>\n";
-        }
-        else
-        {
-            echo "                                      <option>" . htmlspecialchars($row['teamname']) . "</option>\n";
-        }
-    }
+	echo "                                      <option></option>\n";
 
-    echo "                                  </select>\n";
 
-    mysql_close($con);
+	while($row = mysql_fetch_array($result))
+	{
+		if(strcmp($team,$row['teamname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['teamname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['teamname']) . "</option>\n";
+		}
+	}
+
+	echo "                                  </select>\n";
+
+	mysql_close($con);
 }
 
 function echoNumberOfRowToDisplay()
 {
-    echo "<select class=\"metricoption\" name=\"oppertunitypercent\">\n";
-    echo "      <option>30</option>\n";
-    echo "      <option>60</option>\n";
-    echo "      <option>100</option>\n";
-    echo "      <option>200</option>\n";
-    echo "      <option>500</option>\n";
-    echo "      <option>1000</option>\n";
-    echo "      <option>2000</option>\n";
-    echo "</select>\n";
+	echo "<select class=\"metricoption\" name=\"oppertunitypercent\">\n";
+	echo "      <option>30</option>\n";
+	echo "      <option>60</option>\n";
+	echo "      <option>100</option>\n";
+	echo "      <option>200</option>\n";
+	echo "      <option>500</option>\n";
+	echo "      <option>1000</option>\n";
+	echo "      <option>2000</option>\n";
+	echo "</select>\n";
 }
 
 function echoStatusTypes()
 {
-    echo "<select class=\"metricoption\" name=\"oppertunitypercent\">\n";
-    echo "      <option>Not Executed</option>\n";
-    echo "      <option>Executed</option>\n";
-    echo "      <option>Debriefed</option>\n";
-    echo "</select>\n";
+	echo "<select class=\"metricoption\" name=\"oppertunitypercent\">\n";
+	echo "      <option>Not Executed</option>\n";
+	echo "      <option>Executed</option>\n";
+	echo "      <option>Debriefed</option>\n";
+	echo "</select>\n";
 }
 
 function echoTesterSelect($name)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT fullname ";
-    $sqlSelect .= "FROM   members ";
-    $sqlSelect .= "WHERE active = TRUE ";
-    $sqlSelect .= "ORDER  BY fullname ASC" ;
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT fullname ";
+	$sqlSelect .= "FROM   members ";
+	$sqlSelect .= "WHERE active = TRUE ";
+	$sqlSelect .= "ORDER  BY fullname ASC" ;
 
-    $result = mysql_query($sqlSelect);
+	$result = mysql_query($sqlSelect);
 
-    echo "                                  <select name=\"tester\">\n";
+	echo "                                  <select name=\"tester\">\n";
 
 
-    while($row = mysql_fetch_array($result))
-    {
-        if(strcmp($name,$row['fullname'])==0)
-        {
-            echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['fullname']) . "</option>\n";
-        }
-        else
-        {
-            echo "                                      <option>" . htmlspecialchars($row['fullname']) . "</option>\n";
-        }
-    }
+	while($row = mysql_fetch_array($result))
+	{
+		if(strcmp($name,$row['fullname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['fullname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['fullname']) . "</option>\n";
+		}
+	}
 
-    echo "                                  </select>\n";
+	echo "                                  </select>\n";
 
-    mysql_close($con);
+	mysql_close($con);
 }
 
 function echoSprintSelect($sprint)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT sprintname ";
-    $sqlSelect .= "FROM   sprintnames ";
-    $sqlSelect .= "ORDER  BY sprintname ASC" ;
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT sprintname ";
+	$sqlSelect .= "FROM   sprintnames ";
+	$sqlSelect .= "ORDER  BY sprintname ASC" ;
 
-    $result = mysql_query($sqlSelect);
+	$result = mysql_query($sqlSelect);
 
-    echo "                                  <select name=\"sprint\">\n";
+	echo "                                  <select name=\"sprint\">\n";
 
 
-    while($row = mysql_fetch_array($result))
-    {
-        if(strcmp($sprint,$row['sprintname'])==0)
-        {
-            echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['sprintname']) . "</option>\n";
-        }
-        else
-        {
-            echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
-        }
-    }
+	echo "                                      <option></option>\n";
 
-    echo "                                  </select>\n";
+	while($row = mysql_fetch_array($result))
+	{
+		if(strcmp($sprint,$row['sprintname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['sprintname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
+		}
+	}
 
-    mysql_close($con);
+	echo "                                  </select>\n";
+
+	mysql_close($con);
+}
+
+function echoTeamSprintSelect($teamsprint)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT teamsprintname ";
+	$sqlSelect .= "FROM   teamsprintnames ";
+	$sqlSelect .= "ORDER  BY teamsprintname ASC" ;
+
+	$result = mysql_query($sqlSelect);
+
+	echo "                                  <select name=\"teamsprint\">\n";
+
+
+	echo "                                      <option></option>\n";
+
+	while($row = mysql_fetch_array($result))
+	{
+		if(strcmp($teamsprint,$row['teamsprintname'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['teamsprintname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['teamsprintname']) . "</option>\n";
+		}
+	}
+
+	echo "                                  </select>\n";
+
+	mysql_close($con);
 }
 
 ?>
