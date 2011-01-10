@@ -5,105 +5,14 @@ if(!session_is_registered(myusername)){
 }
 include("include/header.php.inc");
 include_once('config/db.php.inc');
-
-
-$user = $_GET["user"];
-$command = $_GET["command"];
-$command_post = $_REQUEST["command"];
-
-$userToChange = $_REQUEST["usernametoupdate"];
-$password1 = $_REQUEST["swpassword1"];
-$password2 = $_REQUEST["swpassword2"];
-$usersettings = $_REQUEST["usersettings"];
-$active = $_REQUEST["active"];
-$admin = $_REQUEST["admin"];
-$superuser = $_REQUEST["superuser"];
-$username = $_REQUEST["username"];
-$fullname = $_REQUEST["fullname"];
-
+include_once 'include/commonFunctions.php.inc';
 
 echo "<h1>Settings</h1>\n";
-if($userToChange!="")
-{
-	if(strcmp($_SESSION['username'],$userToChange)==0)
-	{
-		if($password1!="")
-		{
-			updateUserPassword($userToChange,$password1, $password2);
-		}
-	}
-	else if($_SESSION['useradmin']==1)
-	{
-		if($password1!="")
-		{
-			updateUserPassword($userToChange,$password1, $password2);
-		}
-		if($usersettings!="")
-		{
-			updateUserSettings($userToChange,$active,$admin,$superuser);
-		}
-	}
-}
-else
-{
 
-	if($_SESSION['useradmin']==1)
-	{
-		echo "<div>Admin menu: <a href=\"settings.php?command=addteam\">Add team</a> | <a href=\"settings.php?command=listusers\">List users</a> | <a href=\"settings.php?command=adduser\">Add user</a></div>";
-	}
-	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
-	{
-		echo "<div>Superuser menu: <a href=\"settings.php?command=addsprint\">Add sprintname</a></div>";
-	}
-	echo "<div>User menu: <a href=\"settings.php?command=changepassword\">Change password</a></div>";
+echoMenu();
 
+executeCommand();
 
-	if($_SESSION['useradmin']==1)
-	{
-
-		if(strcmp($command,"listusers")==0)
-		{
-			echoAllUsersInfo();
-		}
-		elseif (strcmp($command,"adduser")==0)
-		{
-			echoAddUser();
-		}
-		elseif (strcmp($command_post,"insertusertodb")==0)
-		{
-			createNewUser($username,$password1,$fullname,1,$admin,$superuser);
-		}
-		elseif(strcmp($command,"addteam")==0)
-		{
-			echoAddTeamName();
-		}
-		elseif (strcmp($command_post,"insertteamnametodb")==0)
-		{
-			InsertTeamNameToDb($_REQUEST["teamtname"]);
-		}
-		if($user!="")
-		{
-			echoChangeUserInfo($user);
-		}
-
-	}
-	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
-	{
-		if(strcmp($command,"addsprint")==0)
-		{
-			echoAddSprintName();
-		}
-		elseif (strcmp($command_post,"insertsprintnametodb")==0)
-		{
-			InsertSprintNameToDb($_REQUEST["sprintname"]);
-		}
-	}
-
-	if(strcmp($command,"changepassword")==0)	{
-
-		echoChangePassword($_SESSION['username']);
-	}
-}
 include("include/footer.php.inc");
 
 
@@ -111,6 +20,205 @@ include("include/footer.php.inc");
 //Function is located below
 //*************************************************************************************s
 
+function executeCommand()
+{
+
+	//Administartor Commands
+	if($_SESSION['useradmin']==1)
+	{
+		if(strcmp($_GET["command"],"listusers")==0)
+		{
+			echo "Tjoho";
+			echoAllUsersInfo();
+		}
+		elseif (strcmp($_GET["command"],"adduser")==0)
+		{
+			echoAddUser();
+		}
+		elseif (strcmp($_REQUEST["command"],"insertusertodb")==0)
+		{
+			createNewUser($username,$password1,$fullname,1,$admin,$superuser);
+		}
+		elseif(strcmp($_GET["command"],"addteam")==0)
+		{
+			echoAddTeamName();
+		}
+		elseif (strcmp($_REQUEST["command"],"insertteamnametodb")==0)
+		{
+			insertTeamNameToDb($_REQUEST["teamtname"]);
+		}
+		elseif(strcmp($_REQUEST["command"],"changeusersettings")==0)
+		{
+			updateUserSettings($_REQUEST["usernametoupdate"],$_REQUEST["active"],$_REQUEST["admin"],$_REQUEST["superuser"]);
+		}
+		elseif(strcmp($_GET["command"],"userinfo")==0)
+		{
+			echoChangeUserInfo($_GET["user"]);
+		}
+		elseif(strcmp($_GET["command"],"config")==0)
+		{
+			echoChangeConfig();
+		}
+		elseif(strcmp($_REQUEST["command"],"updateconfig")==0)
+		{
+			updateConfig();
+		}
+
+
+
+	}
+	//SuperUser Commands
+	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
+	{
+		if(strcmp($_GET["command"],"addsprint")==0)
+		{
+			echoAddSprintName();
+		}
+		if(strcmp($_GET["command"],"addteamsprint")==0)
+		{
+			echoAddTeamSprintName();
+		}
+
+
+		elseif (strcmp($_REQUEST["command"],"insertsprintnametodb")==0)
+		{
+			insertSprintNameToDb($_REQUEST["sprintname"]);
+		}
+		elseif (strcmp($_REQUEST["command"],"insertteamsprintnametodb")==0)
+		{
+			insertTeamSprintNameToDb($_REQUEST["teamsprintname"]);
+		}
+
+
+	}
+
+	//Common commands
+	if(strcmp($_REQUEST["command"],"changepassword")==0)
+	{
+		updateUserPassword($_REQUEST["usernametoupdate"],$_REQUEST["swpassword1"], $_REQUEST["swpassword2"]);
+	}
+	if(strcmp($_GET["command"],"changepassword")==0)    {
+
+		echoChangePassword($_SESSION['username']);
+	}
+
+}
+
+function echoChangeConfig()
+{
+
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelect .= "SELECT * FROM settings";
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "echoChangeConfig: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		echo "<h4>Change Application Configuration</h4>\n";
+		echo "<form name=\"teamname\" action=\"settings.php\" method=\"POST\">\n";
+		echo "<input type=\"hidden\" name=\"command\" value= \"updateconfig\">\n";
+		echo "	<table width=\"*\" border=\"1\">\n";
+		echo "    <tr>\n";
+		echo "        <td>\n";
+		echo "        </td>\n";
+		echo "        <td><b>Common Settings</b>\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Normalized Sessions time(min)\n";
+		echo "        </td>\n";
+		echo "        <td> <input type=\"text\" size=\"50\" value=\"".$row[normalized_session_time]."\" name=\"normlizedsessiontime\">\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>\n";
+		echo "        </td>\n";
+		echo "        <td><b>Activate Modules</b>\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Team\n";
+		echo "        </td>\n";
+		if($row[team]==1)
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"team\" checked=\"checked\" value=\"checked\" >\n";
+		}
+		else
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"team\" value=\"checked\" >\n";
+		}
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Sprint\n";
+		echo "        </td>\n";
+		if($row[sprint]==1)
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"sprint\" checked=\"checked\" value=\"checked\" >\n";
+		}
+		else
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"sprint\" value=\"checked\" >\n";
+		}
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Team sprint\n";
+		echo "        </td>\n";
+		if($row[teamsprint]==1)
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"teamsprint\" checked=\"checked\" value=\"checked\" >\n";
+		}
+		else
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"teamsprint\" value=\"checked\" >\n";
+		}
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "</table>\n";
+		echo "            <input align=left type=\"submit\" value=\"Change settings\" />\n";
+		echo "</form>\n";
+	}
+	mysql_close($con);
+
+}
+
+function echoMenu()
+{
+	if($_SESSION['useradmin']==1)
+	{
+		echo "<div>Admin menu: ";
+		if($_SESSION['settings']['team']==1)
+		{
+			echo "<a href=\"settings.php?command=addteam\">Add team</a> | ";
+		}
+		echo "<a href=\"settings.php?command=listusers\">List users</a> | ";
+		echo "<a href=\"settings.php?command=adduser\">Add user</a> | ";
+		echo "<a href=\"settings.php?command=config\">Configuration</a> | ";
+		echo "</div>";
+	}
+	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
+	{
+		echo "<div>Superuser menu:  ";
+		if($_SESSION['settings']['sprint']==1)
+		{
+			echo "<a href=\"settings.php?command=addsprint\">Add sprintname</a> | ";
+		}
+		if($_SESSION['settings']['teamsprint']==1)
+		{
+			echo "<a href=\"settings.php?command=addteamsprint\">Add team sprintname</a> | ";
+		}
+		echo "</div>";
+	}
+	echo "<div>User menu: <a href=\"settings.php?command=changepassword\">Change password</a></div>";
+}
 
 function echoAddTeamName()
 {
@@ -132,7 +240,7 @@ function echoAddTeamName()
 	echo "</form>\n";
 }
 
-function InsertTeamNameToDb($teamName)
+function insertTeamNameToDb($teamName)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -180,7 +288,27 @@ function echoAddSprintName()
 	echo "</form>\n";
 }
 
-function InsertSprintNameToDb($sprintName)
+function echoAddTeamSprintName()
+{
+	echo "<h2>Add new team sprint name</h2>\n";
+	echo "<form name=\"teamsprintname\" action=\"settings.php\" method=\"POST\">\n";
+	echo "<input type=\"hidden\" name=\"command\" value= \"insertteamsprintnametodb\">\n";
+	echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
+	echo "    <tr>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            New team sprint name\n";
+	echo "        </td>\n";
+	echo "        <td><input type=\"text\" size=\"50\" value=\"\" name=\"teamsprintname\">\n";
+	echo "        </td>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            <input align=left type=\"submit\" value=\"Add name\" />\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "</table>";
+	echo "</form>\n";
+}
+
+function insertSprintNameToDb($sprintName)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -207,6 +335,34 @@ function InsertSprintNameToDb($sprintName)
 	mysql_close($con);
 }
 
+function insertTeamSprintNameToDb($teamsprintName)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sprintName = mysql_real_escape_string($sprintName);
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO teamsprintnames ";
+	$sqlInsert .= "            (`teamsprintname`) ";
+	$sqlInsert .= "VALUES      ('$teamsprintName')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "insertTeamSprintNameToDb: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		echo "<p>Team sprint name $teamsprintName insert to datbase</p>\n";
+	}
+
+	mysql_close($con);
+}
+
+
 function echoChangeUserInfo($username)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
@@ -228,6 +384,7 @@ function echoChangeUserInfo($username)
 	echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
 	echo " <input type=\"hidden\" name=\"usernametoupdate\" value=\"".urlencode($username)."\">\n";
 	echo " <input type=\"hidden\" name=\"usersettings\" value=\"true\">\n";
+	echo "    <input type=\"hidden\" name=\"command\" value= \"changeusersettings\">\n";
 	echo "<table style=\"text-align: left; width: 1000px;\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\">";
 	echo "<tr>";
 	echo "<td><b>Name</b></td>";
@@ -300,7 +457,7 @@ function echoAllUsersInfo()
 	while($row = mysql_fetch_array($result))
 	{
 		echo "<tr>";
-		echo "<td><a href=\"settings.php?user=".urlencode($row['username']). "\">".htmlspecialchars($row['fullname']). "</a></td>";
+		echo "<td><a href=\"settings.php?user=".urlencode($row['username']). "&command=userinfo\">".htmlspecialchars($row['fullname']). "</a></td>";
 		echo "<td>" . urldecode($row['username']) . "</td>";
 		echo "<td>" . urldecode($row['active']) . "</td>";
 		echo "<td>" . urldecode($row['admin']) . "</td>";
@@ -320,6 +477,7 @@ function echoChangePassword($username)
 	echo "<form name=\"password\" action=\"settings.php\" method=\"POST\">\n";
 	echo "<table style=\"text-align: left; width: 1000px;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
 	echo "    <input type=\"hidden\" name=\"usernametoupdate\" value=\"".urlencode($username)."\">\n";
+	echo "    <input type=\"hidden\" name=\"command\" value= \"changepassword\">\n";
 	echo "    <tr>\n";
 	echo "        <td align=\"left\">\n";
 	echo "            New password\n";
@@ -373,38 +531,112 @@ function echoAddUser()
 	echo "        </table>\n";
 }
 
-function updateUserPassword($username,$password1, $password2)
+
+function updateConfig()
 {
-	if(strcmp($password1,$password2)==0)	{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
+	$normlizedsessiontime = 90;
 
-		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-
-		$username = mysql_real_escape_string($username);
-
-		$md5password = md5($password1);
-
-		$sqlUpdate = "";
-		$sqlUpdate .= "UPDATE `members` ";
-		$sqlUpdate .= "SET    `password` ='$md5password' ";
-		$sqlUpdate .= "WHERE  `members`.`username` = '$username' " ;
-
-		$result = mysql_query($sqlUpdate);
-
-		if($result)
-		{
-			echo "Password changed\n";
-		}
-		else
-		{
-			echo mysql_error();
-		}
-		mysql_close($con);
+	if(is_int((int)$_REQUEST["normlizedsessiontime"]) && (int)$_REQUEST["normlizedsessiontime"]!=0)
+	{
+		$normlizedsessiontime = $_REQUEST["normlizedsessiontime"];
 	}
 	else
 	{
-		echo  "Passwords does not match, please try again.\n";
+		echo "Normalized Sessions time is equal to 0 or not an integer, will use default value 90 min.<br>\n";
+	}
+
+	$team = 0;
+	if(strcmp($_REQUEST["team"],"checked")==0)
+	{
+		$team=1;
+	}
+	else
+	{
+		$team=0;
+	}
+
+	$sprint = 0;
+	if(strcmp($_REQUEST["sprint"],"checked")==0)
+	{
+		$sprint=1;
+	}
+	else
+	{
+		$sprint=0;
+	}
+
+	$teamsprint = 0;
+	if(strcmp($_REQUEST["teamsprint"],"checked")==0)
+	{
+		$teamsprint=1;
+	}
+	else
+	{
+		$teamsprint=0;
+	}
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE settings ";
+	$sqlUpdate .= "SET    `normalized_session_time` = $normlizedsessiontime, ";
+	$sqlUpdate .= "       `team` = '$team', ";
+	$sqlUpdate .= "       `sprint` = '$sprint', ";
+	$sqlUpdate .= "       `teamsprint` = '$teamsprint' ";
+	$sqlUpdate .= "WHERE  `id` = '1'" ;
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "updateConfig: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		echo "<br>Configuration changed.<br>\n";
+	}
+
+	$_SESSION['settings'] = getSessionWebSettings();
+
+	mysql_close($con);
+}
+function updateUserPassword($username,$password1, $password2)
+{
+
+	if(strcmp($_SESSION['username'],$_REQUEST["usernametoupdate"])==0 || $_SESSION['useradmin']==1)
+	{
+		if(strcmp($password1,$password2)==0)	{
+
+
+			$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+			mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+			$username = mysql_real_escape_string($username);
+
+			$md5password = md5($password1);
+
+			$sqlUpdate = "";
+			$sqlUpdate .= "UPDATE `members` ";
+			$sqlUpdate .= "SET    `password` ='$md5password' ";
+			$sqlUpdate .= "WHERE  `members`.`username` = '$username' " ;
+
+			$result = mysql_query($sqlUpdate);
+
+			if($result)
+			{
+				echo "Password changed\n";
+			}
+			else
+			{
+				echo mysql_error();
+			}
+			mysql_close($con);
+		}
+		else
+		{
+			echo  "Passwords does not match, please try again.\n";
+		}
 	}
 }
 

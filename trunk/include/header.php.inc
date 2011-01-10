@@ -29,7 +29,10 @@ if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 }
 echo "  </head>\n";
 echo "  <body>\n";
-echo "      [".$_SESSION['user']."]";
+if($_SESSION['user']!="")
+{
+	echo "      [".$_SESSION['user']."]";
+}
 echo "      <a href=\"index.php\">Main page</a> |";
 echo "      <a href=\"session.php?command=new\">New session</a> |";
 echo "      <a href=\"list.php\">List sessions</a> |";
