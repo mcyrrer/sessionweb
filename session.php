@@ -420,8 +420,6 @@ function saveSession_InsertSessionDataToDb($sessionid)
 	}
 	$sqlInsert .= ") " ;
 
-	echo $sqlInsert;
-	echo "<br><br>";
 	$result = mysql_query($sqlInsert);
 
 	if(!$result)
@@ -473,7 +471,6 @@ function saveSession_UpdateSessionDataToDb($sessionid)
 	}
 	$sqlUpdate .= "WHERE sessionid='$sessionid'" ;
 
-	echo $sqlUpdate."<br>";
 
 	$result = mysql_query($sqlUpdate);
 
@@ -556,9 +553,6 @@ function saveSession_UpdateSessionStatusToDb($versionid)
 
 	$result = mysql_query($sqlUpdate);
 
-	echo "<br>";
-	echo $sqlUpdate."<br>";
-
 	if(!$result)
 	{
 		echo "saveSession_UpdateSessionStatusToDb: ".mysql_error()."<br><br>";
@@ -602,10 +596,6 @@ function saveSession_UpdateSessionMetricsToDb($versionid)
 	$sqlUpdate .= "       `duration_time` = '".mysql_real_escape_string($_REQUEST["duration"])."' ";
 	$sqlUpdate .= "WHERE versionid='$versionid'" ;
 
-	echo "<br>";
-	echo $sqlUpdate;
-
-	echo "<br>";
 	$result = mysql_query($sqlUpdate);
 
 	if(!$result)

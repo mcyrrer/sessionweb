@@ -112,7 +112,7 @@ function echoTeamSelect($team)
 
 function echoNumberOfRowToDisplay()
 {
-	echo "<select class=\"metricoption\" name=\"oppertunitypercent\">\n";
+	echo "<select class=\"metricoption\" name=\"norowdisplay\">\n";
 	echo "      <option>30</option>\n";
 	echo "      <option>60</option>\n";
 	echo "      <option>100</option>\n";
@@ -123,12 +123,35 @@ function echoNumberOfRowToDisplay()
 	echo "</select>\n";
 }
 
-function echoStatusTypes()
+function echoStatusTypes($statusToSelect)
 {
-	echo "<select class=\"metricoption\" name=\"oppertunitypercent\">\n";
-	echo "      <option>Not Executed</option>\n";
-	echo "      <option>Executed</option>\n";
-	echo "      <option>Debriefed</option>\n";
+	echo "<select class=\"metricoption\" name=\"status\">\n";
+	if(strcmp($statusToSelect,"Not Executed")==0)
+	{
+		echo "      <option selected=\"selected\">Not Executed</option>\n";
+	}
+	else
+	{
+		echo "      <option>Not Executed</option>\n";
+	}
+
+	if(strcmp($statusToSelect,"Executed")==0)
+	{
+		echo "      <option selected=\"selected\">Executed</option>\n";
+	}
+	else
+	{
+		echo "      <option>Executed</option>\n";
+	}
+
+	if(strcmp($statusToSelect,"Debriefed")==0)
+	{
+		echo "      <option selected=\"selected\">Debriefed</option>\n";
+	}
+	else
+	{
+		echo "      <option>Debriefed</option>\n";
+	}
 	echo "</select>\n";
 }
 
@@ -138,7 +161,7 @@ function echoTesterSelect($name)
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 	$sqlSelect = "";
-	$sqlSelect .= "SELECT fullname ";
+	$sqlSelect .= "SELECT username ";
 	$sqlSelect .= "FROM   members ";
 	$sqlSelect .= "WHERE active = TRUE ";
 	$sqlSelect .= "ORDER  BY fullname ASC" ;
@@ -146,17 +169,17 @@ function echoTesterSelect($name)
 	$result = mysql_query($sqlSelect);
 
 	echo "                                  <select name=\"tester\">\n";
-
+	echo "                                      <option></option>\n";
 
 	while($row = mysql_fetch_array($result))
 	{
-		if(strcmp($name,$row['fullname'])==0)
+		if(strcmp($name,$row['username'])==0)
 		{
-			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['fullname']) . "</option>\n";
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['username']) . "</option>\n";
 		}
 		else
 		{
-			echo "                                      <option>" . htmlspecialchars($row['fullname']) . "</option>\n";
+			echo "                                      <option>" . htmlspecialchars($row['username']) . "</option>\n";
 		}
 	}
 
