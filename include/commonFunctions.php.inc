@@ -87,7 +87,7 @@ function echoTeamSelect($team)
 
 	$result = mysql_query($sqlSelect);
 
-	echo "                                  <select name=\"team\">\n";
+	echo "                                  <select id=\"select_team\" name=\"team\">\n";
 
 
 	echo "                                      <option></option>\n";
@@ -112,7 +112,7 @@ function echoTeamSelect($team)
 
 function echoNumberOfRowToDisplay()
 {
-	echo "<select class=\"metricoption\" name=\"norowdisplay\">\n";
+	echo "<select id=\"select_norowtodisplay\" class=\"metricoption\" name=\"norowdisplay\">\n";
 	echo "      <option>30</option>\n";
 	echo "      <option>60</option>\n";
 	echo "      <option>100</option>\n";
@@ -125,7 +125,7 @@ function echoNumberOfRowToDisplay()
 
 function echoStatusTypes($statusToSelect)
 {
-	echo "<select class=\"metricoption\" name=\"status\">\n";
+	echo "<select id=\"select_status_type\" class=\"metricoption\" name=\"status\">\n";
 	if(strcmp($statusToSelect,"Not Executed")==0)
 	{
 		echo "      <option selected=\"selected\">Not Executed</option>\n";
@@ -168,7 +168,7 @@ function echoTesterSelect($name)
 
 	$result = mysql_query($sqlSelect);
 
-	echo "                                  <select name=\"tester\">\n";
+	echo "                                  <select id=\"select_tester\" name=\"tester\">\n";
 	echo "                                      <option></option>\n";
 
 	while($row = mysql_fetch_array($result))
@@ -200,7 +200,7 @@ function echoSprintSelect($sprint)
 
 	$result = mysql_query($sqlSelect);
 
-	echo "                                  <select name=\"sprint\">\n";
+	echo "                                  <select id=\"select_sprint\" name=\"sprint\">\n";
 
 
 	echo "                                      <option></option>\n";
@@ -234,7 +234,7 @@ function echoTeamSprintSelect($teamsprint)
 
 	$result = mysql_query($sqlSelect);
 
-	echo "                                  <select name=\"teamsprint\">\n";
+	echo "                                  <select id=\"select_teamsprint\" name=\"teamsprint\">\n";
 
 
 	echo "                                      <option></option>\n";

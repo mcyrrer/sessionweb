@@ -430,7 +430,7 @@ function saveSession_InsertSessionDataToDb($sessionid)
 
 function saveSession_UpdateSessionDataToDb($sessionid)
 {
-	print_r($_REQUEST);
+
 	if($_REQUEST["title"]=="")
 	{
 		$_REQUEST["title"]="Unnamed Session";
@@ -746,7 +746,7 @@ function echoSessionForm()
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
 	echo "                              <td>Session title: </td>\n";
-	echo "                              <td><input type=\"text\" size=\"133\" value=\"$title\" name=\"title\"></td>\n";
+	echo "                              <td><input id=\"input_title\" type=\"text\" size=\"133\" value=\"$title\" name=\"title\"></td>\n";
 	echo "                        </tr>\n";
 	if($_SESSION['settings']['team']==1)
 	{
@@ -802,7 +802,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Notes: </td>\n";
 	echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
-	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$notes</textarea>\n";
+	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
@@ -878,7 +878,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
 	echo "                              <td>\n";
-	echo "                                  <input type=\"submit\" value=\"Save\"/>\n";
+	echo "                                  <input id=\"input_submit\" type=\"submit\" value=\"Save\"/>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                  </table>\n";

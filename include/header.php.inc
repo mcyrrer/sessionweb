@@ -22,8 +22,8 @@ if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 		echo "              <script type=\"text/javascript\" src=\"editor/scripts/wysiwyg.js\"></script>\n";
 		echo "              <script type=\"text/javascript\" src=\"editor/scripts/wysiwyg-settings.js\"></script>\n";
 		echo "              <script type=\"text/javascript\">\n";
-		echo "                  WYSIWYG.attach('textarea1',full); // default setup\n";
-		echo "                  WYSIWYG.attach('textarea2',full); // default setup\n";
+		echo "                  WYSIWYG.attach('textarea1',small); // default setup\n";
+		echo "                  WYSIWYG.attach('textarea2',small); // default setup\n";
 		echo "              </script>\n";
 	}
 }
@@ -33,16 +33,16 @@ if($_SESSION['user']!="")
 {
 	echo "      [".$_SESSION['user']."]";
 }
-echo "      <a href=\"index.php\">Main page</a> |";
-echo "      <a href=\"session.php?command=new\">New session</a> |";
-echo "      <a href=\"list.php\">List sessions</a> |";
-echo "      <a href=\"settings.php\">Settings</a> |";
+echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
+echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
+echo "      <a href=\"list.php\" id=\"url_list\">List sessions</a> |";
+echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";
 
 
 
 if(isset($_SESSION['user']))
 {
-	echo "      <a href=\"index.php?logout=yes\">Log out</a> |";
+	echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
 
 

@@ -39,7 +39,7 @@ if(!session_is_registered(myusername)){
 }
 else
 {
-	echo "         You are logged in\n";
+	echo "         Welcome to sessionweb ".$_SESSION['user']."<br> \n";
 
 
 }

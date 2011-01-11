@@ -43,9 +43,17 @@ function executeCommand()
 		{
 			echoAddTeamName();
 		}
+		elseif(strcmp($_GET["command"],"addarea")==0)
+		{
+			echoAddAreaName();
+		}
 		elseif (strcmp($_REQUEST["command"],"insertteamnametodb")==0)
 		{
 			insertTeamNameToDb($_REQUEST["teamtname"]);
+		}
+		elseif (strcmp($_REQUEST["command"],"insertareaname")==0)
+		{
+			insertAreaNameToDb($_REQUEST["areaname"]);
 		}
 		elseif(strcmp($_REQUEST["command"],"changeusersettings")==0)
 		{
@@ -182,6 +190,19 @@ function echoChangeConfig()
 		}
 		echo "        </td>\n";
 		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Area\n";
+		echo "        </td>\n";
+		if($row[area]==1)
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"area\" checked=\"checked\" value=\"checked\" >\n";
+		}
+		else
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"area\" value=\"checked\" >\n";
+		}
+		echo "        </td>\n";
+		echo "    </tr>\n";
 		echo "</table>\n";
 		echo "            <input align=left type=\"submit\" value=\"Change settings\" />\n";
 		echo "</form>\n";
@@ -199,9 +220,9 @@ function echoMenu()
 		{
 			echo "<a href=\"settings.php?command=addteam\">Add team</a> | ";
 		}
-		echo "<a href=\"settings.php?command=listusers\">List users</a> | ";
-		echo "<a href=\"settings.php?command=adduser\">Add user</a> | ";
-		echo "<a href=\"settings.php?command=config\">Configuration</a> | ";
+		echo "<a id=\"url_listusers\" href=\"settings.php?command=listusers\">List users</a> | ";
+		echo "<a id=\"url_adduser\" href=\"settings.php?command=adduser\">Add user</a> | ";
+		echo "<a id=\"url_configuration\" href=\"settings.php?command=config\">Configuration</a> | ";
 		echo "</div>";
 	}
 	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
@@ -209,15 +230,19 @@ function echoMenu()
 		echo "<div>Superuser menu:  ";
 		if($_SESSION['settings']['sprint']==1)
 		{
-			echo "<a href=\"settings.php?command=addsprint\">Add sprintname</a> | ";
+			echo "<a id=\"url_addsprint\" href=\"settings.php?command=addsprint\">Add sprintname</a> | ";
 		}
+		if($_SESSION['settings']['area']==1)
+        {
+			echo "<a id=\"url_addarea\" href=\"settings.php?command=addarea\">Add area</a> | ";
+        }
 		if($_SESSION['settings']['teamsprint']==1)
 		{
-			echo "<a href=\"settings.php?command=addteamsprint\">Add team sprintname</a> | ";
+			echo "<a id=\"url_addteamsprint\" href=\"settings.php?command=addteamsprint\">Add team sprintname</a> | ";
 		}
 		echo "</div>";
 	}
-	echo "<div>User menu: <a href=\"settings.php?command=changepassword\">Change password</a></div>";
+	echo "<div>User menu: <a id=\"url_changepassword\" href=\"settings.php?command=changepassword\">Change password</a></div>";
 }
 
 function echoAddTeamName()
@@ -261,7 +286,42 @@ function insertTeamNameToDb($teamName)
 	}
 	else
 	{
-		echo "<p>Team name $teamName insert to datbase</p>\n";
+		echo "<p>Team name $teamName insert to database</p>\n";
+	}
+
+	mysql_close($con);
+}
+
+function insertAreaNameToDb($areaName)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$areaName = mysql_real_escape_string($areaName);
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO areas ";
+	$sqlInsert .= "            (`areaname`) ";
+	$sqlInsert .= "VALUES      ('$areaName')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		if(mysql_errno()==1062)
+		{
+			echo "<p>Area $areaName not added since it already exists in database.</p>";
+		}
+		else
+		{
+			echo "insertAreaNameToDb: ".mysql_error()."<br>";
+			echo "Mysql error no: ".mysql_errno()."<br>";
+		}
+	}
+	else
+	{
+		echo "<p>Area name $areaName insert to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -282,6 +342,26 @@ function echoAddSprintName()
 	echo "        </td>\n";
 	echo "        <td align=\"left\">\n";
 	echo "            <input align=left type=\"submit\" value=\"Add name\" />\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "</table>";
+	echo "</form>\n";
+}
+
+function echoAddAreaName()
+{
+	echo "<h2>Add new area name</h2>\n";
+	echo "<form name=\"areaname\" action=\"settings.php\" method=\"POST\">\n";
+	echo "<input type=\"hidden\" name=\"command\" value= \"insertareaname\">\n";
+	echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
+	echo "    <tr>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            New area name\n";
+	echo "        </td>\n";
+	echo "        <td><input type=\"text\" size=\"50\" value=\"\" name=\"areaname\">\n";
+	echo "        </td>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            <input align=left type=\"submit\" value=\"Add area\" />\n";
 	echo "        </td>\n";
 	echo "    </tr>\n";
 	echo "</table>";
@@ -329,7 +409,7 @@ function insertSprintNameToDb($sprintName)
 	}
 	else
 	{
-		echo "<p>Sprint name $sprintName insert to datbase</p>\n";
+		echo "<p>Sprint name $sprintName insert to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -356,7 +436,7 @@ function insertTeamSprintNameToDb($teamsprintName)
 	}
 	else
 	{
-		echo "<p>Team sprint name $teamsprintName insert to datbase</p>\n";
+		echo "<p>Team sprint name $teamsprintName insert to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -578,11 +658,22 @@ function updateConfig()
 		$teamsprint=0;
 	}
 
+	$area = 0;
+	if(strcmp($_REQUEST["area"],"checked")==0)
+	{
+		$area=1;
+	}
+	else
+	{
+		$area=0;
+	}
+
 	$sqlUpdate = "";
 	$sqlUpdate .= "UPDATE settings ";
 	$sqlUpdate .= "SET    `normalized_session_time` = $normlizedsessiontime, ";
 	$sqlUpdate .= "       `team` = '$team', ";
 	$sqlUpdate .= "       `sprint` = '$sprint', ";
+	$sqlUpdate .= "       `area` = '$area', ";
 	$sqlUpdate .= "       `teamsprint` = '$teamsprint' ";
 	$sqlUpdate .= "WHERE  `id` = '1'" ;
 
@@ -652,12 +743,12 @@ function createNewUser()
 	{
 		$admin = 1;
 	}
-	
-   $superuser = 0;
-    if(strcmp($_REQUEST["superuser"],"yes")==0)
-    {
-        $superuser = 1;
-    }
+
+	$superuser = 0;
+	if(strcmp($_REQUEST["superuser"],"yes")==0)
+	{
+		$superuser = 1;
+	}
 
 
 	if($username!="" && $password!="")
