@@ -16,10 +16,9 @@ if($currentPage=="")
 	$currentPage=1;
 }
 
-echo "<a id=\"showoption\" href=\"#\">Toggle column options</a>\n";
-echo "<a id=\"cvs\" href=\"#\">Export to cvs</a>\n";
+echo "<a id=\"showoption\" href=\"#\">Show table options</a>\n";
 
-echo "<div id=\"option_list\">\n";
+echo "<div style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\" id=\"option_list\">\n";
 echo "<form id=\"narrowform\" name=\"narrowform\" action=\"list.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
 
 echo "<table width=\"1024\" border=\"0\">\n";
@@ -52,7 +51,7 @@ echo "    </tr>\n";
 echo "</table>\n";
 echo "Number of session to show on each page\n";
 echoNumberOfRowToDisplay();
-echo "    <p><input type=\"submit\" value=\"Continue\" /></p>\n";
+echo "    <p><input id=\"input_continue\" type=\"submit\" value=\"Continue\" /></p>\n";
 echo "</form>\n";
 
 echo "</div>\n";
@@ -124,11 +123,11 @@ if($result)
 	while($row = mysql_fetch_array($result)) {
 		$rowSessionStatus = getSessionStatus($row["versionid"]);
 		$color = getSessionColorCode($rowSessionStatus);
-		echo "  <tr bgcolor=\"$color\">\n";
+		echo "  <tr class=\"tr_sessionrow \" bgcolor=\"$color\">\n";
 		echo "      <td>".$row["sessionid"]."</td>\n";
 		if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['admin'],"1")==0)
 		{
-			echo "      <td><a href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img src=\"pictures/edit.png\" border=\"0\" alt=\"Sessionweb logo\"/></a></td>\n";
+			echo "      <td><a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"Sessionweb logo\"/></a></td>\n";
 		}
 		else
 		{
@@ -141,7 +140,7 @@ if($result)
 		}
 		echo "      <td>\n";
 		echo "<div title=\"".$row["title"]."\">\n";
-		echo "<a href=\"session.php?sessionid=".$row["sessionid"]."&command=view\">$title</a></td>\n";
+		echo "<a class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=view\">$title</a></td>\n";
 		echo "</div>\n";
 		echo "      <td>".$row["username"]."</td>\n";
 		if($_SESSION['settings']['sprint']==1 )

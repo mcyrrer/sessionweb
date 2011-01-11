@@ -28,9 +28,16 @@ full.ImagePopupHeight = 245;
  * Small Setup Example
  */
 var small = new WYSIWYG.Settings();
+small.ImagesDir = "editor/images/";
+small.PopupsDir = "editor/popups/";
+small.CSSFile = "editor/styles/wysiwyg.css";
 small.Width = "350px";
 small.Height = "100px";
-small.DefaultStyle = "font-family: Arial; font-size: 12px; background-color: #AA99AA";
+small.addToolbarElement("unorderedlist", 3, 1);
+small.addToolbarElement("createlink", 3, 2);
+small.addToolbarElement("forecolor", 3, 3);
+small.addToolbarElement("viewSource", 3, 4);
+//small.DefaultStyle = "font-family: Arial; font-size: 12px; background-color: #AA99AA";
 small.Toolbar[0] = new Array("font", "fontsize", "bold", "italic", "underline"); // small setup for toolbar 1
 small.Toolbar[1] = ""; // disable toolbar 2
 small.StatusBarEnabled = false;

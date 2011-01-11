@@ -93,7 +93,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   `teamname` VARCHAR(100) NULL ,
   `sprintname` VARCHAR(100) NULL ,
   `teamsprintname` VARCHAR(100) NULL ,
-  `depricated` TINYINT(1)  NULL ,
+  `depricated` TINYINT(1)  NULL DEFAULT 0 ,
   `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   INDEX `fk_mission_members` (`username` ASC) ,
   INDEX `fk_mission_sprintnames` (`sprintname` ASC) ,
@@ -208,7 +208,20 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `team` TINYINT(1)  NULL ,
   `sprint` TINYINT(1)  NULL ,
   `teamsprint` TINYINT(1)  NULL ,
+  `area` TINYINT(1)  NULL ,
   PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`areas`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`areas` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`areas` (
+  `areaname` VARCHAR(100) NOT NULL ,
+  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`areaname`) )
 ENGINE = InnoDB;
 
 
@@ -249,6 +262,6 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`) VALUES (NULL, '90', '1', '1', '1');
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`) VALUES (NULL, '90', '1', '1', '1', '1');
 
 COMMIT;
