@@ -27,6 +27,7 @@ if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 		echo "              </script>\n";
 	}
 }
+echo "     <script type=\"text/javascript\" src=\"js/googleanalytics.js\"></script>\n";
 echo "  </head>\n";
 echo "  <body>\n";
 if($_SESSION['user']!="")
