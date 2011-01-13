@@ -19,6 +19,7 @@ function getSessionWebSettings()
 	}
 }
 
+
 function getSessionMetrics($versionid)
 {
 	$sqlSelectSessionMetrics = "";
@@ -62,7 +63,30 @@ function getSessionStatus($versionid)
 	{
 		echo "getSessionStatus: ".mysql_error()."<br/>";
 	}
+
 	return mysql_fetch_array($resultSessionStatus);
+}
+
+function getSessionAreas($versionid)
+{
+	$sqlSelectSessionStatus = "";
+	$sqlSelectSessionStatus .= "SELECT areaname ";
+	$sqlSelectSessionStatus .= "FROM   mission_areas ";
+	$sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
+
+	$resultSessionAreas = mysql_query($sqlSelectSessionStatus);
+
+	if(!$resultSessionAreas)
+	{
+		echo "getSessionAreas: ".mysql_error()."<br/>";
+	}
+
+	$result = array();
+	while ($row = mysql_fetch_array($resultSessionAreas)) {
+		$result[]=$row["areaname"];
+	}
+
+	return $result;
 }
 
 function createPercentPieChart($setup,$test,$bug,$oppertunity)
@@ -110,6 +134,92 @@ function echoTeamSelect($team)
 	mysql_close($con);
 }
 
+function echoAreaSelect($area)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT areaname ";
+	$sqlSelect .= "FROM   areas ";
+	$sqlSelect .= "ORDER  BY `areaname` ASC " ;
+
+	$result = mysql_query($sqlSelect);
+
+	echo "                                  <select id=\"select_area\" name=\"area[]\" multiple=\"multiple\" size=\"4\">\n";
+
+
+	if(count($area)==0)
+	{
+			
+		echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
+	}
+	else
+	{
+		echo "                                      <option value=\"\"></option>\n";
+	}
+
+
+	while($row = mysql_fetch_array($result))
+	{
+		if(in_array($row['areaname'],$area))
+		{
+			echo "                                      <option selected=\"selected\" value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+		}
+	}
+
+	echo "                                  </select>\n";
+
+	mysql_close($con);
+}
+
+function echoAreaSelectSingel($area)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT areaname ";
+	$sqlSelect .= "FROM   areas ";
+	$sqlSelect .= "ORDER  BY `areaname` ASC " ;
+
+	$result = mysql_query($sqlSelect);
+
+	echo "                                  <select id=\"select_area\" name=\"area\">\n";
+
+
+	if(count($area)==0)
+	{
+		 
+		echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
+	}
+	else
+	{
+		echo "                                      <option value=\"\"></option>\n";
+	}
+
+
+	while($row = mysql_fetch_array($result))
+	{
+		if(in_array($row['areaname'],$area))
+		{
+			echo "                                      <option selected=\"selected\" value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+		}
+	}
+
+	echo "                                  </select>\n";
+
+	mysql_close($con);
+}
+
 function echoNumberOfRowToDisplay()
 {
 	echo "<select id=\"select_norowtodisplay\" class=\"metricoption\" name=\"norowdisplay\">\n";
@@ -126,6 +236,14 @@ function echoNumberOfRowToDisplay()
 function echoStatusTypes($statusToSelect)
 {
 	echo "<select id=\"select_status_type\" class=\"metricoption\" name=\"status\">\n";
+	if(strcmp($statusToSelect,"")==0)
+	{
+		echo "      <option selected=\"selected\"></option>\n";
+	}
+	else
+	{
+		echo "      <option</option>\n";
+	}
 	if(strcmp($statusToSelect,"Not Executed")==0)
 	{
 		echo "      <option selected=\"selected\">Not Executed</option>\n";

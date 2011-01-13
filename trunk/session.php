@@ -585,6 +585,33 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 	}
 }
 
+function saveSession_InsertSessionAreaToDb($versionid)
+{
+	if($_SESSION['settings']['area']==1 && $area!=null)
+	{
+		$areas = $_REQUEST["area"];
+
+		foreach ($areas as $area) {
+			if($area!="")
+			{
+				$sqlInsert = "";
+				$sqlInsert .= "INSERT INTO mission_areas ";
+				$sqlInsert .= "            (`versionid`, ";
+				$sqlInsert .= "             `areaname`) ";
+				$sqlInsert .= "VALUES      ('$versionid', ";
+				$sqlInsert .= "             '".mysql_real_escape_string($area)."')" ;
+
+				$result = mysql_query($sqlInsert);
+
+				if(!$result)
+				{
+					echo "saveSession_InsertSessionAreaToDb: ".mysql_error()."<br/>";
+				}
+			}
+		}
+	}
+}
+
 function saveSession_UpdateSessionMetricsToDb($versionid)
 {
 	$sqlUpdate = "";
@@ -602,6 +629,23 @@ function saveSession_UpdateSessionMetricsToDb($versionid)
 	{
 		echo "saveSession_UpdateSessionMetricsToDb: ".mysql_error()."<br/>";
 	}
+}
+
+function saveSession_UpdateSessionAreasToDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_areas ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionAreasToDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionAreaToDb($versionid);
+
 }
 
 function checkSessionTitleNotToLong()
@@ -649,6 +693,10 @@ function saveSession()
 
 		//Create metrics record for session
 		saveSession_InsertSessionMetricsToDb($versionid);
+
+		//Create areas for session
+		saveSession_InsertSessionAreaToDb($versionid);
+
 	}
 	//Update existing session
 	else
@@ -661,6 +709,8 @@ function saveSession()
 		saveSession_UpdateSessionStatusToDb($versionid);
 
 		saveSession_UpdateSessionMetricsToDb($versionid);
+
+		saveSession_UpdateSessionAreasToDb($versionid);
 	}
 
 
@@ -686,6 +736,7 @@ function echoSessionForm()
 	$notes = "";
 	$sprint = "";
 	$teamsprint = "";
+	$area = "";
 
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -701,9 +752,12 @@ function echoSessionForm()
 	if($_GET["sessionid"]!="")
 	{
 		$rowSessionMetric = getSessionMetrics($rowSessionData["versionid"]);
-		print_r($rowSessionMetric);
-			
+
 		$rowSessionStatus = getSessionStatus($rowSessionData["versionid"]);
+
+		$rowSessionAreas = getSessionAreas($rowSessionData["versionid"]);
+
+
 	}
 	mysql_close($con);
 
@@ -715,6 +769,7 @@ function echoSessionForm()
 		$sprint = $rowSessionData["sprintname"];
 		$teamsprint = $rowSessionData["teamsprintname"];
 		$team = $rowSessionData["teamname"];
+		$area = $rowSessionAreas;
 	}
 
 	echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
@@ -772,6 +827,16 @@ function echoSessionForm()
 		echo "                              <td valign=\"top\">Team sprint: </td>\n";
 		echo "                              <td>\n";
 		echoTeamSprintSelect($teamsprint);
+		echo "                              </td>\n";
+		echo "                        </tr>\n";
+	}
+
+	if($_SESSION['settings']['area']==1)
+	{
+		echo "                        <tr>\n";
+		echo "                              <td valign=\"top\">Area: </td>\n";
+		echo "                              <td>\n";
+		echoAreaSelect($area);
 		echo "                              </td>\n";
 		echo "                        </tr>\n";
 	}

@@ -209,6 +209,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `sprint` TINYINT(1)  NULL ,
   `teamsprint` TINYINT(1)  NULL ,
   `area` TINYINT(1)  NULL ,
+  `analyticsid` VARCHAR(45) NULL COMMENT 'google analytics id' ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -222,6 +223,31 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`areas` (
   `areaname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`areaname`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_areas`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_areas` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_areas` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `versionid` INT NOT NULL ,
+  `areaname` VARCHAR(100) NOT NULL ,
+  INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
+  INDEX `fk_mission_debriefnotes_copy1_areas1` (`areaname` ASC) ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_debriefnotes_mission10`
+    FOREIGN KEY (`versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_mission_debriefnotes_copy1_areas1`
+    FOREIGN KEY (`areaname` )
+    REFERENCES `sessionwebos`.`areas` (`areaname` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -262,6 +288,6 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`) VALUES (NULL, '90', '1', '1', '1', '1');
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`) VALUES (NULL, '90', '1', '1', '1', '1', NULL);
 
 COMMIT;
