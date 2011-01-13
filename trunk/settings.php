@@ -146,6 +146,18 @@ function echoChangeConfig()
 		echo "        </td>\n";
 		echo "    </tr>\n";
 		echo "    <tr>\n";
+		echo "        <td>Defect Managment System URL\n";
+		echo "        </td>\n";
+		echo "        <td> <input type=\"text\" size=\"50\" value=\"".$row[url_to_dms]."\" name=\"url_to_dms\">\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Requirement Management System URL\n";
+		echo "        </td>\n";
+		echo "        <td> <input type=\"text\" size=\"50\" value=\"".$row[url_to_rms]."\" name=\"url_to_rms\">\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
 		echo "        <td>\n";
 		echo "        </td>\n";
 		echo "        <td><b>Activate Modules</b>\n";
@@ -233,9 +245,9 @@ function echoMenu()
 			echo "<a id=\"url_addsprint\" href=\"settings.php?command=addsprint\">Add sprintname</a> | ";
 		}
 		if($_SESSION['settings']['area']==1)
-        {
+		{
 			echo "<a id=\"url_addarea\" href=\"settings.php?command=addarea\">Add area</a> | ";
-        }
+		}
 		if($_SESSION['settings']['teamsprint']==1)
 		{
 			echo "<a id=\"url_addteamsprint\" href=\"settings.php?command=addteamsprint\">Add team sprintname</a> | ";
@@ -667,6 +679,10 @@ function updateConfig()
 	{
 		$area=0;
 	}
+	
+	$url_to_dms = $_REQUEST["url_to_dms"];
+	
+	$url_to_rms = $_REQUEST["url_to_rms"];
 
 	$sqlUpdate = "";
 	$sqlUpdate .= "UPDATE settings ";
@@ -674,6 +690,8 @@ function updateConfig()
 	$sqlUpdate .= "       `team` = '$team', ";
 	$sqlUpdate .= "       `sprint` = '$sprint', ";
 	$sqlUpdate .= "       `area` = '$area', ";
+	$sqlUpdate .= "       `url_to_dms` = '$url_to_dms', ";
+	$sqlUpdate .= "       `url_to_rms` = '$url_to_rms', ";
 	$sqlUpdate .= "       `teamsprint` = '$teamsprint' ";
 	$sqlUpdate .= "WHERE  `id` = '1'" ;
 

@@ -5,6 +5,7 @@ $(document)
 
 					$("#option_list").hide();
 
+					//Metrics calculation 
 					$("[class=metricoption]")
 							.change(
 									function() {
@@ -33,15 +34,28 @@ $(document)
 															+ "%");
 										}
 									});
-
-					// $("showoption").change(function() {
-					// $("option_list").html("Tjoho!");
-					// });
-					//					
-
+	
+					//Show search option in list.php
 					$("#showoption").click(function() {
 							$("#option_list").fadeIn("slow");
 					});
+					
+					
+					//Add bug to session.
+					$("#bug_entry").focusout(function() {
+						
+						("#bugs").html(
+								"Percentage = ");
+//						  fo++;
+//						  $("#fo")
+//						    .text("focusout fired: " + fo + "x");
+//						}).blur(function() {
+//						  b++;
+//						  $("#b")
+//						    .text("blur fired: " + b + "x");
+						  
+						});
+
 
 				}
 

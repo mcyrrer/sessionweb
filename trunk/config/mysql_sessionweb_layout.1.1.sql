@@ -210,6 +210,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `teamsprint` TINYINT(1)  NULL ,
   `area` TINYINT(1)  NULL ,
   `analyticsid` VARCHAR(45) NULL COMMENT 'google analytics id' ,
+  `url_to_dms` VARCHAR(500) NULL ,
+  `url_to_rms` VARCHAR(500) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -238,7 +240,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_areas` (
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
   INDEX `fk_mission_debriefnotes_copy1_areas1` (`areaname` ASC) ,
   PRIMARY KEY (`id`) ,
-  CONSTRAINT `fk_debriefnotes_mission10`
+  CONSTRAINT `fk_mission_areas_mission`
     FOREIGN KEY (`versionid` )
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
@@ -246,6 +248,25 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_areas` (
   CONSTRAINT `fk_mission_debriefnotes_copy1_areas1`
     FOREIGN KEY (`areaname` )
     REFERENCES `sessionwebos`.`areas` (`areaname` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_bugs`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_bugs` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_bugs` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `versionid` INT NOT NULL ,
+  `bugid` VARCHAR(45) NOT NULL ,
+  INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_bugs_mission100`
+    FOREIGN KEY (`versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -266,28 +287,10 @@ INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superus
 COMMIT;
 
 -- -----------------------------------------------------
--- Data for table `sessionwebos`.`sprintnames`
--- -----------------------------------------------------
-SET AUTOCOMMIT=0;
-USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`sprintnames` (`sprintname`, `updated`) VALUES ('-', NULL);
-
-COMMIT;
-
--- -----------------------------------------------------
--- Data for table `sessionwebos`.`teamsprintnames`
--- -----------------------------------------------------
-SET AUTOCOMMIT=0;
-USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`teamsprintnames` (`teamsprintname`, `updated`) VALUES ('-', NULL);
-
-COMMIT;
-
--- -----------------------------------------------------
 -- Data for table `sessionwebos`.`settings`
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`) VALUES (NULL, '90', '1', '1', '1', '1', NULL);
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`, `url_to_dms`, `url_to_rms`) VALUES (NULL, '90', '1', '1', '1', '1', NULL, NULL, NULL);
 
 COMMIT;

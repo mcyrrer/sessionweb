@@ -777,7 +777,7 @@ function echoSessionForm()
 	echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$rowSessionData["sessionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"versionid\" value=\"".$rowSessionData["versionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
-	echo "<table width=\"1024\" border=\"0\">\n";
+	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
 	echo "                  <table width=\"1024\" border=\"0\">\n";
@@ -876,6 +876,18 @@ function echoSessionForm()
 	echo "                                   <p><img src=\"pictures/line2.png\" alt=\"line\"></p>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
+
+	echo "                        <tr>\n";
+	echo "                              <td>Defects: </td>\n";
+	echo "                              <td><p id=\"bug_entry\"><input id=\"bug_entry_input\" type=\"text\" size=\"50\" value=\"\" name=\"bug_entry\"></p> </td>\n";
+	echo "                        </tr>\n";
+
+	echo "                        <tr>\n";
+	echo "                              <td></td>\n";
+	echo "                              <td><div id=\"bugs\"></div></td>\n";
+	echo "                        </tr>\n";
+
+
 	echo "                        <tr>\n";
 	echo "                              <td>Metrics: </td>\n";
 	echo "                              <td>\n";
