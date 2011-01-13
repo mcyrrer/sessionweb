@@ -286,7 +286,7 @@ function insertTeamNameToDb($teamName)
 	}
 	else
 	{
-		echo "<p>Team name $teamName insert to database</p>\n";
+		echo "<p>Team name $teamName added to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -321,7 +321,7 @@ function insertAreaNameToDb($areaName)
 	}
 	else
 	{
-		echo "<p>Area name $areaName insert to database</p>\n";
+		echo "<p>Area name $areaName added to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -409,7 +409,7 @@ function insertSprintNameToDb($sprintName)
 	}
 	else
 	{
-		echo "<p>Sprint name $sprintName insert to database</p>\n";
+		echo "<p>Sprint name $sprintName added to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -436,7 +436,7 @@ function insertTeamSprintNameToDb($teamsprintName)
 	}
 	else
 	{
-		echo "<p>Team sprint name $teamsprintName insert to database</p>\n";
+		echo "<p>Team sprint name $teamsprintName added to database</p>\n";
 	}
 
 	mysql_close($con);
