@@ -1,11 +1,11 @@
+$buglist = "";
 $(document)
 		.ready(
-
 				function() {
 
 					$("#option_list").hide();
 
-					//Metrics calculation 
+					// Metrics calculation
 					$("[class=metricoption]")
 							.change(
 									function() {
@@ -35,26 +35,20 @@ $(document)
 										}
 									});
 	
-					//Show search option in list.php
+					// Show search option in list.php
 					$("#showoption").click(function() {
 							$("#option_list").fadeIn("slow");
 					});
 					
 					
-					//Add bug to session.
-					$("#bug_entry").focusout(function() {
-						
-						("#bugs").html(
-								"Percentage = ");
-//						  fo++;
-//						  $("#fo")
-//						    .text("focusout fired: " + fo + "x");
-//						}).blur(function() {
-//						  b++;
-//						  $("#b")
-//						    .text("blur fired: " + b + "x");
-						  
-						});
+					// Add bug to session.
+					$("#add_bug").click(function(){
+						$thisid = this.id; //Good to have when we want to remove bugs from list.....
+						$bug = $("#bug").val();
+						$buglist = $buglist + $bug + "|";
+		                $('#buglist_visible').append($bug+"<br>");
+						$('#buglist_hidden').text($buglist);
+		            });
 
 
 				}

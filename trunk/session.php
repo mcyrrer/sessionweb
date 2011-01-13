@@ -664,6 +664,7 @@ function checkSessionTitleNotToLong()
 function saveSession()
 {
 
+    
 	checkSessionTitleNotToLong();
 
 	$sessionid = false;
@@ -780,7 +781,7 @@ function echoSessionForm()
 	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
-	echo "                  <table width=\"1024\" border=\"0\">\n";
+	echo "                  <table width=\"1024\" border=\"1\">\n";
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
 	echo "                              <td>\n";
@@ -879,12 +880,14 @@ function echoSessionForm()
 
 	echo "                        <tr>\n";
 	echo "                              <td>Defects: </td>\n";
-	echo "                              <td><p id=\"bug_entry\"><input id=\"bug_entry_input\" type=\"text\" size=\"50\" value=\"\" name=\"bug_entry\"></p> </td>\n";
+	echo "                              <td><input id=\"bug\" type=\"text\" size=\"50\" value=\"\"><p id=\"add_bug\">add</p>\n";
+    echo "                              <div style= \"visibility:hidden\"><textarea id=\"buglist_hidden\" name=\"buglist_hidden\"></textarea></div>\n";
+    echo "                              </td>\n";
 	echo "                        </tr>\n";
 
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
-	echo "                              <td><div id=\"bugs\"></div></td>\n";
+	echo "                              <td><div id=\"buglist_visible\"></div></td>\n";
 	echo "                        </tr>\n";
 
 
