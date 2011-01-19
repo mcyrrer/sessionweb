@@ -880,8 +880,16 @@ function echoSessionForm()
 
 	echo "                        <tr>\n";
 	echo "                              <td>Defects: </td>\n";
-	echo "                              <td><input id=\"bug\" type=\"text\" size=\"50\" value=\"\"><p id=\"add_bug\">add</p>\n";
-    echo "                              <div style= \"visibility:hidden\"><textarea id=\"buglist_hidden\" name=\"buglist_hidden\"></textarea></div>\n";
+	echo "                              <td>\n";
+	echo "                              <table width=\"*\" border=\"1\">\n";
+    echo "                                  <tr>\n";
+    echo "                                      <td><input id=\"bug\" type=\"text\" size=\"50\" value=\"\">\n";
+    echo "                                      </td>\n";
+    echo "                                      <td><p id=\"add_bug\">add</p>\n";
+    echo "                                      </td>\n";
+    echo "                                  </tr>\n";
+    echo "                              </table>\n";
+	echo "                              <div style= \"visibility:hidden\"><textarea id=\"buglist_hidden\" name=\"buglist_hidden\"></textarea></div>\n";
     echo "                              </td>\n";
 	echo "                        </tr>\n";
 
