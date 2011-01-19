@@ -34,8 +34,7 @@ $(document).ready(function(){
             myBugs.push(bugValue);
             $("#bug").attr('value', '');
             
-            var newBugHtml = ""
-            "  <div id=\"bugdiv_" + bugValue + "\">"
+            var newBugHtml = "<div id=\"bugdiv_" + bugValue + "\">"
             + "  <a href=\"http://" + bugValue + "\" class=\"bugurl\" target=\”_blank\”>" + bugValue + "</a>"
             + "  <div id=\"bug_" + bugValue + "\"> [remove]</div>"
             + "</div>";
