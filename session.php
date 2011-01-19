@@ -889,7 +889,8 @@ function echoSessionForm()
     echo "                                      </td>\n";
     echo "                                  </tr>\n";
     echo "                              </table>\n";
-	echo "                              <div style= \"visibility:hidden\"><textarea id=\"buglist_hidden\" name=\"buglist_hidden\"></textarea></div>\n";
+//    style= \"visibility:hidden\"
+	echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\"></textarea></div>\n";
     echo "                              </td>\n";
 	echo "                        </tr>\n";
 
