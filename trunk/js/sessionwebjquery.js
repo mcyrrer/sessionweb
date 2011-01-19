@@ -27,41 +27,36 @@ $(document).ready(function(){
         $("#option_list").fadeIn("slow");
     });
     
-    // Add bug to session.
+    // Add bug to session and manage if it is deleted
     $("#add_bug").click(function(){
-        $bug = $("#bug").val()+'';
-        
-        myBugs.push($bug);
-        
-        
-        $("<div id=\"bug_" + $bug + "\" class=\"test\"><p>" + $bug + "</p></div>").appendTo('#buglist_visible');
-        alert(myBugs);
-        for (var i = 0; i < myBugs.length; i++) {
-            var value = myBugs[i];
-            
-
-            $("#bug_" + value + "").click(function(){
-                $("#bug_" + value + "").remove();
-                myBugs.remove(value);
+        var bugValue = $("#bug").val() + '';
+        if (jQuery.inArray(bugValue, myBugs) == -1 && bugValue!="") {
+            myBugs.push(bugValue);
+            $("#bug").attr('value', '');
+            $("<div id=\"bug_" + bugValue + "\" class=\"test\"><p>" + bugValue + "</p></div>").appendTo('#buglist_visible');
+            $('#buglist_hidden').text(myBugs.toString());
+            $("#bug_" + bugValue + "").click(function(){
+                var answer = confirm("Remove bug " + bugValue + "?")
+                if (answer) {
+                    $("#bug_" + bugValue + "").remove();
+                    bugPos = jQuery.inArray(bugValue, myBugs);
+                    if (bugPos != -1) {
+                        var removedelements = myBugs.splice(bugPos, 1);//remove();
+                        $('#buglist_hidden').text(myBugs.toString());
+                    }
+                }
             });
         }
-        
-        
-        
+        else {
+			if (bugValue == "") {
+//				alert("Bug with id " + bugValue + " is already connected to session.");
+			}
+			else
+			{
+				alert("Bug with id " + bugValue + " is already connected to session.");
+			}
+        }
     });
     
-    //        $thisid = this.id; //Good to have when we want to remove bugs from list.....
-    //        $bug = $("#bug").val();
-    //        $buglist = $buglist + $bug + "|";
-    //        
-    //        var newTextBoxDiv = $(document.createElement('div')).attr("id", 'TextBoxDiv' + $bug);
-    //        newTextBoxDiv.after().html("test!!!");
-    //        
-    //        
-    //        //        newTextBoxDiv.appendTo("#buglist_visible");
-    //        $('#buglist_visible').append(newTextBoxDiv);
-    //        
-    //        //        $('#buglist_visible').append($bug + "<br>");
-    //        $('#buglist_hidden').text($buglist);
-
+    
 });
