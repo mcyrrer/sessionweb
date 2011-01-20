@@ -36,4 +36,13 @@ background-color: green;
 text-align:center;
 color:black;
 background-color: red;
+}
+
+#helptext1
+{
+text-align:left;
+color:black;
+background-color: #EFEFEF;
+font-size: 12px;
 } 
+
