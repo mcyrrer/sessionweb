@@ -2,11 +2,16 @@ $buglist = "";
 $(document).ready(function(){
 
     $("#option_list").hide();
-//    var myBugs = new Array();
-//	var myRequirements = new Array();
+
+    if (myRequirements == null) {
+        var myRequirements = new Array();
+    }
+    if (myBugs == null) {
+        var myBugs = new Array();
+    }
     $('#requirementlist_hidden').text(myRequirements.toString());
-	$('#buglist_hidden').text(myBugs.toString());
-	
+    $('#buglist_hidden').text(myBugs.toString());
+    
     // Metrics calculation
     $("[class=metricoption]").change(function(){
         var totalPercentage = parseInt($("[name=oppertunitypercent]").val()) +
@@ -84,16 +89,16 @@ $(document).ready(function(){
             });
         }
         else {
-			 if (bugValue == "") {
-			 }
-			 else {
-			 	alert("Bug with id " +
-			 	bugValue +
-			 	" is already connected to session.");
-			 }
+            if (bugValue == "") {
+            }
+            else {
+                alert("Bug with id " +
+                bugValue +
+                " is already connected to session.");
+            }
         }
     });
-	
+    
     // Add requirement to session and manage if it is deleted
     $("#add_requirement").click(function(){
         var requirementValue = $("#requirement").val() + '';
@@ -148,13 +153,13 @@ $(document).ready(function(){
             });
         }
         else {
-             if (requirementValue == "") {
-             }
-             else {
+            if (requirementValue == "") {
+            }
+            else {
                 alert("requirement with id " +
                 requirementValue +
                 " is already connected to session.");
-             }
+            }
         }
     });
     

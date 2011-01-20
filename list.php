@@ -125,14 +125,19 @@ function echoOneSession($row,$rowSessionStatus)
 	$color = getSessionColorCode($rowSessionStatus);
 	echo "  <tr class=\"tr_sessionrow \" bgcolor=\"$color\">\n";
 	echo "      <td>".$row["sessionid"]."</td>\n";
-	if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['admin'],"1")==0)
+	echo "      <td>\n";
+	if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
-		echo "      <td><a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"Sessionweb logo\"/></a></td>\n";
+		echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
 	}
-	else
+	if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
-		echo "      <td></td>\n";
+		if($rowSessionStatus['executed']!=false && $rowSessionStatus['debriefed']!=true)
+		{
+			echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
+		}
 	}
+	echo "      </td>\n";
 	$title = $row["title"];
 	if(strlen($row["title"])>30)
 	{
@@ -252,12 +257,12 @@ function echoColorExplanation()
 	echo "    <tr >\n";
 	echo "        <td bgcolor=\"#c2c287\">Not Executed\n";
 	echo "        </td>\n";
-    echo "        <td>&rarr;";
-    echo "        </td>\n";
+	echo "        <td>&rarr;";
+	echo "        </td>\n";
 	echo "        <td bgcolor=\"#ffff77\">Executed\n";
 	echo "        </td>\n";
-    echo "        <td>&rarr;";
-    echo "        </td>\n";
+	echo "        <td>&rarr;";
+	echo "        </td>\n";
 	echo "        <td bgcolor=\"#99ff99\">Debriefed\n";
 	echo "        </td>\n";
 	echo "    </tr>\n";

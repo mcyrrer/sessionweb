@@ -24,6 +24,16 @@ elseif(strcmp($_REQUEST["command"],"edit")==0)
 {
 	echoSessionForm();
 }
+elseif(strcmp($_REQUEST["command"],"debrief")==0)
+{
+	echoViewSession();
+	echoDebriefSession();
+}
+elseif(strcmp($_REQUEST["command"],"debriefed")==0)
+{
+	saveDebriefedSession();
+}
+
 elseif(strcmp($_REQUEST["command"],"save")==0)
 {
 	//RapidReporter importer
@@ -70,7 +80,7 @@ function echoRequirementsView($versionid)
 		}
 		else
 		{
-			echo "                                   <a href=\"".$_SESSION['settings']['url_to_rms']."$aRequirement\" class=\"requirementurl\" target=\"_blank\">Requirement identifier ($aRequirement) could not be found</a><br>\n";
+			echo "                                   #$aRequirement:<a href=\"".$_SESSION['settings']['url_to_rms']."$aRequirement\" class=\"requirementurl\" target=\"_blank\">Requirement identifier ($aRequirement) could not be found</a><br>\n";
 		}
 
 	}
@@ -410,8 +420,8 @@ function echoViewSession()
 		echo "            ".echoRequirementsView($row["versionid"])."\n";
 		echo "        </td>\n";
 		echo "    </tr>\n";
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 		echo "    <tr>\n";
 		echo "        <td></td>\n";
 		echo "        <td>\n";
@@ -469,6 +479,31 @@ function echoViewSession()
 	}
 
 	mysql_close($con);
+}
+
+
+function echoDebriefSession()
+{
+	if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
+	{
+
+		echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
+		echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
+		echo "<h4>Debrief notes</h4>\n";
+		echo "<textarea id=\"debriefnotes\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\"></textarea>\n";
+		echo "<div>Debriefed: <input type=\"checkbox\" name=\"debriefedcheckbox\" checked=\"checked\" value=\"yes\"></div>\n";
+		if(strcmp($_SESSION['useradmin'],"1")==0)
+		{
+			echo "<div>Debriefed by manager: <input type=\"checkbox\" name=\"debriefedbymanagercheckbox\" checked=\"checked\" value=\"yes\"></div>\n";
+		}
+		echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$_GET["sessionid"]."\">\n";
+		echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
+		echo "</form>\n";
+	}
+	else
+	{
+		echo "You do not have enough permisions to debrief sessions.";
+	}
 }
 
 function echoSessionMetrics($rowSessionMetric, $versionid)
@@ -795,6 +830,45 @@ function saveSession_UpdateSessionStatusToDb($versionid)
 	}
 }
 
+function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed)
+{
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission_status ";
+	$sqlUpdate .= "SET    `debriefed` = $debriefed, ";
+	$sqlUpdate .= "       `masterdibriefed` = $masterdibriefed, ";
+	$sqlUpdate .= "       `debriefed_timestamp` = '".date("Y-d-j H:i:s")."' ";
+	$sqlUpdate .= "WHERE versionid='$versionid'" ;
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionDebriefedStatusToDb: ".mysql_error()."<br><br>";
+	}
+}
+
+function saveSession_InsertSessionDebriefedNotesToDb($versionid, $notes)
+{
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mission_debriefnotes ";
+	$sqlInsert .= "            (`versionid`, ";
+	$sqlInsert .= "             `notes`, ";
+	$sqlInsert .= "             `debriefedby`) ";
+	$sqlInsert .= "VALUES      ('$versionid', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($notes)."', ";
+	$sqlInsert .= "             '".$_SESSION['username']."')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "saveSession_InsertSessionDebriefedNotesToDb: ".mysql_error()."<br><br>";
+	}
+}
+
 function saveSession_InsertSessionMetricsToDb($versionid)
 {
 
@@ -819,6 +893,50 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 	{
 		echo "saveSession_InsertSessionMetricsToDb: ".mysql_error()."<br/>";
 	}
+}
+
+function saveDebriefedSession()
+{
+	if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
+	{
+		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+		$versionid = getSessionVersionId($_REQUEST["sessionid"]);
+
+		$debriefed = "false";
+		if(strcmp($_REQUEST["debriefedcheckbox"],"yes")==0)
+		{
+			$debriefed = "true";
+		}
+
+		$masterdibriefed = "false";
+		if(strcmp($_REQUEST["debriefedbymanagercheckbox"],"yes")==0)
+		{
+			$masterdibriefed = "true";
+		}
+
+		if(doesSessionNotesExist($versionid))
+		{
+			saveSession_DeleteSessionsNotesFromDb($versionid);
+		}
+		else
+		{
+			echo "session does not have notes.<br>";
+		}
+
+		
+		saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed);
+		
+		saveSession_InsertSessionDebriefedNotesToDb($versionid, $_REQUEST["debriefnotes"]);
+		
+		echo "<h4>Debrief notes saved</h4>\n";
+	}
+	else
+	{
+		echo "You can not save since you do not have the persmisions to debrief\n";
+	}
+
 }
 
 function saveSession_InsertSessionAreaToDb($versionid)
@@ -938,7 +1056,22 @@ function saveSession_UpdateSessionAreasToDb($versionid)
 	}
 
 	saveSession_InsertSessionAreaToDb($versionid);
+}
 
+function saveSession_DeleteSessionsNotesFromDb($versionid)
+{
+    $sqlDelete = "";
+    $sqlDelete .= "DELETE FROM mission_debriefnotes ";
+    $sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+    $result = mysql_query($sqlDelete);
+
+    if(!$result)
+    {
+        echo "saveSession_DeleteSessionsNotesFromDb: ".mysql_error()."<br/>";
+    }
+
+    saveSession_InsertSessionAreaToDb($versionid);
 }
 
 function saveSession_UpdateSessionBugsToDb($versionid)
@@ -1120,7 +1253,7 @@ function echoSessionForm()
 	echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$rowSessionData["sessionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"versionid\" value=\"".$rowSessionData["versionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
-	echo "<table width=\"1024\" border=\"1\">\n";
+	echo "<table width=\"1024\" border=\"0\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
 	echo "                  <table width=\"1024\" border=\"0\">\n";

@@ -22,9 +22,9 @@ function getSessionWebSettings()
 
 function getSessionMetrics($versionid)
 {
-//	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-        
+	//	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
 	$sqlSelectSessionMetrics = "";
 	$sqlSelectSessionMetrics .= "SELECT * ";
 	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
@@ -35,7 +35,7 @@ function getSessionMetrics($versionid)
 	{
 		echo "getSessionMetrics: ".mysql_error()."<br/>";
 	}
-	
+
 	return mysql_fetch_array($resultSessionMetrics);
 }
 
@@ -56,6 +56,39 @@ function getSessionData($sessionid)
 	return mysql_fetch_array($resultSession);
 }
 
+function getSessionVersionId($sessionid)
+{
+	$result = getSessionData($sessionid);
+	return $result['versionid'];
+}
+
+function doesSessionNotesExist($versionid)
+{
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_debriefnotes ";
+	$sqlSelect .= "WHERE  versionid = $versionid";
+
+	$result = mysql_query($sqlSelect);
+	if(!$result)
+	{
+		return false;
+	}
+
+	$result =  mysql_fetch_array($result);
+
+	if($result!=null)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
 function getSessionStatus($versionid)
 {
 	$sqlSelectSessionStatus = "";
@@ -69,6 +102,21 @@ function getSessionStatus($versionid)
 	}
 
 	return mysql_fetch_array($resultSessionStatus);
+}
+
+function getSessionNotes($versionid)
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_debriefnotes ";
+	$sqlSelect .= "WHERE  versionid = $versionid";
+	$result = mysql_query($sqlSelectSessionStatus);
+	if(!$result)
+	{
+		echo "getSessionNotes: ".mysql_error()."<br/>";
+	}
+
+	return mysql_fetch_array($result);
 }
 
 function getSessionRequirements($versionid)
