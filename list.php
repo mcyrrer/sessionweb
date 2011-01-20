@@ -82,6 +82,7 @@ function echoSessionTable($currentPage)
 	}
 
 	echo "</table>\n";
+	mysql_close($con);
 
 }
 

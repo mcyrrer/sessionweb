@@ -7,7 +7,9 @@ if(!session_is_registered(myusername)){
 include("include/header.php.inc");
 include_once('config/db.php.inc');
 include_once 'include/commonFunctions.php.inc';
-
+if (is_file("include/customfunctions.php.inc")) {
+	include "include/customfunctions.php.inc";
+}
 
 
 if(strcmp($_REQUEST["command"],"new")==0)
@@ -42,6 +44,221 @@ elseif(strcmp($_REQUEST["command"],"save")==0)
 }
 
 include("include/footer.php.inc");
+
+function echoRequirementsView($versionid)
+{
+	$rowSessionreqs = getSessionRequirements($versionid);
+
+	echo "<h4>Requirements connected to session</h4>\n";
+	echo "<div id=viewreqgid style=\"background-color:#efefef;\">\n";
+	foreach($rowSessionreqs as $aRequirement)
+	{
+		if (is_file("include/customfunctions.php.inc")) {
+			$aRequirementName = getRequirementNameFromServer($aRequirement);
+
+		} else {
+			$aRequirementName = $aRequirement;
+		}
+		if($aRequirementName!="" && $aRequirementName!="-1")
+		{
+			echo "                                   #$aRequirement:<a href=\"".$_SESSION['settings']['url_to_rms']."$aRequirement\" class=\"requirementurl\" target=\"_blank\">$aRequirementName</a><br>\n";
+
+		}
+		elseif($aRequirementName==-1)
+		{
+			echo "#$aRequirement:Could not connect to server to get title";
+		}
+		else
+		{
+			echo "                                   <a href=\"".$_SESSION['settings']['url_to_rms']."$aRequirement\" class=\"requirementurl\" target=\"_blank\">Requirement identifier ($aRequirement) could not be found</a><br>\n";
+		}
+
+	}
+	echo "</div>\n";
+}
+
+function echoBugsView($versionid)
+{
+	$rowSessionreqs = getSessionBugs($versionid);
+
+	echo "<h4>Defects connected to session</h4>\n";
+	echo "<div id=viewbugid style=\"background-color:#efefef;\">\n";
+
+	foreach($rowSessionreqs as $aBug)
+	{
+		if (is_file("include/customfunctions.php.inc")) {
+			$aBugName = getBugNameFromServer($aBug);
+		} else {
+			$aBugName = $aBug;
+		}
+		if($aBugName!="" && $aBugName!="-1")
+		{
+			echo "                                   #$aBug:<a href=\"".$_SESSION['settings']['url_to_dms']."$aBug\" class=\"requirementurl\" target=\"_blank\">$aBugName</a><br>\n";
+
+		}
+		elseif($aBugName==-1)
+		{
+			echo "#$aBug:Could not connect to server to get title";
+		}
+		else
+		{
+			echo "                                   #$aBug:<a href=\"".$_SESSION['settings']['url_to_dms']."$aBug\" class=\"requirementurl\" target=\"_blank\">Defect identifier ($aBug) could not be found</a><br>\n";
+		}
+	}
+	echo "</div>\n";
+}
+
+function echoBugsEdit($versionid)
+{
+	$myBugsArray = "";
+	$rowSessionBugs = "";
+
+	if($versionid!="")
+	{
+
+		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+		$rowSessionBugs = getSessionBugs($versionid);
+
+		mysql_close($con);
+
+		if($rowSessionBugs!="")
+		{
+			$myBugsArray = implode("\",\"", $rowSessionBugs);
+		}
+		echo "            <script>\n";
+		if($myBugsArray!="")
+		{
+			echo "              var myBugs = new Array(\"$myBugsArray\");\n";
+		}
+		else
+		{
+			echo "              var myBugs = new Array();\n";
+		}
+		echo "            </script>\n";
+
+
+		foreach($rowSessionBugs as $row)
+		{
+			$bug = $row;
+			echo "      <div id=\"bugdiv_$bug\">\n";
+			echo "            <table width=\"*\" border=\"0\">\n";
+			echo "                        <tr>\n";
+			echo "                              <td>\n";
+			echo "                                   <a href=\"".$_SESSION['settings']['url_to_rms']."$bug\" class=\"bugurl\" target=\"_blank\">$bug</a>\n";
+			echo "                              </td>\n";
+			echo "                              <td>\n";
+			echo "                                    <div id=\"bug_$bug\">\n";
+			echo "                                          <img src=\"pictures/removeicon.png\" alt=\"[remove]\"></div>\n";
+			echo "                                    </td>\n";
+			echo "                              </tr>\n";
+			echo "                  </table>\n";
+			echo "      </div>\n";
+			echo "          <script>\n";
+			echo "                      var bugValue = \"".$bug."\"\n";
+			echo "                      $(\"#bug_$bug\").click(function(){\n";
+			echo "                          var thisIe = this.id;\n";
+			echo "                          var bugUrlId = \"bugdiv_\" +\n";
+			echo "                          bugValue;\n";
+			echo "                          if (this.id != bugUrlId) {\n";
+			echo "                              var answer = confirm(\"Remove bug $bug?\")\n";
+			echo "                              if (answer) {\n";
+			echo "                                  $(\"#bugdiv_$bug\").remove();\n";
+			echo "                                  bugPos = jQuery.inArray(\"$bug\", myBugs);\n";
+			echo "                                  if (bugPos != -1) {\n";
+			echo "                                      var removedelements = myBugs.splice(bugPos, 1);\n";
+			echo "                                      $('#buglist_hidden').text(myBugs.toString());\n";
+			echo "                                  }\n";
+			echo "                              }\n";
+			echo "                          }\n";
+			echo "                      });\n";
+			echo "          </script>\n";
+		}
+
+	}
+	else
+	{
+		echo "            <script>\n";
+		echo "              var myBugs = new Array();\n";
+		echo "            </script>\n";
+	}
+}
+
+function echoRequirementsEdit($versionid)
+{
+	$myRequirementsArray = "";
+	$rowSessionRequirements = "";
+	if($versionid!="")
+	{
+		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+		$rowSessionRequirements = getSessionRequirements($versionid);
+
+		mysql_close($con);
+
+		if($rowSessionRequirements!="")
+		{
+			$myRequirementsArray = implode("\",\"", $rowSessionRequirements);
+		}
+		echo "            <script>\n";
+		if($myRequirementsArray!="")
+		{
+			echo "              var myRequirements = new Array(\"$myRequirementsArray\");\n";
+		}
+		else
+		{
+			echo "              var myRequirements = new Array();\n";
+		}
+		echo "            </script>\n";
+
+
+		foreach($rowSessionRequirements as $row)
+		{
+			$requirement = $row;
+			echo "      <div id=\"requirementdiv_$requirement\">\n";
+			echo "            <table width=\"*\" border=\"0\">\n";
+			echo "                        <tr>\n";
+			echo "                              <td>\n";
+			echo "                                   <a href=\"".$_SESSION['settings']['url_to_rms']."$requirement\" class=\"requirementurl\" target=\"_blank\">$requirement</a>\n";
+			echo "                              </td>\n";
+			echo "                              <td>\n";
+			echo "                                    <div id=\"requirement_$requirement\">\n";
+			echo "                                          <img src=\"pictures/removeicon.png\" alt=\"[remove]\"></div>\n";
+			echo "                                    </td>\n";
+			echo "                              </tr>\n";
+			echo "                  </table>\n";
+			echo "      </div>\n";
+			echo "			<script>\n";
+			echo "                      var requirementValue = \"".$requirement."\"\n";
+			echo "                      $(\"#requirement_$requirement\").click(function(){\n";
+			echo "                          var thisIe = this.id;\n";
+			echo "                          var requirementUrlId = \"requirementdiv_\" +\n";
+			echo "                          requirementValue;\n";
+			echo "                          if (this.id != requirementUrlId) {\n";
+			echo "                              var answer = confirm(\"Remove requirement $requirement?\")\n";
+			echo "                              if (answer) {\n";
+			echo "                                  $(\"#requirementdiv_$requirement\").remove();\n";
+			echo "                                  requirementPos = jQuery.inArray(\"$requirement\", myRequirements);\n";
+			echo "                                  if (requirementPos != -1) {\n";
+			echo "                                      var removedelements = myRequirements.splice(requirementPos, 1);\n";
+			echo "                                      $('#requirementlist_hidden').text(myRequirements.toString());\n";
+			echo "                                  }\n";
+			echo "                              }\n";
+			echo "                          }\n";
+			echo "                      });\n";
+			echo "          </script>\n";
+		}
+
+	}
+	else
+	{
+		echo "            <script>\n";
+		echo "              var myRequirements = new Array();\n";
+		echo "            </script>\n";
+	}
+}
 
 function echoExecutedStatus($rowSessionStatus)
 {
@@ -98,7 +315,7 @@ function echoViewSession()
 		echo "        <td></td>\n";
 		echo "        <td>\n";
 		echo "            <h2>Session title</h2>\n";
-		echo "            <div style=\"background-color:#efefef;\">\n";
+		echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
 		echo "                ".$row["title"]."\n";
 		echo "            </div>\n";
 		echo "        </td>\n";
@@ -186,6 +403,15 @@ function echoViewSession()
 		echo "            <tr>\n";
 		echo "        </table>";
 		echo "    </tr>\n";
+
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            ".echoRequirementsView($row["versionid"])."\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 		echo "    <tr>\n";
 		echo "        <td></td>\n";
 		echo "        <td>\n";
@@ -198,7 +424,7 @@ function echoViewSession()
 		echo "        </td>\n";
 		echo "        <td align=\"left\">\n";
 		echo "        <h2>Charter</h2>\n";
-		echo "            <div style=\"background-color:#efefef;\">\n";
+		echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
 		echo "                ".$row["charter"]."\n";
 		echo "            </div>\n";
 		echo "        </td>\n";
@@ -215,17 +441,27 @@ function echoViewSession()
 		echo "        </td>\n";
 		echo "        <td align=\"left\">\n";
 		echo "        <h2>Session notes</h2>\n";
-		echo "            <div style=\"background-color:#efefef;\">\n";
+		echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
 		echo "                ".$row["notes"]."\n";
 		echo "            </div>\n";
 		echo "        </td>\n";
 		echo "    </tr>\n";
+
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            ".echoBugsView($row["versionid"])."\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
+
 		echo "    <tr>\n";
 		echo "        <td></td>\n";
 		echo "        <td>\n";
 		echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
 		echo "        </td>\n";
 		echo "    </tr>\n";
+		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 		echoSessionMetrics($rowSessionMetric,$row["versionid"]);
 
 
@@ -612,6 +848,63 @@ function saveSession_InsertSessionAreaToDb($versionid)
 	}
 }
 
+function saveSession_InsertSessionBugsToDb($versionid)
+{
+	$bugs = $_REQUEST["buglist_hidden"];
+	if($bugs!="")
+	{
+		$bugsArray = explode(",",$bugs);
+		foreach ($bugsArray as $aBug) {
+			if($aBug!="")
+			{
+
+				$sqlInsert = "";
+				$sqlInsert .= "INSERT INTO mission_bugs ";
+				$sqlInsert .= "            (`versionid`, ";
+				$sqlInsert .= "             `bugid`) ";
+				$sqlInsert .= "VALUES      ('$versionid', ";
+				$sqlInsert .= "             '".mysql_real_escape_string($aBug)."')" ;
+
+				$result = mysql_query($sqlInsert);
+
+				if(!$result)
+				{
+					echo "saveSession_InsertSessionBugsToDb: ".mysql_error()."<br/>";
+				}
+			}
+		}
+	}
+}
+
+function saveSession_InsertSessionRequirementsToDb($versionid)
+{
+
+	$requirements = $_REQUEST["requirementlist_hidden"];
+	if($requirements!="")
+	{
+		$requirementsArray = explode(",",$requirements);
+		foreach ($requirementsArray as $aRequirement) {
+			if($aRequirement!="")
+			{
+
+				$sqlInsert = "";
+				$sqlInsert .= "INSERT INTO mission_requirements ";
+				$sqlInsert .= "            (`versionid`, ";
+				$sqlInsert .= "             `requirementsid`) ";
+				$sqlInsert .= "VALUES      ('$versionid', ";
+				$sqlInsert .= "             '".mysql_real_escape_string($aRequirement)."')" ;
+
+				$result = mysql_query($sqlInsert);
+
+				if(!$result)
+				{
+					echo "saveSession_InsertSessionRequirementsToDb: ".mysql_error()."<br/>";
+				}
+			}
+		}
+	}
+}
+
 function saveSession_UpdateSessionMetricsToDb($versionid)
 {
 	$sqlUpdate = "";
@@ -647,6 +940,42 @@ function saveSession_UpdateSessionAreasToDb($versionid)
 	saveSession_InsertSessionAreaToDb($versionid);
 
 }
+
+function saveSession_UpdateSessionBugsToDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_bugs ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionBugsToDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionBugsToDb($versionid);
+
+}
+
+function saveSession_UpdateSessionRequirementsToDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_requirements ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionRequirementsToDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionRequirementsToDb($versionid);
+
+}
+
+
 
 function checkSessionTitleNotToLong()
 {
@@ -698,6 +1027,12 @@ function saveSession()
 		//Create areas for session
 		saveSession_InsertSessionAreaToDb($versionid);
 
+		//Create bugs connected to session
+		saveSession_InsertSessionBugsToDb($versionid);
+
+		//Create requirements connected to mission
+		saveSession_InsertSessionRequirementsToDb($versionid);
+
 	}
 	//Update existing session
 	else
@@ -712,12 +1047,19 @@ function saveSession()
 		saveSession_UpdateSessionMetricsToDb($versionid);
 
 		saveSession_UpdateSessionAreasToDb($versionid);
+
+		saveSession_UpdateSessionBugsToDb($versionid);
+
+		saveSession_UpdateSessionRequirementsToDb($versionid);
 	}
 
 
 	mysql_close($con);
 
-	echo "<p/><b>Session saved</b><br/>(sessionid = $sessionid, versionid = $versionid)";
+	echo "<p><b>Session saved</b></p>\n";
+	echo "<p><a href=\"session.php?sessionid=$sessionid&command=view\" id=\"view_session\">View session</a></p>";
+	echo "<p><a href=\"session.php?sessionid=$sessionid&command=edit\" id=\"edit_session\">Edit session</a></p>";
+	echo "(sessionid = $sessionid, versionid = $versionid)\n";
 
 }
 
@@ -778,7 +1120,7 @@ function echoSessionForm()
 	echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$rowSessionData["sessionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"versionid\" value=\"".$rowSessionData["versionid"]."\">\n";
 	echo "<input type=\"hidden\" name=\"tester\" value=\"".$_SESSION['username']."\">\n";
-	echo "<table width=\"1024\" border=\"0\">\n";
+	echo "<table width=\"1024\" border=\"1\">\n";
 	echo "      <tr>\n";
 	echo "            <td>\n";
 	echo "                  <table width=\"1024\" border=\"0\">\n";
@@ -843,14 +1185,18 @@ function echoSessionForm()
 	}
 
 	echo "                        <tr>\n";
-	echo "                              <td>Test requirements: </td>\n";
+	echo "                              <td valign=\"top\">Test requirements: </td>\n";
 	echo "                              <td>\n";
 	echo "                              <table width=\"*\" border=\"0\">\n";
 	echo "                                  <tr>\n";
 	echo "                                      <td><input id=\"requirement\" type=\"text\" size=\"50\" value=\"\">\n";
 	echo "                                      </td>\n";
-	echo "                                      <td><p id=\"add_requirement\">add</p>\n";
+	echo "                                      <td><div id=\"add_requirement\">add</div>\n";
 	echo "                                      </td>\n";
+	echo "                                  </tr>\n";
+	echo "                                  <tr>\n";
+	echo "                                      <td><div id=\"helptext1\" >Only add the requirements id</div></td>\n";
+	echo "                                      <td></td>\n";
 	echo "                                  </tr>\n";
 	echo "                              </table>\n";
 	echo "                              </td>\n";
@@ -858,7 +1204,8 @@ function echoSessionForm()
 
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
-	echo "                              <td><div id=\"requirementlist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\"></div></td>\n";
+	echo "                              <td>&nbsp;<div id=\"requirementlist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">";
+	echo "                                ".echoRequirementsEdit($rowSessionData["versionid"])."</div></td>\n";
 	echo "                        </tr>\n";
 
 	echo "                        <tr>\n";
@@ -899,23 +1246,27 @@ function echoSessionForm()
 	echo "                        </tr>\n";
 
 	echo "                        <tr>\n";
-	echo "                              <td>Session based on: </td>\n";
+	echo "                              <td valign=\"top\">Defects: </td>\n";
 	echo "                              <td>\n";
 	echo "                              <table width=\"*\" border=\"0\">\n";
 	echo "                                  <tr>\n";
 	echo "                                      <td><input id=\"bug\" type=\"text\" size=\"50\" value=\"\">\n";
 	echo "                                      </td>\n";
-	echo "                                      <td><p id=\"add_bug\">add</p>\n";
+	echo "                                      <td><div id=\"add_bug\">add</div>\n";
 	echo "                                      </td>\n";
 	echo "                                  </tr>\n";
+	echo "                                  <tr>\n";
+	echo "                                      <td><div id=\"helptext1\" >Only add the defect id</div></td>\n";
+	echo "                                      <td></td>\n";
+	echo "                                  </tr>\n";
 	echo "                              </table>\n";
-	//    style= \"visibility:hidden\"
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 
 	echo "                        <tr>\n";
 	echo "                              <td></td>\n";
-	echo "                              <td><div id=\"buglist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\"></div></td>\n";
+	echo "                              <td>&nbsp;<div id=\"buglist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">";
+	echo "                             ".echoBugsEdit($rowSessionData["versionid"])."</div></td>\n";
 	echo "                        </tr>\n";
 
 
@@ -1009,11 +1360,11 @@ function echoPercentSelection($selected)
 	for ($index  = 0; $index  <= 100; $index = $index + 5) {
 		if($index==$selected)
 		{
-			echo "                                      <option selected=\"selected\">$index</option>";
+			echo "                                      <option selected=\"selected\">$index</option>\n";
 		}
 		else
 		{
-			echo "                                      <option>$index</option>";
+			echo "                                      <option>$index</option>\n";
 		}
 	}
 }
@@ -1025,7 +1376,7 @@ function echoPercentSelection($selected)
 function echoDurationSelection()
 {
 	for ($index  = 15; $index  <= 480; $index = $index + 15) {
-		echo "                                      <option>$index</option>";
+		echo "                                      <option>$index</option>\n";
 	}
 }
 

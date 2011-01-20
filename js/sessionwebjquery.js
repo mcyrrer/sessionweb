@@ -2,9 +2,11 @@ $buglist = "";
 $(document).ready(function(){
 
     $("#option_list").hide();
-    var myBugs = new Array();
-	var myRequirements = new Array();
-    
+//    var myBugs = new Array();
+//	var myRequirements = new Array();
+    $('#requirementlist_hidden').text(myRequirements.toString());
+	$('#buglist_hidden').text(myBugs.toString());
+	
     // Metrics calculation
     $("[class=metricoption]").change(function(){
         var totalPercentage = parseInt($("[name=oppertunitypercent]").val()) +
@@ -39,7 +41,7 @@ $(document).ready(function(){
             var newBugHtml = "<div id=\"bugdiv_" +
             bugValue +
             "\">" +
-            "<table width=\"200\" border=\"0\">" +
+            "<table width=\"*\" border=\"0\">" +
             "    <tr>" +
             "        <td><a href=\"" +
             url_to_dms +
@@ -103,7 +105,7 @@ $(document).ready(function(){
             var newrequirementHtml = "<div id=\"requirementdiv_" +
             requirementValue +
             "\">" +
-            "<table width=\"200\" border=\"0\">" +
+            "<table width=\"*\" border=\"0\">" +
             "    <tr>" +
             "        <td><a href=\"" +
             url_to_rms +

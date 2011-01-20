@@ -22,6 +22,9 @@ function getSessionWebSettings()
 
 function getSessionMetrics($versionid)
 {
+//	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+        
 	$sqlSelectSessionMetrics = "";
 	$sqlSelectSessionMetrics .= "SELECT * ";
 	$sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
@@ -32,6 +35,7 @@ function getSessionMetrics($versionid)
 	{
 		echo "getSessionMetrics: ".mysql_error()."<br/>";
 	}
+	
 	return mysql_fetch_array($resultSessionMetrics);
 }
 
@@ -65,6 +69,47 @@ function getSessionStatus($versionid)
 	}
 
 	return mysql_fetch_array($resultSessionStatus);
+}
+
+function getSessionRequirements($versionid)
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT requirementsid ";
+	$sqlSelect .= "FROM   mission_requirements ";
+	$sqlSelect .= "WHERE  versionid = $versionid";
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "getSessionRequirements: ".mysql_error()."<br/>";
+	}
+
+	$resultToReturn = array();
+	while ($row = mysql_fetch_array($result)) {
+		$resultToReturn[]=$row["requirementsid"];
+	}
+
+	return $resultToReturn;
+}
+
+function getSessionBugs($versionid)
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_bugs ";
+	$sqlSelect .= "WHERE  versionid = $versionid";
+	$result = mysql_query($sqlSelect);
+	if(!$result)
+	{
+		echo "getSessionBugs: ".mysql_error()."<br/>";
+	}
+
+	$resultToReturn = array();
+	while ($row = mysql_fetch_array($result)) {
+		$resultToReturn[]=$row["bugid"];
+	}
+
+	return $resultToReturn;
 }
 
 function getSessionAreas($versionid)
@@ -194,7 +239,7 @@ function echoAreaSelectSingel($area)
 
 	if(count($area)==0)
 	{
-		 
+			
 		echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
 	}
 	else
