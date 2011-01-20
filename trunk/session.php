@@ -843,7 +843,7 @@ function echoSessionForm()
 	}
 
 	echo "                        <tr>\n";
-	echo "                              <td>Defects: </td>\n";
+	echo "                              <td>Test requirements: </td>\n";
 	echo "                              <td>\n";
 	echo "                              <table width=\"*\" border=\"0\">\n";
 	echo "                                  <tr>\n";

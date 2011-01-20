@@ -272,6 +272,25 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_bugs` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_requirements`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_requirements` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_requirements` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `versionid` INT NOT NULL ,
+  `requirementsid` VARCHAR(45) NOT NULL ,
+  INDEX `fk_missionreq_mission1` (`versionid` ASC) ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_bugs_mission1000`
+    FOREIGN KEY (`versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
