@@ -1,5 +1,10 @@
 <?php
 
+function getSessionSessionlink()
+{
+    return "";
+}
+
 function getSessionWebSettings()
 {
 	$sqlSelect = "";
