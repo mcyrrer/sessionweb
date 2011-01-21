@@ -1,0 +1,525 @@
+<?php
+function getSessionMetricsPieChartUrl($versionid)
+{
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_sessionmetrics ";
+	$sqlSelect .= "WHERE  versionid = $versionid";
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "getSessionMetrics: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+
+		$setup_percent = $row["setup_percent"];
+		$test_percent = $row["test_percent"];
+		$bug_percent = $row["bug_percent"];
+		$opportunity_percent = $row["opportunity_percent"];
+
+		return createPercentPieChart($setup_percent,$test_percent,$bug_percent,$opportunity_percent);
+	}
+}
+
+function saveSession_CreateNewSessionId()
+{
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO sessionid ";
+	$sqlInsert .= "            (`createdby`) ";
+	$sqlInsert .= "VALUES      ('".$_SESSION['username']."') " ;
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "saveSession_CreateNewSessionId: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_GetSessionIdForNewSession()
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   sessionid ";
+	$sqlSelect .= "WHERE  createdby = '".$_SESSION['username']."' ";
+	$sqlSelect .= "ORDER  BY sessionid DESC ";
+	$sqlSelect .= "LIMIT  1" ;
+
+	$result = mysql_query($sqlSelect);
+
+	if($result)
+	{
+		$row = mysql_fetch_array($result);
+		$sessionid = $row["sessionid"];
+	}
+	else
+	{
+		echo "saveSession_GetSessionIdForNewSession: ".mysql_error()."<br/>";
+	}
+
+	return $sessionid;
+}
+
+
+function saveSession_InsertSessionDataToDb($sessionid)
+{
+
+
+	if($_REQUEST["title"]=="")
+	{
+		$_REQUEST["title"]="Unnamed Session";
+		echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
+	}
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mission ";
+	$sqlInsert .= "            (`sessionid`, ";
+	$sqlInsert .= "             `title`, ";
+	$sqlInsert .= "             `charter`, ";
+	$sqlInsert .= "             `notes`, ";
+	$sqlInsert .= "             `username`, ";
+	$sqlInsert .= "             `sprintname`, ";
+	$sqlInsert .= "             `teamsprintname`, ";
+	$sqlInsert .= "             `teamname`) ";
+	$sqlInsert .= "VALUES      ('$sessionid', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["title"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["charter"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["notes"])."', ";
+	$sqlInsert .= "             '".$_SESSION['username']."', ";
+	if($_REQUEST['sprint']=="")
+	{
+		$sqlInsert .= "             null, ";
+	}
+	else
+	{
+		$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
+	}
+	if($_REQUEST['teamsprint']=="")
+	{
+		$sqlInsert .= "             null, ";
+	}
+	else
+	{
+
+		$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['teamsprint'])."', ";
+	}
+	if($_REQUEST['team']=="")
+	{
+		$sqlInsert .= "             null ";
+	}
+	else
+	{
+		$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."'";
+	}
+	$sqlInsert .= ") " ;
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "saveSession_InsertSessionDataToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_UpdateSessionDataToDb($sessionid)
+{
+
+	if($_REQUEST["title"]=="")
+	{
+		$_REQUEST["title"]="Unnamed Session";
+		echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
+	}
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission ";
+	$sqlUpdate .= "SET    `title` = '".mysql_real_escape_string($_REQUEST["title"])."', ";
+	$sqlUpdate .= "       `charter` = '".mysql_real_escape_string($_REQUEST["charter"])."', ";
+	$sqlUpdate .= "       `notes` = '".mysql_real_escape_string($_REQUEST["notes"])."', ";
+	$sqlUpdate .= "       `username` = '".$_SESSION['username']."', ";
+	if($_REQUEST['sprint']=="")
+	{
+		$sqlUpdate .= "       `sprintname` = null, ";
+	}
+	else
+	{
+		$sqlUpdate .= "       `sprintname` = '".mysql_real_escape_string($_REQUEST['sprint'])."', ";
+	}
+
+	if($_REQUEST['teamsprint']=="")
+	{
+		$sqlUpdate .= "       `teamsprintname` = null, ";
+	}
+	else
+	{
+		$sqlUpdate .= "       `teamsprintname` = '".mysql_real_escape_string($_REQUEST['teamsprint'])."', ";
+	}
+
+	if($_REQUEST['team']=="")
+	{
+		$sqlUpdate .= "       `teamname` = null ";
+	}
+	else
+	{
+		$sqlUpdate .= "       `teamname` = '".mysql_real_escape_string($_REQUEST['team'])."' ";
+	}
+	$sqlUpdate .= "WHERE sessionid='$sessionid'" ;
+
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionDataToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_GetVersionIdForNewSession()
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission ";
+	$sqlSelect .= "WHERE  username = '".$_SESSION['username']."' ";
+	$sqlSelect .= "ORDER  BY versionid DESC ";
+	$sqlSelect .= "LIMIT  1" ;
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "saveSession_GetVersionIdForNewSession: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		$versionid = $row["versionid"];
+	}
+	return $versionid;
+}
+
+function saveSession_InsertSessionStatusToDb($versionid)
+{
+	$executed = false;
+
+	if($_REQUEST["executed"]!="")
+	{
+		$executed = true;
+	}
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mission_status ";
+	$sqlInsert .= "            (`versionid`, ";
+	$sqlInsert .= "             `executed`, ";
+	$sqlInsert .= "             `debriefed`, ";
+	$sqlInsert .= "             `masterdibriefed`, ";
+	$sqlInsert .= "             `executed_timestamp` ) ";
+	$sqlInsert .= "VALUES      ('$versionid', ";
+	$sqlInsert .= "             '$executed', ";
+	$sqlInsert .= "             'false', ";
+	$sqlInsert .= "             'false', " ;
+	$sqlInsert .= "             '".date("Y-d-j H:i:s")."')" ;
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "saveSession_InsertSessionStatusToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_UpdateSessionStatusToDb($versionid)
+{
+	$executed = false;
+
+	if($_REQUEST["executed"]!="")
+	{
+		$executed = true;
+	}
+
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission_status ";
+	$sqlUpdate .= "SET    `executed` = '$executed', ";
+	$sqlUpdate .= "       `debriefed` = 'false', ";
+	$sqlUpdate .= "       `masterdibriefed` = 'false', ";
+	$sqlUpdate .= "       `executed_timestamp` = '".date("Y-d-j H:i:s")."' ";
+	$sqlUpdate .= "WHERE versionid='$versionid'" ;
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionStatusToDb: ".mysql_error()."<br><br>";
+	}
+}
+
+function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed)
+{
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission_status ";
+	$sqlUpdate .= "SET    `debriefed` = $debriefed, ";
+	$sqlUpdate .= "       `masterdibriefed` = $masterdibriefed, ";
+	$sqlUpdate .= "       `debriefed_timestamp` = '".date("Y-d-j H:i:s")."' ";
+	$sqlUpdate .= "WHERE versionid='$versionid'" ;
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionDebriefedStatusToDb: ".mysql_error()."<br><br>";
+	}
+}
+
+function saveSession_InsertSessionDebriefedNotesToDb($versionid, $notes)
+{
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mission_debriefnotes ";
+	$sqlInsert .= "            (`versionid`, ";
+	$sqlInsert .= "             `notes`, ";
+	$sqlInsert .= "             `debriefedby`) ";
+	$sqlInsert .= "VALUES      ('$versionid', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($notes)."', ";
+	$sqlInsert .= "             '".$_SESSION['username']."')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "saveSession_InsertSessionDebriefedNotesToDb: ".mysql_error()."<br><br>";
+	}
+}
+
+function saveSession_InsertSessionMetricsToDb($versionid)
+{
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO mission_sessionmetrics ";
+	$sqlInsert .= "            (`versionid`, ";
+	$sqlInsert .= "             `setup_percent`, ";
+	$sqlInsert .= "             `test_percent`, ";
+	$sqlInsert .= "             `bug_percent`, ";
+	$sqlInsert .= "             `opportunity_percent`, ";
+	$sqlInsert .= "             `duration_time`) ";
+	$sqlInsert .= "VALUES      ('$versionid', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["setuppercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["testpercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["bugpercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["oppertunitypercent"])."', ";
+	$sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["duration"])."')" ;
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		echo "saveSession_InsertSessionMetricsToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_InsertSessionAreaToDb($versionid)
+{
+	if($_SESSION['settings']['area']==1 && $area!=null)
+	{
+		$areas = $_REQUEST["area"];
+
+		foreach ($areas as $area) {
+			if($area!="")
+			{
+				$sqlInsert = "";
+				$sqlInsert .= "INSERT INTO mission_areas ";
+				$sqlInsert .= "            (`versionid`, ";
+				$sqlInsert .= "             `areaname`) ";
+				$sqlInsert .= "VALUES      ('$versionid', ";
+				$sqlInsert .= "             '".mysql_real_escape_string($area)."')" ;
+
+				$result = mysql_query($sqlInsert);
+
+				if(!$result)
+				{
+					echo "saveSession_InsertSessionAreaToDb: ".mysql_error()."<br/>";
+				}
+			}
+		}
+	}
+}
+
+function saveSession_InsertSessionBugsToDb($versionid)
+{
+	$bugs = $_REQUEST["buglist_hidden"];
+	if($bugs!="")
+	{
+		$bugsArray = explode(",",$bugs);
+		foreach ($bugsArray as $aBug) {
+			if($aBug!="")
+			{
+
+				$sqlInsert = "";
+				$sqlInsert .= "INSERT INTO mission_bugs ";
+				$sqlInsert .= "            (`versionid`, ";
+				$sqlInsert .= "             `bugid`) ";
+				$sqlInsert .= "VALUES      ('$versionid', ";
+				$sqlInsert .= "             '".mysql_real_escape_string($aBug)."')" ;
+
+				$result = mysql_query($sqlInsert);
+
+				if(!$result)
+				{
+					echo "saveSession_InsertSessionBugsToDb: ".mysql_error()."<br/>";
+				}
+			}
+		}
+	}
+}
+
+function saveSession_InsertSessionSessionsLinksToDb($versionid)
+{
+   $sessionstoLinkTo = $_REQUEST["sessionlink_hidden"];
+    if($sessionstoLinkTo!="")
+    {
+        $sessionsToLinkToArray = explode(",",$sessionstoLinkTo);
+        foreach ($sessionsToLinkToArray as $aSessionToLinkTo) {
+            if($aSessionToLinkTo!="")
+            {
+                //GET versionid for $aSessionToLinkTo
+                //TODO:
+            	
+            	//INSERT versionid + versionid to db...
+                $sqlInsert = "";
+                $sqlInsert .= "INSERT INTO mission_bugs ";
+                $sqlInsert .= "            (`versionid`, ";
+                $sqlInsert .= "             `bugid`) ";
+                $sqlInsert .= "VALUES      ('$versionid', ";
+                $sqlInsert .= "             '".mysql_real_escape_string($aBug)."')" ;
+
+                $result = mysql_query($sqlInsert);
+
+                if(!$result)
+                {
+                    echo "saveSession_InsertSessionBugsToDb: ".mysql_error()."<br/>";
+                }
+            }
+        }
+    }
+}
+
+function saveSession_InsertSessionRequirementsToDb($versionid)
+{
+
+	$requirements = $_REQUEST["requirementlist_hidden"];
+	if($requirements!="")
+	{
+		$requirementsArray = explode(",",$requirements);
+		foreach ($requirementsArray as $aRequirement) {
+			if($aRequirement!="")
+			{
+
+				$sqlInsert = "";
+				$sqlInsert .= "INSERT INTO mission_requirements ";
+				$sqlInsert .= "            (`versionid`, ";
+				$sqlInsert .= "             `requirementsid`) ";
+				$sqlInsert .= "VALUES      ('$versionid', ";
+				$sqlInsert .= "             '".mysql_real_escape_string($aRequirement)."')" ;
+
+				$result = mysql_query($sqlInsert);
+
+				if(!$result)
+				{
+					echo "saveSession_InsertSessionRequirementsToDb: ".mysql_error()."<br/>";
+				}
+			}
+		}
+	}
+}
+
+function saveSession_UpdateSessionMetricsToDb($versionid)
+{
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE mission_sessionmetrics ";
+	$sqlUpdate .= "SET    `setup_percent` = '".mysql_real_escape_string($_REQUEST["setuppercent"])."', ";
+	$sqlUpdate .= "       `test_percent` = '".mysql_real_escape_string($_REQUEST["testpercent"])."', ";
+	$sqlUpdate .= "       `bug_percent` = '".mysql_real_escape_string($_REQUEST["bugpercent"])."', ";
+	$sqlUpdate .= "       `opportunity_percent` = '".mysql_real_escape_string($_REQUEST["oppertunitypercent"])."', ";
+	$sqlUpdate .= "       `duration_time` = '".mysql_real_escape_string($_REQUEST["duration"])."' ";
+	$sqlUpdate .= "WHERE versionid='$versionid'" ;
+
+	$result = mysql_query($sqlUpdate);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionMetricsToDb: ".mysql_error()."<br/>";
+	}
+}
+
+function saveSession_UpdateSessionAreasToDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_areas ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionAreasToDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionAreaToDb($versionid);
+}
+
+function saveSession_DeleteSessionsNotesFromDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_debriefnotes ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_DeleteSessionsNotesFromDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionAreaToDb($versionid);
+}
+
+function saveSession_UpdateSessionBugsToDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_bugs ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionBugsToDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionBugsToDb($versionid);
+
+}
+
+function saveSession_UpdateSessionRequirementsToDb($versionid)
+{
+	$sqlDelete = "";
+	$sqlDelete .= "DELETE FROM mission_requirements ";
+	$sqlDelete .= "WHERE  `versionid` = '$versionid'" ;
+
+	$result = mysql_query($sqlDelete);
+
+	if(!$result)
+	{
+		echo "saveSession_UpdateSessionRequirementsToDb: ".mysql_error()."<br/>";
+	}
+
+	saveSession_InsertSessionRequirementsToDb($versionid);
+
+}
+
+
+?>
