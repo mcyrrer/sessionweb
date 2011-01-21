@@ -5,7 +5,8 @@ if(!session_is_registered(myusername)){
 }
 include("include/header.php.inc");
 include_once('config/db.php.inc');
-include_once 'include/commonFunctions.php.inc';
+include_once ('include/commonFunctions.php.inc');
+
 
 echo "<br>";
 

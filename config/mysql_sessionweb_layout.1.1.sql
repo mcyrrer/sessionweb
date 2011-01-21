@@ -291,6 +291,25 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_requirements` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_sessionsconnections`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_sessionsconnections` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionsconnections` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `linked_from_versionid` INT NOT NULL ,
+  `linked_to_versionid` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_mission_sessionsconnections_mission1` (`linked_from_versionid` ASC) ,
+  CONSTRAINT `fk_mission_sessionsconnections_mission1`
+    FOREIGN KEY (`linked_from_versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
