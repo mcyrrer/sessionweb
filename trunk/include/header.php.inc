@@ -5,7 +5,7 @@ echo "  <head>\n";
 echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\">\n";
 echo "      <title>Sessionweb</title>\n";
 
-echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\" />\n";
+echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 
 echo "     <script src=\"js/jquery-1.4.4.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/sessionwebjquery.js\" type=\"text/javascript\"></script>\n";

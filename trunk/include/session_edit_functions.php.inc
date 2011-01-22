@@ -18,7 +18,7 @@ function echoBugsEdit($versionid)
 		{
 			$myBugsArray = implode("\",\"", $rowSessionBugs);
 		}
-		echo "            <script>\n";
+		echo "            <script type=\"text/javascript\">\n";
 		if($myBugsArray!="")
 		{
 			echo "              var myBugs = new Array(\"$myBugsArray\");\n";
@@ -46,7 +46,7 @@ function echoBugsEdit($versionid)
 			echo "                              </tr>\n";
 			echo "                  </table>\n";
 			echo "      </div>\n";
-			echo "          <script>\n";
+			echo "          <script type=\"text/javascript\">\n";
 			echo "                      var bugValue = \"".$bug."\"\n";
 			echo "                      $(\"#bug_$bug\").click(function(){\n";
 			echo "                          var thisIe = this.id;\n";
@@ -70,7 +70,7 @@ function echoBugsEdit($versionid)
 	}
 	else
 	{
-		echo "            <script>\n";
+		echo "            <script type=\"text/javascript\">\n";
 		echo "              var myBugs = new Array();\n";
 		echo "            </script>\n";
 	}
@@ -93,7 +93,7 @@ function echoRequirementsEdit($versionid)
 		{
 			$myRequirementsArray = implode("\",\"", $rowSessionRequirements);
 		}
-		echo "            <script>\n";
+		echo "            <script type=\"text/javascript\">\n";
 		if($myRequirementsArray!="")
 		{
 			echo "              var myRequirements = new Array(\"$myRequirementsArray\");\n";
@@ -122,7 +122,7 @@ function echoRequirementsEdit($versionid)
 			echo "                              </tr>\n";
 			echo "                  </table>\n";
 			echo "      </div>\n";
-			echo "          <script>\n";
+			echo "          <script type=\"text/javascript\">\n";
 			echo "                      var requirementValue = \"".$requirement."\"\n";
 			echo "                      $(\"#requirement_$requirement\").click(function(){\n";
 			echo "                          var thisIe = this.id;\n";
@@ -146,7 +146,7 @@ function echoRequirementsEdit($versionid)
 	}
 	else
 	{
-		echo "            <script>\n";
+		echo "            <script type=\"text/javascript\">\n";
 		echo "              var myRequirements = new Array();\n";
 		echo "            </script>\n";
 	}
@@ -170,7 +170,7 @@ function echoSessionlinkEdit($versionid)
 		{
 			$mySessionlinkArray = implode("\",\"", $rowSessionSessionlink);
 		}
-		echo "            <script>\n";
+		echo "            <script type=\"text/javascript\">\n";
 		if($mySessionlinkArray!="")
 		{
 			echo "              var mySessionlink = new Array(\"$mySessionlinkArray\");\n";
@@ -199,7 +199,7 @@ function echoSessionlinkEdit($versionid)
 				echo "                              </tr>\n";
 				echo "                  </table>\n";
 				echo "      </div>\n";
-				echo "          <script>\n";
+				echo "          <script type=\"text/javascript\">n";
 				echo "                      var sessionlinkValue = \"".$sessionlink."\"\n";
 				echo "                      $(\"#sessionlink_$sessionlink\").click(function(){\n";
 				echo "                          var thisIe = this.id;\n";
@@ -223,7 +223,7 @@ function echoSessionlinkEdit($versionid)
 	}
 	else
 	{
-		echo "            <script>\n";
+		echo "            <script type=\"text/javascript\">\n";
 		echo "              var mySessionlink = new Array();\n";
 		echo "            </script>\n";
 	}
