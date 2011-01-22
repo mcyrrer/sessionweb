@@ -1,10 +1,5 @@
 <?php
 
-function getSessionSessionlink()
-{
-    return "";
-}
-
 function getSessionWebSettings()
 {
 	$sqlSelect = "";
@@ -163,6 +158,27 @@ function getSessionBugs($versionid)
 	}
 
 	return $resultToReturn;
+}
+
+function getConnectedSessions($versionid)
+{
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT * ";
+    $sqlSelect .= "FROM   mission_sessionsconnections ";
+    $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
+    
+    $result = mysql_query($sqlSelect);
+    if(!$result)
+    {
+        echo "getConnectedSessions: ".mysql_error()."<br/>";
+    }
+
+    $resultToReturn = array();
+    while ($row = mysql_fetch_array($result)) {
+        $resultToReturn[]=$row["linked_to_versionid"];
+    }
+
+    return $resultToReturn;
 }
 
 function getSessionAreas($versionid)
