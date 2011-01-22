@@ -129,13 +129,13 @@ function echoOneSession($row,$rowSessionStatus)
 	echo "      <td>\n";
 	if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
-		echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
+		echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
 	}
 	if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
 		if($rowSessionStatus['executed']!=false && $rowSessionStatus['debriefed']!=true)
 		{
-			echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
+			echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
 		}
 	}
 	echo "      </td>\n";
@@ -146,8 +146,8 @@ function echoOneSession($row,$rowSessionStatus)
 	}
 	echo "      <td>\n";
 	echo "<div title=\"".$row["title"]."\">\n";
-	echo "<a class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&command=view\">$title</a></td>\n";
-	echo "</div>\n";
+	echo "<a class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=view\">$title</a></div>\n";
+	echo "</td>\n";
 	echo "      <td>".$row["username"]."</td>\n";
 	if($_SESSION['settings']['sprint']==1 )
 	{

@@ -478,7 +478,7 @@ function echoSessionForm()
     echo "                                      </td>\n";
     echo "                                  </tr>\n";
     echo "                                  <tr>\n";
-    echo "                                      <td><div id=\"helptext1\" >Add the session id</div></td>\n";
+    echo "                                      <td><div id=\"helptext2\" >Add the session id</div></td>\n";
     echo "                                      <td></td>\n";
     echo "                                  </tr>\n";
     echo "                              </table>\n";
@@ -545,7 +545,7 @@ function echoSessionForm()
     echo "                                      </td>\n";
     echo "                                  </tr>\n";
     echo "                                  <tr>\n";
-    echo "                                      <td><div id=\"helptext1\" >Only add the defect id</div></td>\n";
+    echo "                                      <td><div id=\"helptext3\" >Only add the defect id</div></td>\n";
     echo "                                      <td></td>\n";
     echo "                                  </tr>\n";
     echo "                              </table>\n";
@@ -639,13 +639,13 @@ function echoSessionForm()
     echo "            </td>\n";
     echo "      </tr>\n";
     echo "</table>\n";
-    echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
-    echo "                              <div><textarea id=\"requirementlist_hidden\" name=\"requirementlist_hidden\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
-    echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
+    echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
+    echo "                              <div><textarea id=\"requirementlist_hidden\" name=\"requirementlist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
+    echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
 //    style= \"visibility:hidden;width:10px;height:2px;\"
     
-    echo "              <script> $('#requirementlist_hidden').text(myRequirements.toString());</script> \n";
-        echo "              <script> $('#buglist_hidden').text(myBugs.toString());</script> \n";
+    echo "              <script type=\"text/javascript\"> $('#requirementlist_hidden').text(myRequirements.toString());</script> \n";
+        echo "              <script type=\"text/javascript\"> $('#buglist_hidden').text(myBugs.toString());</script> \n";
     echo "</form>\n";
 }
 
