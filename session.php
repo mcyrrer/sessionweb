@@ -288,7 +288,7 @@ function saveSession()
         
         //Create sessionLinks connected to mission
         saveSession_InsertSessionSessionsLinksToDb($versionid);
-        
+                
     }
     //Update existing session
     else
@@ -307,6 +307,10 @@ function saveSession()
         saveSession_UpdateSessionBugsToDb($versionid);
 
         saveSession_UpdateSessionRequirementsToDb($versionid);
+        
+        saveSession_UpdateSessionRequirementsToDb($versionid);
+        
+        saveSession_UpdateSessionLinkedToDb($versionid);
     }
 
 
@@ -639,13 +643,14 @@ function echoSessionForm()
     echo "            </td>\n";
     echo "      </tr>\n";
     echo "</table>\n";
-    echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
+    echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" rows=\"1\" cols=\"1\" ></textarea></div>\n";
     echo "                              <div><textarea id=\"requirementlist_hidden\" name=\"requirementlist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
-    echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
+    echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" rows=\"15\" cols=\"15\"></textarea></div>\n";
 //    style= \"visibility:hidden;width:10px;height:2px;\"
     
     echo "              <script type=\"text/javascript\"> $('#requirementlist_hidden').text(myRequirements.toString());</script> \n";
-        echo "              <script type=\"text/javascript\"> $('#buglist_hidden').text(myBugs.toString());</script> \n";
+    echo "              <script type=\"text/javascript\"> $('#buglist_hidden').text(myBugs.toString());</script> \n";
+    echo "              <script type=\"text/javascript\"> $('#sessionlinklist_hidden').text(mySessionlinks.toString());</script> \n";
     echo "</form>\n";
 }
 

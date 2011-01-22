@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 function echoViewSession()
 {
@@ -126,8 +126,17 @@ function echoViewSession()
         echo "            ".echoRequirementsView($row["versionid"])."\n";
         echo "        </td>\n";
         echo "    </tr>\n";
+
         $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
         mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+        echo "    <tr>\n";
+        echo "        <td></td>\n";
+        echo "        <td>\n";
+        echo "            ".echoSessionsLinkToView($row["versionid"])."\n";
+        echo "        </td>\n";
+        echo "    </tr>\n";
+
         echo "    <tr>\n";
         echo "        <td></td>\n";
         echo "        <td>\n";
@@ -247,6 +256,22 @@ function echoBugsView($versionid)
         {
             echo "                                   #$aBug:<a href=\"".$_SESSION['settings']['url_to_dms']."$aBug\" class=\"requirementurl\" target=\"_blank\">Defect identifier ($aBug) could not be found</a><br>\n";
         }
+    }
+    echo "</div>\n";
+}
+
+function echoSessionsLinkToView($versionid)
+{
+    $rowSessionLinkedTo = getConnectedSessions($versionid);
+
+    echo "<h4>Connected to other sessions</h4>\n";
+    echo "<div id=viewbugid style=\"background-color:#efefef;\">\n";
+
+    foreach($rowSessionLinkedTo as $aSessionToLink)
+    {
+        $aSessionTitle = GetSessionTitle($versionid);
+
+        echo "                                   Linked to: #$aSessionToLink:<a href=\"session.php?sessionid=$aSessionToLink&command=view\" class=\"requirementurl\" target=\"_blank\">$aSessionTitle</a><br>\n";
     }
     echo "</div>\n";
 }
