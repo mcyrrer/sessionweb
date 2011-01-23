@@ -207,12 +207,13 @@ function GetVersionidFromSessionid($sessionid)
     $sqlSelect .= "SELECT versionid  ";
     $sqlSelect .= "FROM   `mission` ";
     $sqlSelect .= "WHERE  `sessionid` = $sessionid ";
-
+    
+    
     $result = mysql_query($sqlSelect);
 
     if(mysql_errno()==1054)
     {
-        "Session id provided is not an integer, will not add it.";
+        echo "Session id provided is not an integer, will not add it.<br>";
     }
     elseif(!$result)
     {
@@ -223,6 +224,7 @@ function GetVersionidFromSessionid($sessionid)
         $row = mysql_fetch_array($result);
         $versionid = $row["versionid"];
     }
+    
     return $versionid;
 }
 
@@ -427,11 +429,13 @@ function saveSession_InsertSessionBugsToDb($versionid)
 function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
 {
     $sessionstoLinkTo = $_REQUEST["sessionlink_hidden"];
+   
     if($sessionstoLinkTo!="")
     {
 
         $sessionsToLinkToArray = explode(",",$sessionstoLinkTo);
         foreach ($sessionsToLinkToArray as $aSessionLinkTo) {
+            
             if($aSessionLinkTo!="")
             {
                 $linked_to_versionid = GetVersionidFromSessionid($aSessionLinkTo);
@@ -452,7 +456,15 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
                         echo "saveSession_InsertSessionSessionsLinksToDb: ".mysql_error()."<br/>";
                     }
                 }
+                else
+                {
+                    echo "Could not add a connection to session $aSessionLinkTo since it does not exist.<br>";
+                }
             }
+//            else
+//            {
+//                echo "Session ID is empty<br>";
+//            }
         }
     }
 }
