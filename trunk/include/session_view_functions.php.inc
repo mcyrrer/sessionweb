@@ -269,7 +269,7 @@ function echoSessionsLinkToView($versionid)
 
     foreach($rowSessionLinkedTo as $aSessionToLink)
     {
-        $aSessionTitle = GetSessionTitle($versionid);
+        $aSessionTitle = GetSessionTitle($aSessionToLink);
 
         echo "                                   Linked to: #$aSessionToLink:<a href=\"session.php?sessionid=$aSessionToLink&command=view\" class=\"requirementurl\" target=\"_blank\">$aSessionTitle</a><br>\n";
     }

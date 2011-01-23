@@ -200,7 +200,7 @@ function echoSessionlinkEdit($versionid)
 				echo "                              </tr>\n";
 				echo "                  </table>\n";
 				echo "      </div>\n";
-				echo "          <script type=\"text/javascript\">n";
+				echo "          <script type=\"text/javascript\">\n";
 				echo "                      var sessionlinkValue = \"".$sessionlink."\"\n";
 				echo "                      $(\"#sessionlink_$sessionlink\").click(function(){\n";
 				echo "                          var thisIe = this.id;\n";
@@ -209,10 +209,10 @@ function echoSessionlinkEdit($versionid)
 				echo "                              var answer = confirm(\"Remove sessionlink $sessionlink?\")\n";
 				echo "                              if (answer) {\n";
 				echo "                                  $(\"#sessionlinkdiv_$sessionlink\").remove();\n";
-				echo "                                  sessionlinkPos = jQuery.inArray(\"$sessionlink\", mySessionlink);\n";
+				echo "                                  sessionlinkPos = jQuery.inArray(\"$sessionlink\", mySessionlinks);\n";
 				echo "                                  if (sessionlinkPos != -1) {\n";
-				echo "                                      var removedelements = mySessionlink.splice(sessionlinkPos, 1);\n";
-				echo "                                      $('#sessionlinklist_hidden').text(mySessionlink.toString());\n";
+				echo "                                      var removedelements = mySessionlinks.splice(sessionlinkPos, 1);\n";
+				echo "                                      $('#sessionlinklist_hidden').text(mySessionlinks.toString());\n";
 				echo "                                  }\n";
 				echo "                              }\n";
 				echo "                          }\n";

@@ -643,7 +643,7 @@ function echoSessionForm()
     echo "            </td>\n";
     echo "      </tr>\n";
     echo "</table>\n";
-    echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" rows=\"1\" cols=\"1\" ></textarea></div>\n";
+    echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
     echo "                              <div><textarea id=\"requirementlist_hidden\" name=\"requirementlist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
     echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" rows=\"15\" cols=\"15\"></textarea></div>\n";
 //    style= \"visibility:hidden;width:10px;height:2px;\"
