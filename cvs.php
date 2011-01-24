@@ -1,4 +1,9 @@
 <?php
+session_start();
+if(!session_is_registered(myusername)){
+    header("location:index.php");
+}
+
 include_once('config/db.php.inc');
 
 $start= addslashes($_REQUEST["start"]);
