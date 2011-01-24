@@ -27,6 +27,10 @@ elseif(strcmp($_REQUEST["command"],"edit")==0)
 {
     echoSessionForm();
 }
+elseif(strcmp($_REQUEST["command"],"delete")==0)
+{
+    deleteSession();
+}
 elseif(strcmp($_REQUEST["command"],"debrief")==0)
 {
     echoViewSession();
@@ -87,8 +91,6 @@ function echoDebriefedStatus($rowSessionStatus)
         echo "                          Not debriefed\n";
     }
 }
-
-
 
 
 function echoDebriefSession()
@@ -228,8 +230,6 @@ function saveDebriefedSession()
 }
 
 
-
-
 function checkSessionTitleNotToLong()
 {
     $_TITLELENGTH = 500;
@@ -285,10 +285,10 @@ function saveSession()
 
         //Create requirements connected to mission
         saveSession_InsertSessionRequirementsToDb($versionid);
-        
+
         //Create sessionLinks connected to mission
         saveSession_InsertSessionSessionsLinksToDb($versionid);
-                
+
     }
     //Update existing session
     else
@@ -307,9 +307,9 @@ function saveSession()
         saveSession_UpdateSessionBugsToDb($versionid);
 
         saveSession_UpdateSessionRequirementsToDb($versionid);
-        
+
         saveSession_UpdateSessionRequirementsToDb($versionid);
-        
+
         saveSession_UpdateSessionLinkedToDb($versionid);
     }
 
@@ -356,10 +356,15 @@ function echoSessionForm()
         $rowSessionStatus = getSessionStatus($rowSessionData["versionid"]);
 
         $rowSessionAreas = getSessionAreas($rowSessionData["versionid"]);
-
-
     }
     mysql_close($con);
+
+    if($insertSessionData)
+    {
+
+        echo "      <a href=\"session.php?sessionid=".$_GET["sessionid"]."&amp;command=delete\" id=\"url_deletesession\">Delete session</a> |";
+
+    }
 
     if($insertSessionData)
     {
@@ -645,9 +650,9 @@ function echoSessionForm()
     echo "</table>\n";
     echo "                              <div><textarea id=\"buglist_hidden\" name=\"buglist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
     echo "                              <div><textarea id=\"requirementlist_hidden\" name=\"requirementlist_hidden\" rows=\"1\" cols=\"1\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
-    echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" rows=\"15\" cols=\"15\"></textarea></div>\n";
-//    style= \"visibility:hidden;width:10px;height:2px;\"
-    
+    echo "                              <div><textarea id=\"sessionlinklist_hidden\" name=\"sessionlink_hidden\" rows=\"15\" cols=\"15\" style= \"visibility:hidden;width:10px;height:2px;\"></textarea></div>\n";
+    //    style= \"visibility:hidden;width:10px;height:2px;\"
+
     echo "              <script type=\"text/javascript\"> $('#requirementlist_hidden').text(myRequirements.toString());</script> \n";
     echo "              <script type=\"text/javascript\"> $('#buglist_hidden').text(myBugs.toString());</script> \n";
     echo "              <script type=\"text/javascript\"> $('#sessionlinklist_hidden').text(mySessionlinks.toString());</script> \n";
@@ -763,4 +768,20 @@ function parseBBTestAssistantNotes($notes)
     }
 
     return $charterParsed;
+}
+
+function deleteSession()
+{
+
+    $versionid = GetSessionIdFromVersionId($_REQUEST["sessionid"]);
+    if($versionid!="")
+    {
+        deleteSessionFromDatabase($versionid);
+
+        echo "Session ".$_REQUEST["sessionid"]." deleted from database";
+    }
+    else
+    {
+        echo "Session ".$_REQUEST["sessionid"]." could not be found in database.(Already deleted?)";
+    }
 }
