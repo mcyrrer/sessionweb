@@ -207,8 +207,8 @@ function GetVersionidFromSessionid($sessionid)
     $sqlSelect .= "SELECT versionid  ";
     $sqlSelect .= "FROM   `mission` ";
     $sqlSelect .= "WHERE  `sessionid` = $sessionid ";
-    
-    
+
+
     $result = mysql_query($sqlSelect);
 
     if(mysql_errno()==1054)
@@ -224,9 +224,42 @@ function GetVersionidFromSessionid($sessionid)
         $row = mysql_fetch_array($result);
         $versionid = $row["versionid"];
     }
-    
+
     return $versionid;
 }
+
+function GetSessionIdFromVersionId($versionid)
+{
+
+    $conSql1 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT sessionid  ";
+    $sqlSelect .= "FROM   `mission` ";
+    $sqlSelect .= "WHERE  `versionid` = $versionid ";
+
+
+    $result = mysql_query($sqlSelect);
+
+    if(mysql_errno()==1054)
+    {
+        echo "Session id provided is not an integer, will not add it.<br>";
+    }
+    elseif(!$result)
+    {
+        echo "GetSessionIdFromVersionId: ".mysql_error()."<br/>";
+    }
+    else
+    {
+        $row = mysql_fetch_array($result);
+        $sessionid = $row["sessionid"];
+    }
+    mysql_close($conSql1);
+
+    return $sessionid;
+}
+
 
 function GetSessionTitle($versionid)
 {
@@ -429,13 +462,13 @@ function saveSession_InsertSessionBugsToDb($versionid)
 function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
 {
     $sessionstoLinkTo = $_REQUEST["sessionlink_hidden"];
-   
+     
     if($sessionstoLinkTo!="")
     {
 
         $sessionsToLinkToArray = explode(",",$sessionstoLinkTo);
         foreach ($sessionsToLinkToArray as $aSessionLinkTo) {
-            
+
             if($aSessionLinkTo!="")
             {
                 $linked_to_versionid = GetVersionidFromSessionid($aSessionLinkTo);
@@ -448,7 +481,7 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
                     $sqlInsert .= "             `linked_to_versionid`) ";
                     $sqlInsert .= "VALUES      ('$linked_from_versionid', ";
                     $sqlInsert .= "             '$linked_to_versionid')" ;
-                    
+
                     $result = mysql_query($sqlInsert);
 
                     if(!$result)
@@ -461,10 +494,10 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
                     echo "Could not add a connection to session $aSessionLinkTo since it does not exist.<br>";
                 }
             }
-//            else
-//            {
-//                echo "Session ID is empty<br>";
-//            }
+            //            else
+            //            {
+            //                echo "Session ID is empty<br>";
+            //            }
         }
     }
 }
@@ -600,5 +633,70 @@ function saveSession_UpdateSessionLinkedToDb($versionid)
 
 }
 
+/**
+ * Delete a session from the database by delete all rows in all tables that have infromation about the session
+ * @param $versionid
+ */
+function deleteSessionFromDatabase($versionid)
+{
 
+
+    $sessionId = GetSessionIdFromVersionId($versionid);
+
+    $conDeleteSession = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sqlDeleteMissionStatus = "";
+    $sqlDeleteMissionStatus .= "DELETE FROM mission_status ";
+    $sqlDeleteMissionStatus .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionStatus);
+
+    $sqlDeleteMissionMetrics = "";
+    $sqlDeleteMissionMetrics .= "DELETE FROM mission_sessionmetrics ";
+    $sqlDeleteMissionMetrics .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionMetrics);
+
+    $sqlDeleteMissionRequirements = "";
+    $sqlDeleteMissionRequirements .= "DELETE FROM mission_requirements ";
+    $sqlDeleteMissionRequirements .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionRequirements);
+
+    $sqlDeleteMissionDebriefNotes = "";
+    $sqlDeleteMissionDebriefNotes .= "DELETE FROM mission_debriefnotes ";
+    $sqlDeleteMissionDebriefNotes .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionDebriefNotes);
+
+    $sqlDeleteMissionBugs = "";
+    $sqlDeleteMissionBugs .= "DELETE FROM mission_bugs ";
+    $sqlDeleteMissionBugs .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionBugs);
+
+    $sqlDeleteMissionAreas = "";
+    $sqlDeleteMissionAreas .= "DELETE FROM mission_areas ";
+    $sqlDeleteMissionAreas .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionAreas);
+
+    $sqlDeleteMissionConnectionsFrom = "";
+    $sqlDeleteMissionConnectionsFrom .= "DELETE FROM mission_sessionsconnections ";
+    $sqlDeleteMissionConnectionsFrom .= "WHERE  linked_from_versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionConnectionsFrom);
+
+    $sqlDeleteMissionConnectionsTo = "";
+    $sqlDeleteMissionConnectionsTo .= "DELETE FROM mission_sessionsconnections ";
+    $sqlDeleteMissionConnectionsTo .= "WHERE  linked_to_versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMissionConnectionsTo);
+
+    $sqlDeleteMission = "";
+    $sqlDeleteMission .= "DELETE FROM mission ";
+    $sqlDeleteMission .= "WHERE  versionid = $versionid " ;
+    $result = mysql_query($sqlDeleteMission);
+
+    $sqlDeleteSessionId = "";
+    $sqlDeleteSessionId .= "DELETE FROM sessionid ";
+    $sqlDeleteSessionId .= "WHERE  sessionid = $sessionId " ;
+    $result = mysql_query($sqlDeleteSessionId);
+
+    mysql_close($conDeleteSession);
+
+}
 ?>

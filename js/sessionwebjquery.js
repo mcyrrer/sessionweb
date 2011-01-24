@@ -9,6 +9,19 @@ $(document).ready(function(){
     var myBugs = $('#buglist_hidden').text().split(',');
     var mysessionlinks = $('#sessionlinklist_hidden').text().split(',');
 
+    //Delete Session questionbox
+	    $("#url_deletesession").click(function(){
+            var answer = confirm("Remove  sessionlink?");
+			if(answer)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+    });
+	
     
     // Metrics calculation
     $("[class=metricoption]").change(function(){
