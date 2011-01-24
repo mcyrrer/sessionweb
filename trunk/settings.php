@@ -235,6 +235,7 @@ function echoMenu()
 		echo "<a id=\"url_listusers\" href=\"settings.php?command=listusers\">List users</a> | ";
 		echo "<a id=\"url_adduser\" href=\"settings.php?command=adduser\">Add user</a> | ";
 		echo "<a id=\"url_configuration\" href=\"settings.php?command=config\">Configuration</a> | ";
+		echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
 		echo "</div>";
 	}
 	if ($_SESSION['useradmin']==1 || $_SESSION['superuser']==1)
