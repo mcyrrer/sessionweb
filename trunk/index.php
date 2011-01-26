@@ -1,4 +1,10 @@
 <?php
+//if(is_file("install.php"))
+//{
+//    header("Location: install.php");
+//    exit();
+//}
+
 $logout = $_GET["logout"];
 session_start();
 
