@@ -11,7 +11,7 @@ $(document).ready(function(){
 
     //Delete Session questionbox
 	    $("#url_deletesession").click(function(){
-            var answer = confirm("Remove  sessionlink?");
+            var answer = confirm("Delete session from database?");
 			if(answer)
 			{
 				return true;
