@@ -1,0 +1,54 @@
+body
+{
+	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+	font-size:small;
+	margin:8px 10px 16px;
+	text-align:left;
+}
+h1 {
+    color: #2e2e2e;
+    text-align: left;
+}
+
+h2 {
+    color: #2e2e2e;
+    text-align: left;
+}
+
+h3 {
+    color: #000000;
+    text-align: left;
+}
+
+p {
+    font-family: "Times New Roman";
+    font-size: 20px;
+}
+
+#metricscalculation
+{
+text-align:center;
+color:black;
+background-color: green;
+} 
+
+#metricscalculation_red
+{
+text-align:center;
+color:black;
+background-color: red;
+}
+
+#helptext1
+{
+text-align:left;
+color:black;
+background-color: #EFEFEF;
+font-size: 12px;
+}
+
+.secondframe
+{
+	background-color: #BCBCBC;
+}
+
