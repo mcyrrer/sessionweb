@@ -23,7 +23,10 @@ public class SessionWebTest {
 	@BeforeClass
 	public void setUp() throws Exception {
 		String host = System.getProperty("host");
-		String portString = System.getProperty("port");
+		String portString = System.getProperty("selport");
+		System.out.println(System.getenv("host"));
+		System.out.println(host);
+		System.err.println("4444");
 		int port = Integer.parseInt(portString);
 		String browser = System.getProperty("browser");
 		String url = System.getProperty("url");
@@ -35,6 +38,13 @@ public class SessionWebTest {
 		selenium.windowMaximize();
 
 	}
+//	
+//	@Test
+//	public void logIn() throws Exception {
+//		CommonSteps cs = new CommonSteps();
+//		cs.logIn(selenium);
+//		cs.logOut(selenium);
+//	}
 
 	@AfterClass
 	public void tearDown() throws Exception {
