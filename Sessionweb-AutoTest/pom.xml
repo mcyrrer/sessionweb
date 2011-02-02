@@ -11,14 +11,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.14</version>
-		</dependency>
-		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>5.12.1</version>
+			<classifier>jdk15</classifier>
+			<version>5.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium.client-drivers</groupId>
@@ -27,107 +23,101 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>test</id>
-			<properties>
-				<environment>test</environment>
-				<base.url>test-mypages.securitas-direct.com/</base.url>
-				<port>80</port>
-			</properties>
-		</profile>
-	</profiles>
-
-	<repositories>
-		<repository>
-			<id>sdi-releases</id>
-			<name>sdi releases</name>
-			<url>http://nexus.its.sec.intra/content/repositories/sdi-releases</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-			<id>sdi-snapshots</id>
-			<name>sdi snapshots</name>
-			<url>http://nexus.its.sec.intra/content/repositories/sdi-snapshots</url>
-		</repository>
-		<repository>
-			<id>nexus</id>
-			<name>central</name>
-			<url>http://nexus.its.sec.intra/content/repositories/central</url>
-		</repository>
-		<repository>
-			<id>releases</id>
-			<name>SDI Internal Repository</name>
-			<url>http://nexus.its.sec.intra/content/repositories/releases</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-			<id>snapshots</id>
-			<name>SDI Internal Repository</name>
-			<url>http://nexus.its.sec.intra/content/repositories/snapshots</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Released inhouse artifacts</name>
-			<url>http://nexus.its.sec.intra/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Snapshot inhouse artifacts</name>
-			<url>http://nexus.its.sec.intra/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>sdi-public</id>
-			<name>Internal Maven 2 Repository</name>
-			<url>http://nexus.its.sec.intra/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<reporting>
+	<build>
 		<plugins>
-			<!-- Generate JavaDoc -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.6.1</version>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<doctitle>The API for ${project.name} ${project.version}</doctitle> <!-- Used by javadoc:javadoc goal -->
-					<windowtitle>The API for ${project.name} ${project.version}</windowtitle> <!-- Used by javadoc:javadoc goal -->
-
-					<testDoctitle>The Test API for ${project.name} ${project.version}</testDoctitle> <!-- Used by javadoc:test-javadoc goal -->
-					<testWindowtitle>The Test API for ${project.name}
-						${project.version}</testWindowtitle> <!-- Used by javadoc:test-javadoc goal -->
+					<source>1.5</source>
+					<target>1.5</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>selenium-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start-server</goal>
+						</goals>
+						<configuration>
+							<background>true</background>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-selenium</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop-server</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- Skip the normal tests, we'll run them in the integration-test phase -->
+					<skip>true</skip>
+				</configuration>
+
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+							<systemProperties>
+								<property>
+									<name>host</name>
+									<value>${host}</value>
+								</property>
+								<property>
+									<name>selport</name>
+									<value>${selport}</value>
+								</property>
+								<property>
+									<name>browser</name>
+									<value>${browser}</value>
+								</property>
+								<property>
+									<name>selport</name>
+									<value>${selport}</value>
+								</property>
+								<property>
+									<name>url</name>
+									<value>${url}</value>
+								</property>
+							</systemProperties>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
 
+	<profiles>
+		<profile>
+			<id>localhost</id>
+			<properties>
+				<host>localhost</host>
+				<selport>4444</selport>
+				<browser>*firefox</browser>
+				<url>http://devnagios.its.sec.intra/sessionweb/</url>
+			</properties>
+		</profile>
+	</profiles>
+
+	<!-- <profile> <id>remote-ff</id> <properties> <host>172.30.112.138</host> 
+		<selport>4444</selport> <browser>*firefox</browser> <url>http://devnagios.its.sec.intra/sessionweb/</url> 
+		</properties> </profile> <profile> <id>remote-chrome</id> <properties> <host>172.30.112.138</host> 
+		<selport>4444</selport> <browser>*chrome</browser> <url>http://devnagios.its.sec.intra/sessionweb/</url> 
+		</properties> </profile> -->
 
 
 </project>
