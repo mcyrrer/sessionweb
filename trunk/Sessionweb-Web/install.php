@@ -11,7 +11,7 @@ if($_REQUEST[adm_user]!="")
     $con = mysql_connect('localhost', $adm_user ,$adm_password) or die("Can not connect to Mysql db, please check your user and password");
     mysql_close($con);
     
-    $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/mysql_sessionweb_layout.1.1.sql";
+    $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/SessionwebDbLayout_latest.sql";
 
     exec($loadDbWithSessionWebSql, $result);
 
