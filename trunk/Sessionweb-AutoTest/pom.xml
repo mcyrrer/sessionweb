@@ -21,6 +21,11 @@
 			<artifactId>selenium-java-client-driver</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.14</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -41,9 +46,10 @@
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>start-server</goal>
-						</goals>
+						</goals>						
 						<configuration>
 							<background>true</background>
+							<port>${selport}</port>
 						</configuration>
 					</execution>
 					<execution>
@@ -111,8 +117,8 @@
 			<id>localhost</id>
 			<properties>
 				<host>localhost</host>
-				<selport>4444</selport>
-				<browser>*iexplore</browser>
+				<selport>4445</selport>
+				<browser>*firefox</browser>
 				<url>http://devnagios.its.sec.intra/sessionweb/</url>
 			</properties>
 		</profile>
