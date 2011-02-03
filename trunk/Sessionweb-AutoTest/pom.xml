@@ -94,6 +94,11 @@
 									<value>${url}</value>
 								</property>
 							</systemProperties>
+
+							<suiteXmlFiles>
+								<suiteXmlFile>src/test/resources/SuitAll.xml</suiteXmlFile>
+							</suiteXmlFiles>
+
 						</configuration>
 					</execution>
 				</executions>
@@ -107,17 +112,28 @@
 			<properties>
 				<host>localhost</host>
 				<selport>4444</selport>
+				<browser>*iexplore</browser>
+				<url>http://devnagios.its.sec.intra/sessionweb/</url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>remote-ff</id>
+			<properties>
+				<host>172.30.112.138</host>
+				<selport>4444</selport>
 				<browser>*firefox</browser>
 				<url>http://devnagios.its.sec.intra/sessionweb/</url>
 			</properties>
 		</profile>
+		<profile>
+			<id>remote-chrome</id>
+			<properties>
+				<host>172.30.112.138</host>
+				<selport>4444</selport>
+				<browser>*chrome</browser>
+				<url>http://devnagios.its.sec.intra/sessionweb/</url>
+			</properties>
+		</profile>
 	</profiles>
-
-	<!-- <profile> <id>remote-ff</id> <properties> <host>172.30.112.138</host> 
-		<selport>4444</selport> <browser>*firefox</browser> <url>http://devnagios.its.sec.intra/sessionweb/</url> 
-		</properties> </profile> <profile> <id>remote-chrome</id> <properties> <host>172.30.112.138</host> 
-		<selport>4444</selport> <browser>*chrome</browser> <url>http://devnagios.its.sec.intra/sessionweb/</url> 
-		</properties> </profile> -->
-
-
 </project>
