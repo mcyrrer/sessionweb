@@ -119,7 +119,7 @@
 				<host>localhost</host>
 				<selport>4445</selport>
 				<browser>*firefox</browser>
-				<url>http://devnagios.its.sec.intra/sessionweb/</url>
+				<url>http://localhost/sessionweb/</url>
 			</properties>
 		</profile>
 
