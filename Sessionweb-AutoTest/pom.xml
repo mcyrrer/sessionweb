@@ -138,8 +138,8 @@
 				<url>http://localhost</url>
 				<mysqlhost>localhost</mysqlhost>
 				<mysqldb>sessionwebos</mysqldb>
-				<mysqluser>sessionwebadmin</mysqluser>
-				<mysqlpassword>123456</mysqlpassword>
+				<mysqluser>sessionweb</mysqluser>
+				<mysqlpassword>2easy</mysqlpassword>
 			</properties>
 		</profile>
 	</profiles>
