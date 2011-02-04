@@ -694,7 +694,7 @@ function updateConfig()
 	$sqlUpdate .= "       `url_to_dms` = '$url_to_dms', ";
 	$sqlUpdate .= "       `url_to_rms` = '$url_to_rms', ";
 	$sqlUpdate .= "       `teamsprint` = '$teamsprint' ";
-	$sqlUpdate .= "WHERE  `id` = '1'" ;
+	//$sqlUpdate .= "WHERE  `id` = '1'" ;
 
 	$result = mysql_query($sqlUpdate);
 

@@ -33,24 +33,24 @@ function echoSessionTable($currentPage)
 {
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
-    echo "      <td width=\"25\">Id</td>\n";
-    echo "      <td width=\"25\">Actions</td>\n";
-    echo "      <td>Title</td>\n";
-    echo "      <td>User</td>\n";
+    echo "      <td id=\"tableheader_id\" width=\"25\">Id</td>\n";
+    echo "      <td id=\"tableheader_actions\" width=\"25\">Actions</td>\n";
+    echo "      <td id=\"tableheader_title\" >Title</td>\n";
+    echo "      <td id=\"tableheader_users\" >User</td>\n";
     if($_SESSION['settings']['sprint']==1 )
     {
-        echo "      <td>Sprint</td>\n";
+        echo "      <td id=\"tableheader_sprint\" >Sprint</td>\n";
     }
     if($_SESSION['settings']['teamsprint']==1 )
     {
-        echo "      <td>Team sprint</td>\n";
+        echo "      <td id=\"tableheader_teamsprint\" >Team sprint</td>\n";
     }
     if($_SESSION['settings']['team']==1 )
     {
-        echo "      <td>Team</td>\n";
+        echo "      <tdid=\"tableheader_team\" >Team</td>\n";
     }
 
-    echo "      <td>Updated</td>\n";
+    echo "      <td id=\"tableheader_updated\" >Updated</td>\n";
     echo "  </tr>\n";
 
     $rowsToDisplay = 30;
@@ -130,13 +130,13 @@ function echoOneSession($row,$rowSessionStatus)
     echo "      <td>\n";
     if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
     {
-        echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
+        echo "      <a id=\"edit_session\"  class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
     }
     if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
     {
         if($rowSessionStatus['executed']!=false && $rowSessionStatus['debriefed']!=true)
         {
-            echo "      <a class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
+            echo "      <a id=\"edit_session\" class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
         }
     }
     echo "      </td>\n";
@@ -145,24 +145,24 @@ function echoOneSession($row,$rowSessionStatus)
     {
         $title = substr($row["title"],0,50)."...";
     }
-    echo "      <td>\n";
-    echo "<div title=\"".$row["title"]."\">\n";
-    echo "<a class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=view\">$title</a></div>\n";
+    echo "      <td >\n";
+    echo "<div id=\"tablerowtitle_".$row["sessionid"]."\" title=\"".$row["title"]."\">\n";
+    echo "<a id=\"view_session\" class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=view\">$title</a></div>\n";
     echo "</td>\n";
-    echo "      <td>".$row["username"]."</td>\n";
+    echo "      <td id=\"tablerowuser_".$row["sessionid"]."\">".$row["username"]."</td>\n";
     if($_SESSION['settings']['sprint']==1 )
     {
-        echo "      <td>".$row["sprintname"]."</td>\n";
+        echo "      <td id=\"tablerowsprint_".$row["sessionid"]."\">".$row["sprintname"]."</td>\n";
     }
     if($_SESSION['settings']['teamsprint']==1 )
     {
-        echo "      <td>".$row["teamsprintname"]."</td>\n";
+        echo "      <td id=\"tablerowteamsprint_".$row["sessionid"]."\">".$row["teamsprintname"]."</td>\n";
     }
     if($_SESSION['settings']['team']==1 )
     {
-        echo "      <td>".$row["teamname"]."</td>\n";
+        echo "      <td id=\"tablerowteam_".$row["sessionid"]."\">".$row["teamname"]."</td>\n";
     }
-    echo "      <td>".$row["updated"]."</td>\n";
+    echo "      <td id=\"tablerowupdatead_".$row["sessionid"]."\">".$row["updated"]."</td>\n";
     echo "  </tr>\n";
 }
 
@@ -204,24 +204,24 @@ function echoSearchDiv()
 
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "    <tr>\n";
-    echo "        <td>User";
+    echo "        <td id=\"option_user\">User";
     echoTesterSelect($_REQUEST["tester"]);
     echo "        </td>\n";
     if($_SESSION['settings']['sprint']==1 )
     {
-        echo "        <td>Sprint:";
+        echo "        <td id=\"option_sprint\">Sprint:";
         echoSprintSelect($_REQUEST["sprint"]);
         echo "        </td>\n";
     }
     if($_SESSION['settings']['teamsprint']==1 )
     {
-        echo "        <td>Team sprint:";
+        echo "        <td id=\"option_teamsprint\">Team sprint:";
         echoTeamSprintSelect($_REQUEST["teamsprint"]);
         echo "        </td>\n";
     }
     if($_SESSION['settings']['team']==1 )
     {
-        echo "        <td>Team:";
+        echo "        <td id=\"option_team\">Team:";
         echoTeamSelect($_REQUEST["team"]);
         echo "        </td>\n";
     }
@@ -234,13 +234,13 @@ function echoSearchDiv()
         echo "    <tr valign=\"top\">\n";
         echo "        <td valign=\"top\">Area:";
         echo "        </td>\n";
-        echo "        <td>\n";
+        echo "        <td id=\"option_area\">\n";
         echoAreaSelectSingel($_REQUEST["area"]);
         echo "        </td>\n";
         echo "</table>\n";
         echo "        </td>\n";
     }
-    echo "        <td>Status:\n";
+    echo "        <td id=\"option_status\">Status:\n";
     echoStatusTypes($_REQUEST["status"]);
     echo "        </td>\n";
     echo "    </tr>\n";
@@ -296,7 +296,7 @@ function echoPreviouseAndNextLink($currentPage,$num_rows)
     if($currentPage!=1)
     {
         $prevPage = $currentPage-1;
-        echo "     <td><a href=\"list.php?page=$prevPage\">Previous page</a></td>";
+        echo "     <td><a id=\"prev_page\" href=\"list.php?page=$prevPage\">Previous page</a></td>";
     }
     else
     {
@@ -304,7 +304,7 @@ function echoPreviouseAndNextLink($currentPage,$num_rows)
     }
     if($num_rows==30)
     {
-        echo "      <td align=\"right\"><a href=\"list.php?page=$nextPage\">Next page</a><br/></td>\n";
+        echo "      <td id=\"next_page\" align=\"right\"><a href=\"list.php?page=$nextPage\">Next page</a><br/></td>\n";
     }
     else
     {
