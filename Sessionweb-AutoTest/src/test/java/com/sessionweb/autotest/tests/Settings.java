@@ -11,6 +11,7 @@ public class Settings extends SessionWebTest {
 	CommonSteps cs = new CommonSteps();
 
 	@Test public void addTeam() throws Exception {
+		cs.cleanDb();
 		cs.logIn(selenium);
 		
 		selenium.click("url_settings");
@@ -36,7 +37,7 @@ public class Settings extends SessionWebTest {
 	}
 	
 	@Test public void addUser() throws Exception {
-		
+		cs.cleanDb();
 		cs.logIn(selenium);
 
 		selenium.click("url_settings");
@@ -86,6 +87,7 @@ public class Settings extends SessionWebTest {
 	}
 	
 	@Test public void addSprint() throws Exception {
+		cs.cleanDb();
 		cs.logIn(selenium);
 		
 		selenium.click("url_settings");
@@ -117,6 +119,7 @@ public class Settings extends SessionWebTest {
 	}
 
 	@Test public void addTeamSprint() throws Exception {
+		cs.cleanDb();
 		cs.logIn(selenium);
 		
 		selenium.click("url_settings");
@@ -148,6 +151,7 @@ public class Settings extends SessionWebTest {
 	}
 	
 	@Test public void addArea() throws Exception {
+		cs.cleanDb();
 		cs.logIn(selenium);
 		
 		selenium.click("url_settings");
@@ -179,6 +183,7 @@ public class Settings extends SessionWebTest {
 	}
 
 	@Test public void changePassword() throws Exception {
+		cs.cleanDb();
 		cs.logIn(selenium);
 		
 		selenium.click("url_settings");
@@ -212,13 +217,70 @@ public class Settings extends SessionWebTest {
 		selenium.click("Submit");
 		selenium.waitForPageToLoad("15000");
 		assertTrue(selenium.isTextPresent("Wrong Username or Password"));
-		selenium.open("index.php?logout=yes");
+		selenium.open("sessionweb/index.php?logout=yes");
 		selenium.type("myusername", "testpassword");
 		selenium.type("mypassword", "123456");
 		selenium.click("Submit");
 		selenium.waitForPageToLoad("15000");
 		assertTrue(selenium.isTextPresent("[testpassword]"));
 	
+		cs.logOut(selenium);
+	}
+	
+	@Test public void modulesActivatedAndDeactivated() throws Exception {
+		cs.cleanDb();
+		cs.logIn(selenium);
+		//testdata
+		selenium.click("url_newsession");
+		selenium.waitForPageToLoad("15000");
+		selenium.click("input_title");
+		selenium.type("input_title", "testsession to test configuration options");
+		selenium.click("input_submit");
+		selenium.waitForPageToLoad("15000");
+		//actual test
+		selenium.click("url_list");
+		selenium.waitForPageToLoad("15000");
+		assertTrue(selenium.isElementPresent("tableheader_sprint"));
+		assertTrue(selenium.isElementPresent("tableheader_teamsprint"));
+		selenium.click("showoption");
+		assertTrue(selenium.isElementPresent("select_sprint"));
+		assertTrue(selenium.isElementPresent("select_teamsprint"));
+		assertTrue(selenium.isElementPresent("select_team"));
+		assertTrue(selenium.isElementPresent("select_area"));
+		selenium.click("url_settings");
+		selenium.waitForPageToLoad("15000");
+		selenium.click("url_configuration");
+		selenium.waitForPageToLoad("15000");
+		selenium.click("team");
+		selenium.click("sprint");
+		selenium.click("teamsprint");
+		selenium.click("area");
+		selenium.click("//input[@value='Change settings']");
+		selenium.waitForPageToLoad("15000");
+		Thread.sleep(2000);
+		selenium.click("url_list");
+		selenium.waitForPageToLoad("15000");
+		selenium.click("showoption");
+		assertFalse(selenium.isElementPresent("tableheader_sprint"));
+		assertFalse(selenium.isElementPresent("tableheader_teamsprint"));
+		selenium.click("showoption");
+		assertFalse(selenium.isElementPresent("select_sprint"));
+		assertFalse(selenium.isElementPresent("select_teamsprint"));
+		assertFalse(selenium.isElementPresent("select_team"));
+		assertFalse(selenium.isElementPresent("select_area"));
+		
+		//clean up the settings mess....
+		selenium.click("url_settings");
+		selenium.waitForPageToLoad("15000");
+		selenium.click("url_configuration");
+		selenium.waitForPageToLoad("15000");
+		selenium.click("team");
+		selenium.click("sprint");
+		selenium.click("teamsprint");
+		selenium.click("area");
+		selenium.click("//input[@value='Change settings']");
+		selenium.waitForPageToLoad("15000");
+		
 		cs.logOut(selenium);
 	}
 }
