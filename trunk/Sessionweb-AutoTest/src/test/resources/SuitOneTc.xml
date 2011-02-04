@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="5" skipfailedinvocationCounts="false" verbose="1" name="Failed suite [SuiteAll]" junit="false" parallel="false" annotations="JDK" data-provider-thread-count="10">
+<suite thread-count="5" verbose="1" name="Failed suite [SuiteAll]" junit="false" parallel="false" annotations="JDK" data-provider-thread-count="10">
   <test name="TestAll(failed)" junit="false" parallel="false" annotations="JDK">
     <classes>
       <class name="com.sessionweb.autotest.tests.List">
