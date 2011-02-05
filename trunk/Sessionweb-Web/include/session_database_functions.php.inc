@@ -75,6 +75,8 @@ function saveSession_InsertSessionDataToDb($sessionid)
         $_REQUEST["title"]="Unnamed Session";
         echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
     }
+    $publickey = md5(rand());
+   
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission ";
     $sqlInsert .= "            (`sessionid`, ";
@@ -84,7 +86,8 @@ function saveSession_InsertSessionDataToDb($sessionid)
     $sqlInsert .= "             `username`, ";
     $sqlInsert .= "             `sprintname`, ";
     $sqlInsert .= "             `teamsprintname`, ";
-    $sqlInsert .= "             `teamname`) ";
+    $sqlInsert .= "             `teamname`, ";
+    $sqlInsert .= "             `publickey`) ";
     $sqlInsert .= "VALUES      ('$sessionid', ";
     $sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["title"])."', ";
     $sqlInsert .= "             '".mysql_real_escape_string($_REQUEST["charter"])."', ";
@@ -109,13 +112,15 @@ function saveSession_InsertSessionDataToDb($sessionid)
     }
     if($_REQUEST['team']=="")
     {
-        $sqlInsert .= "             null ";
+        $sqlInsert .= "             null, ";
     }
     else
     {
-        $sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."'";
+        $sqlInsert .= "             '".mysql_real_escape_string($_REQUEST['team'])."', ";
     }
+    $sqlInsert .= "             '$publickey'";
     $sqlInsert .= ") " ;
+   
 
     $result = mysql_query($sqlInsert);
 
