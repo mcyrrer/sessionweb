@@ -488,4 +488,26 @@ function echoTeamSprintSelect($teamsprint)
 	mysql_close($con);
 }
 
+function GetSessionPublicKey($versionid)
+{
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT publickey  ";
+    $sqlSelect .= "FROM   `mission` ";
+    $sqlSelect .= "WHERE  `versionid` = $versionid ";
+
+    $result = mysql_query($sqlSelect);
+
+    if(!$result)
+    {
+        echo "GetSessionPublicKey: ".mysql_error()."<br/>";
+    }
+    else
+    {
+        $row = mysql_fetch_array($result);
+        $publickey = $row["publickey"];
+    }
+    return $publickey;
+}
+
 ?>
