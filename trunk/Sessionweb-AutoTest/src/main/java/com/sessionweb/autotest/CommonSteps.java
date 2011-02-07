@@ -2,10 +2,12 @@ package com.sessionweb.autotest;
 
 import com.thoughtworks.selenium.Selenium;
 
+import java.io.InterruptedIOException;
 import java.sql.*;
 import java.util.UUID;
 
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 public class CommonSteps {
     private Connection connect = null;
@@ -29,6 +31,7 @@ public class CommonSteps {
     public void logOut(Selenium selenium) throws Exception {
         selenium.click("url_logout");
         selenium.waitForPageToLoad("15000");
+        Thread.sleep(1000);
         assertTrue(selenium.isTextPresent("You are logged out"));
     }
 
@@ -117,5 +120,21 @@ public class CommonSteps {
         connect.close();
         System.out.println("Sessionweb Database cleaned and ready for usage");
 
+    }
+
+    public void waitForText(Selenium selenium, String text) throws InterruptedException {
+        for (int second = 0; ; second++) {
+            if (second >= 30) fail("timeout: Could not find text " + text + ".");
+            try {
+                if (selenium.isTextPresent(text)) break;
+            } catch (Exception e) {
+            }
+            Thread.sleep(1000);
+        }
+    }
+
+    public String formatTableContentToCommonString(Selenium selenium, String xPath) {
+        String tableToFormat = selenium.getTable(xPath);
+        return tableToFormat.replace(":   ", ": ");
     }
 }

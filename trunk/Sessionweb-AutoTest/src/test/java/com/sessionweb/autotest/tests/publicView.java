@@ -30,7 +30,7 @@ public class publicView extends SessionWebTest {
 		selenium.click("input_submit");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("view_session");
-		selenium.waitForPageToLoad("30000");
+		cs.waitForText(selenium,"Session title");
 		assertTrue(selenium.isElementPresent("publiclink"));
 		selenium.click("publiclink");
 		selenium.waitForPageToLoad("30000");
@@ -60,11 +60,10 @@ public class publicView extends SessionWebTest {
 		selenium.click("input_submit");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("view_session");
-		selenium.waitForPageToLoad("30000");
+        cs.waitForText(selenium,"Session title");
 		selenium.click("publiclink");
 		selenium.waitForPageToLoad("30000");
-
-
+        Thread.sleep(500);
         String url = selenium.getLocation();
         url = url.substring(0,url.length()-1);
         selenium.open(url);
