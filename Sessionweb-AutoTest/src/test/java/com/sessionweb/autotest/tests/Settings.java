@@ -227,7 +227,9 @@ public class Settings extends SessionWebTest {
         selenium.click("Submit");
         selenium.waitForPageToLoad("15000");
         assertTrue(selenium.isTextPresent("Wrong Username or Password"));
-        selenium.open("index.php?logout=yes");
+        String logoutUrl = System.getProperty("url")+"index.php?logout=yes";
+        System.out.println(logoutUrl);
+        selenium.open(logoutUrl);
         selenium.type("myusername", "testpassword");
         selenium.type("mypassword", "123456");
         selenium.click("Submit");
