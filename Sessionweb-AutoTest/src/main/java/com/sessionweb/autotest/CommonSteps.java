@@ -69,6 +69,7 @@ public class CommonSteps {
         statement.execute("DELETE FROM mission_sessionmetrics");
         statement.execute("DELETE FROM mission_sessionsconnections");
         statement.execute("DELETE FROM mission_status");
+        statement.execute("DELETE FROM user_settings");
         statement.execute("DELETE FROM mission");
         statement.execute("DELETE FROM sessionid");
         statement.execute("DELETE FROM sprintnames");
@@ -77,6 +78,7 @@ public class CommonSteps {
         statement.execute("DELETE FROM members");
         statement.execute("DELETE FROM areas");
         statement.execute("DELETE FROM settings");
+
 
         String sql = ""
                 + "INSERT INTO `sessionwebos`.`settings` "
