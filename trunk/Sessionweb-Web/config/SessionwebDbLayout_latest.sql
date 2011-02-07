@@ -312,6 +312,31 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionsconnections` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`user_settings`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`user_settings` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_settings` (
+  `username` VARCHAR(45) NOT NULL ,
+  `teamname` VARCHAR(100) NULL ,
+  `list_view` VARCHAR(45) NULL ,
+  PRIMARY KEY (`username`) ,
+  INDEX `fk_user_settings_members1` (`username` ASC) ,
+  INDEX `fk_user_settings_teamnames1` (`teamname` ASC) ,
+  CONSTRAINT `fk_user_settings_members1`
+    FOREIGN KEY (`username` )
+    REFERENCES `sessionwebos`.`members` (`username` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_settings_teamnames1`
+    FOREIGN KEY (`teamname` )
+    REFERENCES `sessionwebos`.`teamnames` (`teamname` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -332,5 +357,14 @@ COMMIT;
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
 INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`, `url_to_dms`, `url_to_rms`, `publicview`) VALUES (NULL, '90', '1', '1', '1', '1', NULL, NULL, NULL, '1');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `sessionwebos`.`user_settings`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `sessionwebos`;
+INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`) VALUES ('admin', NULL, 'all');
 
 COMMIT;
