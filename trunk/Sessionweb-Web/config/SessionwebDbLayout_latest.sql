@@ -213,6 +213,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `analyticsid` VARCHAR(45) NULL COMMENT 'google analytics id' ,
   `url_to_dms` VARCHAR(500) NULL ,
   `url_to_rms` VARCHAR(500) NULL ,
+  `publicview` TINYINT(1)  NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -321,7 +322,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', 1, 1, 1, NULL, '21232f297a57a5a743894a0e4a801fc3');
+INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', '1', '1', '1', NULL, '21232f297a57a5a743894a0e4a801fc3');
 
 COMMIT;
 
@@ -330,6 +331,6 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`, `url_to_dms`, `url_to_rms`) VALUES (NULL, 90, 1, 1, 1, 1, NULL, NULL, NULL);
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`, `url_to_dms`, `url_to_rms`, `publicview`) VALUES (NULL, '90', '1', '1', '1', '1', NULL, NULL, NULL, '1');
 
 COMMIT;

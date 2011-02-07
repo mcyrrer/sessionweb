@@ -11,6 +11,7 @@ echo "     <script src=\"js/jquery-1.4.4.js\" type=\"text/javascript\"></script>
 echo "     <script src=\"js/sessionwebjquery.js\" type=\"text/javascript\"></script>\n";
 echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
 echo "              <script type=\"text/javascript\">\n";
+echo "              var mySessionlinks = \"\";\n";
 echo "              var url_to_dms = \"".$_SESSION['settings']['url_to_dms']."\";\n";
 echo "              var url_to_rms = \"".$_SESSION['settings']['url_to_rms']."\";\n";
 

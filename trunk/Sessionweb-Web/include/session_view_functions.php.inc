@@ -141,6 +141,12 @@ function echoViewSession()
 		echo "            ".echoSessionsLinkToView($row["versionid"])."\n";
 		echo "        </td>\n";
 		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td></td>\n";
+		echo "        <td>\n";
+		echo "            ".echoSessionsLinkFromoView($row["versionid"])."\n";
+		echo "        </td>\n";
+		echo "    </tr>\n";
 
 		echo "    <tr>\n";
 		echo "        <td></td>\n";
@@ -269,15 +275,40 @@ function echoSessionsLinkToView($versionid)
 {
 	$rowSessionLinkedTo = getConnectedSessions($versionid);
 
-	echo "<h4>Connected to other sessions</h4>\n";
-	echo "<div id=viewbugid style=\"background-color:#efefef;\">\n";
+	echo "<h4>Connected to sessions</h4>\n";
+	echo "<div id=\"sessionslinkedto\" style=\"background-color:#efefef;\">\n";
 
-	foreach($rowSessionLinkedTo as $aSessionToLink)
+
+	foreach($rowSessionLinkedTo as $versionid)
 	{
-		$aSessionTitle = GetSessionTitle($aSessionToLink);
+		$aSessionToLink = GetSessionIdFromVersionIdNoNewDbConnection($versionid);
+		$aSessionTitle = GetSessionTitleFromSessionId($aSessionToLink);
 
 		echo "                                   Linked to: #$aSessionToLink:<a href=\"session.php?sessionid=$aSessionToLink&command=view\" class=\"requirementurl\" target=\"_blank\">$aSessionTitle</a><br>\n";
 	}
+	//	mysql_close($conSql1);
+	echo "</div>\n";
+}
+
+function echoSessionsLinkFromoView($versionid)
+{
+	$rowSessionLinkedFrom = getSessionsLinkedFrom($versionid);
+	 
+	echo "<h4>Connected from sessions</h4>\n";
+	echo "<div id=\"sessionslinkedfrom\" style=\"background-color:#efefef;\">\n";
+
+	if($rowSessionLinkedFrom!="")
+	{
+
+		foreach($rowSessionLinkedFrom as $versionid)
+		{
+			$aSessionFromLink = GetSessionIdFromVersionIdNoNewDbConnection($versionid);
+			$aSessionTitle = GetSessionTitleFromSessionId($aSessionFromLink);
+
+			echo "                                   Linked from: #$aSessionFromLink:<a href=\"session.php?sessionid=$aSessionFromLink&command=view\" class=\"requirementurl\" target=\"_blank\">$aSessionTitle</a><br>\n";
+		}
+	}
+	//  mysql_close($conSql1);
 	echo "</div>\n";
 }
 

@@ -147,7 +147,7 @@ function echoOneSession($row,$rowSessionStatus)
     }
     echo "      <td >\n";
     echo "<div id=\"tablerowtitle_".$row["sessionid"]."\" title=\"".$row["title"]."\">\n";
-    echo "<a id=\"view_session\" class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=view\">$title</a></div>\n";
+    echo "<a id=\"view_session".$row["sessionid"]."\" class=\"url_view_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=view\">$title</a></div>\n";
     echo "</td>\n";
     echo "      <td id=\"tablerowuser_".$row["sessionid"]."\">".$row["username"]."</td>\n";
     if($_SESSION['settings']['sprint']==1 )

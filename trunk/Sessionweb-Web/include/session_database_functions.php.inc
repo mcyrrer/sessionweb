@@ -232,36 +232,45 @@ function GetVersionidFromSessionid($sessionid)
 	return $versionid;
 }
 
+function GetSessionIdFromVersionIdNoNewDbConnection($versionid)
+{
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT sessionid  ";
+    $sqlSelect .= "FROM   `mission` ";
+    $sqlSelect .= "WHERE  `versionid` = $versionid ";
+
+
+    $result = mysql_query($sqlSelect);
+
+    if(mysql_errno()==1054)
+    {
+        echo "Session id provided is not an integer, will not add it.<br>";
+    }
+    elseif(!$result)
+    {
+        echo "GetSessionIdFromVersionId: ".mysql_error()."<br/>";
+    }
+    else
+    {
+        $row = mysql_fetch_array($result);
+        $sessionid = $row["sessionid"];
+    }
+
+	return $sessionid;
+}
+
 function GetSessionIdFromVersionId($versionid)
 {
 
-	$conSql1 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+//    $conSql1 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+//    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-	$sqlSelect = "";
-	$sqlSelect .= "SELECT sessionid  ";
-	$sqlSelect .= "FROM   `mission` ";
-	$sqlSelect .= "WHERE  `versionid` = $versionid ";
+    $sessionid = GetSessionIdFromVersionIdNoNewDbConnection($versionid);
+    
+//    mysql_close($conSql1);
 
-
-	$result = mysql_query($sqlSelect);
-
-	if(mysql_errno()==1054)
-	{
-		echo "Session id provided is not an integer, will not add it.<br>";
-	}
-	elseif(!$result)
-	{
-		echo "GetSessionIdFromVersionId: ".mysql_error()."<br/>";
-	}
-	else
-	{
-		$row = mysql_fetch_array($result);
-		$sessionid = $row["sessionid"];
-	}
-	mysql_close($conSql1);
-
-	return $sessionid;
+    return $sessionid;
 }
 
 
@@ -272,9 +281,9 @@ function GetSessionTitle($versionid)
 	$sqlSelect .= "SELECT title  ";
 	$sqlSelect .= "FROM   `mission` ";
 	$sqlSelect .= "WHERE  `versionid` = $versionid ";
-
+    
 	$result = mysql_query($sqlSelect);
-
+  
 	if(!$result)
 	{
 		echo "GetSessionTitle: ".mysql_error()."<br/>";
@@ -283,8 +292,34 @@ function GetSessionTitle($versionid)
 	{
 		$row = mysql_fetch_array($result);
 		$title = $row["title"];
+
 	}
+
 	return $title;
+}
+
+function GetSessionTitleFromSessionId($sessionid)
+{
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT title  ";
+    $sqlSelect .= "FROM   `mission` ";
+    $sqlSelect .= "WHERE  `sessionid` = $sessionid ";
+    
+    $result = mysql_query($sqlSelect);
+
+    if(!$result)
+    {
+        echo "GetSessionTitle: ".mysql_error()."<br/>";
+    }
+    else
+    {
+        $row = mysql_fetch_array($result);
+        $title = $row["title"];
+ 
+    }
+
+    return $title;
 }
 
 function saveSession_InsertSessionStatusToDb($versionid)
@@ -410,7 +445,7 @@ function saveSession_InsertSessionMetricsToDb($versionid)
 
 function saveSession_InsertSessionAreaToDb($versionid)
 {
-	if($_SESSION['settings']['area']==1 && $area!=null)
+	if($_SESSION['settings']['area']==1 && $_REQUEST["area"]!=null)
 	{
 		$areas = $_REQUEST["area"];
 

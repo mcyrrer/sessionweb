@@ -68,7 +68,7 @@ function echoSessionMetrics($rowSessionMetric, $versionid)
     echo "                    </div>\n";
     echo "                </td>\n";
     echo "                <td align=\"left\">\n";
-    echo "                    <h4>Oppertunity</h4>\n";
+    echo "                    <h4>Opportunity</h4>\n";
     echo "                    <div style=\"background-color:#efefef;\">\n";
     echo "                        $opportunity_percent %\n";
     echo "                    </div>\n";
