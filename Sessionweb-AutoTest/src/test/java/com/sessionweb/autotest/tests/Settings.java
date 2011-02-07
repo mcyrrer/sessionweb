@@ -113,7 +113,8 @@ public class Settings extends SessionWebTest {
 		selenium.click("url_list");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("showoption");
-		assertEquals(selenium.getTable("//form[@id='narrowform']/table.0.1"), "Sprint: seleniumsprint1 seleniumsprint2 seleniumsprint3");
+        String table = cs.formatTableContentToCommonString(selenium, "//form[@id='narrowform']/table.0.1");
+		assertEquals(table, "Sprint: seleniumsprint1 seleniumsprint2 seleniumsprint3");
 		
 		cs.logOut(selenium);
 	}
@@ -145,7 +146,8 @@ public class Settings extends SessionWebTest {
 		selenium.click("url_list");
 		selenium.waitForPageToLoad("15000");
 		selenium.click("showoption");
-		assertEquals(selenium.getTable("//form[@id='narrowform']/table.0.2"), "Team sprint: seleniumteamsprint1 seleniumteamsprint2 seleniumteamsprint3");
+        String table = cs.formatTableContentToCommonString(selenium, "//form[@id='narrowform']/table.0.2");
+		assertEquals(table, "Team sprint: seleniumteamsprint1 seleniumteamsprint2 seleniumteamsprint3");
 		
 		cs.logOut(selenium);
 	}
@@ -177,6 +179,8 @@ public class Settings extends SessionWebTest {
 		selenium.click("url_list");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("showoption");
+        String tabel = selenium.getTable("//form[@id='narrowform']/table/tbody/tr[2]/td[1]/table.0.1");
+
 		assertEquals(selenium.getTable("//form[@id='narrowform']/table/tbody/tr[2]/td[1]/table.0.1"), "seleniumarea1 seleniumarea2 seleniumarea3");
 	
 		cs.logOut(selenium);
@@ -217,7 +221,7 @@ public class Settings extends SessionWebTest {
 		selenium.click("Submit");
 		selenium.waitForPageToLoad("15000");
 		assertTrue(selenium.isTextPresent("Wrong Username or Password"));
-		selenium.open("sessionweb/index.php?logout=yes");
+		selenium.open("index.php?logout=yes");
 		selenium.type("myusername", "testpassword");
 		selenium.type("mypassword", "123456");
 		selenium.click("Submit");

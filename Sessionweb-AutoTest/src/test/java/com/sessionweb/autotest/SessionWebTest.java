@@ -10,7 +10,7 @@ public class SessionWebTest {
 	/**
 	 * Execute this by adding these to the VM arguments. E.g. 
 	 * -Dhost=localhost
-	 * -Dport=4444 
+	 * -Dselport=4444
 	 * -Dbrowser=*firefox 
 	 * -Durl=http://localhost/sessionweb/
 	 * -Dmysqlhost=localhost
