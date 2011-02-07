@@ -2,7 +2,6 @@ package com.sessionweb.autotest;
 
 import com.thoughtworks.selenium.Selenium;
 
-import java.io.InterruptedIOException;
 import java.sql.*;
 import java.util.UUID;
 
@@ -117,6 +116,12 @@ public class CommonSteps {
                 + "             '21232f297a57a5a743894a0e4a801fc3')";
 
 
+        statement.execute(sql);
+
+        sql = ""
+                + "INSERT INTO `user_settings` "
+                + "            (`username`) "
+                + "VALUES      ('admin')";
         statement.execute(sql);
 
         connect.close();
