@@ -109,6 +109,16 @@ function executeCommand()
 
 		echoChangePassword($_SESSION['username']);
 	}
+	if(strcmp($_GET["command"],"listsettings")==0)    {
+
+		echoChangeListSettings();
+	}
+	if(strcmp($_REQUEST["command"],"changelistsettings")==0)
+	{
+		updateUserSettingsForLoginUser();
+	}
+
+
 
 }
 
@@ -255,7 +265,7 @@ function echoMenu()
 		}
 		echo "</div>";
 	}
-	echo "<div>User menu: <a id=\"url_changepassword\" href=\"settings.php?command=changepassword\">Change password</a></div>";
+	echo "<div>User menu: <a id=\"url_changepassword\" href=\"settings.php?command=changepassword\">Change password</a> | <a id=\"url_listsettings\" href=\"settings.php?command=listsettings\">List settings</a></div>";
 }
 
 function echoAddTeamName()
@@ -455,6 +465,21 @@ function insertTeamSprintNameToDb($teamsprintName)
 	mysql_close($con);
 }
 
+function echoChangeListSettings()
+{
+	echo "<h2>Change list settings</h2>";
+	echo "<p>Choose default filter for  the \"List sessions\" page</p>";
+	echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
+
+	echo "<input type=\"hidden\" name=\"command\" value= \"changelistsettings\">\n";
+	echo "<select id=\"changelistsettings_options\" name=\"listsettings\">\n";
+	echo "<option value=\"all\">All sessions</option>\n";
+	echo "<option value=\"mine\">My own sessions</option>\n";
+	//echo "<option value=\"team\">All sessions</option>\n";
+	echo "</select>\n";
+	echo "<input type=\"submit\" value=\"Update\">";
+	echo "</form>";
+}
 
 function echoChangeUserInfo($username)
 {
@@ -680,9 +705,9 @@ function updateConfig()
 	{
 		$area=0;
 	}
-	
+
 	$url_to_dms = $_REQUEST["url_to_dms"];
-	
+
 	$url_to_rms = $_REQUEST["url_to_rms"];
 
 	$sqlUpdate = "";
@@ -750,6 +775,35 @@ function updateUserPassword($username,$password1, $password2)
 	}
 }
 
+function updateUserSettingsForLoginUser()
+{
+
+
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$md5password = md5($password1);
+
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE `user_settings` ";
+	$sqlUpdate .= "SET    `list_view` ='".mysql_real_escape_string($_REQUEST['listsettings'])."' ";
+	$sqlUpdate .= "WHERE  `user_settings`.`username` = '".$_SESSION['username']."' " ;
+
+	$result = mysql_query($sqlUpdate);
+
+	if($result)
+	{
+		echo "User settings changed\n";
+	}
+	else
+	{
+		echo mysql_error();
+	}
+	mysql_close($con);
+}
+
+
+
 
 function createNewUser()
 {
@@ -816,6 +870,24 @@ function createNewUser()
 		$sqlInsert .= "             '$activeToDb', ";
 		$sqlInsert .= "             '$adminToDb', ";
 		$sqlInsert .= "             '$superuserToDb')" ;
+
+		$result = mysql_query($sqlInsert);
+
+		if($result)
+		{
+			echo "User added\n";
+		}
+		else
+		{
+			echo mysql_error();
+		}
+
+		$sqlInsert = "";
+		$sqlInsert .= "INSERT INTO `user_settings` ";
+		$sqlInsert .= "            (`username`, ";
+		$sqlInsert .= "             `list_view`) ";
+		$sqlInsert .= "VALUES      ('$username', ";
+		$sqlInsert .= "             'all')" ;
 
 		$result = mysql_query($sqlInsert);
 

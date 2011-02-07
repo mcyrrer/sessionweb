@@ -184,23 +184,23 @@ function getConnectedSessions($versionid)
 
 function getSessionsLinkedFrom($versionid)
 {
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT * ";
-    $sqlSelect .= "FROM   mission_sessionsconnections ";
-    $sqlSelect .= "WHERE  linked_to_versionid = $versionid";
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_sessionsconnections ";
+	$sqlSelect .= "WHERE  linked_to_versionid = $versionid";
 
-    $result = mysql_query($sqlSelect);
-    if(!$result)
-    {
-        echo "getSessionsLinkedFrom: ".mysql_error()."<br/>";
-    }
+	$result = mysql_query($sqlSelect);
+	if(!$result)
+	{
+		echo "getSessionsLinkedFrom: ".mysql_error()."<br/>";
+	}
 
-    $resultToReturn = array();
-    while ($row = mysql_fetch_array($result)) {
-        $resultFromReturn[]=$row["linked_from_versionid"];
-    }
+	$resultToReturn = array();
+	while ($row = mysql_fetch_array($result)) {
+		$resultFromReturn[]=$row["linked_from_versionid"];
+	}
 
-    return $resultFromReturn;
+	return $resultFromReturn;
 }
 
 function getSessionAreas($versionid)
@@ -539,4 +539,25 @@ function GetSessionPublicKey($versionid)
 	return $publickey;
 }
 
+function getUserSettings()
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   user_settings ";
+	$sqlSelect .= "WHERE  username = '".$_SESSION['username']."'" ;
+
+
+	$result = mysql_query($sqlSelect);
+
+	if(!$result)
+	{
+		echo "getUserSettings: ".mysql_error()."<br/>";
+	}
+
+	mysql_close($con);
+	return mysql_fetch_array($result);
+}
 ?>
