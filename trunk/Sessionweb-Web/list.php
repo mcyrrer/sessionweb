@@ -16,9 +16,8 @@ $currentPage=$_GET["page"];
 
 
 
-if(count($_REQUEST)==1)
+if(count($_REQUEST)<2)
 {
-
     $userSettings = getUserSettings();
     if($userSettings['list_view']=="all")
     {
@@ -45,6 +44,7 @@ if(count($_REQUEST)==1)
 }
 else
 {
+	echo "REQUEST";
 	$listSettings = $_REQUEST;
 }
 
