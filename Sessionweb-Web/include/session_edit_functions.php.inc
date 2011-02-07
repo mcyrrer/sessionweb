@@ -165,7 +165,7 @@ function echoSessionlinkEdit($versionid)
 
 		$rowSessionSessionlink = getConnectedSessions($versionid);
 
-		mysql_close($con);
+//		mysql_close($con);
 
 		if($rowSessionSessionlink!="")
 		{
@@ -186,12 +186,15 @@ function echoSessionlinkEdit($versionid)
 		{
 			foreach($rowSessionSessionlink as $row)
 			{
-				$sessionlink = $row;
+				$versionid = $row;
+				$aSessionTitle = GetSessionTitle($versionid);
+				$sessionlink = GetSessionIdFromVersionId($versionid);
+				
 				echo "      <div id=\"sessionlinkdiv_$sessionlink\">\n";
 				echo "            <table width=\"*\" border=\"0\">\n";
 				echo "                        <tr>\n";
 				echo "                              <td>\n";
-				echo "                                   <a href=\"".$_SESSION['settings']['url_to_rms']."$sessionlink\" class=\"sessionlinkurl\" target=\"_blank\">$sessionlink</a>\n";
+				echo "                                   #$sessionlink <a href=\"session.php?sessionid=$aSessionToLink&command=view\" class=\"sessionlinkurl\" target=\"_blank\"> $aSessionTitle</a>\n";
 				echo "                              </td>\n";
 				echo "                              <td>\n";
 				echo "                                    <div id=\"sessionlink_$sessionlink\">\n";

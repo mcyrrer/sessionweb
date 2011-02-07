@@ -160,25 +160,47 @@ function getSessionBugs($versionid)
 	return $resultToReturn;
 }
 
+
 function getConnectedSessions($versionid)
+{
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT * ";
+	$sqlSelect .= "FROM   mission_sessionsconnections ";
+	$sqlSelect .= "WHERE  linked_from_versionid = $versionid";
+
+	$result = mysql_query($sqlSelect);
+	if(!$result)
+	{
+		echo "getConnectedSessions: ".mysql_error()."<br/>";
+	}
+
+	$resultToReturn = array();
+	while ($row = mysql_fetch_array($result)) {
+		$resultToReturn[]=$row["linked_to_versionid"];
+	}
+
+	return $resultToReturn;
+}
+
+function getSessionsLinkedFrom($versionid)
 {
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission_sessionsconnections ";
-    $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
-    
+    $sqlSelect .= "WHERE  linked_to_versionid = $versionid";
+
     $result = mysql_query($sqlSelect);
     if(!$result)
     {
-        echo "getConnectedSessions: ".mysql_error()."<br/>";
+        echo "getSessionsLinkedFrom: ".mysql_error()."<br/>";
     }
 
     $resultToReturn = array();
     while ($row = mysql_fetch_array($result)) {
-        $resultToReturn[]=$row["linked_to_versionid"];
+        $resultFromReturn[]=$row["linked_from_versionid"];
     }
 
-    return $resultToReturn;
+    return $resultFromReturn;
 }
 
 function getSessionAreas($versionid)
@@ -208,7 +230,7 @@ function createPercentPieChart($setup,$test,$bug,$oppertunity)
 
 	$totalTime = $setup +$test+$bug+$oppertunity;
 
-	$imgURL = "http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=450x150&chd=t:$setup,$test,$bug,$oppertunity&chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Oppertunity($oppertunity%)|&chco=FF0000|00FF00|0000FF|000000&";
+	$imgURL = "http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=450x150&chd=t:$setup,$test,$bug,$oppertunity&chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&chco=FF0000|00FF00|0000FF|000000&";
 	//	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
 	return $imgURL;
 }
@@ -319,9 +341,16 @@ function echoAreaSelectSingel($area)
 
 	while($row = mysql_fetch_array($result))
 	{
-		if(in_array($row['areaname'],$area))
+		if($area!=null)
 		{
-			echo "                                      <option selected=\"selected\" value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+			if(in_array($row['areaname'],$area))
+			{
+				echo "                                      <option selected=\"selected\" value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+			}
+			else
+			{
+				echo "                                      <option value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
+			}
 		}
 		else
 		{
@@ -491,23 +520,23 @@ function echoTeamSprintSelect($teamsprint)
 function GetSessionPublicKey($versionid)
 {
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT publickey  ";
-    $sqlSelect .= "FROM   `mission` ";
-    $sqlSelect .= "WHERE  `versionid` = $versionid ";
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT publickey  ";
+	$sqlSelect .= "FROM   `mission` ";
+	$sqlSelect .= "WHERE  `versionid` = $versionid ";
 
-    $result = mysql_query($sqlSelect);
+	$result = mysql_query($sqlSelect);
 
-    if(!$result)
-    {
-        echo "GetSessionPublicKey: ".mysql_error()."<br/>";
-    }
-    else
-    {
-        $row = mysql_fetch_array($result);
-        $publickey = $row["publickey"];
-    }
-    return $publickey;
+	if(!$result)
+	{
+		echo "GetSessionPublicKey: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		$publickey = $row["publickey"];
+	}
+	return $publickey;
 }
 
 ?>

@@ -234,7 +234,8 @@ function saveSession()
 		echo "<p><b>Session saved</b></p>\n";
 		echo "<p><a href=\"session.php?sessionid=$sessionid&command=view\" id=\"view_session\">View session</a></p>";
 		echo "<p><a href=\"session.php?sessionid=$sessionid&command=edit\" id=\"edit_session\">Edit session</a></p>";
-		echo "(sessionid = $sessionid, versionid = $versionid)\n";
+		
+		echo "<span style=\"color:white\"><div id=\"sessioninfo\">sessionid:<div id=\"sessionid\">$sessionid</div>, versionid:<div id=\"versionid\">$versionid</div></span></div>\n";
 	}
 }
 
@@ -518,7 +519,7 @@ function echoSessionForm()
 	echoPercentSelection($rowSessionMetric["bug_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
-	echo "                                                <td>Oppertunity(%): </td>\n";
+	echo "                                                <td>Opportunity(%): </td>\n";
 	echo "                                                <td>\n";
 	echo "                                                      <select class=\"metricoption\" name=\"oppertunitypercent\">\n";
 	echoPercentSelection($rowSessionMetric["opportunity_percent"]);
