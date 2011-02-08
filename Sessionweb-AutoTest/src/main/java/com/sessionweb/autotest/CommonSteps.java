@@ -1,8 +1,10 @@
 package com.sessionweb.autotest;
 
 import com.thoughtworks.selenium.Selenium;
+import de.svenjacobs.loremipsum.LoremIpsum;
 
 import java.sql.*;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.testng.Assert.assertTrue;
@@ -13,6 +15,8 @@ public class CommonSteps {
     private Statement statement = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
+    LoremIpsum li = new LoremIpsum();
+    Random generator = new Random();
     String mysqlhost = System.getProperty("mysqlhost");
     String mysqldb = System.getProperty("mysqldb");
     String mysqluser = System.getProperty("mysqluser");
@@ -27,6 +31,15 @@ public class CommonSteps {
         assertTrue(selenium.isTextPresent("[Administrator]"));
     }
 
+    public void logInAsTestUser(Selenium selenium) {
+        selenium.open("/sessionweb/index.php?logout=yes");
+        selenium.type("myusername", "test");
+        selenium.type("mypassword", "test");
+        selenium.click("Submit");
+        selenium.waitForPageToLoad("15000");
+        assertTrue(selenium.isTextPresent("[test]"));
+    }
+
     public void logOut(Selenium selenium) throws Exception {
         selenium.click("url_logout");
         selenium.waitForPageToLoad("15000");
@@ -37,11 +50,56 @@ public class CommonSteps {
     public void createSession(Selenium selenium) throws Exception {
         selenium.click("url_newsession");
         selenium.waitForPageToLoad("30000");
-        selenium.click("input_title");
-        String title = getRandom(30);
+        String title = li.getWords(15, generator.nextInt(50));
         selenium.type("input_title", title);
+        selenium.type("textarea1", li.getWords(50, generator.nextInt(50)));
+        selenium.type("textarea2", li.getWords(50, generator.nextInt(50)));
         selenium.click("//input[@value='Save']");
         selenium.waitForPageToLoad("30000");
+    }
+
+    public void createRandomSession(Selenium selenium) throws Exception {
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("30000");
+        String title = li.getWords(15, generator.nextInt(50));
+        selenium.type("input_title", title);
+        selenium.type("textarea1", li.getWords(50, generator.nextInt(50)));
+        selenium.type("textarea2", li.getWords(50, generator.nextInt(50)));
+        int pos = generator.nextInt(2) + 1;
+        selenium.select("select_team", "index=" + pos);
+        pos = generator.nextInt(2) + 1;
+        selenium.select("select_sprint", "index=" + pos);
+        pos = generator.nextInt(2) + 1;
+        selenium.select("select_teamsprint", "index=" + pos);
+        pos = generator.nextInt(2) + 1;
+        selenium.addSelection("select_area", "index=" + pos);
+        selenium.select("setuppercent", "label=55");
+        selenium.select("testpercent", "label=30");
+        selenium.select("bugpercent", "label=30");
+        selenium.select("setuppercent", "label=20");
+        selenium.select("oppertunitypercent", "label=20");
+        selenium.select("duration", "label=210");
+        boolean executed = false;
+        if (generator.nextBoolean()) {
+            selenium.check("executed");
+            executed = true;
+        }
+
+
+        selenium.click("//input[@value='Save']");
+        selenium.waitForPageToLoad("30000");
+        if (executed) {
+            if (generator.nextBoolean()) {
+                String sessionid = selenium.getText("sessionid");
+                selenium.click("url_list");
+                selenium.waitForPageToLoad("30000");
+                selenium.click("debrief_session" + sessionid);
+                selenium.waitForPageToLoad("30000");
+                selenium.click("//input[@value='Continue']");
+                selenium.waitForPageToLoad("30000");
+            }
+        }
+
     }
 
     String getRandom(int length) {
@@ -49,7 +107,6 @@ public class CommonSteps {
         String myRandom = uuid.toString();
         return myRandom.substring(length);
     }
-
 
     public void cleanDb() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
