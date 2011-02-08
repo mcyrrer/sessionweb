@@ -71,7 +71,7 @@ function echoDebriefSession()
 		echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
 		echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
 		echo "<h4>Debrief notes</h4>\n";
-		echo "<textarea id=\"debriefnotes\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\"></textarea>\n";
+		echo "<textarea id=\"debriefnotes\" class=\"ckeditor\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\"></textarea>\n";
 		echo "<div>Debriefed: <input type=\"checkbox\" name=\"debriefedcheckbox\" checked=\"checked\" value=\"yes\"></div>\n";
 		if(strcmp($_SESSION['useradmin'],"1")==0)
 		{
@@ -431,7 +431,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Charter: </td>\n";
 	echo "                              <td>\n";
-	echo "                                  <textarea id=\"textarea1\" name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$charter</textarea>\n";
+	echo "                                  <textarea id=\"textarea1\" class=\"ckeditor\" name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$charter</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";
@@ -455,7 +455,7 @@ function echoSessionForm()
 	echo "                        <tr>\n";
 	echo "                              <td valign=\"top\">Notes: </td>\n";
 	echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
-	echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
+	echo "                                  <textarea id=\"textarea2\" class=\"ckeditor\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
 	echo "                        <tr>\n";

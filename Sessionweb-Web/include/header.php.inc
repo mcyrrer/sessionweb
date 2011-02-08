@@ -18,22 +18,7 @@ echo "              var url_to_rms = \"".$_SESSION['settings']['url_to_rms']."\"
 echo "              </script>\n";
 if(strstr($_SERVER['PHP_SELF'],"session.php")!=false)
 {
-
-	if(stristr($_SERVER['HTTP_USER_AGENT'],"Chrome")==false) //HACK: wysiwyg does not work in chrome...
-	{
-		if(strcmp($_REQUEST["command"],"new")==0 || strcmp($_REQUEST["command"],"edit")==0)
-		{
-			echo "<!-- \n";
-			echo "                  Include the WYSIWYG javascript files\n";
-			echo "-->\n";
-			echo "              <script type=\"text/javascript\" src=\"editor/scripts/wysiwyg.js\"></script>\n";
-			echo "              <script type=\"text/javascript\" src=\"editor/scripts/wysiwyg-settings.js\"></script>\n";
-			echo "              <script type=\"text/javascript\">\n";
-			echo "                  WYSIWYG.attach('textarea1',small); // default setup\n";
-			echo "                  WYSIWYG.attach('textarea2',small); // default setup\n";
-			echo "              </script>\n";
-		}
-	}
+	echo "<script type=\"text/javascript\" src=\"editor/ckeditor.js\"></script>\n";
 }
 if($_SESSION['settings']['analyticsid']!="" )
 {
