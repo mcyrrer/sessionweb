@@ -18,20 +18,20 @@ $currentPage=$_GET["page"];
 
 if(count($_REQUEST)<2)
 {
-    $userSettings = getUserSettings();
-    if($userSettings['list_view']=="all")
-    {
-    	$tester="";
-    }
-    else if($userSettings['list_view']=="mine")
-    {
-        $tester=$_SESSION['username'];
-    }
-    else
-    {
-    	$tester="";
-    }
-    
+	$userSettings = getUserSettings();
+	if($userSettings['list_view']=="all")
+	{
+		$tester="";
+	}
+	else if($userSettings['list_view']=="mine")
+	{
+		$tester=$_SESSION['username'];
+	}
+	else
+	{
+		$tester="";
+	}
+
 	$listSettings = array();
 	$listSettings["tester"]=$tester;
 	$listSettings["sprint"]="";
@@ -60,6 +60,8 @@ echoSessionTable($currentPage,$listSettings);
 
 
 echoColorExplanation();
+
+echoIconExplanation();
 
 
 include("include/footer.php.inc");
@@ -166,13 +168,13 @@ function echoOneSession($row,$rowSessionStatus)
 	echo "      <td>\n";
 	if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
-		echo "      <a id=\"edit_session\"  class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
+		echo "      <a id=\"edit_session".$row["sessionid"]."\"  class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
 	}
 	if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
 		if($rowSessionStatus['executed']!=false && $rowSessionStatus['debriefed']!=true)
 		{
-			echo "      <a id=\"edit_session\" class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
+			echo "      <a id=\"debrief_session".$row["sessionid"]."\" class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
 		}
 	}
 	echo "      </td>\n";
@@ -305,9 +307,18 @@ function echoColorExplanation()
 	echo "        </td>\n";
 	echo "    </tr>\n";
 	echo "    </table>\n";
+}
 
-
-
+function echoIconExplanation()
+{
+	echo "<table width=\"*\" border=\"0\">\n";
+	echo "    <tr>\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"edit\" /></td><td valign=\"top\">Edit Session\n";
+	echo "        </td>\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/debrieficon.png\" alt=\"edit\" /></td><td valign=\"top\">Debrief Session\n";
+	echo "        </td>\n";
+	echo "    <tr/>\n";
+	echo "    </table>\n";
 }
 
 function getSessionColorCode($rowSessionStatus)
