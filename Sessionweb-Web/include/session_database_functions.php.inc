@@ -235,27 +235,27 @@ function GetVersionidFromSessionid($sessionid)
 function GetSessionIdFromVersionIdNoNewDbConnection($versionid)
 {
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT sessionid  ";
-    $sqlSelect .= "FROM   `mission` ";
-    $sqlSelect .= "WHERE  `versionid` = $versionid ";
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT sessionid  ";
+	$sqlSelect .= "FROM   `mission` ";
+	$sqlSelect .= "WHERE  `versionid` = $versionid ";
 
 
-    $result = mysql_query($sqlSelect);
+	$result = mysql_query($sqlSelect);
 
-    if(mysql_errno()==1054)
-    {
-        echo "Session id provided is not an integer, will not add it.<br>";
-    }
-    elseif(!$result)
-    {
-        echo "GetSessionIdFromVersionId: ".mysql_error()."<br/>";
-    }
-    else
-    {
-        $row = mysql_fetch_array($result);
-        $sessionid = $row["sessionid"];
-    }
+	if(mysql_errno()==1054)
+	{
+		echo "Session id provided is not an integer, will not add it.<br>";
+	}
+	elseif(!$result)
+	{
+		echo "GetSessionIdFromVersionId: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		$sessionid = $row["sessionid"];
+	}
 
 	return $sessionid;
 }
@@ -263,14 +263,14 @@ function GetSessionIdFromVersionIdNoNewDbConnection($versionid)
 function GetSessionIdFromVersionId($versionid)
 {
 
-//    $conSql1 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-//    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+	//    $conSql1 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	//    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sessionid = GetSessionIdFromVersionIdNoNewDbConnection($versionid);
-    
-//    mysql_close($conSql1);
+	$sessionid = GetSessionIdFromVersionIdNoNewDbConnection($versionid);
 
-    return $sessionid;
+	//    mysql_close($conSql1);
+
+	return $sessionid;
 }
 
 
@@ -281,9 +281,9 @@ function GetSessionTitle($versionid)
 	$sqlSelect .= "SELECT title  ";
 	$sqlSelect .= "FROM   `mission` ";
 	$sqlSelect .= "WHERE  `versionid` = $versionid ";
-    
+
 	$result = mysql_query($sqlSelect);
-  
+
 	if(!$result)
 	{
 		echo "GetSessionTitle: ".mysql_error()."<br/>";
@@ -301,25 +301,25 @@ function GetSessionTitle($versionid)
 function GetSessionTitleFromSessionId($sessionid)
 {
 
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT title  ";
-    $sqlSelect .= "FROM   `mission` ";
-    $sqlSelect .= "WHERE  `sessionid` = $sessionid ";
-    
-    $result = mysql_query($sqlSelect);
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT title  ";
+	$sqlSelect .= "FROM   `mission` ";
+	$sqlSelect .= "WHERE  `sessionid` = $sessionid ";
 
-    if(!$result)
-    {
-        echo "GetSessionTitle: ".mysql_error()."<br/>";
-    }
-    else
-    {
-        $row = mysql_fetch_array($result);
-        $title = $row["title"];
- 
-    }
+	$result = mysql_query($sqlSelect);
 
-    return $title;
+	if(!$result)
+	{
+		echo "GetSessionTitle: ".mysql_error()."<br/>";
+	}
+	else
+	{
+		$row = mysql_fetch_array($result);
+		$title = $row["title"];
+
+	}
+
+	return $title;
 }
 
 function saveSession_InsertSessionStatusToDb($versionid)
@@ -638,6 +638,25 @@ function saveSession_UpdateSessionBugsToDb($versionid)
 
 }
 
+function updateSessionOwner($sessionid,$tester)
+{
+	$sqlUpdate = "";
+	$sqlUpdate .= "UPDATE `mission` ";
+	$sqlUpdate .= "SET    `username` = '$tester' ";
+	$sqlUpdate .= "WHERE  `sessionid` = '$sessionid'" ;
+   
+	$result = mysql_query($sqlUpdate);
+
+    if(!$result)
+    {
+        echo "updateSessionOwner: ".mysql_error()."<br/>";
+        return false;
+    }
+    
+    return true;
+
+}
+
 function saveSession_UpdateSessionRequirementsToDb($versionid)
 {
 	$sqlDelete = "";
@@ -676,14 +695,14 @@ function saveSession_UpdateSessionLinkedToDb($versionid)
  * Delete a session from the database by delete all rows in all tables that have infromation about the session
  * @param $versionid
  */
-function deleteSessionFromDatabase($versionid)
+function deleteSessionFromDatabase($sessionId)
 {
-
-
-	$sessionId = GetSessionIdFromVersionId($versionid);
 
 	$conDeleteSession = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$versionid = GetVersionidFromSessionid($sessionId);
+	//	$sessionId = GetSessionIdFromVersionId($versionid);
 
 	$sqlDeleteMissionStatus = "";
 	$sqlDeleteMissionStatus .= "DELETE FROM mission_status ";

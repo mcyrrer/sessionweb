@@ -230,7 +230,7 @@ function createPercentPieChart($setup,$test,$bug,$oppertunity)
 
 	$totalTime = $setup +$test+$bug+$oppertunity;
 
-	$imgURL = "http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=450x150&chd=t:$setup,$test,$bug,$oppertunity&chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&chco=FF0000|00FF00|0000FF|000000&";
+	$imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=450x150&amp;chd=t:$setup,$test,$bug,$oppertunity&amp;chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&amp;chco=FF0000|00FF00|0000FF|000000&";
 	//	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
 	return $imgURL;
 }
@@ -295,7 +295,12 @@ function echoAreaSelect($area)
 		echo "                                      <option value=\"\"></option>\n";
 	}
 
-
+    if(!is_array($area))
+    {
+        $oneArea = $area;
+        $area = array();
+        $area[] =  $oneArea;	
+    }
 	while($row = mysql_fetch_array($result))
 	{
 		if(in_array($row['areaname'],$area))

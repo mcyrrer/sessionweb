@@ -44,7 +44,6 @@ if(count($_REQUEST)<2)
 }
 else
 {
-	echo "REQUEST";
 	$listSettings = $_REQUEST;
 }
 
@@ -72,23 +71,23 @@ function echoSessionTable($currentPage,$listSettings)
 	echo "<table width=\"1024\" border=\"0\">\n";
 	echo "  <tr>\n";
 	echo "      <td id=\"tableheader_id\" width=\"25\">Id</td>\n";
-	echo "      <td id=\"tableheader_actions\" width=\"25\">Actions</td>\n";
+	echo "      <td id=\"tableheader_actions\" width=\"100\">Actions</td>\n";
 	echo "      <td id=\"tableheader_title\" >Title</td>\n";
 	echo "      <td id=\"tableheader_users\" >User</td>\n";
 	if($_SESSION['settings']['sprint']==1 )
 	{
 		echo "      <td id=\"tableheader_sprint\" >Sprint</td>\n";
 	}
-	if($_SESSION['settings']['teamsprint']==1 )
-	{
-		echo "      <td id=\"tableheader_teamsprint\" >Team sprint</td>\n";
-	}
+	//	if($_SESSION['settings']['teamsprint']==1 )
+	//	{
+	//		echo "      <td id=\"tableheader_teamsprint\" >Team sprint</td>\n";
+	//	}
 	if($_SESSION['settings']['team']==1 )
 	{
 		echo "      <td id=\"tableheader_team\" >Team</td>\n";
 	}
 
-	echo "      <td id=\"tableheader_updated\" >Updated</td>\n";
+	echo "      <td id=\"tableheader_updated\" width=\"120\">Updated</td>\n";
 	echo "  </tr>\n";
 
 	$rowsToDisplay = 30;
@@ -168,15 +167,25 @@ function echoOneSession($row,$rowSessionStatus)
 	echo "      <td>\n";
 	if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
-		echo "      <a id=\"edit_session".$row["sessionid"]."\"  class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\"/></a>\n";
+		echo "      <a id=\"edit_session".$row["sessionid"]."\"  class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\" title=\"Edit session\"/></a>\n";
+
+		echo "      <a id=\"reassign_session".$row["sessionid"]."\" class=\"reassign_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=reassign\"><img class=\"picture_reassign_session\" src=\"pictures/user-new-2-small.png\" border=\"0\" alt=\"Reassign session\" title=\"Reassign session\"/></a>\n";
+
 	}
 	if(strcmp($_SESSION['superuser'],"1")==0 || strcmp($_SESSION['useradmin'],"1")==0)
 	{
 		if($rowSessionStatus['executed']!=false && $rowSessionStatus['debriefed']!=true)
 		{
-			echo "      <a id=\"debrief_session".$row["sessionid"]."\" class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\"/></a>\n";
+			echo "      <a id=\"debrief_session".$row["sessionid"]."\" class=\"url_edit_session\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\" title=\"Debrief session\"/></a>\n";
 		}
 	}
+	if(strcmp($_SESSION['username'],$row["username"])==0 || strcmp($_SESSION['useradmin'],"1")==0)
+	{
+		echo "      <a id=\"delete_session".$row["sessionid"]."\" href=\"session.php?sessionid=".$row["sessionid"]."&amp;command=delete\"><img src=\"pictures/edit-delete-2-small.png\" border=\"0\" alt=\"Delete session\" title=\"Delete session\" class=\"delete_session\"/></a>\n";
+		addjQueryDeletePopUp($row["sessionid"]);
+	}
+	echo "      <a id=\"publicview_session".$row["sessionid"]."\" class=\"publicview_session\" href=\"publicview.php?sessionid=".$row["sessionid"]."&amp;command=view&amp;publickey=".$row["publickey"]."\"><img src=\"pictures/share-3-small.png\" border=\"0\" alt=\"Share session\" title=\"Share session\"/></a>\n";
+
 	echo "      </td>\n";
 	$title = $row["title"];
 	if(strlen($row["title"])>30)
@@ -192,10 +201,10 @@ function echoOneSession($row,$rowSessionStatus)
 	{
 		echo "      <td id=\"tablerowsprint_".$row["sessionid"]."\">".$row["sprintname"]."</td>\n";
 	}
-	if($_SESSION['settings']['teamsprint']==1 )
-	{
-		echo "      <td id=\"tablerowteamsprint_".$row["sessionid"]."\">".$row["teamsprintname"]."</td>\n";
-	}
+	//	if($_SESSION['settings']['teamsprint']==1 )
+	//	{
+	//		echo "      <td id=\"tablerowteamsprint_".$row["sessionid"]."\">".$row["teamsprintname"]."</td>\n";
+	//	}
 	if($_SESSION['settings']['team']==1 )
 	{
 		echo "      <td id=\"tablerowteam_".$row["sessionid"]."\">".$row["teamname"]."</td>\n";
@@ -313,12 +322,18 @@ function echoIconExplanation()
 {
 	echo "<table width=\"*\" border=\"0\">\n";
 	echo "    <tr>\n";
-	echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"edit\" /></td><td valign=\"top\">Edit Session\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"Edit Session\" /></td><td valign=\"top\">Edit Session\n";
 	echo "        </td>\n";
-	echo "        <td valign=\"top\"><img src=\"pictures/debrieficon.png\" alt=\"edit\" /></td><td valign=\"top\">Debrief Session\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/debrieficon.png\" alt=\"Debrief Session\" /></td><td valign=\"top\">Debrief Session\n";
 	echo "        </td>\n";
-	echo "    <tr/>\n";
-	echo "    </table>\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/edit-delete-2-small.png\" alt=\"Delete Session\" /></td><td valign=\"top\">Delete Session\n";
+	echo "        </td>\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/user-new-2-small.png\" alt=\"Reassign Session\" /></td><td valign=\"top\">Reassign Session\n";
+	echo "        </td>\n";
+	echo "        <td valign=\"top\"><img src=\"pictures/share-3-small.png\" alt=\"Share Session\" /></td><td valign=\"top\">Share Session\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "</table>\n";
 }
 
 function getSessionColorCode($rowSessionStatus)
@@ -360,4 +375,22 @@ function echoPreviouseAndNextLink($currentPage,$num_rows)
 	echo "  </tr>\n";
 
 	echo "</table>\n";
+}
+
+function addjQueryDeletePopUp($id)
+{
+	//Delete Session questionbox
+	echo "              <script type=\"text/javascript\">\n";
+	echo "$(\"#delete_session".$id."\").click(function(){\n";
+	echo "        var answer = confirm(\"Delete session from database?\");\n";
+	echo "        if(answer)\n";
+	echo "        {\n";
+	echo "            return true;\n";
+	echo "        }\n";
+	echo "        else\n";
+	echo "        {\n";
+	echo "            return false;\n";
+	echo "        }\n";
+	echo "});\n";
+	echo "              </script>\n";
 }

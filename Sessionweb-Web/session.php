@@ -32,6 +32,14 @@ elseif(strcmp($_REQUEST["command"],"delete")==0)
 {
 	deleteSession();
 }
+elseif(strcmp($_REQUEST["command"],"reassign")==0)
+{
+	reassignSession();
+}
+elseif(strcmp($_REQUEST["command"],"reassignexecute")==0)
+{
+	reassignSessionExecute();
+}
 elseif(strcmp($_REQUEST["command"],"debrief")==0)
 {
 	echoViewSession();
@@ -62,6 +70,30 @@ elseif(strcmp($_REQUEST["command"],"save")==0)
 }
 
 include("include/footer.php.inc");
+
+
+function reassignSessionExecute()
+{
+
+	$sessionid = $_REQUEST["sessionid"];
+	$tester = $_REQUEST["tester"];
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+	updateSessionOwner($sessionid,$tester);
+	mysql_close($con);
+	echo $tester;
+
+}
+
+function reassignSession()
+{
+	$sessionid = $_REQUEST["sessionid"];
+	echo "<form id=\"reassignform\" name=\"reassignform\" action=\"session.php?command=reassignexecute\" method=\"POST\" accept-charset=\"utf-8\">\n";
+	echoTesterSelect("");
+	echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$_GET["sessionid"]."\">\n";
+	echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
+	echo "</form>\n";
+}
 
 function echoDebriefSession()
 {
@@ -234,7 +266,7 @@ function saveSession()
 		echo "<p><b>Session saved</b></p>\n";
 		echo "<p><a href=\"session.php?sessionid=$sessionid&command=view\" id=\"view_session\">View session</a></p>";
 		echo "<p><a href=\"session.php?sessionid=$sessionid&command=edit\" id=\"edit_session\">Edit session</a></p>";
-		
+
 		echo "<span style=\"color:white\"><div id=\"sessioninfo\">sessionid:<div id=\"sessionid\">$sessionid</div>, versionid:<div id=\"versionid\">$versionid</div></span></div>\n";
 	}
 }
@@ -274,13 +306,6 @@ function echoSessionForm()
 		$rowSessionAreas = getSessionAreas($rowSessionData["versionid"]);
 	}
 	mysql_close($con);
-
-	if($insertSessionData)
-	{
-
-		echo "      <a href=\"session.php?sessionid=".$_GET["sessionid"]."&amp;command=delete\" id=\"url_deletesession\">Delete session</a> |";
-
-	}
 
 	if($insertSessionData)
 	{
@@ -695,10 +720,11 @@ function parseBBTestAssistantNotes($notes)
 function deleteSession()
 {
 
-	$versionid = GetSessionIdFromVersionId($_REQUEST["sessionid"]);
-	if($versionid!="")
+	$sessionid = $_REQUEST["sessionid"];
+	//$versionid = GetSessionIdFromVersionId($_REQUEST["sessionid"]);
+	if($sessionid!="")
 	{
-		deleteSessionFromDatabase($versionid);
+		deleteSessionFromDatabase($sessionid);
 
 		echo "Session ".$_REQUEST["sessionid"]." deleted from database";
 	}
@@ -706,4 +732,5 @@ function deleteSession()
 	{
 		echo "Session ".$_REQUEST["sessionid"]." could not be found in database.(Already deleted?)";
 	}
+
 }
