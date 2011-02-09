@@ -79,15 +79,24 @@ function reassignSessionExecute()
 	$tester = $_REQUEST["tester"];
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-	updateSessionOwner($sessionid,$tester);
+	$result = updateSessionOwner($sessionid,$tester);
 	mysql_close($con);
-	echo $tester;
+	if($result)
+	{
+		echo "Session reassigned.\n";
+	}
+	else
+	{
+		echo "Error, could not reassign session.\n";
+	}
 
 }
 
 function reassignSession()
 {
 	$sessionid = $_REQUEST["sessionid"];
+	echo "<h2>Reassign session</h2>\n";
+	echo "Reassign session $sessionid to:\n";
 	echo "<form id=\"reassignform\" name=\"reassignform\" action=\"session.php?command=reassignexecute\" method=\"POST\" accept-charset=\"utf-8\">\n";
 	echoTesterSelect("");
 	echo "<input type=\"hidden\" name=\"sessionid\" value=\"".$_GET["sessionid"]."\">\n";
