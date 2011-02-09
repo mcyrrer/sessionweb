@@ -25,12 +25,6 @@ function echoViewSession()
 		$rowSessionStatus = getSessionStatus($row["versionid"]);
 
 		echo "<h1>View Session</h1>\n";
-		if($_GET["publickey"]=="")
-		{
-			echo "<div id=\"viewsessionmenu\">\n";
-			echo "    <a id=\"publiclink\" href=\"publicview.php?sessionid=".$row["sessionid"]."&amp;command=view&amp;publickey=".$row["publickey"]."\">Public link</a>\n";
-			echo "</div>";
-		}
 		echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"5\">";
 		echo "    <tr>\n";
 		echo "        <td></td>\n";
@@ -121,8 +115,9 @@ function echoViewSession()
 		echo "                        ".$row["updated"]."\n";
 		echo "                    </div>\n";
 		echo "                </td>\n";
-		echo "            <tr>\n";
+		echo "            </tr>\n";
 		echo "        </table>";
+		echo " </td>\n";
 		echo "    </tr>\n";
 
 		echo "    <tr>\n";

@@ -85,7 +85,7 @@ function echoSessionMetrics($rowSessionMetric, $versionid)
     echo "                          $nbrOfSession\n";
     echo "                      </div>\n";
     echo "                </td>\n";
-    echo "            <tr>\n";
+    echo "            </tr>\n";
     echo "        </table>";
     echo "        </td>\n";
     echo "    </tr>\n";

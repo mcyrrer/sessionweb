@@ -142,7 +142,7 @@ function echoChangeConfig()
 		echo "<h4>Change Application Configuration</h4>\n";
 		echo "<form name=\"teamname\" action=\"settings.php\" method=\"POST\">\n";
 		echo "<input type=\"hidden\" name=\"command\" value= \"updateconfig\">\n";
-		echo "	<table width=\"*\" border=\"1\">\n";
+		echo "	<table width=\"*\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
 		echo "    <tr>\n";
 		echo "        <td>\n";
 		echo "        </td>\n";
