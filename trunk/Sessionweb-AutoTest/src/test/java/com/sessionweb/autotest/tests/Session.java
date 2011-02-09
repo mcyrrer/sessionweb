@@ -14,7 +14,7 @@ public class Session extends SessionWebTest {
 
     @Test
     public void basicSession() throws Exception {
-        if (System.getProperty("browser").compareTo("*iexplore") != 0) {
+//        if (System.getProperty("browser").compareTo("*iexplore") != 0) {
             cs.cleanDb();
 
             cs.logIn(selenium);
@@ -81,10 +81,10 @@ public class Session extends SessionWebTest {
             assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.5"), "Normalized Sessions count 2");
 
             cs.logOut(selenium);
-        } else {
-            System.out.println("Is IE browser, will not test this due to IE bug....");
-            assertTrue(true);
-        }
+//        } else {
+//            System.out.println("Is IE browser, will not test this due to IE bug....");
+//            assertTrue(true);
+//        }
     }
 
     @Test
