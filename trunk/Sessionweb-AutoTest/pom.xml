@@ -150,6 +150,20 @@
         </profile>
 
         <profile>
+            <id>ci</id>
+            <properties>
+                <host>localhost</host>
+                <selport>4445</selport>
+                <browser>*firefox</browser>
+                <url>http://localhost/sessionwebci/</url>
+                <mysqlhost>localhost</mysqlhost>
+                <mysqldb>sessionwebci</mysqldb>
+                <mysqluser>sessionwebci</mysqluser>
+                <mysqlpassword>2easy</mysqlpassword>
+            </properties>
+        </profile>
+
+        <profile>
             <id>firefox</id>
             <properties>
                 <browser>*firefox</browser>

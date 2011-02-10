@@ -57,7 +57,7 @@ public class Session extends SessionWebTest {
             selenium.select("testpercent", "label=35");
             selenium.select("bugpercent", "label=35");
             selenium.select("duration", "label=180");
-            assertTrue(selenium.isTextPresent("Percentage = 100%"));
+            assertTrue(selenium.isTextPresent("100%"),"100% visible");
             selenium.click("executed");
             selenium.click("input_submit");
             selenium.waitForPageToLoad("15000");

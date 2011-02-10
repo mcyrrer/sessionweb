@@ -337,8 +337,8 @@ public class Settings extends SessionWebTest {
         selenium.waitForPageToLoad("15000");
         selenium.click("url_list");
         selenium.waitForPageToLoad("15000");
-        assertTrue(selenium.isTextPresent("test"));
-        assertFalse(selenium.isTextPresent("admin"));
+        assertTrue(selenium.isTextPresent("test"),"test is present");
+        assertFalse(selenium.isTextPresent("admin"), "admin should not be present");
         selenium.click("url_settings");
         selenium.waitForPageToLoad("15000");
         selenium.click("url_listsettings");
