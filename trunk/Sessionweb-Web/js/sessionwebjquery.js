@@ -21,15 +21,46 @@ $(document).ready(function(){
 				return false;
 			}
     });
-	
-    
+	    
+	//Metric check at submit
+	    $("#input_submit").click(function(){
+	    	if($("#executed").is(':checked'))
+	    		{
+			    	var setup = $("#setuppercent").val();
+			    	var test = $("#testpercent").val();
+			    	var bug = $("#bugpercent").val();
+			    	var opp = $("#oppertunitypercent").val();
+			    	
+			    	var totalPercent =  parseInt(setup)+parseInt(test)+parseInt(bug)+parseInt(opp);
+			    	if(totalPercent=="NaN")
+			    		{
+			    			totalPercent = 0;
+			    		}
+			    	if (parseInt(totalPercent) != 100) {
+						alert("Percentage for session is " + parseInt(totalPercent) + "%. It has to be 100%.");
+						return false;
+					} else {
+						return true;
+					}
+	    		}
+    });
+	    
+   
     // Metrics calculation
     $("[class=metricoption]").change(function(){
-        var totalPercentage = parseInt($("[name=oppertunitypercent]").val()) +
-        parseInt($("[name=bugpercent]").val()) +
-        parseInt($("[name=testpercent]").val()) +
-        parseInt($("[name=setuppercent]").val());
+    	var setup = $("#setuppercent").val();
+    	var test = $("#testpercent").val();
+    	var bug = $("#bugpercent").val();
+    	var opp = $("#oppertunitypercent").val();
+    	
+    	var totalPercentage =  parseInt(setup)+parseInt(test)+parseInt(bug)+parseInt(opp);
+    	if(totalPercentage==NaN)
+    		{
+    			totalPercentage = 0;
+    		}  	
+
         if (totalPercentage != 100) {
+
             $("#metricscalculation").html("<div id=\"metricscalculation_red\">Total percentage = " + totalPercentage + "%. Please adjust it to 100%.</div>");
         }
         else {
