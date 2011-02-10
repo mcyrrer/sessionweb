@@ -124,7 +124,7 @@
                             </systemProperties>
 
                             <suiteXmlFiles>
-                                <suiteXmlFile>src/test/resources/SuitOneTc.xml</suiteXmlFile>
+                                <suiteXmlFile>src/test/resources/SuitAll.xml</suiteXmlFile>
                             </suiteXmlFiles>
 
                         </configuration>
