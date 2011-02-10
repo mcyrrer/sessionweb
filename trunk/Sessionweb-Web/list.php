@@ -16,7 +16,7 @@ $currentPage=$_GET["page"];
 
 
 
-if(count($_REQUEST)<2)
+if(count($_REQUEST)<3)
 {
 	$userSettings = getUserSettings();
 	if($userSettings['list_view']=="all")
@@ -31,7 +31,8 @@ if(count($_REQUEST)<2)
 	{
 		$tester="";
 	}
-
+	
+	
 	$listSettings = array();
 	$listSettings["tester"]=$tester;
 	$listSettings["sprint"]="";
@@ -46,7 +47,7 @@ else
 {
 	$listSettings = $_REQUEST;
 }
-
+	print_r($listSettings);
 if($currentPage=="")
 {
 	$currentPage=1;
@@ -238,7 +239,7 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay,$listSettings)
 
 	$sqlSelect .= "ORDER BY updated DESC " ;
 	$sqlSelect .= "LIMIT  $limitDown, $rowsToDisplay " ;
-
+//	print $sqlSelect;
 	return $sqlSelect;
 }
 
