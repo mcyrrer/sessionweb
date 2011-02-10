@@ -79,6 +79,17 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `sessionwebos`.`testenvironment`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`testenvironment` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`testenvironment` (
+  `name` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`name`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `sessionwebos`.`mission`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `sessionwebos`.`mission` ;
@@ -96,6 +107,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   `depricated` TINYINT(1)  NULL DEFAULT 0 ,
   `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   `publickey` VARCHAR(100) NOT NULL ,
+  `testenvironment` VARCHAR(45) NULL ,
+  `software` VARCHAR(45) NULL ,
   INDEX `fk_mission_members` (`username` ASC) ,
   INDEX `fk_mission_sprintnames` (`sprintname` ASC) ,
   INDEX `fk_mission_teamnames` (`teamname` ASC) ,
@@ -103,6 +116,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   UNIQUE INDEX `sessionid_UNIQUE` (`sessionid` ASC) ,
   UNIQUE INDEX `versionid_UNIQUE` (`versionid` ASC) ,
   PRIMARY KEY (`versionid`) ,
+  INDEX `fk_mission_testenvironment1` (`testenvironment` ASC) ,
   CONSTRAINT `fk_mission_members`
     FOREIGN KEY (`username` )
     REFERENCES `sessionwebos`.`members` (`username` )
@@ -126,6 +140,11 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   CONSTRAINT `fk_mission_sessionid1`
     FOREIGN KEY (`sessionid` )
     REFERENCES `sessionwebos`.`sessionid` (`sessionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_mission_testenvironment1`
+    FOREIGN KEY (`testenvironment` )
+    REFERENCES `sessionwebos`.`testenvironment` (`name` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -210,10 +229,11 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `sprint` TINYINT(1)  NULL ,
   `teamsprint` TINYINT(1)  NULL ,
   `area` TINYINT(1)  NULL ,
+  `testenvironment` TINYINT(1)  NULL ,
+  `publicview` TINYINT(1)  NULL ,
   `analyticsid` VARCHAR(45) NULL COMMENT 'google analytics id' ,
   `url_to_dms` VARCHAR(500) NULL ,
   `url_to_rms` VARCHAR(500) NULL ,
-  `publicview` TINYINT(1)  NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -347,7 +367,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', '1', '1', '1', NULL, '21232f297a57a5a743894a0e4a801fc3');
+INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', 1, 1, 1, NULL, '21232f297a57a5a743894a0e4a801fc3');
 
 COMMIT;
 
@@ -356,7 +376,7 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `analyticsid`, `url_to_dms`, `url_to_rms`, `publicview`) VALUES (NULL, '90', '1', '1', '1', '1', NULL, NULL, NULL, '1');
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`) VALUES (NULL, 90, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL);
 
 COMMIT;
 
