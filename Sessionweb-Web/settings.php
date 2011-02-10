@@ -71,6 +71,14 @@ function executeCommand()
 		{
 			updateConfig();
 		}
+		elseif(strcmp($_GET["command"],"addenv")==0)
+		{
+			echoAddEnvironment();
+		}
+		elseif (strcmp($_REQUEST["command"],"insertenvname")==0)
+		{
+			insertEnvironmentNameToDb($_REQUEST["envname"]);
+		}
 
 
 
@@ -120,6 +128,26 @@ function executeCommand()
 
 
 
+}
+
+function echoAddEnvironment()
+{
+	echo "<h2>Add new test environment name</h2>\n";
+	echo "<form name=\"envname\" action=\"settings.php\" method=\"POST\">\n";
+	echo "<input type=\"hidden\" name=\"command\" value= \"insertenvname\">\n";
+	echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
+	echo "    <tr>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            New environment name\n";
+	echo "        </td>\n";
+	echo "        <td><input type=\"text\" size=\"50\" value=\"\" name=\"envname\">\n";
+	echo "        </td>\n";
+	echo "        <td align=\"left\">\n";
+	echo "            <input align=left type=\"submit\" value=\"Add environment\" />\n";
+	echo "        </td>\n";
+	echo "    </tr>\n";
+	echo "</table>";
+	echo "</form>\n";
 }
 
 function echoChangeConfig()
@@ -225,6 +253,32 @@ function echoChangeConfig()
 		}
 		echo "        </td>\n";
 		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Test Environment\n";
+		echo "        </td>\n";
+		if($row[testenvironment]==1)
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"env\" checked=\"checked\" value=\"checked\" >\n";
+		}
+		else
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"env\" value=\"checked\" >\n";
+		}
+		echo "        </td>\n";
+		echo "    </tr>\n";
+		echo "    <tr>\n";
+		echo "        <td>Public view\n";
+		echo "        </td>\n";
+		if($row[publicview]==1)
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"publicview\" checked=\"checked\" value=\"checked\" >\n";
+		}
+		else
+		{
+			echo "        <td> <input type=\"checkbox\" name=\"publicview\" value=\"checked\" >\n";
+		}
+		echo "        </td>\n";
+		echo "    </tr>\n";
 		echo "</table>\n";
 		echo "            <input align=left type=\"submit\" value=\"Change settings\" />\n";
 		echo "</form>\n";
@@ -244,6 +298,7 @@ function echoMenu()
 		}
 		echo "<a id=\"url_listusers\" href=\"settings.php?command=listusers\">List users</a> | ";
 		echo "<a id=\"url_adduser\" href=\"settings.php?command=adduser\">Add user</a> | ";
+		echo "<a id=\"url_addenv\" href=\"settings.php?command=addenv\">Add test environment</a> | ";
 		echo "<a id=\"url_configuration\" href=\"settings.php?command=config\">Configuration</a> | ";
 		echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
 		echo "</div>";
@@ -310,6 +365,41 @@ function insertTeamNameToDb($teamName)
 	else
 	{
 		echo "<p>Team name $teamName added to database</p>\n";
+	}
+
+	mysql_close($con);
+}
+
+function insertEnvironmentNameToDb($envName)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$areaName = mysql_real_escape_string($areaName);
+
+	$sqlInsert = "";
+	$sqlInsert .= "INSERT INTO testenvironment ";
+	$sqlInsert .= "            (`name`) ";
+	$sqlInsert .= "VALUES      ('$envName')" ;
+
+
+	$result = mysql_query($sqlInsert);
+
+	if(!$result)
+	{
+		if(mysql_errno()==1062)
+		{
+			echo "<p>Teset environment $areaName not added since it already exists in database.</p>";
+		}
+		else
+		{
+			echo "insertEnvironmentNameToDb: ".mysql_error()."<br>";
+			echo "Mysql error no: ".mysql_errno()."<br>";
+		}
+	}
+	else
+	{
+		echo "<p>Test environment $areaName added to database</p>\n";
 	}
 
 	mysql_close($con);
@@ -706,6 +796,26 @@ function updateConfig()
 		$area=0;
 	}
 
+	$env = 0;
+	if(strcmp($_REQUEST["env"],"checked")==0)
+	{
+		$env=1;
+	}
+	else
+	{
+		$env=0;
+	}
+
+	$publicview = 0;
+	if(strcmp($_REQUEST["publicview"],"checked")==0)
+	{
+		$publicview=1;
+	}
+	else
+	{
+		$publicview=0;
+	}
+
 	$url_to_dms = $_REQUEST["url_to_dms"];
 
 	$url_to_rms = $_REQUEST["url_to_rms"];
@@ -718,6 +828,8 @@ function updateConfig()
 	$sqlUpdate .= "       `area` = '$area', ";
 	$sqlUpdate .= "       `url_to_dms` = '$url_to_dms', ";
 	$sqlUpdate .= "       `url_to_rms` = '$url_to_rms', ";
+	$sqlUpdate .= "       `testenvironment` = '$env', ";
+	$sqlUpdate .= "       `publicview` = '$publicview', ";
 	$sqlUpdate .= "       `teamsprint` = '$teamsprint' ";
 	//$sqlUpdate .= "WHERE  `id` = '1'" ;
 
