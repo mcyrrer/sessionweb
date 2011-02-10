@@ -12,58 +12,38 @@ public class publicView extends SessionWebTest {
 	@Test
 	public void viewSessionWithValidKey() throws Exception {
         cs.cleanDb();
-		cs.logIn(selenium);
+        cs.logIn(selenium);
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("input_title", "ShareMe");
+        selenium.click("//input[@value='Save']");
+        selenium.waitForPageToLoad("15000");
+        String sessionIdToView = selenium.getText("sessionid");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("publicview_session" + sessionIdToView);
 
-		selenium.click("url_newsession");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("input_title");
-		selenium.type("input_title", "test session for public key");
-		selenium.type("requirement", "req");
-		selenium.click("add_requirement");
-		selenium.type("bug", "defect");
-		selenium.select("setuppercent", "label=80");
-		selenium.select("testpercent", "label=5");
-		selenium.select("bugpercent", "label=5");
-		selenium.select("oppertunitypercent", "label=10");
-		selenium.select("duration", "label=90");
-		selenium.click("executed");
-		selenium.click("input_submit");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("view_session");
 		cs.waitForText(selenium,"Session title");
-		assertTrue(selenium.isElementPresent("publiclink"));
-		selenium.click("publiclink");
-		selenium.waitForPageToLoad("30000");
-		assertTrue(selenium.isTextPresent("test session for public key"));
-		assertTrue(selenium.isTextPresent("80"));
 
+		assertTrue(selenium.isTextPresent("ShareMe"));
 	}
 
     @Test
 	public void viewSessionWithInValidKey() throws Exception {
         cs.cleanDb();
-		cs.logIn(selenium);
+        cs.logIn(selenium);
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("input_title", "ShareMe");
+        selenium.click("//input[@value='Save']");
+        selenium.waitForPageToLoad("15000");
+        String sessionIdToView = selenium.getText("sessionid");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("publicview_session" + sessionIdToView);
 
-		selenium.click("url_newsession");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("input_title");
-		selenium.type("input_title", "test session for public key");
-		selenium.type("requirement", "req");
-		selenium.click("add_requirement");
-		selenium.type("bug", "defect");
-		selenium.select("setuppercent", "label=80");
-		selenium.select("testpercent", "label=5");
-		selenium.select("bugpercent", "label=5");
-		selenium.select("oppertunitypercent", "label=10");
-		selenium.select("duration", "label=90");
-		selenium.click("executed");
-		selenium.click("input_submit");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("view_session");
-        cs.waitForText(selenium,"Session title");
-		selenium.click("publiclink");
-		selenium.waitForPageToLoad("30000");
-        Thread.sleep(500);
+		cs.waitForText(selenium,"Session title");
+
         String url = selenium.getLocation();
         url = url.substring(0,url.length()-1);
         selenium.open(url);

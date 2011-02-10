@@ -8,7 +8,7 @@ import com.sessionweb.autotest.CommonSteps;
 import com.sessionweb.autotest.SessionWebTest;
 
 public class Settings extends SessionWebTest {
-    CommonSteps cs = new CommonSteps();
+    //CommonSteps cs = new CommonSteps();
 
     @Test
     public void addTeam() throws Exception {
@@ -227,9 +227,9 @@ public class Settings extends SessionWebTest {
         selenium.click("Submit");
         selenium.waitForPageToLoad("15000");
         assertTrue(selenium.isTextPresent("Wrong Username or Password"));
-        String logoutUrl = System.getProperty("url")+"index.php?logout=yes";
-        System.out.println(logoutUrl);
-        selenium.open(logoutUrl);
+
+        cs.logInAsTestUserThroughUrl(selenium);
+
         selenium.type("myusername", "testpassword");
         selenium.type("mypassword", "123456");
         selenium.click("Submit");
@@ -254,7 +254,6 @@ public class Settings extends SessionWebTest {
         selenium.click("url_list");
         selenium.waitForPageToLoad("15000");
         assertTrue(selenium.isElementPresent("tableheader_sprint"));
-        assertTrue(selenium.isElementPresent("tableheader_teamsprint"));
         selenium.click("showoption");
         assertTrue(selenium.isElementPresent("select_sprint"));
         assertTrue(selenium.isElementPresent("select_teamsprint"));

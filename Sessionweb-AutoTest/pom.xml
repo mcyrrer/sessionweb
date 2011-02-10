@@ -124,7 +124,7 @@
                             </systemProperties>
 
                             <suiteXmlFiles>
-                                <suiteXmlFile>src/test/resources/SuitAll.xml</suiteXmlFile>
+                                <suiteXmlFile>src/test/resources/SuitOneTc.xml</suiteXmlFile>
                             </suiteXmlFiles>
 
                         </configuration>
@@ -141,7 +141,7 @@
                 <host>localhost</host>
                 <selport>4445</selport>
                 <browser>*firefox</browser>
-                <url>http://localhost</url>
+                <url>http://localhost/sessionweb/</url>
                 <mysqlhost>localhost</mysqlhost>
                 <mysqldb>sessionwebos</mysqldb>
                 <mysqluser>sessionweb</mysqluser>
