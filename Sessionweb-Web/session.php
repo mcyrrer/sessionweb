@@ -537,25 +537,25 @@ function echoSessionForm()
 	echo "                                          <tr>\n";
 	echo "                                                <td>Setup(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select class=\"metricoption\" name=\"setuppercent\">\n";
+	echo "                                                      <select id=\"setuppercent\" class=\"metricoption\" name=\"setuppercent\">\n";
 	echoPercentSelection($rowSessionMetric["setup_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Test(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select class=\"metricoption\" name=\"testpercent\">\n";
+	echo "                                                      <select id=\"testpercent\" class=\"metricoption\" name=\"testpercent\">\n";
 	echoPercentSelection($rowSessionMetric["test_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Bug(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select class=\"metricoption\" name=\"bugpercent\">\n";
+	echo "                                                      <select id=\"bugpercent\" class=\"metricoption\" name=\"bugpercent\">\n";
 	echoPercentSelection($rowSessionMetric["bug_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
 	echo "                                                <td>Opportunity(%): </td>\n";
 	echo "                                                <td>\n";
-	echo "                                                      <select class=\"metricoption\" name=\"oppertunitypercent\">\n";
+	echo "                                                      <select id=\"oppertunitypercent\" class=\"metricoption\" name=\"oppertunitypercent\">\n";
 	echoPercentSelection($rowSessionMetric["opportunity_percent"]);
 	echo "                                                      </select>\n";
 	echo "                                                </td>\n";
@@ -586,11 +586,11 @@ function echoSessionForm()
 	echo "                              <td>\n";
 	if($rowSessionStatus['executed']==1)
 	{
-		echo "                                  <input type=\"checkbox\" name=\"executed\" checked=\"checked\" value=\"yes\" >\n";
+		echo "                                  <input type=\"checkbox\" name=\"executed\" checked=\"checked\" value=\"yes\" id=\"executed\">\n";
 	}
 	else
 	{
-		echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" >\n";
+		echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" id=\"executed\">\n";
 	}
 	echo "                              </td>\n";
 	echo "                        </tr>\n";
@@ -622,7 +622,7 @@ function echoSessionForm()
  */
 function echoPercentSelection($selected)
 {
-	echo "                                      <option>$selected</option>\n";
+	//echo "                                      <option>$selected</option>\n";
 	for ($index  = 0; $index  <= 100; $index = $index + 5) {
 		if($index==$selected)
 		{
