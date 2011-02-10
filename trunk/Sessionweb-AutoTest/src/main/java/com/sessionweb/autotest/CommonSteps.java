@@ -47,6 +47,13 @@ public class CommonSteps {
         assertTrue(selenium.isTextPresent("You are logged out"));
     }
 
+    public void logInAsTestUserThroughUrl(Selenium selenium) throws Exception {
+        selenium.open("/sessionweb/index.php?logout=yes");
+        selenium.waitForPageToLoad("15000");
+        Thread.sleep(1000);
+        assertTrue(selenium.isTextPresent("You are logged out"));
+    }
+
     public void createSession(Selenium selenium) throws Exception {
         selenium.click("url_newsession");
         selenium.waitForPageToLoad("30000");
