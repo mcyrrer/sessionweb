@@ -47,7 +47,7 @@ else
 {
 	$listSettings = $_REQUEST;
 }
-	print_r($listSettings);
+//	print_r($listSettings);
 if($currentPage=="")
 {
 	$currentPage=1;
