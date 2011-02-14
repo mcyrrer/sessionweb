@@ -270,6 +270,41 @@ function echoTeamSelect($team)
 	mysql_close($con);
 }
 
+function echoTestEnvironmentSelect($testenvironment)
+{
+	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+	mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+	$sqlSelect = "";
+	$sqlSelect .= "SELECT name ";
+	$sqlSelect .= "FROM   testenvironment ";
+	$sqlSelect .= "ORDER  BY `name` ASC " ;
+
+	$result = mysql_query($sqlSelect);
+
+	echo "                                  <select id=\"select_testenv\" name=\"testenv\">\n";
+
+
+	echo "                                      <option></option>\n";
+
+
+	while($row = mysql_fetch_array($result))
+	{
+		if(strcmp($testenvironment,$row['name'])==0)
+		{
+			echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['name']) . "</option>\n";
+		}
+		else
+		{
+			echo "                                      <option>" . htmlspecialchars($row['name']) . "</option>\n";
+		}
+	}
+
+	echo "                                  </select>\n";
+
+	mysql_close($con);
+}
+
 function echoAreaSelect($area)
 {
 	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
