@@ -38,6 +38,111 @@ public class Settings extends SessionWebTest {
     }
 
     @Test
+    public void publicViewActivatedDeactivated() throws Exception {
+        cs.cleanDb();
+        cs.logIn(selenium);
+
+
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("input_title", "tasete");
+        selenium.click("//input[@value='Save']");
+        selenium.waitForPageToLoad("15000");
+        String sessionid = selenium.getText("sessionid");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+        assertTrue(selenium.isElementPresent("//img[@alt='Share session']"));
+        selenium.click("url_settings");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_configuration");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("publicview");
+        selenium.click("//input[@value='Change settings']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+        assertFalse(selenium.isElementPresent("//img[@alt='Share session']"));
+
+
+        cs.logOut(selenium);
+    }
+
+    @Test
+    public void addTestEnvironment() throws Exception {
+        cs.cleanDb();
+        cs.logIn(selenium);
+
+        selenium.open("/sessionweb/settings.php?command=config");
+        selenium.click("url_addenv");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='envname']", "testenv1");
+        selenium.click("//input[@value='Add environment']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addenv");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='envname']", "testenv2");
+        selenium.click("//input[@value='Add environment']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addenv");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='envname']", "testenv3");
+        selenium.click("//input[@value='Add environment']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        assertEquals(selenium.getText("//select[@id='select_testenv']/option[2]"), "testenv1");
+        assertEquals(selenium.getText("//select[@id='select_testenv']/option[3]"), "testenv2");
+        assertEquals(selenium.getText("//select[@id='select_testenv']/option[4]"), "testenv3");
+
+        cs.logOut(selenium);
+    }
+
+    @Test
+    public void testEnvironmentActivatedDeactivated() throws Exception {
+        cs.cleanDb();
+        cs.logIn(selenium);
+
+        selenium.click("url_settings");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addenv");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='envname']", "testenv1");
+        selenium.click("//input[@value='Add environment']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        assertTrue(selenium.isTextPresent("Testenvironment:"));
+        selenium.type("input_title", "testsession");
+        selenium.select("select_testenv", "label=testenv1");
+        selenium.click("//input[@value='Save']");
+        selenium.waitForPageToLoad("15000");
+        String sessionid = selenium.getText("sessionid");
+        selenium.click("view_session");
+        cs.waitForText(selenium, "Session title");
+        assertTrue(selenium.isTextPresent("Testenvironment"));
+        assertTrue(selenium.isTextPresent("testenv1"));
+        selenium.click("url_settings");
+        selenium.waitForPageToLoad("15000");
+        Thread.sleep(500);
+        selenium.click("url_configuration");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("env");
+        selenium.click("//input[@value='Change settings']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+        Thread.sleep(500);
+        selenium.click("view_session" + sessionid);
+        cs.waitForText(selenium, "Session title");
+        assertFalse(selenium.isTextPresent("Testenvironment"));
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        assertFalse(selenium.isTextPresent("Testenvironment:"));
+        Thread.sleep(500);
+        cs.logOut(selenium);
+    }
+
+    @Test
     public void addUser() throws Exception {
         cs.cleanDb();
         cs.logIn(selenium);
@@ -337,7 +442,7 @@ public class Settings extends SessionWebTest {
         selenium.waitForPageToLoad("15000");
         selenium.click("url_list");
         selenium.waitForPageToLoad("15000");
-        assertTrue(selenium.isTextPresent("test"),"test is present");
+        assertTrue(selenium.isTextPresent("test"), "test is present");
         assertFalse(selenium.isTextPresent("admin"), "admin should not be present");
         selenium.click("url_settings");
         selenium.waitForPageToLoad("15000");
