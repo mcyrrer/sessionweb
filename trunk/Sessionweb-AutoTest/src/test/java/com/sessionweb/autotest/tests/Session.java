@@ -14,7 +14,6 @@ public class Session extends SessionWebTest {
 
     @Test
     public void basicSession() throws Exception {
-//        if (System.getProperty("browser").compareTo("*iexplore") != 0) {
             cs.cleanDb();
 
             cs.logIn(selenium);
@@ -69,22 +68,18 @@ public class Session extends SessionWebTest {
             assertTrue(selenium.isTextPresent("testteam1"));
             assertTrue(selenium.isTextPresent("testsprint1"));
             assertTrue(selenium.isTextPresent("testteamsprint1"));
-            assertEquals(selenium.getTable("//td[2]/table.0.5"), "Status Executed");
-            assertEquals(selenium.getTable("//td[2]/table.0.6"), "Debriefed Not debriefed");
-            assertEquals(selenium.getTable("//table.2.1"), "Requirements connected to session #12:Link to requirement");
+            assertEquals(selenium.getTable("//td[2]/table.0.6"), "Status Executed");
+            assertEquals(selenium.getTable("//td[2]/table.0.7"), "Debriefed Not debriefed");
+            assertTrue(selenium.isTextPresent("Requirements connected to session #12:Link to requirement"), "is req visible on view page");
             assertTrue(selenium.isTextPresent("#12:12"));
-            assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.4"), "Sessions duration 180 (min)");
-            assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.3"), "Opportunity 0 %");
-            assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.2"), "Bug 35 %");
-            assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.1"), "Test 35 %");
-            assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.0"), "Setup 30 %");
-            assertEquals(selenium.getTable("//tr[12]/td[2]/table.0.5"), "Normalized Sessions count 2");
+            assertTrue(selenium.isTextPresent("Sessions duration 180 (min)"));
+            assertTrue(selenium.isTextPresent("Opportunity 0 %"));
+            assertTrue(selenium.isTextPresent("Bug 35 %"));
+            assertTrue(selenium.isTextPresent("Test 35 %"));
+            assertTrue(selenium.isTextPresent("Setup 30 %"));
+            assertTrue(selenium.isTextPresent("Normalized Sessions count 2"));
 
             cs.logOut(selenium);
-//        } else {
-//            System.out.println("Is IE browser, will not test this due to IE bug....");
-//            assertTrue(true);
-//        }
     }
 
     @Test
