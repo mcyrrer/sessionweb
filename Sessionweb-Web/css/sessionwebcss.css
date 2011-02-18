@@ -1,10 +1,10 @@
-body
-{
-	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-	font-size:small;
-	margin:8px 10px 16px;
-	text-align:left;
+body {
+    font-family: "Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-size: small;
+    margin: 8px 10px 16px;
+    text-align: left;
 }
+
 h1 {
     color: #2e2e2e;
     text-align: left;
@@ -25,30 +25,33 @@ p {
     font-size: 20px;
 }
 
-#metricscalculation
-{
-text-align:center;
-color:black;
-background-color: green;
-} 
-
-#metricscalculation_red
-{
-text-align:center;
-color:black;
-background-color: red;
+#metricscalculation {
+    text-align: center;
+    color: black;
+    background-color: green;
 }
 
-#helptext1
-{
-text-align:left;
-color:black;
-background-color: #EFEFEF;
-font-size: 12px;
+#metricscalculation_red {
+    text-align: center;
+    color: black;
+    background-color: red;
 }
 
-.secondframe
-{
-	background-color: #BCBCBC;
+.helptext1 {
+    text-align: left;
+    color: black;
+    background-color: #EFEFEF;
+    font-size: 12px;
+}
+
+.secondframe {
+    background-color: #BCBCBC;
+}
+
+.addaction {
+    background-color: #EFEFEF;
+    color: black;
+    font-weight: bold;
+    text-decoration: underline
 }
 
