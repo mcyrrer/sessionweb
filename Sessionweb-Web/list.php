@@ -12,10 +12,9 @@ echo "<br>";
 
 $currentPage = $_GET["page"];
 
-//TODO: Get settings from Db!
 
-
-if (count($_REQUEST) < 3) {
+//TODO: fix next link. get data data=stored, then use strored $listSettings in $_SESSION
+if (count($_REQUEST) < 3 && $_SESSION['listsearch']==null) {
     $userSettings = getUserSettings();
     if ($userSettings['list_view'] == "all") {
         $tester = "";
@@ -28,7 +27,7 @@ if (count($_REQUEST) < 3) {
         $tester = "";
     }
 
-
+   // print " no post request";
     $listSettings = array();
     $listSettings["tester"] = $tester;
     $listSettings["sprint"] = "";
@@ -39,10 +38,21 @@ if (count($_REQUEST) < 3) {
     $listSettings["norowdisplay"] = "30";
 
 }
-else
+elseif($_POST!=null)
 {
+    //print "post request";
+    //print_r($_REQUEST);
     $listSettings = $_REQUEST;
 }
+else
+{
+   // print "list request";
+   // print_r($_SESSION['listsearch']);
+    $listSettings = $_SESSION['listsearch'];
+}
+
+$_SESSION['listsearch'] = $listSettings;
+
 //	print_r($listSettings);
 if ($currentPage == "") {
     $currentPage = 1;
@@ -318,14 +328,14 @@ function echoPreviouseAndNextLink($currentPage, $num_rows) {
     echo "  <tr>\n";
     if ($currentPage != 1) {
         $prevPage = $currentPage - 1;
-        echo "     <td><a id=\"prev_page\" href=\"list.php?page=$prevPage\">Previous page</a></td>";
+        echo "     <td><a id=\"prev_page\" href=\"list.php?page=$prevPage&amp;data=stored\">Previous page</a></td>";
     }
     else
     {
         echo "     <td></td>\n";
     }
     if ($num_rows == 30) {
-        echo "      <td id=\"next_page\" align=\"right\"><a href=\"list.php?page=$nextPage\">Next page</a><br/></td>\n";
+        echo "      <td id=\"next_page\" align=\"right\"><a href=\"list.php?page=$nextPage&amp;data=stored\">Next page</a><br/></td>\n";
     }
     else
     {
