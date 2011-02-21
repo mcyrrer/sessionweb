@@ -12,9 +12,8 @@ echo "<br>";
 
 $currentPage = $_GET["page"];
 
+if (count($_REQUEST) < 3 && $_REQUEST["data"] != "stored") {
 
-//TODO: fix next link. get data data=stored, then use strored $listSettings in $_SESSION
-if (count($_REQUEST) < 3 && $_SESSION['listsearch']==null) {
     $userSettings = getUserSettings();
     if ($userSettings['list_view'] == "all") {
         $tester = "";
@@ -26,8 +25,6 @@ if (count($_REQUEST) < 3 && $_SESSION['listsearch']==null) {
     {
         $tester = "";
     }
-
-   // print " no post request";
     $listSettings = array();
     $listSettings["tester"] = $tester;
     $listSettings["sprint"] = "";
@@ -38,22 +35,20 @@ if (count($_REQUEST) < 3 && $_SESSION['listsearch']==null) {
     $listSettings["norowdisplay"] = "30";
 
 }
-elseif($_POST!=null)
+elseif ($_POST != null)
 {
-    //print "post request";
-    //print_r($_REQUEST);
+
     $listSettings = $_REQUEST;
 }
 else
 {
-   // print "list request";
-   // print_r($_SESSION['listsearch']);
-    $listSettings = $_SESSION['listsearch'];
+    if ($_REQUEST["data"] == "stored") {
+        $listSettings = $_SESSION['listsearch'];
+    }
 }
 
 $_SESSION['listsearch'] = $listSettings;
 
-//	print_r($listSettings);
 if ($currentPage == "") {
     $currentPage = 1;
 }
@@ -71,7 +66,8 @@ echoIconExplanation();
 include("include/footer.php.inc");
 
 
-function echoSessionTable($currentPage, $listSettings) {
+function echoSessionTable($currentPage, $listSettings)
+{
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
     echo "      <td id=\"tableheader_id\" width=\"25\">Id</td>\n";
@@ -125,7 +121,8 @@ function echoSessionTable($currentPage, $listSettings) {
 
 }
 
-function echoAllSessions($row) {
+function echoAllSessions($row)
+{
     $rowSessionStatus = getSessionStatus($row["versionid"]);
 
     if ($listSettings["status"] != "") {
@@ -153,7 +150,8 @@ function echoAllSessions($row) {
     }
 }
 
-function echoOneSession($row, $rowSessionStatus) {
+function echoOneSession($row, $rowSessionStatus)
+{
     $color = getSessionColorCode($rowSessionStatus);
     echo "  <tr class=\"tr_sessionrow \" bgcolor=\"$color\">\n";
     echo "      <td>" . $row["sessionid"] . "</td>\n";
@@ -200,7 +198,8 @@ function echoOneSession($row, $rowSessionStatus) {
     echo "  </tr>\n";
 }
 
-function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings) {
+function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   `mission` ";
@@ -220,11 +219,12 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
 
     $sqlSelect .= "ORDER BY updated DESC ";
     $sqlSelect .= "LIMIT  $limitDown, $rowsToDisplay ";
-//	print $sqlSelect;
+    //	print $sqlSelect;
     return $sqlSelect;
 }
 
-function echoSearchDiv($listSettings) {
+function echoSearchDiv($listSettings)
+{
     echo "<a id=\"showoption\" href=\"#\">Show table options</a>\n";
 
     echo "<div style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\" id=\"option_list\">\n";
@@ -277,7 +277,8 @@ function echoSearchDiv($listSettings) {
     echo "</div>\n";
 }
 
-function echoColorExplanation() {
+function echoColorExplanation()
+{
     echo "<table width=\"*\" border=\"0\">\n";
     echo "    <tr >\n";
     echo "        <td bgcolor=\"#c2c287\">Not Executed\n";
@@ -294,7 +295,8 @@ function echoColorExplanation() {
     echo "    </table>\n";
 }
 
-function echoIconExplanation() {
+function echoIconExplanation()
+{
     echo "<table width=\"*\" border=\"0\">\n";
     echo "    <tr>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"Edit Session\" /></td><td valign=\"top\">Edit Session\n";
@@ -311,7 +313,8 @@ function echoIconExplanation() {
     echo "</table>\n";
 }
 
-function getSessionColorCode($rowSessionStatus) {
+function getSessionColorCode($rowSessionStatus)
+{
     $color = "#c2c287";
     if ($rowSessionStatus["executed"] == 1) {
         $color = "#ffff77";
@@ -322,7 +325,8 @@ function getSessionColorCode($rowSessionStatus) {
     return $color;
 }
 
-function echoPreviouseAndNextLink($currentPage, $num_rows) {
+function echoPreviouseAndNextLink($currentPage, $num_rows)
+{
     $nextPage = $currentPage + 1;
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
@@ -346,7 +350,8 @@ function echoPreviouseAndNextLink($currentPage, $num_rows) {
     echo "</table>\n";
 }
 
-function addjQueryDeletePopUp($id) {
+function addjQueryDeletePopUp($id)
+{
     //Delete Session questionbox
     echo "              <script type=\"text/javascript\">\n";
     echo "$(\"#delete_session" . $id . "\").click(function(){\n";
