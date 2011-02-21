@@ -33,6 +33,8 @@ if(!$resultSession)
 $row =  mysql_fetch_array($resultSession);
 
 $settings = getSessionWebSettings();
+
+$_SESSION['settings'] = $settings;
 mysql_close($con);
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
 echo "<html>\n";
