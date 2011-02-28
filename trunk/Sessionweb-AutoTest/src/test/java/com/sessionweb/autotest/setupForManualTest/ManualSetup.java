@@ -104,4 +104,5 @@ public class ManualSetup extends SessionWebTest {
         selenium.click("input_submit");
         selenium.waitForPageToLoad("30000");
     }
+
 }
