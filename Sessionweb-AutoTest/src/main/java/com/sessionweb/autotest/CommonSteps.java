@@ -101,7 +101,7 @@ public class CommonSteps {
                 selenium.click("url_list");
                 selenium.waitForPageToLoad("30000");
                 selenium.click("debrief_session" + sessionid);
-                selenium.waitForPageToLoad("30000");
+                waitForText(selenium,"Session title");
                 selenium.click("//input[@value='Continue']");
                 selenium.waitForPageToLoad("30000");
             }
@@ -141,6 +141,7 @@ public class CommonSteps {
         statement.execute("DELETE FROM members");
         statement.execute("DELETE FROM areas");
         statement.execute("DELETE FROM settings");
+        statement.execute("DELETE FROM testenvironment");
 
 
         String sql = ""

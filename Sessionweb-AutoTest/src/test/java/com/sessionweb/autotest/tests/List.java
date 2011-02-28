@@ -61,7 +61,7 @@ public class List extends SessionWebTest {
         selenium.click("url_list");
         selenium.waitForPageToLoad("15000");
         selenium.click("publicview_session" + sessionIdToView);
-        cs.waitForText(selenium,"Session title");
+        cs.waitForText(selenium, "Session title");
         assertTrue(selenium.isTextPresent(sessionIdToView));
         cs.logInAsTestUserThroughUrl(selenium);
     }
@@ -89,7 +89,7 @@ public class List extends SessionWebTest {
         String sessionToReassign = selenium.getText("sessionid");
         selenium.click("url_list");
         selenium.waitForPageToLoad("15000");
-        selenium.click("reassign_session"+sessionToReassign);
+        selenium.click("reassign_session" + sessionToReassign);
         selenium.waitForPageToLoad("15000");
         selenium.select("select_tester", "label=test");
         assertTrue(selenium.isTextPresent(sessionToReassign));
@@ -98,7 +98,85 @@ public class List extends SessionWebTest {
         assertTrue(selenium.isTextPresent("Session reassigned."));
         selenium.click("url_list");
         selenium.waitForPageToLoad("15000");
-        assertTrue(selenium.isElementPresent("tablerowuser_"+sessionToReassign));
+        assertTrue(selenium.isElementPresent("tablerowuser_" + sessionToReassign));
+
+        cs.logOut(selenium);
+    }
+
+    @Test
+    public void copySession() throws Exception {
+        cs.cleanDb();
+        cs.logIn(selenium);
+
+        selenium.click("url_settings");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("link=Add team");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("teamtname", "t_test1");
+        selenium.click("//input[@value='Add team']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addenv");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='envname']", "e_env1");
+        selenium.click("//input[@value='Add environment']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addsprint");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='sprintname']", "s_sprname");
+        selenium.click("//input[@value='Add name']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addarea");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='areaname']", "aarreeaa11");
+        selenium.click("//input[@value='Add area']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addarea");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='areaname']", "aarreeaa12");
+        selenium.click("//input[@value='Add area']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_addteamsprint");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("//input[@name='teamsprintname']", "ttteemmsspprrinnt1");
+        selenium.click("//input[@value='Add name']");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("url_newsession");
+        selenium.waitForPageToLoad("15000");
+        selenium.type("input_title", "testtitle1");
+        selenium.select("select_team", "label=t_test1");
+        selenium.select("select_sprint", "label=s_sprname");
+        selenium.select("select_teamsprint", "label=ttteemmsspprrinnt1");
+        selenium.addSelection("select_area", "label=aarreeaa11");
+        selenium.addSelection("select_area", "label=aarreeaa12");
+        selenium.select("select_testenv", "label=e_env1");
+
+        selenium.click("//input[@value='Save']");
+        selenium.waitForPageToLoad("15000");
+        String sessionIdToView = selenium.getText("sessionid");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+
+
+        assertTrue(selenium.isTextPresent("testtitle1"));
+
+        selenium.open("/sessionweb/list.php");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+        selenium.click("//img[@alt='Copy session']");
+        selenium.waitForPageToLoad("15000");
+        String copySessionId = selenium.getText("copySessionid");
+        selenium.click("url_list");
+        selenium.waitForPageToLoad("15000");
+
+
+        selenium.click("view_session" + copySessionId);
+        cs.waitForText(selenium, "Session title");
+        assertTrue(selenium.isTextPresent("testtitle1(COPY)"));
+        assertTrue(selenium.isTextPresent("t_test1"));
+        assertTrue(selenium.isTextPresent("s_sprname"));
+        assertTrue(selenium.isTextPresent("ttteemmsspprrinnt1"));
+        assertTrue(selenium.isTextPresent("e_env1"));
+
 
         cs.logOut(selenium);
     }
