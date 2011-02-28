@@ -29,7 +29,7 @@ function saveSession_CreateNewSessionId() {
     $sqlInsert .= "INSERT INTO sessionid ";
     $sqlInsert .= "            (`createdby`) ";
     $sqlInsert .= "VALUES      ('" . $_SESSION['username'] . "') ";
-    
+
     $result = mysql_query($sqlInsert);
 
     if (!$result) {
@@ -125,11 +125,71 @@ function saveSession_InsertSessionDataToDb($sessionid) {
     $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
     $sqlInsert .= ") ";
 
-  
+
     $result = mysql_query($sqlInsert);
 
     if (!$result) {
         echo "saveSession_InsertSessionDataToDb: " . mysql_error() . "<br/>";
+    }
+}
+
+function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy) {
+    // print_r($sessionToCopy);
+
+    $sqlInsert = "";
+    $sqlInsert .= "INSERT INTO mission ";
+    $sqlInsert .= "            (`sessionid`, ";
+    $sqlInsert .= "             `title`, ";
+    $sqlInsert .= "             `charter`, ";
+    $sqlInsert .= "             `username`, ";
+    $sqlInsert .= "             `sprintname`, ";
+    $sqlInsert .= "             `teamsprintname`, ";
+    $sqlInsert .= "             `testenvironment`, ";
+    $sqlInsert .= "             `teamname`, ";
+    $sqlInsert .= "             `publickey`) ";
+    $sqlInsert .= "VALUES      ('$sessionid', ";
+    $sqlInsert .= "             '" . $sessionToCopy["title"] . "(COPY) ', ";
+    $sqlInsert .= "             '" . $sessionToCopy["charter"] . "', ";
+    $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
+    if ($sessionToCopy['sprintname'] == "") {
+        $sqlInsert .= "             null, ";
+    }
+    else
+    {
+        $sqlInsert .= "             '" . $sessionToCopy['sprintname'] . "', ";
+    }
+    if ($sessionToCopy['teamsprintname'] == "") {
+        $sqlInsert .= "             null, ";
+    }
+    else
+    {
+
+        $sqlInsert .= "             '" . $sessionToCopy['teamsprintname'] . "', ";
+    }
+    if ($sessionToCopy['testenvironment'] == "") {
+        $sqlInsert .= "             null, ";
+    }
+    else
+    {
+        $sqlInsert .= "             '" . $sessionToCopy['testenvironment'] . "', ";
+    }
+    if ($sessionToCopy['teamname'] == "") {
+        $sqlInsert .= "             null, ";
+    }
+    else
+    {
+        $sqlInsert .= "             '" . $sessionToCopy['teamname'] . "', ";
+    }
+    $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
+    $sqlInsert .= ") ";
+
+
+    //echo "SQLINSERT=$sqlInsert";
+
+    $result = mysql_query($sqlInsert);
+
+    if (!$result) {
+        echo "copySession_InsertSessionDataToDb: " . mysql_error() . "<br/>";
     }
 }
 
@@ -324,12 +384,13 @@ function GetSessionTitleFromSessionId($sessionid) {
     return $title;
 }
 
-function saveSession_InsertSessionStatusToDb($versionid) {
-    $executed = false;
+/**
+ * @param  $versionid
+ * @param  $executedStatus Shall be a boolean
+ * @return void
+ */
+function saveSession_InsertSessionStatusToDb($versionid, $executedStatus) {
 
-    if ($_REQUEST["executed"] != "") {
-        $executed = true;
-    }
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission_status ";
@@ -339,7 +400,7 @@ function saveSession_InsertSessionStatusToDb($versionid) {
     $sqlInsert .= "             `masterdibriefed`, ";
     $sqlInsert .= "             `executed_timestamp` ) ";
     $sqlInsert .= "VALUES      ('$versionid', ";
-    $sqlInsert .= "             '$executed', ";
+    $sqlInsert .= "             '$executedStatus', ";
     $sqlInsert .= "             'false', ";
     $sqlInsert .= "             'false', ";
     $sqlInsert .= "             '" . date("Y-d-j H:i:s") . "')";
@@ -409,7 +470,7 @@ function saveSession_InsertSessionDebriefedNotesToDb($versionid, $notes) {
     }
 }
 
-function saveSession_InsertSessionMetricsToDb($versionid) {
+function saveSession_InsertSessionMetricsToDb($versionid, $metrics) {
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission_sessionmetrics ";
@@ -420,11 +481,11 @@ function saveSession_InsertSessionMetricsToDb($versionid) {
     $sqlInsert .= "             `opportunity_percent`, ";
     $sqlInsert .= "             `duration_time`) ";
     $sqlInsert .= "VALUES      ('$versionid', ";
-    $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST["setuppercent"]) . "', ";
-    $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST["testpercent"]) . "', ";
-    $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST["bugpercent"]) . "', ";
-    $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST["oppertunitypercent"]) . "', ";
-    $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST["duration"]) . "')";
+    $sqlInsert .= "             '" . mysql_real_escape_string($metrics["setuppercent"]) . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($metrics["testpercent"]) . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($metrics["bugpercent"]) . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($metrics["oppertunitypercent"]) . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($metrics["duration"]) . "')";
 
     $result = mysql_query($sqlInsert);
 
@@ -433,9 +494,10 @@ function saveSession_InsertSessionMetricsToDb($versionid) {
     }
 }
 
-function saveSession_InsertSessionAreaToDb($versionid) {
-    if ($_SESSION['settings']['area'] == 1 && $_REQUEST["area"] != null) {
-        $areas = $_REQUEST["area"];
+function saveSession_InsertSessionAreaToDb($versionid, $areas) {
+    //    $_SESSION['settings']['area'] == 1 &&
+    if ($areas != null) {
+        //        $areas = $_REQUEST["area"];
 
         foreach ($areas as $area) {
             if ($area != "") {
