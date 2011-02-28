@@ -11,6 +11,7 @@ include_once ('include/commonFunctions.php.inc');
 echo "<br>";
 
 $currentPage = $_GET["page"];
+$listSettings = "";
 
 if (count($_REQUEST) < 3 && $_REQUEST["data"] != "stored") {
 
@@ -66,8 +67,7 @@ echoIconExplanation();
 include("include/footer.php.inc");
 
 
-function echoSessionTable($currentPage, $listSettings)
-{
+function echoSessionTable($currentPage, $listSettings) {
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
     echo "      <td id=\"tableheader_id\" width=\"25\">Id</td>\n";
@@ -102,17 +102,19 @@ function echoSessionTable($currentPage, $listSettings)
     $sqlSelect = createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings);
 
     $result = mysql_query($sqlSelect);
-    $num_rows = mysql_num_rows($result);
+    //echo "$sqlSelect<br>";
+    $num_rows = 0;
 
     if ($result) {
+        $num_rows = mysql_num_rows($result);
         while ($row = mysql_fetch_array($result)) {
 
-            echoAllSessions($row);
+            echoAllSessions($row, $listSettings);
         }
     }
     else
     {
-        echo "saveSession_GetSessionIdForNewSession: " . mysql_error() . "<br/>";
+        echo "echoSessionTable: " . mysql_error() . "<br/>";
     }
 
     echo "</table>\n";
@@ -121,38 +123,36 @@ function echoSessionTable($currentPage, $listSettings)
 
 }
 
-function echoAllSessions($row)
-{
-    $rowSessionStatus = getSessionStatus($row["versionid"]);
+function echoAllSessions($row, $listSettings) {
+    // $rowSessionStatus = getSessionStatus($row["versionid"]);
 
     if ($listSettings["status"] != "") {
-        if (strcmp($listSettings["status"], "Not Executed") == 0 && $rowSessionStatus["debriefed"] == 0) {
-            if ($rowSessionStatus["executed"] == 0) {
-                echoOneSession($row, $rowSessionStatus);
+        if (strcmp($listSettings["status"], "Not Executed") == 0 && $row["debriefed"] == 0) {
+            if ($row["executed"] == 0) {
+                echoOneSession($row, $row);
             }
         }
         elseif (strcmp($listSettings["status"], "Executed") == 0)
         {
-            if ($rowSessionStatus["executed"] == 1 && $rowSessionStatus["debriefed"] == 0) {
-                echoOneSession($row, $rowSessionStatus);
+            if ($row["executed"] == 1 && $row["debriefed"] == 0) {
+                echoOneSession($row, $row);
             }
         }
         elseif (strcmp($listSettings["status"], "Debriefed") == 0)
         {
-            if ($rowSessionStatus["debriefed"] == 1) {
-                echoOneSession($row, $rowSessionStatus);
+            if ($row["debriefed"] == 1) {
+                echoOneSession($row);
             }
         }
     }
     else
     {
-        echoOneSession($row, $rowSessionStatus);
+        echoOneSession($row);
     }
 }
 
-function echoOneSession($row, $rowSessionStatus)
-{
-    $color = getSessionColorCode($rowSessionStatus);
+function echoOneSession($row) {
+    $color = getSessionColorCode($row);
     echo "  <tr class=\"tr_sessionrow \" bgcolor=\"$color\">\n";
     echo "      <td>" . $row["sessionid"] . "</td>\n";
     echo "      <td>\n";
@@ -163,7 +163,7 @@ function echoOneSession($row, $rowSessionStatus)
 
     }
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        if ($rowSessionStatus['executed'] != false && $rowSessionStatus['debriefed'] != true) {
+        if ($row['executed'] != false && $row['debriefed'] != true) {
             echo "      <a id=\"debrief_session" . $row["sessionid"] . "\" class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\" title=\"Debrief session\"/></a>\n";
         }
     }
@@ -198,24 +198,26 @@ function echoOneSession($row, $rowSessionStatus)
     echo "  </tr>\n";
 }
 
-function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
-{
+function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings) {
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
-    $sqlSelect .= "FROM   `mission` ";
-    $sqlSelect .= "WHERE   depricated = 0 ";
-    if ($listSettings["tester"] != "") {
-        $sqlSelect .= "     AND username=\"" . $listSettings["tester"] . "\" ";
+    $sqlSelect .= "FROM   `sessioninfo` ";
+    if ($listSettings["tester"] != "" || $listSettings["sprint"] != "" || $listSettings["teamsprint"] != "" || $listSettings["team"] != "") {
+        $sqlSelect .= " WHERE  sessionid NOT LIKE \"\" ";
+        if ($listSettings["tester"] != "") {
+            $sqlSelect .= "     AND username=\"" . $listSettings["tester"] . "\" ";
+        }
+        if ($listSettings["sprint"] != "") {
+            $sqlSelect .= "     AND sprintname=\"" . $listSettings["sprint"] . "\" ";
+        }
+        if ($listSettings["teamsprint"] != "") {
+            $sqlSelect .= "     AND teamsprintname=\"" . $listSettings["teamsprint"] . "\" ";
+        }
+        if ($listSettings["team"] != "") {
+            $sqlSelect .= "     AND teamname=\"" . $listSettings["team"] . "\" ";
+        }
     }
-    if ($listSettings["sprint"] != "") {
-        $sqlSelect .= "     AND sprintname=\"" . $listSettings["sprint"] . "\" ";
-    }
-    if ($listSettings["teamsprint"] != "") {
-        $sqlSelect .= "     AND teamsprintname=\"" . $listSettings["teamsprint"] . "\" ";
-    }
-    if ($listSettings["team"] != "") {
-        $sqlSelect .= "     AND teamname=\"" . $listSettings["team"] . "\" ";
-    }
+
 
     $sqlSelect .= "ORDER BY updated DESC ";
     $sqlSelect .= "LIMIT  $limitDown, $rowsToDisplay ";
@@ -223,8 +225,7 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
     return $sqlSelect;
 }
 
-function echoSearchDiv($listSettings)
-{
+function echoSearchDiv($listSettings) {
     echo "<a id=\"showoption\" href=\"#\">Show table options</a>\n";
 
     echo "<div style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\" id=\"option_list\">\n";
@@ -277,8 +278,7 @@ function echoSearchDiv($listSettings)
     echo "</div>\n";
 }
 
-function echoColorExplanation()
-{
+function echoColorExplanation() {
     echo "<table width=\"*\" border=\"0\">\n";
     echo "    <tr >\n";
     echo "        <td bgcolor=\"#c2c287\">Not Executed\n";
@@ -295,8 +295,7 @@ function echoColorExplanation()
     echo "    </table>\n";
 }
 
-function echoIconExplanation()
-{
+function echoIconExplanation() {
     echo "<table width=\"*\" border=\"0\">\n";
     echo "    <tr>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"Edit Session\" /></td><td valign=\"top\">Edit Session\n";
@@ -313,8 +312,7 @@ function echoIconExplanation()
     echo "</table>\n";
 }
 
-function getSessionColorCode($rowSessionStatus)
-{
+function getSessionColorCode($rowSessionStatus) {
     $color = "#c2c287";
     if ($rowSessionStatus["executed"] == 1) {
         $color = "#ffff77";
@@ -325,8 +323,7 @@ function getSessionColorCode($rowSessionStatus)
     return $color;
 }
 
-function echoPreviouseAndNextLink($currentPage, $num_rows)
-{
+function echoPreviouseAndNextLink($currentPage, $num_rows) {
     $nextPage = $currentPage + 1;
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
@@ -350,8 +347,7 @@ function echoPreviouseAndNextLink($currentPage, $num_rows)
     echo "</table>\n";
 }
 
-function addjQueryDeletePopUp($id)
-{
+function addjQueryDeletePopUp($id) {
     //Delete Session questionbox
     echo "              <script type=\"text/javascript\">\n";
     echo "$(\"#delete_session" . $id . "\").click(function(){\n";
@@ -368,8 +364,7 @@ function addjQueryDeletePopUp($id)
     echo "              </script>\n";
 }
 
-function echoPublicViewIcon($row)
-{
+function echoPublicViewIcon($row) {
     echo "<a id=\"publicview_session" . $row["sessionid"] . "\" class=\"publicview_session\" href=\"publicview.php?sessionid=" . $row["sessionid"] . "&amp;command=view&amp;publickey=" . $row["publickey"] . "\">";
     echo "  <img src=\"pictures/share-3-small.png\" border=\"0\" alt=\"Share session\" title=\"Share session\"/>";
     echo "</a>\n";
