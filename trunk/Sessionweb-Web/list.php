@@ -174,6 +174,7 @@ function echoOneSession($row) {
     if ($_SESSION['settings']['publicview'] == 1) {
         echoPublicViewIcon($row);
     }
+    echoCopyIcon($row);
     echo "      </td>\n";
     $title = $row["title"];
     if (strlen($row["title"]) > 30) {
@@ -367,5 +368,11 @@ function addjQueryDeletePopUp($id) {
 function echoPublicViewIcon($row) {
     echo "<a id=\"publicview_session" . $row["sessionid"] . "\" class=\"publicview_session\" href=\"publicview.php?sessionid=" . $row["sessionid"] . "&amp;command=view&amp;publickey=" . $row["publickey"] . "\">";
     echo "  <img src=\"pictures/share-3-small.png\" border=\"0\" alt=\"Share session\" title=\"Share session\"/>";
+    echo "</a>\n";
+}
+
+function echoCopyIcon($row) {
+    echo "<a id=\"copy_session" . $row["sessionid"] . "\" class=\"copy_session\" href=\"session.php?command=copy&amp;sessionid=" . $row["sessionid"]."\">";
+    echo "  <img src=\"pictures/edit-copy-9-small.png\" border=\"0\" alt=\"Copy session\" title=\"Copy session\"/>";
     echo "</a>\n";
 }

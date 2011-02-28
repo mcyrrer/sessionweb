@@ -40,7 +40,7 @@ function getSessionData($sessionid) {
     $sqlSelectSession .= "SELECT * ";
     $sqlSelectSession .= "FROM   mission ";
     $sqlSelectSession .= "WHERE  sessionid = $sessionid";
-
+    
     $resultSession = mysql_query($sqlSelectSession);
 
     if (!$resultSession) {
@@ -50,6 +50,11 @@ function getSessionData($sessionid) {
     return mysql_fetch_array($resultSession);
 }
 
+/**
+ * Get the versionid for the given sessionid
+ * @param  $sessionid
+ * @return versionid as string 
+ */
 function getSessionVersionId($sessionid) {
     $result = getSessionData($sessionid);
     return $result['versionid'];
@@ -181,6 +186,10 @@ function getSessionsLinkedFrom($versionid) {
     return $resultFromReturn;
 }
 
+/**
+ * @param  $versionid
+ * @return array
+ */
 function getSessionAreas($versionid) {
     $sqlSelectSessionStatus = "";
     $sqlSelectSessionStatus .= "SELECT areaname ";

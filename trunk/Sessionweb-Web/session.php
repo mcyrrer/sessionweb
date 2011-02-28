@@ -49,6 +49,11 @@ elseif (strcmp($_REQUEST["command"], "debriefed") == 0)
     saveDebriefedSession();
 }
 
+elseif (strcmp($_REQUEST["command"], "copy") == 0)
+{
+    copySession();
+}
+
 elseif (strcmp($_REQUEST["command"], "save") == 0)
 {
     //RapidReporter importer
@@ -202,13 +207,24 @@ function saveSession() {
             $versionid = saveSession_GetVersionIdForNewSession();
 
             //Create missionstatus record in Db
-            saveSession_InsertSessionStatusToDb($versionid);
+            $executed = false;
+            if ($_REQUEST["executed"] != "") {
+                $executed = true;
+            }
+            saveSession_InsertSessionStatusToDb($versionid, $executed);
 
             //Create metrics record for session
-            saveSession_InsertSessionMetricsToDb($versionid);
+            $metrics = array();
+            $metrics["setuppercent"] = $_REQUEST["setuppercent"];
+            $metrics["testpercent"] = $_REQUEST["testpercent"];
+            $metrics["bugpercent"] = $_REQUEST["bugpercent"];
+            $metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
+            $metrics["duration"] = $_REQUEST["duration"];
+            saveSession_InsertSessionMetricsToDb($versionid, $metrics);
 
             //Create areas for session
-            saveSession_InsertSessionAreaToDb($versionid);
+            $areas = $_REQUEST["area"];
+            saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
 
             //Create bugs connected to session
             saveSession_InsertSessionBugsToDb($versionid);
@@ -259,6 +275,90 @@ function saveSession() {
 
         echo "<span style=\"color:white\"><div id=\"sessioninfo\">sessionid:<div id=\"sessionid\">$sessionid</div>, versionid:<div id=\"versionid\">$versionid</div></span></div>\n";
     }
+}
+
+
+/**
+ * Save session to database
+ */
+function copySession() {
+
+    echo "<h1>Copy session</h1>\n";
+    $sessionid = false;
+    $versionid = false;
+
+
+    $publickey = md5(rand());
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    //Copy session
+    if ($_REQUEST["sessionid"] != "") {
+
+
+        $sessionDataToCopy = (getSessionData($_REQUEST["sessionid"]));
+
+        $sessionIdToCopy = $_REQUEST["sessionid"];
+
+        //Create a new random key
+        $sessionDataToCopy["publickey"] = md5(rand());
+
+        //Will create a new session id to map to a session
+        saveSession_CreateNewSessionId();
+
+        //Get the new session id for user x
+        $sessionid = saveSession_GetSessionIdForNewSession();
+        echo "SessionId Created: <div id=\"copySessionid\">$sessionid</div>";
+        //Insert sessiondata to mission table
+
+        copySession_InsertSessionDataToDb($sessionid, $sessionDataToCopy);
+
+        //Get versionId from db
+        $versionid = saveSession_GetVersionIdForNewSession();
+
+        $versionIdToCopy = getSessionVersionId($sessionIdToCopy);
+
+        //Create missionstatus record in Db
+        $executed = false;
+        if ($_REQUEST["executed"] != "") {
+            $executed = true;
+        }
+        saveSession_InsertSessionStatusToDb($versionid, $executed);
+
+        //Create metrics record for session
+        $metrics = array();
+        $metrics["setuppercent"] = $_REQUEST["setuppercent"];
+        $metrics["testpercent"] = $_REQUEST["testpercent"];
+        $metrics["bugpercent"] = $_REQUEST["bugpercent"];
+        $metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
+        $metrics["duration"] = $_REQUEST["duration"];
+        saveSession_InsertSessionMetricsToDb($versionid, $metrics);
+
+
+        //Create areas for session
+
+        $areasFromOldSession = getSessionAreas($versionIdToCopy);
+
+        saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
+
+
+        //TODO: Fix the rest of copy session....
+        //Create bugs connected to session
+        //        saveSession_InsertSessionBugsToDb($versionid);
+        //
+        //        //Create requirements connected to mission
+        //        saveSession_InsertSessionRequirementsToDb($versionid);
+        //
+        //        //Create sessionLinks connected to mission
+        //        saveSession_InsertSessionSessionsLinksToDb($versionid);
+
+        echo "Copy created...";
+
+    }
+
+
+    mysql_close($con);
+
 }
 
 /**
