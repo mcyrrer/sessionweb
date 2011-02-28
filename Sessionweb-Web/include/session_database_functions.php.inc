@@ -29,7 +29,7 @@ function saveSession_CreateNewSessionId() {
     $sqlInsert .= "INSERT INTO sessionid ";
     $sqlInsert .= "            (`createdby`) ";
     $sqlInsert .= "VALUES      ('" . $_SESSION['username'] . "') ";
-
+    
     $result = mysql_query($sqlInsert);
 
     if (!$result) {
