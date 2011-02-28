@@ -134,7 +134,7 @@ function echoViewSession() {
         echo "    <tr>\n";
         echo "        <td></td>\n";
         echo "        <td>\n";
-        echo $row["software"];
+        echo str_replace("\n","<br>",$row["software"]);
         echo "        </td>\n";
         echo "    </tr>\n";
 
