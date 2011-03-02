@@ -360,7 +360,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `updated` INT);
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `publickey` INT, `updated` INT);
 
 -- -----------------------------------------------------
 -- View `sessionwebos`.`sessioninfo`
@@ -368,7 +368,7 @@ CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versi
 DROP VIEW IF EXISTS `sessionwebos`.`sessioninfo` ;
 DROP TABLE IF EXISTS `sessionwebos`.`sessioninfo`;
 USE `sessionwebos`;
-CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT m.sessionid, m.versionid, m.title, m.username, ms.executed, ms.debriefed, m.updated 
+CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT m.sessionid, m.versionid, m.title, m.username, ms.executed, ms.debriefed, m.publickey, m.updated 
 from mission m, mission_status ms WHERE m.versionid = ms.versionid;
 
 
