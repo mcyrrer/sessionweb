@@ -102,7 +102,7 @@ function echoSessionTable($currentPage, $listSettings) {
     $sqlSelect = createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings);
 
     $result = mysql_query($sqlSelect);
-    echo "$sqlSelect<br>";
+//    echo "$sqlSelect<br>";
 //    print_r($listSettings);
     $num_rows = 0;
 
@@ -156,7 +156,7 @@ function echoOneSession($row) {
     $color = getSessionColorCode($row);
     echo "  <tr class=\"tr_sessionrow \" bgcolor=\"$color\">\n";
     echo "      <td>" . $row["sessionid"] . "</td>\n";
-    echo "      <td>\n";
+    echo "      <td width='125'>\n";
     if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
         echo "      <a id=\"edit_session" . $row["sessionid"] . "\"  class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\" title=\"Edit session\"/></a>\n";
 
@@ -176,6 +176,7 @@ function echoOneSession($row) {
         echoPublicViewIcon($row);
     }
     echoCopyIcon($row);
+    addjQueryCopyPopUp($row["sessionid"]);
     echo "      </td>\n";
     $title = $row["title"];
     if (strlen($row["title"]) > 30) {
@@ -196,7 +197,7 @@ function echoOneSession($row) {
     if ($_SESSION['settings']['team'] == 1) {
         echo "      <td id=\"tablerowteam_" . $row["sessionid"] . "\">" . $row["teamname"] . "</td>\n";
     }
-    echo "      <td id=\"tablerowupdatead_" . $row["sessionid"] . "\">" . $row["updated"] . "</td>\n";
+    echo "      <td width='135' id=\"tablerowupdatead_" . $row["sessionid"] . "\">" . $row["updated"] . "</td>\n";
     echo "  </tr>\n";
 }
 
@@ -204,7 +205,7 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   `sessioninfo` ";
-    if ($listSettings["tester"] != "" || $listSettings["sprint"] != "" || $listSettings["teamsprint"] != "" || $listSettings["team"] != "" | $listSettings["status"]!= "") {
+    if ($listSettings["tester"] != "" || $listSettings["sprint"] != "" || $listSettings["teamsprint"] != "" || $listSettings["team"] != "" | $listSettings["status"] != "") {
         $sqlSelect .= " WHERE  sessionid NOT LIKE \"\" ";
         if ($listSettings["tester"] != "") {
             $sqlSelect .= "     AND username=\"" . $listSettings["tester"] . "\" ";
@@ -307,8 +308,8 @@ function echoColorExplanation() {
 }
 
 function echoIconExplanation() {
-    echo "<table width=\"*\" border=\"0\">\n";
-    echo "    <tr>\n";
+    echo "<table width=\"*\" border=\"0\" cellpadding='4' cellspacing='0'>\n";
+    echo "    <tr bgcolor='B3B3B3'>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"Edit Session\" /></td><td valign=\"top\">Edit Session\n";
     echo "        </td>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/debrieficon.png\" alt=\"Debrief Session\" /></td><td valign=\"top\">Debrief Session\n";
@@ -318,6 +319,8 @@ function echoIconExplanation() {
     echo "        <td valign=\"top\"><img src=\"pictures/user-new-2-small.png\" alt=\"Reassign Session\" /></td><td valign=\"top\">Reassign Session\n";
     echo "        </td>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/share-3-small.png\" alt=\"Share Session\" /></td><td valign=\"top\">Share Session\n";
+    echo "        </td>\n";
+    echo "        <td valign=\"top\"><img src=\"pictures/edit-copy-9-small.png\" alt=\"Copy Session\" /></td><td valign=\"top\">Share Session\n";
     echo "        </td>\n";
     echo "    </tr>\n";
     echo "</table>\n";
@@ -363,6 +366,23 @@ function addjQueryDeletePopUp($id) {
     echo "              <script type=\"text/javascript\">\n";
     echo "$(\"#delete_session" . $id . "\").click(function(){\n";
     echo "        var answer = confirm(\"Delete session from database?\");\n";
+    echo "        if(answer)\n";
+    echo "        {\n";
+    echo "            return true;\n";
+    echo "        }\n";
+    echo "        else\n";
+    echo "        {\n";
+    echo "            return false;\n";
+    echo "        }\n";
+    echo "});\n";
+    echo "              </script>\n";
+}
+
+function addjQueryCopyPopUp($id) {
+    //Copy Session questionbox
+    echo "              <script type=\"text/javascript\">\n";
+    echo "$(\"#copy_session" . $id . "\").click(function(){\n";
+    echo "        var answer = confirm(\"Copy session?\");\n";
     echo "        if(answer)\n";
     echo "        {\n";
     echo "            return true;\n";

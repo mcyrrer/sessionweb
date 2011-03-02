@@ -125,6 +125,7 @@ function saveSession_InsertSessionDataToDb($sessionid) {
     $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
     $sqlInsert .= ") ";
 
+      echo $sqlInsert; 
 
     $result = mysql_query($sqlInsert);
 
