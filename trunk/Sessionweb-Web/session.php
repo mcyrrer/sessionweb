@@ -224,7 +224,7 @@ function saveSession() {
 
             //Create areas for session
             $areas = $_REQUEST["area"];
-            saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
+            saveSession_InsertSessionAreaToDb($versionid, $areas);
 
             //Create bugs connected to session
             saveSession_InsertSessionBugsToDb($versionid);
@@ -252,9 +252,11 @@ function saveSession() {
 
         saveSession_UpdateSessionStatusToDb($versionid);
 
+
         saveSession_UpdateSessionMetricsToDb($versionid);
 
-        saveSession_UpdateSessionAreasToDb($versionid);
+        $areas = $_REQUEST["area"];
+        saveSession_UpdateSessionAreasToDb($versionid, $areas);
 
         saveSession_UpdateSessionBugsToDb($versionid);
 
@@ -395,7 +397,7 @@ function echoSessionForm() {
     mysql_close($con);
 
     if ($insertSessionData) {
-        $title = $rowSessionData["title"];
+        $title = htmlspecialchars($rowSessionData["title"]);
         $charter = $rowSessionData["charter"];
         $notes = $rowSessionData["notes"];
         $sprint = $rowSessionData["sprintname"];
@@ -653,7 +655,7 @@ function echoSessionForm() {
     echo "                                                <td>Session duration (min): </td>\n";
     echo "                                                <td>\n";
     echo "                                                      <select name=\"duration\">\n";
-    echoDurationSelection();
+    echoDurationSelection($rowSessionMetric["duration_time"]);
     echo "                                                      </select>\n";
     echo "                                                </td>\n";
     echo "                                          </tr>\n";
@@ -727,9 +729,15 @@ function echoPercentSelection($selected) {
  * Prints duration option (belongs to a HTML select item) to screen
  *
  */
-function echoDurationSelection() {
+function echoDurationSelection($selected) {
     for ($index = 15; $index <= 480; $index = $index + 15) {
-        echo "                                      <option>$index</option>\n";
+        if ($index == $selected) {
+            echo "                                      <option selected=\"selected\">$index</option>\n";
+        }
+        else
+        {
+            echo "                                      <option>$index</option>\n";
+        }
     }
 }
 

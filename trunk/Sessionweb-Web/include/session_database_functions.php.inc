@@ -180,7 +180,7 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy) {
     {
         $sqlInsert .= "             '" . $sessionToCopy['teamname'] . "', ";
     }
-    $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
+    $sqlInsert .= "             '" . $sessionToCopy["publickey"] . "' ";
     $sqlInsert .= ") ";
 
 
@@ -523,6 +523,7 @@ function saveSession_InsertSessionBugsToDb($versionid) {
     if ($bugs != "") {
         $bugsArray = explode(",", $bugs);
         foreach ($bugsArray as $aBug) {
+            $aBug = str_replace(" ", "", $aBug);
             if ($aBug != "") {
 
                 $sqlInsert = "";
@@ -549,7 +550,7 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid) {
 
         $sessionsToLinkToArray = explode(",", $sessionstoLinkTo);
         foreach ($sessionsToLinkToArray as $aSessionLinkTo) {
-
+            $aSessionLinkTo = str_replace(" ", "", $aSessionLinkTo);
             if ($aSessionLinkTo != "") {
                 $linked_to_versionid = GetVersionidFromSessionid($aSessionLinkTo);
 
@@ -586,6 +587,7 @@ function saveSession_InsertSessionRequirementsToDb($versionid) {
     if ($requirements != "") {
         $requirementsArray = explode(",", $requirements);
         foreach ($requirementsArray as $aRequirement) {
+            $aRequirement = str_replace(" ", "", $aRequirement);
             if ($aRequirement != "") {
 
                 $sqlInsert = "";
@@ -622,7 +624,7 @@ function saveSession_UpdateSessionMetricsToDb($versionid) {
     }
 }
 
-function saveSession_UpdateSessionAreasToDb($versionid) {
+function saveSession_UpdateSessionAreasToDb($versionid, $areas) {
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_areas ";
     $sqlDelete .= "WHERE  `versionid` = '$versionid'";
@@ -633,7 +635,7 @@ function saveSession_UpdateSessionAreasToDb($versionid) {
         echo "saveSession_UpdateSessionAreasToDb: " . mysql_error() . "<br/>";
     }
 
-    saveSession_InsertSessionAreaToDb($versionid);
+    saveSession_InsertSessionAreaToDb($versionid,$areas);
 }
 
 function saveSession_DeleteSessionsNotesFromDb($versionid) {

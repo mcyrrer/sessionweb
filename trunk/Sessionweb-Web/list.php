@@ -102,7 +102,8 @@ function echoSessionTable($currentPage, $listSettings) {
     $sqlSelect = createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings);
 
     $result = mysql_query($sqlSelect);
-    //echo "$sqlSelect<br>";
+    echo "$sqlSelect<br>";
+//    print_r($listSettings);
     $num_rows = 0;
 
     if ($result) {
@@ -203,7 +204,7 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   `sessioninfo` ";
-    if ($listSettings["tester"] != "" || $listSettings["sprint"] != "" || $listSettings["teamsprint"] != "" || $listSettings["team"] != "") {
+    if ($listSettings["tester"] != "" || $listSettings["sprint"] != "" || $listSettings["teamsprint"] != "" || $listSettings["team"] != "" | $listSettings["status"]!= "") {
         $sqlSelect .= " WHERE  sessionid NOT LIKE \"\" ";
         if ($listSettings["tester"] != "") {
             $sqlSelect .= "     AND username=\"" . $listSettings["tester"] . "\" ";
@@ -217,6 +218,15 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
         if ($listSettings["team"] != "") {
             $sqlSelect .= "     AND teamname=\"" . $listSettings["team"] . "\" ";
         }
+        if ($listSettings["status"] != "") {
+            if ($listSettings["status"] == "Not Executed")
+                $sqlSelect .= "     AND executed=0 ";
+            if ($listSettings["status"] == "Executed")
+                $sqlSelect .= "     AND executed=1 ";
+            if ($listSettings["status"] == "Debriefed")
+                $sqlSelect .= "     AND debriefed=1 ";
+        }
+
     }
 
 
@@ -372,7 +382,7 @@ function echoPublicViewIcon($row) {
 }
 
 function echoCopyIcon($row) {
-    echo "<a id=\"copy_session" . $row["sessionid"] . "\" class=\"copy_session\" href=\"session.php?command=copy&amp;sessionid=" . $row["sessionid"]."\">";
+    echo "<a id=\"copy_session" . $row["sessionid"] . "\" class=\"copy_session\" href=\"session.php?command=copy&amp;sessionid=" . $row["sessionid"] . "\">";
     echo "  <img src=\"pictures/edit-copy-9-small.png\" border=\"0\" alt=\"Copy session\" title=\"Copy session\"/>";
     echo "</a>\n";
 }
