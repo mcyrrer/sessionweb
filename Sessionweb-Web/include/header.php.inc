@@ -46,6 +46,7 @@ if ($_SESSION['user'] != "") {
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
 echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
 echo "      <a href=\"list.php\" id=\"url_list\">List sessions</a> |";
+echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";
 
 
