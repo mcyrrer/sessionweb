@@ -248,6 +248,8 @@ function saveSession_UpdateSessionDataToDb($sessionid) {
     }
     $sqlUpdate .= "WHERE sessionid='$sessionid'";
 
+    //echo $sqlUpdate."<br>";
+
     $result = mysql_query($sqlUpdate);
 
     if (!$result) {
@@ -704,7 +706,7 @@ function saveSession_UpdateSessionLinkedToDb($versionid) {
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_sessionsconnections ";
     $sqlDelete .= "WHERE  `linked_from_versionid` = '$versionid'";
-
+echo $sqlDelete;
     $result = mysql_query($sqlDelete);
 
     if (!$result) {

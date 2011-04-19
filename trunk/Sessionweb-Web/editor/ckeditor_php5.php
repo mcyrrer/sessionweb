@@ -583,4 +583,30 @@ class CKEditor
 			return '{ ' . join(', ', $result) . ' }';
 		}
 	}
+
+    	/**
+	* Custom function for retrieving the data of the current editor instance
+	*
+	* @param string instance id
+	* @return string
+	*/
+	public function getData($id)
+	{
+		$js = "";
+		if (!$this->initialized) {
+			$js .= $this->init();
+		}
+		$js .= $this->returnGlobalEvents();
+		$script = "document.write('<div id=\"temp_zone\" style=\"display: none;\"></div>');"
+			. "$(document).ready(function(){"
+				. '$("input[type=\'submit\']").each(function(i, v){'
+					. "$('#' + v.id).click(function(){"
+					. "var data = CKEDITOR.instances.$id.getData();"
+					. "$('#temp_zone').html(data);"
+					. "});"
+				. "});"
+			. "});";
+		$js .= $this->script($script);
+		return $js;
+	}
 }
