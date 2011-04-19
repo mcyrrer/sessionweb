@@ -9,19 +9,23 @@ $(document).ready(function() {
     var myBugs = $('#buglist_hidden').text().split(',');
     var mysessionlinks = $('#sessionlinklist_hidden').text().split(',');
 
-//      Delete Session questionbox
-//      This script is placed in the php code.
-//    $("#url_deletesession").click(function() {
-//        var answer = confirm("Delete session from database?");
-//        if (answer) {
-//            return true;
-//        }
-//        else {
-//            return false;
-//        }
-//    });
 
+//Autosave implementation start
 
+    if ($(document).getUrlParam("command") == "edit") {
+        //CKEDITOR.config.jqueryOverrideVal = true;
+
+        $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+        $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+
+        $('#sessionform').autosave({
+            interval:     2000,
+            save:         function(e, o) {
+                autosave_exe();
+            }
+        });
+    }
+//Autosave implementation End
 
     //Metric check at submit
     $("#input_submit").click(function() {
@@ -47,6 +51,8 @@ $(document).ready(function() {
 
     // Metrics calculation
     $("[class=metricoption]").change(function() {
+//        alert(CKEDITOR.instances['textarea1'].getData().val());
+        alert($('#textarea1').val());
         var setup = $("#setuppercent").val();
         var test = $("#testpercent").val();
         var bug = $("#bugpercent").val();

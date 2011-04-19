@@ -426,7 +426,7 @@ function echoSessionForm() {
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <h1>New Session</h1>\n";
+    echo "                                   <h1>New Session</h1><br><span id='autosaved'></span>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -558,7 +558,7 @@ function echoSessionForm() {
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Charter: </td>\n";
     echo "                              <td>\n";
-    echo "                                  <textarea id=\"textarea1\" class=\"ckeditor\" name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$charter</textarea>\n";
+    echo "                                  <textarea id=\"textarea1\"name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$charter</textarea>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -582,7 +582,7 @@ function echoSessionForm() {
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Notes: </td>\n";
     echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
-    echo "                                  <textarea id=\"textarea2\" class=\"ckeditor\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
+    echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
