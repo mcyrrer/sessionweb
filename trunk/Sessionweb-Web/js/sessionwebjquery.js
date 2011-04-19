@@ -12,29 +12,33 @@ $(document).ready(function() {
 
 //***************Autosave implementation start***************
 
-    var res = confirm("Would you like to enable automatic save of you session? (it will save once a minute)");
-    if (res) {
-        $("#autosaved").empty().append("Autosave enabled...");
-        if ($(document).getUrlParam("command") == "edit") {
-            $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
-            $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
-            $('#sessionform').autosave({
-                interval:     60000,//60000=every 1min
-                save:         function(e, o) {
-                    var today = new Date();
-                    var h = today.getHours();
-                    var m = today.getMinutes();
-                    var s = today.getSeconds();
-                    m = checkTime(m);
-                    s = checkTime(s);
-                    $("#autosaved").empty().append(h + ":" + m + ":" + s);
-                }
-            });
+    var command = $(document).getUrlParam("command");
+    var sPath = window.location.pathname;
+    var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+    if (sPage == "session.php" && command == "edit") {
+        var res = confirm("Would you like to enable automatic save of you session? (it will save once a minute)");
+        if (res) {
+            $("#autosaved").empty().append("Autosave enabled...");
+            if ($(document).getUrlParam("command") == "edit") {
+                $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+                $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+                $('#sessionform').autosave({
+                    interval:     60000,//60000=every 1min
+                    save:         function(e, o) {
+                        var today = new Date();
+                        var h = today.getHours();
+                        var m = today.getMinutes();
+                        var s = today.getSeconds();
+                        m = checkTime(m);
+                        s = checkTime(s);
+                        $("#autosaved").empty().append(h + ":" + m + ":" + s);
+                    }
+                });
+            }
         }
-    }
-    else
-    {
-        $("#autosaved").empty().append("Autosave disabled by user, reload to enable it again.");
+        else {
+            $("#autosaved").empty().append("Autosave disabled by user, reload to enable it again.");
+        }
     }
 
 //***************Metric check at submit***************
