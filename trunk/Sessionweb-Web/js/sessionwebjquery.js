@@ -10,24 +10,34 @@ $(document).ready(function() {
     var mysessionlinks = $('#sessionlinklist_hidden').text().split(',');
 
 
-//Autosave implementation start
+//***************Autosave implementation start***************
 
-    if ($(document).getUrlParam("command") == "edit") {
-        //CKEDITOR.config.jqueryOverrideVal = true;
-
-        $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
-        $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
-
-        $('#sessionform').autosave({
-            interval:     2000,
-            save:         function(e, o) {
-                autosave_exe();
-            }
-        });
+    var res = confirm("Would you like to enable automatic save of you session? (it will save once a minute)");
+    if (res) {
+        $("#autosaved").empty().append("Autosave enabled...");
+        if ($(document).getUrlParam("command") == "edit") {
+            $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+            $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+            $('#sessionform').autosave({
+                interval:     60000,//60000=every 1min
+                save:         function(e, o) {
+                    var today = new Date();
+                    var h = today.getHours();
+                    var m = today.getMinutes();
+                    var s = today.getSeconds();
+                    m = checkTime(m);
+                    s = checkTime(s);
+                    $("#autosaved").empty().append(h + ":" + m + ":" + s);
+                }
+            });
+        }
     }
-//Autosave implementation End
+    else
+    {
+        $("#autosaved").empty().append("Autosave disabled by user, reload to enable it again.");
+    }
 
-    //Metric check at submit
+//***************Metric check at submit***************
     $("#input_submit").click(function() {
         if ($("#executed").is(':checked')) {
             var setup = $("#setuppercent").val();
@@ -49,10 +59,8 @@ $(document).ready(function() {
     });
 
 
-    // Metrics calculation
+//***************Metrics calculation***************
     $("[class=metricoption]").change(function() {
-//        alert(CKEDITOR.instances['textarea1'].getData().val());
-        alert($('#textarea1').val());
         var setup = $("#setuppercent").val();
         var test = $("#testpercent").val();
         var bug = $("#bugpercent").val();
@@ -76,12 +84,12 @@ $(document).ready(function() {
         }
     });
 
-    // Show search option in list.php
+//***************Show search option in list.php***************
     $("#showoption").click(function() {
         $("#option_list").fadeIn("slow");
     });
 
-    // Add sessionlink to session and manage if it is deleted
+//***************Add sessionlink to session and manage if it is deleted***************
     $("#add_sessionlink").click(function() {
         var sessionlinkValue = $("#sessionlink").val() + '';
         if (jQuery.inArray(sessionlinkValue, mysessionlinks) == -1 &&
@@ -133,7 +141,7 @@ $(document).ready(function() {
         }
     });
 
-    // Add bug to session and manage if it is deleted
+//***************Add bug to session and manage if it is deleted***************
     $("#add_bug").click(function() {
         var bugValue = $("#bug").val() + '';
         if (jQuery.inArray(bugValue, myBugs) == -1 &&
@@ -190,7 +198,8 @@ $(document).ready(function() {
             }
         }
     });
-    // Add requirement to session and manage if it is deleted
+
+//***************Add requirement to session and manage if it is deleted***************
     $("#add_requirement").click(function() {
         var requirementValue = $("#requirement").val() + '';
         if (jQuery.inArray(requirementValue, myRequirements) == -1 &&

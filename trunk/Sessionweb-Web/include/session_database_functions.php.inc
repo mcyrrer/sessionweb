@@ -125,7 +125,7 @@ function saveSession_InsertSessionDataToDb($sessionid) {
     $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
     $sqlInsert .= ") ";
 
-      echo $sqlInsert; 
+    //  echo $sqlInsert;
 
     $result = mysql_query($sqlInsert);
 
@@ -706,7 +706,7 @@ function saveSession_UpdateSessionLinkedToDb($versionid) {
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_sessionsconnections ";
     $sqlDelete .= "WHERE  `linked_from_versionid` = '$versionid'";
-echo $sqlDelete;
+
     $result = mysql_query($sqlDelete);
 
     if (!$result) {

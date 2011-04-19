@@ -40,7 +40,6 @@ function getSessionData($sessionid) {
     $sqlSelectSession .= "SELECT * ";
     $sqlSelectSession .= "FROM   mission ";
     $sqlSelectSession .= "WHERE  sessionid = $sessionid";
-    
     $resultSession = mysql_query($sqlSelectSession);
 
     if (!$resultSession) {
@@ -48,6 +47,12 @@ function getSessionData($sessionid) {
     }
 
     return mysql_fetch_array($resultSession);
+}
+
+function getSessionPublicKeyBasedOnSessionId($sessionid)
+{
+    $sessionData = getSessionData($sessionid);
+    return $sessionData['publickey'];
 }
 
 /**

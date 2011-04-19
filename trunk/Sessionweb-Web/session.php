@@ -21,6 +21,7 @@ if (strcmp($_REQUEST["command"], "new") == 0) {
 }
 elseif (strcmp($_REQUEST["command"], "view") == 0)
 {
+    echoSessionAction();
     echoViewSession();
 }
 elseif (strcmp($_REQUEST["command"], "edit") == 0)
@@ -75,7 +76,8 @@ elseif (strcmp($_REQUEST["command"], "save") == 0)
 include("include/footer.php.inc");
 
 
-function reassignSessionExecute() {
+function reassignSessionExecute()
+{
 
     $sessionid = $_REQUEST["sessionid"];
     $tester = $_REQUEST["tester"];
@@ -93,7 +95,8 @@ function reassignSessionExecute() {
 
 }
 
-function reassignSession() {
+function reassignSession()
+{
     $sessionid = $_REQUEST["sessionid"];
     echo "<h2>Reassign session</h2>\n";
     echo "Reassign session $sessionid to:\n";
@@ -104,7 +107,8 @@ function reassignSession() {
     echo "</form>\n";
 }
 
-function echoDebriefSession() {
+function echoDebriefSession()
+{
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
 
         echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
@@ -126,7 +130,8 @@ function echoDebriefSession() {
 }
 
 
-function saveDebriefedSession() {
+function saveDebriefedSession()
+{
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
         $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
         mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -166,7 +171,8 @@ function saveDebriefedSession() {
 }
 
 
-function checkSessionTitleNotToLong() {
+function checkSessionTitleNotToLong()
+{
     $_TITLELENGTH = 500;
 
     echo "<h1>Save session</h1>\n";
@@ -178,7 +184,8 @@ function checkSessionTitleNotToLong() {
 /**
  * Save session to database
  */
-function saveSession() {
+function saveSession()
+{
 
 
     checkSessionTitleNotToLong();
@@ -283,7 +290,8 @@ function saveSession() {
 /**
  * Save session to database
  */
-function copySession() {
+function copySession()
+{
 
     echo "<h1>Copy session</h1>\n";
     $sessionid = false;
@@ -367,7 +375,8 @@ function copySession() {
  *
  * @return unknown_type
  */
-function echoSessionForm() {
+function echoSessionForm()
+{
 
     $title = "";
     $team = "";
@@ -426,7 +435,16 @@ function echoSessionForm() {
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <h1>New Session</h1><br><span id='autosaved'></span>\n";
+    if ($_REQUEST['command'] == 'edit') {
+        echo "                                   <h1>Edit Session</h1>\n";
+        echo "    <img src='pictures/information-small.png'>Last saved: <span id='autosaved'></span>";
+    }
+    else
+    {
+        echo "                                   <h1>New Session</h1>\n";
+        echo "    <span id='autosaved'> <img src='pictures/information-small.png'> Autosave is enabled after first save of session.</span>";
+    }
+
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -712,7 +730,8 @@ function echoSessionForm() {
  * Prints percent (belongs to a HTML select item) to screen. E.g 5,10,15,20...
  *
  */
-function echoPercentSelection($selected) {
+function echoPercentSelection($selected)
+{
     //echo "                                      <option>$selected</option>\n";
     for ($index = 0; $index <= 100; $index = $index + 5) {
         if ($index == $selected) {
@@ -729,7 +748,8 @@ function echoPercentSelection($selected) {
  * Prints duration option (belongs to a HTML select item) to screen
  *
  */
-function echoDurationSelection($selected) {
+function echoDurationSelection($selected)
+{
     for ($index = 15; $index <= 480; $index = $index + 15) {
         if ($index == $selected) {
             echo "                                      <option selected=\"selected\">$index</option>\n";
@@ -747,7 +767,8 @@ function echoDurationSelection($selected) {
  * @return parsed notes as HTML
  */
 
-function parseRapidReporterNotes($notes) {
+function parseRapidReporterNotes($notes)
+{
 
     $explodedCharterNotes = explode("<br/>", $notes);
 
@@ -789,7 +810,8 @@ function parseRapidReporterNotes($notes) {
  * @param $notes BB TestAssistant XML notes
  * @return parsed notes as HTML
  */
-function parseBBTestAssistantNotes($notes) {
+function parseBBTestAssistantNotes($notes)
+{
     $notes = htmlspecialchars_decode($notes);
     $notes = str_replace("<br/>", "", $notes);
     $notes = str_replace("&nbsp;", "", $notes);
@@ -819,7 +841,8 @@ function parseBBTestAssistantNotes($notes) {
     return $charterParsed;
 }
 
-function deleteSession() {
+function deleteSession()
+{
 
     $sessionid = $_REQUEST["sessionid"];
     //$versionid = GetSessionIdFromVersionId($_REQUEST["sessionid"]);
