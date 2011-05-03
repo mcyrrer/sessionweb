@@ -563,4 +563,14 @@ function getUserSettings() {
     return mysql_fetch_array($result);
 }
 
+function echoSessionStatusTypesSelect()
+{
+    echo "<select id='sessionstatus'>\n";
+    echo "    <option value='' ></option>\n";
+    echo "    <option value='notexe' >Not Executed</option>\n";
+    echo "    <option value='exe' >Executed</option>\n";
+    echo "    <option value='deb' >Debriefed</option>\n";
+    echo "</select>\n";
+}
+
 ?>
