@@ -241,4 +241,26 @@ $(document).ready(function() {
             }
         }
     });
+
+
+//***************Statistic graph typ changed***************
+    $("#choosegraph").change(function() {
+//        $("#graphframe").html($("#choosegraph").val());
+//        $("#select_tester").attr('disabled', 'disabled');
+//        $("#select_team").attr('disabled', 'disabled');
+//        $("#select_sprint").attr('disabled', 'disabled');
+    });
+
+//***************Statistic Change Iframe to choosen graph***************
+    $("#showgraph").click(function() {
+        var type = $("#choosegraph").val();
+        var tester = $("#select_tester").val();
+        var team = $("#select_team").val();
+        var sprint = $("#select_sprint").val();
+
+        var url = "http://localhost/sessionweb/graph/index.php?type="+type+"&tester="+tester+"&team="+team+"&sprint="+sprint+"";
+
+        $("#iframegraph").attr('src',url );
+    });
+
 });

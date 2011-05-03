@@ -1,3 +1,6 @@
+<!--select DATE(updated), count(*)-->
+<!--  from mission group by DATE(updated);-->
+
 <?php
 session_start();
 if (!session_is_registered(myusername)) {
@@ -6,38 +9,31 @@ if (!session_is_registered(myusername)) {
 include("include/header.php.inc");
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
+echo "<h1>Statistics/Graphs</h1>";
+echo "Graph type:";
+echoGraphTypes();
+echo "Tester:";
+echoTesterSelect("");
+echo "Team:";
+echoTeamSelect("");
+echo "Sprint:";
+echoSprintSelect("");
+echo "Session status:";
+echoSessionStatusTypesSelect();
+echo "<img src='pictures/go-next.png' alt='Show Graph' id='showgraph'>";
+
+echo "<div id='graphdiv'>";
+echo "<iframe id='iframegraph' src='http://localhost/sessionweb/graph/index.php' width='1024' height='600' frameborder='0'></iframe>";
+echo "</div>";
+
+
+function echoGraphTypes()
+{
+    echo "<select id='choosegraph'>\n";
+    echo "    <option value='' >Choose graph</option>\n";
+    echo "    <option value='line_overtime'>Line graph: Accumulated test sessions over time(Normalized)</option>\n";
+        echo "    <option value='pie_generic'>Pie graph:test</option>\n";
+    echo "</select>\n";
+}
 
 ?>
-<table>
-    <tr>
-        <td valign="top">
-            <h2>Graph type</h2>
-
-            <div>
-                <img src="pictures/line-graph-medium.png" alt=""><br>
-                <a href="#" id="sessionsperday">Sessions per day</a>
-            </div>
-            <div>
-                <img src="pictures/bar-graph-medium.png" alt=""><br>
-                <a href="#" id="sessionspersprint">Sessions per sprint</a>
-            </div>
-            <div>
-
-                <img src="pictures/pie-graph-medium.png" alt=""><br>
-                <a href="#" id="timedistribution">Time distribution</a>
-            </div>
-        </td>
-        <td valign="top">
-            <form name="input" action="html_form_action.asp" method="get">
-               <div id="statistic_options">
-                    statistic_options
-                </div>
-                <input type="submit" value="Submit"/>
-            </form>
-            <div id="statistic_result">
-                statistic_result
-            </div>
-        </td>
-    </tr>
-</table>
-
