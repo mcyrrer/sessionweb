@@ -265,9 +265,19 @@ $(document).ready(function() {
         var team = $("#select_team").val();
         var sprint = $("#select_sprint").val();
 
-        var url = "http://localhost/sessionweb/graph/index.php?type="+type+"&tester="+tester+"&team="+team+"&sprint="+sprint+"";
+        var url = "http://localhost/sessionweb/graph/index.php?type=" + type;
+        if (tester != "")
+            url += "&tester=" + tester;
+        if (team != "")
+            if (team != "undefined")
+                url += "&team=" + team;
+        if (sprint != "")
+            url += "&sprint=" + team;
 
-        $("#iframegraph").attr('src',url );
+
+//        + "&tester=" + tester + "&team=" + team + "&sprint=" + sprint + "";
+        $("#url_graph").html("<a href='" + url + "'>" + url + "</a>");
+        $("#iframegraph").attr('src', url);
     });
 
 });
