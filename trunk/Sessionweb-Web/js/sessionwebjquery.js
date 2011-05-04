@@ -9,19 +9,26 @@ $(document).ready(function() {
     var myBugs = $('#buglist_hidden').text().split(',');
     var mysessionlinks = $('#sessionlinklist_hidden').text().split(',');
 
-
-//***************Autosave implementation start***************
-
+    //Get the command GET parameter and name of page loaded
     var command = $(document).getUrlParam("command");
     var sPath = window.location.pathname;
     var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+
+    //Initiation of WYSIWUG editor
+    if (sPage == "session.php" && command == "edit") {
+        $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+        $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+    }
+
+//***************Autosave implementation start***************
+
+
     if (sPage == "session.php" && command == "edit") {
         var res = confirm("Would you like to enable automatic save of you session? (it will save once a minute)");
         if (res) {
             $("#autosaved").empty().append("Autosave enabled...");
             if ($(document).getUrlParam("command") == "edit") {
-                $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
-                $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+
                 $('#sessionform').autosave({
                     interval:     60000,//60000=every 1min
                     save:         function(e, o) {
