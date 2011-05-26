@@ -77,13 +77,13 @@ function echoViewSession()
                 echo "        <td align=\"left\">\n";
                 echo "        <table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"4\">";
                 echo "            <tr>\n";
-                echo "                <td align=\"left\">\n";
+                echo "                <td align=\"left\" valign='top'>\n";
                 echo "                    <h4>Sessionid</h4>\n";
                 echo "                    <div style=\"background-color:#efefef;\">\n";
                 echo "                        " . $row["sessionid"] . "\n";
                 echo "                    </div>\n";
                 echo "                </td>\n";
-                echo "                <td align=\"left\">\n";
+                echo "                <td align=\"left\" valign='top'>\n";
                 echo "                    <h4>Username</h4>\n";
                 echo "                    <div style=\"background-color:#efefef;\">\n";
                 echo "                        " . $row["username"] . "\n";
@@ -94,7 +94,7 @@ function echoViewSession()
                     if ($row["teamname"] == "") {
                         $value = "&nbsp;";
                     }
-                    echo "                <td align=\"left\">\n";
+                    echo "                <td align=\"left\" valign='top'>\n";
                     echo "                    <h4>Teamname</h4>\n";
                     echo "                    <div style=\"background-color:#efefef;\">\n";
                     echo "                        $value\n";
@@ -106,7 +106,7 @@ function echoViewSession()
                     if ($row["sprintname"] == "") {
                         $value = "&nbsp;";
                     }
-                    echo "                <td align=\"left\">\n";
+                    echo "                <td align=\"left\" valign='top'>\n";
                     echo "                    <h4>Sprintname</h4>\n";
                     echo "                    <div style=\"background-color:#efefef;\">\n";
                     echo "                        $value\n";
@@ -118,10 +118,25 @@ function echoViewSession()
                     if ($row["teamsprintname"] == "") {
                         $value = "&nbsp;";
                     }
-                    echo "                <td align=\"left\">\n";
+                    echo "                <td align=\"left\" valign='top'>\n";
                     echo "                    <h4>Team sprintname</h4>\n";
                     echo "                    <div style=\"background-color:#efefef;\">\n";
                     echo "                        $value\n";
+                    echo "                    </div>\n";
+                    echo "                </td>\n";
+                }
+
+                if ($_SESSION['settings']['area'] == 1) {
+                    $sessionid = $row["sessionid"];
+                    $versionid = getSessionVersionId($sessionid);
+                    $areaArray = getSessionAreas($versionid);
+                    echo "                <td align=\"left\" valign='top'>\n";
+                    echo "                    <h4>Area</h4>\n";
+                    echo "                    <div style=\"background-color:#efefef;\">\n";
+                    foreach ($areaArray as $area)
+                    {
+                        echo "                        $area<br>\n";
+                    }
                     echo "                    </div>\n";
                     echo "                </td>\n";
                 }
@@ -131,7 +146,7 @@ function echoViewSession()
                     if ($row["testenvironment"] == "") {
                         $value = "&nbsp;";
                     }
-                    echo "                <td align=\"left\">\n";
+                    echo "                <td align=\"left\" valign='top'>\n";
                     echo "                    <h4>Testenvironment</h4>\n";
                     echo "                    <div style=\"background-color:#efefef;\">\n";
                     echo "                        $value\n";
@@ -139,19 +154,19 @@ function echoViewSession()
                     echo "                </td>\n";
                 }
 
-                echo "                <td align=\"left\">\n";
+                echo "                <td align=\"left\" valign='top'>\n";
                 echo "                      <h4>Status</h4>\n";
                 echo "                      <div style=\"background-color:#efefef;\">\n";
                 echoExecutedStatus($rowSessionStatus);
                 echo "                      </div>\n";
                 echo "                </td>\n";
-                echo "                <td align=\"left\">\n";
+                echo "                <td align=\"left\" valign='top'>\n";
                 echo "                      <h4>Debriefed</h4>\n";
                 echo "                      <div style=\"background-color:#efefef;\">\n";
                 echoDebriefedStatus($rowSessionStatus);
                 echo "                      </div>\n";
                 echo "                </td>\n";
-                echo "                <td align=\"left\">\n";
+                echo "                <td align=\"left\" valign='top'>\n";
                 echo "                    <h4>Updated</h4>\n";
                 echo "                    <div style=\"background-color:#efefef;\">\n";
                 echo "                        " . $row["updated"] . "\n";
@@ -250,6 +265,25 @@ function echoViewSession()
                 mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
                 echoSessionMetrics($rowSessionMetric, $row["versionid"]);
 
+                $sessionDebriefNotes = getSessionDebrief($row["versionid"]);
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echo "            <h2>Debrief comments</h2>\n";
+                echo "        </td>\n";
+                echo "    </tr>\n";
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echo             $sessionDebriefNotes['notes'];
+                echo "        </td>\n";
+                echo "    </tr>\n";
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echo "            Debriefed by: ".$sessionDebriefNotes['debriefedby'];
+                echo "        </td>\n";
+                echo "    </tr>\n";
 
                 echo "</table>";
             } else
