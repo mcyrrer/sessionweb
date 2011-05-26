@@ -35,6 +35,23 @@ function getSessionMetrics($versionid) {
     return mysql_fetch_array($resultSessionMetrics);
 }
 
+function getSessionDebrief($versionid) {
+    //	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT * ";
+    $sqlSelect .= "FROM   mission_debriefnotes ";
+    $sqlSelect .= "WHERE  versionid = $versionid";
+    $resultSession = mysql_query($sqlSelect);
+
+    if (!$resultSession) {
+        echo "getSessionDebrief: " . mysql_error() . "<br/>";
+    }
+
+    return mysql_fetch_array($resultSession);
+}
+
 function getSessionData($sessionid) {
     $sqlSelectSession = "";
     $sqlSelectSession .= "SELECT * ";
