@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!session_is_registered(myusername)) {
-    header("location:index.php");
+    header("location:../index.php");
 }
 //include("../include/header.php.inc");
 include_once('../config/db.php.inc');
