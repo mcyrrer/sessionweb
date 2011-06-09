@@ -15,7 +15,7 @@ $(document).ready(function() {
     var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 
     //Initiation of WYSIWUG editor
-    if (sPage == "session.php" && command == "edit") {
+    if (sPage == "session.php" && command == "edit" || sPage == "session.php" && command == "new") {
         $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
         $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
     }
@@ -265,12 +265,13 @@ $(document).ready(function() {
         var team = $("#select_team").val();
         var sprint = $("#select_sprint").val();
 
-        var url = "http://localhost/sessionweb/graph/index.php?type=" + type;
+        var url = "graph/index.php?type=" + type;
         if (tester != "")
             url += "&tester=" + tester;
-        if (team != "")
-            if (team != "undefined")
-                url += "&team=" + team;
+//        if (team != "")
+//            alert(team);
+//            if (team != "undefined")
+//                url += "&team=" + team;
         if (sprint != "")
             url += "&sprint=" + team;
 

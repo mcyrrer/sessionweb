@@ -406,7 +406,7 @@ function saveSession_InsertSessionStatusToDb($versionid, $executedStatus) {
     $sqlInsert .= "             '$executedStatus', ";
     $sqlInsert .= "             'false', ";
     $sqlInsert .= "             'false', ";
-    $sqlInsert .= "             'CURRENT_TIMESTAMP')";
+    $sqlInsert .= "             NOW())";
 
     $result = mysql_query($sqlInsert);
 
@@ -428,7 +428,7 @@ function saveSession_UpdateSessionStatusToDb($versionid) {
     $sqlUpdate .= "SET    `executed` = '$executed', ";
     $sqlUpdate .= "       `debriefed` = 'false', ";
     $sqlUpdate .= "       `masterdibriefed` = 'false', ";
-    $sqlUpdate .= "       `executed_timestamp` = CURRENT_TIMESTAMP ";
+    $sqlUpdate .= "       `executed_timestamp` = NOW() ";
     $sqlUpdate .= "WHERE versionid='$versionid'";
 
     $result = mysql_query($sqlUpdate);
@@ -444,7 +444,7 @@ function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $m
     $sqlUpdate .= "UPDATE mission_status ";
     $sqlUpdate .= "SET    `debriefed` = $debriefed, ";
     $sqlUpdate .= "       `masterdibriefed` = $masterdibriefed, ";
-    $sqlUpdate .= "       `debriefed_timestamp` = 'CURRENT_TIMESTAMP' ";
+    $sqlUpdate .= "       `debriefed_timestamp` = NOW() ";
     $sqlUpdate .= "WHERE versionid='$versionid'";
 
     $result = mysql_query($sqlUpdate);

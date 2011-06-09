@@ -22,10 +22,16 @@ else
 
 }
 
-if ($_SESSION['useradmin'] == 1) {
-    echo "Team:";
-    echoTeamSelect("");
-}
+//if ($_SESSION['useradmin'] == 1) {
+//    echo "Team:";
+//    echoTeamSelect("");
+//}
+//else
+//{
+//    echo "                                      <select id=\"select_team\" name=\"team\">\n";
+//    echo "                                      <option></option>\n";
+//    echo "                                      </select>\n";
+//}
 
 
 echo "Sprint:";
@@ -35,7 +41,7 @@ echoSprintSelect("");
 echo "<img src='pictures/go-next.png' alt='Show Graph' id='showgraph'>";
 
 echo "<div id='graphdiv'>";
-echo "<iframe id='iframegraph' src='http://localhost/sessionweb/graph/index.php' width='1200' height='600' frameborder='0'></iframe>";
+echo "<iframe id='iframegraph' src='graph/index.php' width='1200' height='600' frameborder='0'></iframe>";
 echo "</div>";
 echo "<div id='url_graph'></div>";
 
@@ -43,9 +49,9 @@ echo "<div id='url_graph'></div>";
 function echoGraphTypes()
 {
     echo "<select id='choosegraph'>\n";
-    echo "    <option value='' >Choose graph</option>\n";
+//    echo "    <option value='' >Choose graph</option>\n";
     echo "    <option value='line_overtime'>Line graph: Test sessions over time</option>\n";
-//    echo "    <option value='pie_generic'>Pie graph:test</option>\n";
+    //    echo "    <option value='pie_generic'>Pie graph:test</option>\n";
     echo "</select>\n";
 }
 
