@@ -599,7 +599,8 @@ function echoSessionForm()
     echo "                        </tr>\n";
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Notes: </td>\n";
-    echo "                              <td><i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
+    echo "                              <td>\n";
+    //echo "                              <i>It is possible to paste <a href=\"http://testing.gershon.info/reporter/\">RapidReporter</a> CVS notes or <a href=\"http://www.bbtestassistant.com\">BB TestAssistant</a> XML notes into the notes field.</i>\n";
     echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";

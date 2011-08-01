@@ -16,8 +16,27 @@ $(document).ready(function() {
 
     //Initiation of WYSIWUG editor
     if (sPage == "session.php" && command == "edit" || sPage == "session.php" && command == "new") {
-        $('#textarea1').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
-        $('#textarea2').ckeditor(); //{ /* callback code */  }, { skin : 'office2003' });
+        CKEDITOR.config.toolbar_Basic =
+        [
+            	['Source','-','-','-','-','-','-'],
+                ['Cut','Copy','Paste','PasteText','PasteFromWord','-','-', 'SpellChecker', 'Scayt'],
+                ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+                ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
+                '/',
+                ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
+                ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+                ['BidiLtr', 'BidiRtl' ],
+                ['Link','Unlink','Anchor'],
+                ['Image','-','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','-'],
+                '/',
+                ['Styles','Format','Font','FontSize'],
+                ['TextColor','BGColor'],
+                ['Maximize', 'ShowBlocks','-','About']
+        ];
+        CKEDITOR.config.toolbar = 'Basic';
+        $('#textarea1').ckeditor({ toolbar : 'Basic' });//, { toolbar : 'ToolBar' };
+        $('#textarea2').ckeditor({ toolbar : 'Basic' });//, { skin : 'office2003' };
     }
 
 //***************Autosave implementation start***************
