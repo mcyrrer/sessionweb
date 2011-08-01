@@ -1,0 +1,7 @@
+SessionWeb
+
+Sessionweb require PHP5 and MYSQL to work.
+If you do not know how to install/configure it please use XAMPP Server (http://www.apachefriends.org/en/xampp.html)
+
+===Installation instructions===
+Exstract the content into on a web server and browse to sessionweb/install.php page and follow the instructions.
