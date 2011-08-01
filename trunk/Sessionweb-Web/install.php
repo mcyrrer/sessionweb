@@ -21,8 +21,12 @@ if($_REQUEST[adm_user]!="")
     exec($createDatabaseSql, $result);
     echo "user $user_name created<br>";
 
-    $setupGranSql  = "mysql -u$adm_user -p$adm_password -e \"GRANT SELECT , INSERT , UPDATE , DELETE ON sessionwebos . * TO $user_name@localhost;\" ";
-    exec($setupGranSql, $result);
+
+    $setupGranSqlStep1  = "mysql -u$adm_user -p$adm_password -e \"GRANT USAGE ON * . * TO  '$user_name'@'localhost' IDENTIFIED BY  '$user_password' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;;\" ";
+    exec($setupGranSqlStep1, $result);
+
+    $setupGranSqlStep2  = "mysql -u$adm_user -p$adm_password -e \"GRANT SELECT , INSERT , UPDATE , DELETE ON  `sessionwebos` . * TO  '$user_name'@'localhost';;\" ";
+    exec($setupGranSqlStep2, $result);
 
     echo "Access rights to sessionwebos for user $user_name is set to SELECT , INSERT , UPDATE , DELETE<br>";
 
@@ -37,7 +41,7 @@ if($_REQUEST[adm_user]!="")
     fwrite($fh,
     $configfileString);
     fclose($fh);
-    echo "<br>Installation finished. Please <b>remove</b> this file and go to <a href=\"index.php\">Sessionweb</a> and use username admin and password admin.";
+    echo "<br>Installation finished. Please <b>remove</b> this file (install.php) and go to <a href=\"index.php\">Sessionweb</a> and use username <b>admin</b> and password <b>admin</b>.";
     exit();
 }
 ?>
@@ -57,7 +61,7 @@ if($_REQUEST[adm_user]!="")
 <div class="form_description">
 <h2>Install Sessionweb</h2>
 <p>Add information below to automaticly create a MySql database and load
-it with Sessionweb tables on this server <br> Please make sure that file
+it with Sessionweb tables on this server <br>For installation on a linux/unix server please make sure that file
 conf/db.php.inc is possible to write to for the web server user. If not
 change file permission by executing <b>chmod 666 conf/db.php.inc</b>
 
@@ -70,7 +74,7 @@ databasename mysql_sessionweb_layout.x.x.sql
 
 </p>
 <p>If sessionweb database already is in place and conf/db.php.inc is up
-to date please remove install.php to start to use sessionweb</p>
+to date please remove install.php to start to use sessionweb. Default user created is admin with password admin.</p>
 </div>
 <ul>
 	<!--	<li id="li_1"><label class="description" for="element_1"> MySql host </label>-->
