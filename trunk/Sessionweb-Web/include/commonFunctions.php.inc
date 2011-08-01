@@ -452,7 +452,7 @@ function echoTesterSelect($name) {
     $sqlSelect = "";
     $sqlSelect .= "SELECT username ";
     $sqlSelect .= "FROM   members ";
-    $sqlSelect .= "WHERE active = TRUE ";
+    //$sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
     $sqlSelect .= "ORDER  BY fullname ASC";
 
     $result = mysql_query($sqlSelect);
