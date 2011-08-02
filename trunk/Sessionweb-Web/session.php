@@ -151,10 +151,10 @@ function saveDebriefedSession()
         if (doesSessionNotesExist($versionid)) {
             saveSession_DeleteSessionsNotesFromDb($versionid);
         }
-        else
-        {
-            echo "session does not have notes.<br>";
-        }
+//        else
+//        {
+//            echo "session does not have notes.<br>";
+//        }
 
 
         saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed);
@@ -165,7 +165,7 @@ function saveDebriefedSession()
     }
     else
     {
-        echo "You can not save since you do not have the persmisions to debrief\n";
+        echo "You can not save since you do not have the permissions to debrief\n";
     }
 
 }
