@@ -108,7 +108,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   `publickey` VARCHAR(100) NOT NULL ,
   `testenvironment` VARCHAR(45) NULL ,
-  `software` VARCHAR(45) NULL ,
+  `software` VARCHAR(1024) NULL ,
   INDEX `fk_mission_members` (`username` ASC) ,
   INDEX `fk_mission_sprintnames` (`sprintname` ASC) ,
   INDEX `fk_mission_teamnames` (`teamname` ASC) ,
@@ -234,6 +234,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `analyticsid` VARCHAR(45) NULL COMMENT 'google analytics id' ,
   `url_to_dms` VARCHAR(500) NULL ,
   `url_to_rms` VARCHAR(500) NULL ,
+  `wordcloud` TINYINT(1)  NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -360,7 +361,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `publickey` INT, `updated` INT);
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);
 
 -- -----------------------------------------------------
 -- View `sessionwebos`.`sessioninfo`
@@ -368,8 +369,33 @@ CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versi
 DROP VIEW IF EXISTS `sessionwebos`.`sessioninfo` ;
 DROP TABLE IF EXISTS `sessionwebos`.`sessioninfo`;
 USE `sessionwebos`;
-CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT m.sessionid, m.versionid, m.title, m.username, ms.executed, ms.debriefed, m.publickey, m.updated 
-from mission m, mission_status ms WHERE m.versionid = ms.versionid;
+CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT 
+        m.sessionid,
+        m.versionid,
+        m.title,
+        m.username,
+        ms.executed,
+        ms.debriefed,
+        m.publickey,
+        m.updated,
+        m.teamname,
+        m.sprintname,
+        ms.executed_timestamp,
+        ms.debriefed_timestamp,
+        sm.setup_percent,
+        sm.test_percent,
+        sm.bug_percent,
+        sm.opportunity_percent,
+        sm.duration_time
+    from
+        mission m,
+        mission_status ms,
+        mission_sessionmetrics sm
+    WHERE
+        m.versionid = ms.versionid
+        AND
+        m.versionid = sm.versionid
+;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -390,7 +416,7 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`) VALUES (NULL, '90', '1', '1', '1', '1', '1', '1', NULL, NULL, NULL);
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`, `wordcloud`) VALUES (NULL, '90', '1', '1', '1', '1', '1', '1', NULL, NULL, NULL, '1');
 
 COMMIT;
 

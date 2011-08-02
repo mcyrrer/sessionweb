@@ -10,34 +10,53 @@ $(document).ready(function() {
     var mysessionlinks = $('#sessionlinklist_hidden').text().split(',');
 
     //Get the command GET parameter and name of page loaded
-    var command = $(document).getUrlParam("command");
+    var command = "";
+    try {
+        var command = $(document).getUrlParam("command");
+    }
+    catch(err) {
+
+    }
     var sPath = window.location.pathname;
     var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 
     //Initiation of WYSIWUG editor
     if (sPage == "session.php" && command == "edit" || sPage == "session.php" && command == "new") {
         CKEDITOR.config.toolbar_Basic =
-        [
-            	['Source','-','-','-','-','-','-'],
-                ['Cut','Copy','Paste','PasteText','PasteFromWord','-','-', 'SpellChecker', 'Scayt'],
-                ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-                ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-                '/',
-                ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-                ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
-                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-                ['BidiLtr', 'BidiRtl' ],
-                ['Link','Unlink','Anchor'],
-                ['Image','-','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','-'],
-                '/',
-                ['Styles','Format','Font','FontSize'],
-                ['TextColor','BGColor'],
-                ['Maximize', 'ShowBlocks','-','About']
-        ];
+                [
+                    ['Source','-','-','-','-','-','-'],
+                    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','-', 'SpellChecker', 'Scayt'],
+                    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+                    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
+                    '/',
+                    ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
+                    ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+                    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+                    ['BidiLtr', 'BidiRtl' ],
+                    ['Link','Unlink','Anchor'],
+                    ['Image','-','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','-'],
+                    '/',
+                    ['Styles','Format','Font','FontSize'],
+                    ['TextColor','BGColor'],
+                    ['Maximize', 'ShowBlocks','-','About']
+                ];
         CKEDITOR.config.toolbar = 'Basic';
         $('#textarea1').ckeditor({ toolbar : 'Basic' });//, { toolbar : 'ToolBar' };
         $('#textarea2').ckeditor({ toolbar : 'Basic' });//, { skin : 'office2003' };
     }
+
+
+//***************WordCloud add word to stoplist
+    $("[class=wordcloudword]").click(function() {
+        var word = $(this).text();
+        $.get("wordcloud.php", { word: $(this).text() },
+                function(data) {
+                    $("#addedword").html(word + " added to black list");
+//                    alert(": " + data);
+                });
+        $(this).html("");
+
+    });
 
 //***************Autosave implementation start***************
 

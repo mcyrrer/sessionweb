@@ -357,6 +357,20 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_settings` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Placeholder table for view `sessionwebos`.`sessioninfo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `publickey` INT, `updated` INT);
+
+-- -----------------------------------------------------
+-- View `sessionwebos`.`sessioninfo`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `sessionwebos`.`sessioninfo` ;
+DROP TABLE IF EXISTS `sessionwebos`.`sessioninfo`;
+USE `sessionwebos`;
+CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT m.sessionid, m.versionid, m.title, m.username, ms.executed, ms.debriefed, m.publickey, m.updated 
+from mission m, mission_status ms WHERE m.versionid = ms.versionid;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -367,7 +381,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', 1, 1, 1, NULL, '21232f297a57a5a743894a0e4a801fc3');
+INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`) VALUES ('admin', 'Administrator', '1', '1', '1', NULL, '21232f297a57a5a743894a0e4a801fc3');
 
 COMMIT;
 
@@ -376,7 +390,7 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`) VALUES (NULL, 90, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL);
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`) VALUES (NULL, '90', '1', '1', '1', '1', '1', '1', NULL, NULL, NULL);
 
 COMMIT;
 

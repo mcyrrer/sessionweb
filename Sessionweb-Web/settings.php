@@ -263,6 +263,19 @@ function echoChangeConfig() {
         }
         echo "        </td>\n";
         echo "    </tr>\n";
+        echo "    <tr>\n";
+
+        echo "        <td>Word Cloud in session view\n";
+        echo "        </td>\n";
+        if ($row[wordcloud] == 1) {
+            echo "        <td> <input type=\"checkbox\" name=\"wordcloud\" checked=\"checked\" value=\"checked\" >\n";
+        }
+        else
+        {
+            echo "        <td> <input type=\"checkbox\" name=\"wordcloud\" value=\"checked\" >\n";
+        }
+        echo "        </td>\n";
+        echo "    </tr>\n";
         echo "</table>\n";
         echo "            <input align=left type=\"submit\" value=\"Change settings\" />\n";
         echo "</form>\n";
@@ -761,6 +774,15 @@ function updateConfig() {
         $publicview = 0;
     }
 
+    $wordcloud = 0;
+    if (strcmp($_REQUEST["wordcloud"], "checked") == 0) {
+        $wordcloud = 1;
+    }
+    else
+    {
+        $wordcloud = 0;
+    }
+
     $url_to_dms = $_REQUEST["url_to_dms"];
 
     $url_to_rms = $_REQUEST["url_to_rms"];
@@ -775,7 +797,8 @@ function updateConfig() {
     $sqlUpdate .= "       `url_to_rms` = '$url_to_rms', ";
     $sqlUpdate .= "       `testenvironment` = '$env', ";
     $sqlUpdate .= "       `publicview` = '$publicview', ";
-    $sqlUpdate .= "       `teamsprint` = '$teamsprint' ";
+    $sqlUpdate .= "       `teamsprint` = '$teamsprint', ";
+    $sqlUpdate .= "       `wordcloud` = '$wordcloud' ";
     //$sqlUpdate .= "WHERE  `id` = '1'" ;
 
     $result = mysql_query($sqlUpdate);

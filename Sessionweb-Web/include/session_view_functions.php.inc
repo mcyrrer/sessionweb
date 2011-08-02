@@ -177,6 +177,26 @@ function echoViewSession()
                 echo " </td>\n";
                 echo "    </tr>\n";
 
+
+                //WordCloud
+                if ($_SESSION['settings']['wordcloud'] == 1) {
+                    echo "    <tr>\n";
+                    echo "        <td></td>\n";
+                    echo "        <td>\n";
+                    echo "            <h4>WordCloud</h4>\n";
+                    echo "        </td>\n";
+                    echo "    </tr>\n";
+                    echo "    <tr>\n";
+                    echo "        <td></td>\n";
+                    echo "        <td>\n";
+                    echo "<iframe src='graph/wordcloud.php?sessionid=" . $row["sessionid"] . "' width='100%' height='120' frameborder='0'>";
+                    echo "  <p>Your browser does not support iframes.</p>";
+                    echo "</iframe>";
+                    echo "        </td>\n";
+                    echo "    </tr>\n";
+                }
+
+
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
@@ -281,7 +301,7 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            Debriefed by: ".$sessionDebriefNotes['debriefedby'];
+                echo "            Debriefed by: " . $sessionDebriefNotes['debriefedby'];
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
