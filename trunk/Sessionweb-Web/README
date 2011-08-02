@@ -1,16 +1,15 @@
-====SessionWeb====
+=SessionWeb=
 Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server (http://www.apachefriends.org/en/xampp.html)
 
-
 ==SessionWeb 1.1==
-=Installations Instructions=
+===Installations Instructions===
 For new installation follow 1.0 instruction
 For Upgrade from 1.0-1.1:
 Replace all files in your sessionweb folder with the new once and execute the config/SessionwebDbLayoutDeelta_1.0-_1.1_DRAFT.sql script to modify the database.
-=What is new in 1.1=
-*Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings. 
+====What is new in 1.1====
+Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings.
 
 ==SessionWeb 1.0==
-=Installations Instructions=
+===Installations Instructions===
 Put the content into on a web server and browse to sessionweb/install.php page and follow the instructions.
