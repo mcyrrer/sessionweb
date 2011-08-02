@@ -51,7 +51,7 @@ function echoGraphTypes()
     echo "<select id='choosegraph'>\n";
 //    echo "    <option value='' >Choose graph</option>\n";
     echo "    <option value='line_overtime'>Line graph: Test sessions over time</option>\n";
-    //    echo "    <option value='pie_generic'>Pie graph:test</option>\n";
+    echo "    <option value='pie_timedist'>Pie graph: Time distribution</option>\n";
     echo "</select>\n";
 }
 

@@ -134,8 +134,9 @@ $(document).ready(function() {
     });
 
 //***************Show search option in list.php***************
-    $("#showoption").click(function() {
+    $("[class=showoption]").click(function() {
         $("#option_list").fadeIn("slow");
+        $("#showoptiontext").text("");
     });
 
 //***************Add sessionlink to session and manage if it is deleted***************

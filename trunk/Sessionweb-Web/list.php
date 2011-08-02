@@ -238,7 +238,8 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
 }
 
 function echoSearchDiv($listSettings) {
-    echo "<a id=\"showoption\" href=\"#\">Show table options</a>\n";
+    echo "<img src='pictures/listsettings.png' class='showoption' id='showoptionpicture' alt='Session list settings'>\n";
+    echo "<a class='showoption' id='showoptiontext' href=\"#\">Show Search Functionality</a>\n";
 
     echo "<div style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\" id=\"option_list\">\n";
     echo "<form id=\"narrowform\" name=\"narrowform\" action=\"list.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
