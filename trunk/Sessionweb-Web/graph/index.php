@@ -24,11 +24,11 @@ $failedToCreateGraph = false;
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    if ($_GET['type'] == "line_overtime") {
+    if (urldecode($_GET['type']) == "line_overtime") {
         //        lineGraph();
         dateLineGraphGoogle();
     }
-    elseif ($_GET['type'] == "pie_timedist")
+    elseif (urldecode($_GET['type']) == "pie_timedist")
     {
         pieTimeDistribution();
     }
@@ -42,7 +42,6 @@ $failedToCreateGraph = false;
 <body>
 
 <div>
-    <?php echo $sql; echo $labels;?>
     <div id='chart_div' style='width: 1024; height: 400px;'>
         <canvas id="graphDiv" width="1024" height="400"> [Please wait...]</canvas>
     </div>
@@ -53,28 +52,30 @@ $failedToCreateGraph = false;
 <?php
 function dateLineGraphGoogle()
 {
-    //TODO: Fix undefined for team in javascript!!!!!
     $sql = "SELECT DATE(executed_timestamp) AS date, COUNT(*) AS count, sessionid  ";
     $sql .= "FROM sessionwebos.sessioninfo  ";
     $sql .= "WHERE executed = 1  ";
     if ($_GET['tester'] != null) {
         if ($_SESSION['useradmin'] == 1) {
-            $sql .= "AND username = '" . $_GET['tester'] . "' ";
+            $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
         }
     }
     if ($_GET['team'] != null) {
         if ($_SESSION['useradmin'] == 1) {
-            $sql .= "AND teamname = '" . $_GET['team'] . "' ";
+            $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
         }
     }
     if ($_GET['sprint'] != null) {
-        $sql .= "AND sprintname = '" . $_GET['sprint'] . "' ";
+        $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
     }
 
     $sql .= "GROUP BY DATE(executed_timestamp)  ";
     $sql .= "ORDER BY date;";
+//    echo "    <script type='text/javascript'>\n";
+//    echo " alert('$sql');\n";
+//    echo "    </script>\n";
     $result = mysql_query($sql);
-    //    echo $sql;
+
     if ($result) {
         echo "<script type='text/javascript' src='https://www.google.com/jsapi'></script>\n";
         echo "    <script type='text/javascript'>\n";
@@ -107,20 +108,19 @@ function dateLineGraphGoogle()
             $year = substr($date, 0, 4);
             $month = intval(substr($date, 5, 2)) - 1;
             $day = substr($date, 8, 2);
-            //        print_r($row);
             $sql = "SELECT SUM(duration_time)/ ";
             $sql .= "  (SELECT normalized_session_time ";
             $sql .= "   FROM settings) AS duration ";
             $sql .= "FROM `sessionwebos`.`sessioninfo`  ";
             $sql .= "WHERE DATE(executed_timestamp) = '" . $row['date'] . "' ";
             if ($_GET['tester'] != null) {
-                $sql .= "AND username = '" . $_GET['tester'] . "' ";
+                $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
             }
             if ($_GET['team'] != null) {
-                $sql .= "AND teamname = '" . $_GET['team'] . "' ";
+                $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
             }
             if ($_GET['sprint'] != null) {
-                $sql .= "AND sprintname = '" . $_GET['sprint'] . "' ";
+                $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
             }
             $sql .= "  AND executed = 1;";
             //                echo $sql;
