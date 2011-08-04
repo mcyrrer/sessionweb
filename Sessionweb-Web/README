@@ -7,6 +7,7 @@ If you do not know how to install/configure it please use XAMPP Server (http://w
 For new installation follow 1.0 instruction
 For Upgrade from 1.0-1.1:
 Replace all files in your sessionweb folder with the new once and execute the config/SessionwebDbLayoutDeelta_1.0-_1.1_DRAFT.sql script to modify the database.
+If you are sessonweb on unix/linux/mac please check that the include/StoplistWordCloud.txt have the correct read/write permissions (chmod 666 include/StoplistWordCloud.txt). This is needed to be able to add words to the list.
 ====What is new in 1.1====
 Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings.
 
