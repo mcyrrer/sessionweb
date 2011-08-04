@@ -6,16 +6,19 @@ body {
 }
 
 h1 {
+    font-family:"'Comic Sans MS'";
     color: #2e2e2e;
     text-align: left;
 }
 
 h2 {
+    font-family:"'Comic Sans MS'";
     color: #2e2e2e;
     text-align: left;
 }
 
 h3 {
+    font-family:"'Comic Sans MS'";
     color: #000000;
     text-align: left;
 }

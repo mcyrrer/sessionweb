@@ -9,6 +9,7 @@ if (!session_is_registered(myusername)) {
 include_once('../config/db.php.inc');
 include_once ('../include/commonFunctions.php.inc');
 
+
 $wordsCountArray = array();
 
 if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
