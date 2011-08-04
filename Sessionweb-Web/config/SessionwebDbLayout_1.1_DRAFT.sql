@@ -234,7 +234,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `analyticsid` VARCHAR(45) NULL COMMENT 'google analytics id' ,
   `url_to_dms` VARCHAR(500) NULL ,
   `url_to_rms` VARCHAR(500) NULL ,
-  `wordcloud` TINYINT(1)  NULL ,
+  `wordcloud` TINYINT(1)  NULL DEFAULT 1 ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -342,6 +342,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_settings` (
   `username` VARCHAR(45) NOT NULL ,
   `teamname` VARCHAR(100) NULL ,
   `list_view` VARCHAR(45) NULL ,
+  `autosave` TINYINT NULL DEFAULT 1 ,
   PRIMARY KEY (`username`) ,
   INDEX `fk_user_settings_members1` (`username` ASC) ,
   INDEX `fk_user_settings_teamnames1` (`teamname` ASC) ,
@@ -425,6 +426,6 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`) VALUES ('admin', NULL, 'all');
+INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`) VALUES ('admin', NULL, 'all', NULL);
 
 COMMIT;
