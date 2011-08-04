@@ -151,10 +151,10 @@ function saveDebriefedSession()
         if (doesSessionNotesExist($versionid)) {
             saveSession_DeleteSessionsNotesFromDb($versionid);
         }
-//        else
-//        {
-//            echo "session does not have notes.<br>";
-//        }
+        //        else
+        //        {
+        //            echo "session does not have notes.<br>";
+        //        }
 
 
         saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed);
@@ -187,7 +187,7 @@ function checkSessionTitleNotToLong()
 function saveSession()
 {
 
-
+    //insertAutomaticGoBackOnePage();
     checkSessionTitleNotToLong();
 
     $sessionid = false;
@@ -845,7 +845,9 @@ function parseBBTestAssistantNotes($notes)
 function deleteSession()
 {
 
+
     $sessionid = $_REQUEST["sessionid"];
+    insertAutomaticGoBackOnePage();
     //$versionid = GetSessionIdFromVersionId($_REQUEST["sessionid"]);
     if ($sessionid != "") {
         deleteSessionFromDatabase($sessionid);

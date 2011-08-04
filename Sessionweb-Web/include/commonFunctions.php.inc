@@ -590,4 +590,10 @@ function echoSessionStatusTypesSelect()
     echo "</select>\n";
 }
 
+function insertAutomaticGoBackOnePage()
+{
+    echo "<script type='text/JavaScript'>\n";
+    echo "setTimeout(\"location.href = '" . $_SERVER['HTTP_REFERER'] . "';\",3000);\n";
+    echo "</script>\n";
+}
 ?>

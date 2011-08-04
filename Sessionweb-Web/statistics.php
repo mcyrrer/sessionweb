@@ -22,10 +22,10 @@ else
 
 }
 
-//if ($_SESSION['useradmin'] == 1) {
-//    echo "Team:";
-//    echoTeamSelect("");
-//}
+if ($_SESSION['useradmin'] == 1) {
+    echo "Team:";
+    echoTeamSelect("");
+}
 //else
 //{
 //    echo "                                      <select id=\"select_team\" name=\"team\">\n";
