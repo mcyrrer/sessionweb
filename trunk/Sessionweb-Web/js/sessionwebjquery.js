@@ -62,29 +62,36 @@ $(document).ready(function() {
 
 
     if (sPage == "session.php" && command == "edit") {
-        var res = confirm("Would you like to enable automatic save of you session? (it will save once a minute)");
-        if (res) {
-            $("#autosaved").empty().append("Autosave enabled...");
-            if ($(document).getUrlParam("command") == "edit") {
 
-                $('#sessionform').autosave({
-                    interval:     60000,//60000=every 1min
-                    save:         function(e, o) {
-                        var today = new Date();
-                        var h = today.getHours();
-                        var m = today.getMinutes();
-                        var s = today.getSeconds();
-                        m = checkTime(m);
-                        s = checkTime(s);
-                        $("#autosaved").empty().append(h + ":" + m + ":" + s);
-                    }
-                });
+        $.get('api/user/settings/autosave', function(data) {
+            $('.result').html(data);
+
+
+//        var res = confirm("Would you like to enable automatic save of you session? (it will save once a minute)");
+            if (data == 1) {
+                $("#autosaved").empty().append("Autosave enabled...");
+                if ($(document).getUrlParam("command") == "edit") {
+
+                    $('#sessionform').autosave({
+                        interval:     60000,//60000=every 1min
+                        save:         function(e, o) {
+                            var today = new Date();
+                            var h = today.getHours();
+                            var m = today.getMinutes();
+                            var s = today.getSeconds();
+                            m = checkTime(m);
+                            s = checkTime(s);
+                            $("#autosaved").empty().append(h + ":" + m + ":" + s);
+                        }
+                    });
+                }
             }
-        }
-        else {
-            $("#autosaved").empty().append("Autosave disabled by user, reload to enable it again.");
-        }
+            else {
+                $("#autosaved").empty().append("Autosave disabled by user, change user settings under settings to enable it.");
+            }
+        });
     }
+
 
 //***************Metric check at submit***************
     $("#input_submit").click(function() {

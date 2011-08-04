@@ -4,7 +4,9 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 ALTER TABLE `sessionwebos`.`mission` CHANGE COLUMN `software` `software` VARCHAR(1024) NULL DEFAULT NULL  ;
 
-ALTER TABLE `sessionwebos`.`settings` ADD COLUMN `wordcloud` TINYINT(1) NULL DEFAULT NULL  AFTER `url_to_rms` ;
+ALTER TABLE `sessionwebos`.`settings` ADD COLUMN `wordcloud` TINYINT(1) NULL DEFAULT 1  AFTER `url_to_rms` ;
+
+ALTER TABLE `sessionwebos`.`user_settings` ADD COLUMN `autosave` TINYINT(4) NULL DEFAULT 1  AFTER `list_view` ;
 
 
 -- -----------------------------------------------------

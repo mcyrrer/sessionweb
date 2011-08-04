@@ -21,7 +21,8 @@ include("include/footer.php.inc");
 //Function is located below
 //*************************************************************************************s
 
-function executeCommand() {
+function executeCommand()
+{
 
     //Administartor Commands
     if ($_SESSION['useradmin'] == 1) {
@@ -123,7 +124,8 @@ function executeCommand() {
 
 }
 
-function echoAddEnvironment() {
+function echoAddEnvironment()
+{
     echo "<h2>Add new test environment name</h2>\n";
     echo "<form name=\"envname\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertenvname\">\n";
@@ -142,7 +144,8 @@ function echoAddEnvironment() {
     echo "</form>\n";
 }
 
-function echoChangeConfig() {
+function echoChangeConfig()
+{
 
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -284,7 +287,8 @@ function echoChangeConfig() {
 
 }
 
-function echoMenu() {
+function echoMenu()
+{
     if ($_SESSION['useradmin'] == 1) {
         echo "<div>Admin menu: ";
         if ($_SESSION['settings']['team'] == 1) {
@@ -310,10 +314,11 @@ function echoMenu() {
         }
         echo "</div>";
     }
-    echo "<div>User menu: <a id=\"url_changepassword\" href=\"settings.php?command=changepassword\">Change password</a> | <a id=\"url_listsettings\" href=\"settings.php?command=listsettings\">List settings</a></div>";
+    echo "<div>User menu: <a id=\"url_changepassword\" href=\"settings.php?command=changepassword\">Change password</a> | <a id=\"url_listsettings\" href=\"settings.php?command=listsettings\">User settings</a></div>";
 }
 
-function echoAddTeamName() {
+function echoAddTeamName()
+{
     echo "<h2>Add new team name</h2>\n";
     echo "<form name=\"teamname\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertteamnametodb\">\n";
@@ -332,7 +337,8 @@ function echoAddTeamName() {
     echo "</form>\n";
 }
 
-function insertTeamNameToDb($teamName) {
+function insertTeamNameToDb($teamName)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -357,7 +363,8 @@ function insertTeamNameToDb($teamName) {
     mysql_close($con);
 }
 
-function insertEnvironmentNameToDb($envName) {
+function insertEnvironmentNameToDb($envName)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -389,7 +396,8 @@ function insertEnvironmentNameToDb($envName) {
     mysql_close($con);
 }
 
-function insertAreaNameToDb($areaName) {
+function insertAreaNameToDb($areaName)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -422,7 +430,8 @@ function insertAreaNameToDb($areaName) {
 }
 
 
-function echoAddSprintName() {
+function echoAddSprintName()
+{
     echo "<h2>Add new sprint name</h2>\n";
     echo "<form name=\"sprintname\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertsprintnametodb\">\n";
@@ -441,7 +450,8 @@ function echoAddSprintName() {
     echo "</form>\n";
 }
 
-function echoAddAreaName() {
+function echoAddAreaName()
+{
     echo "<h2>Add new area name</h2>\n";
     echo "<form name=\"areaname\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertareaname\">\n";
@@ -460,7 +470,8 @@ function echoAddAreaName() {
     echo "</form>\n";
 }
 
-function echoAddTeamSprintName() {
+function echoAddTeamSprintName()
+{
     echo "<h2>Add new team sprint name</h2>\n";
     echo "<form name=\"teamsprintname\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertteamsprintnametodb\">\n";
@@ -479,7 +490,8 @@ function echoAddTeamSprintName() {
     echo "</form>\n";
 }
 
-function insertSprintNameToDb($sprintName) {
+function insertSprintNameToDb($sprintName)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -504,7 +516,8 @@ function insertSprintNameToDb($sprintName) {
     mysql_close($con);
 }
 
-function insertTeamSprintNameToDb($teamsprintName) {
+function insertTeamSprintNameToDb($teamsprintName)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -529,22 +542,52 @@ function insertTeamSprintNameToDb($teamsprintName) {
     mysql_close($con);
 }
 
-function echoChangeListSettings() {
-    echo "<h2>Change list settings</h2>";
+function echoChangeListSettings()
+{
+
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $usersettings = getUserSettings();
+
+    echo "<h2>Change user settings</h2>";
     echo "<p>Choose default filter for  the \"List sessions\" page</p>";
     echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
 
     echo "<input type=\"hidden\" name=\"command\" value= \"changelistsettings\">\n";
+
     echo "<select id=\"changelistsettings_options\" name=\"listsettings\">\n";
-    echo "<option value=\"all\">All sessions</option>\n";
-    echo "<option value=\"mine\">My own sessions</option>\n";
+    if ($usersettings['list_view'] == "mine") {
+        echo "<option value=\"all\" >All sessions</option>\n";
+        echo "<option value=\"mine\" selected>My own sessions</option>\n";
+    }
+    else
+    {
+        echo "<option value=\"all\" selected>All sessions</option>\n";
+        echo "<option value=\"mine\">My own sessions</option>\n";
+    }
+
+
+    echo "</select>\n";
+    echo "<br><br>";
+    echo "<div>Enable or disable autosave when edit a session:<br>";
+    if ($usersettings['autosave'] == "1") {
+        echo "<td><input type=\"checkbox\" name=\"autosave\" value=\"checked\" checked=\"checked\"></td>";
+    }
+    else
+    {
+        echo "<td><input type=\"checkbox\" name=\"autosave\" value=\"checked\"></td>";
+    }
     //echo "<option value=\"team\">All sessions</option>\n";
     echo "</select>\n";
+    echo "</div>";
+
     echo "<input type=\"submit\" value=\"Update\">";
     echo "</form>";
 }
 
-function echoChangeUserInfo($username) {
+function echoChangeUserInfo($username)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -608,7 +651,8 @@ function echoChangeUserInfo($username) {
 }
 
 
-function echoAllUsersInfo() {
+function echoAllUsersInfo()
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -647,7 +691,8 @@ function echoAllUsersInfo() {
 }
 
 
-function echoChangePassword($username) {
+function echoChangePassword($username)
+{
     echo "<h2>Change Password</h2>\n";
     echo "<form name=\"password\" action=\"settings.php\" method=\"POST\">\n";
     echo "<table style=\"text-align: left; width: 1000px;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
@@ -677,7 +722,8 @@ function echoChangePassword($username) {
 }
 
 
-function echoAddUser() {
+function echoAddUser()
+{
     echo "<h2>Add user:</h2>\n";
     echo "<table style=\"text-align: left; width: 1000px;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">\n";
     echo "            <form name=\"sprint\" action=\"settings.php\" method= \"POST\">\n";
@@ -706,13 +752,14 @@ function echoAddUser() {
 }
 
 
-function updateConfig() {
+function updateConfig()
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
     $normlizedsessiontime = 90;
 
-    if (is_int((int) $_REQUEST["normlizedsessiontime"]) && (int) $_REQUEST["normlizedsessiontime"] != 0) {
+    if (is_int((int)$_REQUEST["normlizedsessiontime"]) && (int)$_REQUEST["normlizedsessiontime"] != 0) {
         $normlizedsessiontime = $_REQUEST["normlizedsessiontime"];
     }
     else
@@ -816,7 +863,8 @@ function updateConfig() {
     mysql_close($con);
 }
 
-function updateUserPassword($username, $password1, $password2) {
+function updateUserPassword($username, $password1, $password2)
+{
 
     if (strcmp($_SESSION['username'], $_REQUEST["usernametoupdate"]) == 0 || $_SESSION['useradmin'] == 1) {
         if (strcmp($password1, $password2) == 0) {
@@ -852,7 +900,8 @@ function updateUserPassword($username, $password1, $password2) {
     }
 }
 
-function updateUserSettingsForLoginUser() {
+function updateUserSettingsForLoginUser()
+{
 
 
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
@@ -862,7 +911,11 @@ function updateUserSettingsForLoginUser() {
 
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE `user_settings` ";
-    $sqlUpdate .= "SET    `list_view` ='" . mysql_real_escape_string($_REQUEST['listsettings']) . "' ";
+    $sqlUpdate .= "SET    `list_view` ='" . mysql_real_escape_string($_REQUEST['listsettings']) . "' ,";
+    if ($_REQUEST['autosave'] == 'checked')
+        $sqlUpdate .= "       `autosave` ='1' ";
+    else
+        $sqlUpdate .= "       `autosave` ='0' ";
     $sqlUpdate .= "WHERE  `user_settings`.`username` = '" . $_SESSION['username'] . "' ";
 
     $result = mysql_query($sqlUpdate);
@@ -878,7 +931,8 @@ function updateUserSettingsForLoginUser() {
 }
 
 
-function createNewUser() {
+function createNewUser()
+{
     $username = $_REQUEST["username"];
     $password = $_REQUEST["swpassword1"];
     $fullname = $_REQUEST["fullname"];
@@ -972,7 +1026,8 @@ function createNewUser() {
     }
 }
 
-function updateUserSettings($userToChange, $active, $admin, $superuser) {
+function updateUserSettings($userToChange, $active, $admin, $superuser)
+{
     $activeToDb = 0;
     if ($active != "") {
         $activeToDb = 1;
