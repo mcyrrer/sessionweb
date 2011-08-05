@@ -8,6 +8,12 @@ ALTER TABLE `sessionwebos`.`settings` ADD COLUMN `wordcloud` TINYINT(1) NULL DEF
 
 ALTER TABLE `sessionwebos`.`user_settings` ADD COLUMN `autosave` TINYINT(4) NULL DEFAULT 1  AFTER `list_view` ;
 
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`version` (
+  `versioninstalled` FLOAT NOT NULL DEFAULT 1.1 )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_swedish_ci;
+
 
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
