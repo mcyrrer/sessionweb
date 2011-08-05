@@ -360,6 +360,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `sessionwebos`.`version`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`version` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`version` (
+  `versioninstalled` FLOAT NOT NULL DEFAULT 1.1 );
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);
@@ -427,5 +436,14 @@ COMMIT;
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
 INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`) VALUES ('admin', NULL, 'all', NULL);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `sessionwebos`.`version`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `sessionwebos`;
+INSERT INTO `sessionwebos`.`version` (`versioninstalled`) VALUES ('1.1');
 
 COMMIT;
