@@ -651,8 +651,6 @@ function saveSession_DeleteSessionsNotesFromDb($versionid) {
     if (!$result) {
         echo "saveSession_DeleteSessionsNotesFromDb: " . mysql_error() . "<br/>";
     }
-
-    saveSession_InsertSessionAreaToDb($versionid);
 }
 
 function saveSession_UpdateSessionBugsToDb($versionid) {
