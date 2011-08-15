@@ -70,14 +70,18 @@ function executeCommand()
         {
             insertEnvironmentNameToDb($_REQUEST["envname"]);
         }
+        elseif (strcmp($_GET["command"], "addsprint") == 0) {
+            echoAddSprintName();
+        }
+        elseif (strcmp($_REQUEST["command"], "insertsprintnametodb") == 0)
+        {
+            insertSprintNameToDb($_REQUEST["sprintname"]);
+        }
 
 
     }
     //SuperUser Commands
     if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
-        if (strcmp($_GET["command"], "addsprint") == 0) {
-            echoAddSprintName();
-        }
         if (strcmp($_GET["command"], "addteamsprint") == 0) {
             echoAddTeamSprintName();
         }
@@ -93,10 +97,7 @@ function executeCommand()
         {
             echoAddAreaName();
         }
-        elseif (strcmp($_REQUEST["command"], "insertsprintnametodb") == 0)
-        {
-            insertSprintNameToDb($_REQUEST["sprintname"]);
-        }
+
         elseif (strcmp($_REQUEST["command"], "insertteamsprintnametodb") == 0)
         {
             insertTeamSprintNameToDb($_REQUEST["teamsprintname"]);
@@ -294,18 +295,19 @@ function echoMenu()
         if ($_SESSION['settings']['team'] == 1) {
             echo "<a href=\"settings.php?command=addteam\">Add team</a> | ";
         }
+        if ($_SESSION['settings']['sprint'] == 1) {
+            echo "<a id=\"url_addsprint\" href=\"settings.php?command=addsprint\">Add sprintname</a> | ";
+        }
         echo "<a id=\"url_listusers\" href=\"settings.php?command=listusers\">List users</a> | ";
         echo "<a id=\"url_adduser\" href=\"settings.php?command=adduser\">Add user</a> | ";
         echo "<a id=\"url_addenv\" href=\"settings.php?command=addenv\">Add test environment</a> | ";
         echo "<a id=\"url_configuration\" href=\"settings.php?command=config\">Configuration</a> | ";
+
         echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
         echo "</div>";
     }
     if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
         echo "<div>Superuser menu:  ";
-        if ($_SESSION['settings']['sprint'] == 1) {
-            echo "<a id=\"url_addsprint\" href=\"settings.php?command=addsprint\">Add sprintname</a> | ";
-        }
         if ($_SESSION['settings']['area'] == 1) {
             echo "<a id=\"url_addarea\" href=\"settings.php?command=addarea\">Add area</a> | ";
         }
