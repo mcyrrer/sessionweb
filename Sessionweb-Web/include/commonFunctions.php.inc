@@ -1,5 +1,7 @@
 <?php
 
+include_once('session_database_functions.php.inc');
+
 function getSessionWebSettings() {
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -124,7 +126,7 @@ function getSessionNotes($versionid) {
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission_debriefnotes ";
     $sqlSelect .= "WHERE  versionid = $versionid";
-    $result = mysql_query($sqlSelectSessionStatus);
+    $result = mysql_query($sqlSelect);
     if (!$result) {
         echo "getSessionNotes: " . mysql_error() . "<br/>";
     }
@@ -183,7 +185,10 @@ function getConnectedSessions($versionid) {
 
     $resultToReturn = array();
     while ($row = mysql_fetch_array($result)) {
-        $resultToReturn[] = $row["linked_to_versionid"];
+    $sessionid = GetSessionIdFromVersionId($row["linked_to_versionid"]);
+        //Importera sessionid från version -> lägg det till arrayen nedan!!!
+        $resultToReturn[] = $sessionid;
+//        $resultToReturn[] = $row["linked_to_versionid"];
     }
 
     return $resultToReturn;
@@ -574,6 +579,25 @@ function getUserSettings() {
 
     if (!$result) {
         echo "getUserSettings: " . mysql_error() . "<br/>";
+    }
+
+    mysql_close($con);
+    return mysql_fetch_array($result);
+}
+
+function getSessionWebVersion() {
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT * ";
+    $sqlSelect .= "FROM   version ";
+
+    $result = mysql_query($sqlSelect);
+
+    if (!$result) {
+        return null;
+//        echo "getSessionVersion: " . mysql_error() . "<br/>";
     }
 
     mysql_close($con);

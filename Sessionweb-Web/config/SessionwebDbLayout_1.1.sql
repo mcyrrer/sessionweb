@@ -365,7 +365,9 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sessionwebos`.`version` ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`version` (
-  `versioninstalled` FLOAT NOT NULL DEFAULT 1.1 );
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `versioninstalled` FLOAT NOT NULL DEFAULT 1.1 ,
+  PRIMARY KEY (`id`) );
 
 
 -- -----------------------------------------------------
@@ -444,6 +446,6 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`version` (`versioninstalled`) VALUES ('1.1');
+INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, '1.1');
 
 COMMIT;

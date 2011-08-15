@@ -1,5 +1,6 @@
 <?php
-function getSessionMetricsPieChartUrl($versionid) {
+function getSessionMetricsPieChartUrl($versionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -24,7 +25,8 @@ function getSessionMetricsPieChartUrl($versionid) {
     }
 }
 
-function saveSession_CreateNewSessionId() {
+function saveSession_CreateNewSessionId()
+{
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO sessionid ";
     $sqlInsert .= "            (`createdby`) ";
@@ -37,7 +39,8 @@ function saveSession_CreateNewSessionId() {
     }
 }
 
-function saveSession_GetSessionIdForNewSession() {
+function saveSession_GetSessionIdForNewSession()
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   sessionid ";
@@ -60,7 +63,8 @@ function saveSession_GetSessionIdForNewSession() {
 }
 
 
-function saveSession_InsertSessionDataToDb($sessionid) {
+function saveSession_InsertSessionDataToDb($sessionid)
+{
 
 
     if ($_REQUEST["title"] == "") {
@@ -134,7 +138,8 @@ function saveSession_InsertSessionDataToDb($sessionid) {
     }
 }
 
-function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy) {
+function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
+{
     // print_r($sessionToCopy);
 
     $sqlInsert = "";
@@ -194,7 +199,8 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy) {
     }
 }
 
-function saveSession_UpdateSessionDataToDb($sessionid) {
+function saveSession_UpdateSessionDataToDb($sessionid)
+{
 
     if ($_REQUEST["title"] == "") {
         $_REQUEST["title"] = "Unnamed Session";
@@ -257,7 +263,8 @@ function saveSession_UpdateSessionDataToDb($sessionid) {
     }
 }
 
-function saveSession_GetVersionIdForNewSession() {
+function saveSession_GetVersionIdForNewSession()
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission ";
@@ -278,7 +285,8 @@ function saveSession_GetVersionIdForNewSession() {
     return $versionid;
 }
 
-function GetVersionidFromSessionid($sessionid) {
+function GetVersionidFromSessionid($sessionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT versionid  ";
@@ -304,7 +312,8 @@ function GetVersionidFromSessionid($sessionid) {
     return $versionid;
 }
 
-function GetSessionIdFromVersionIdNoNewDbConnection($versionid) {
+function GetSessionIdFromVersionIdNoNewDbConnection($versionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT sessionid  ";
@@ -330,7 +339,8 @@ function GetSessionIdFromVersionIdNoNewDbConnection($versionid) {
     return $sessionid;
 }
 
-function GetSessionIdFromVersionId($versionid) {
+function GetSessionIdFromVersionId($versionid)
+{
 
     //    $conSql1 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
     //    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -343,7 +353,8 @@ function GetSessionIdFromVersionId($versionid) {
 }
 
 
-function GetSessionTitle($versionid) {
+function GetSessionTitle($versionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT title  ";
@@ -365,7 +376,8 @@ function GetSessionTitle($versionid) {
     return $title;
 }
 
-function GetSessionTitleFromSessionId($sessionid) {
+function GetSessionTitleFromSessionId($sessionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT title  ";
@@ -375,7 +387,7 @@ function GetSessionTitleFromSessionId($sessionid) {
     $result = mysql_query($sqlSelect);
 
     if (!$result) {
-        echo "GetSessionTitle: " . mysql_error() . "<br/>";
+        echo "GetSessionTitleFromSessionId: " . mysql_error() . "<br/>";
     }
     else
     {
@@ -392,7 +404,8 @@ function GetSessionTitleFromSessionId($sessionid) {
  * @param  $executedStatus Shall be a boolean
  * @return void
  */
-function saveSession_InsertSessionStatusToDb($versionid, $executedStatus) {
+function saveSession_InsertSessionStatusToDb($versionid, $executedStatus)
+{
 
 
     $sqlInsert = "";
@@ -415,7 +428,8 @@ function saveSession_InsertSessionStatusToDb($versionid, $executedStatus) {
     }
 }
 
-function saveSession_UpdateSessionStatusToDb($versionid) {
+function saveSession_UpdateSessionStatusToDb($versionid)
+{
     $executed = false;
 
     if ($_REQUEST["executed"] != "") {
@@ -438,7 +452,8 @@ function saveSession_UpdateSessionStatusToDb($versionid) {
     }
 }
 
-function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed) {
+function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed)
+{
 
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE mission_status ";
@@ -454,7 +469,8 @@ function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $m
     }
 }
 
-function saveSession_InsertSessionDebriefedNotesToDb($versionid, $notes) {
+function saveSession_InsertSessionDebriefedNotesToDb($versionid, $notes)
+{
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission_debriefnotes ";
@@ -473,7 +489,8 @@ function saveSession_InsertSessionDebriefedNotesToDb($versionid, $notes) {
     }
 }
 
-function saveSession_InsertSessionMetricsToDb($versionid, $metrics) {
+function saveSession_InsertSessionMetricsToDb($versionid, $metrics)
+{
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission_sessionmetrics ";
@@ -497,7 +514,8 @@ function saveSession_InsertSessionMetricsToDb($versionid, $metrics) {
     }
 }
 
-function saveSession_InsertSessionAreaToDb($versionid, $areas) {
+function saveSession_InsertSessionAreaToDb($versionid, $areas)
+{
     //    $_SESSION['settings']['area'] == 1 &&
     if ($areas != null) {
         //        $areas = $_REQUEST["area"];
@@ -521,7 +539,8 @@ function saveSession_InsertSessionAreaToDb($versionid, $areas) {
     }
 }
 
-function saveSession_InsertSessionBugsToDb($versionid) {
+function saveSession_InsertSessionBugsToDb($versionid)
+{
     $bugs = $_REQUEST["buglist_hidden"];
     if ($bugs != "") {
         $bugsArray = explode(",", $bugs);
@@ -546,7 +565,8 @@ function saveSession_InsertSessionBugsToDb($versionid) {
     }
 }
 
-function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid) {
+function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
+{
     $sessionstoLinkTo = $_REQUEST["sessionlink_hidden"];
 
     if ($sessionstoLinkTo != "") {
@@ -584,7 +604,8 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid) {
     }
 }
 
-function saveSession_InsertSessionRequirementsToDb($versionid) {
+function saveSession_InsertSessionRequirementsToDb($versionid)
+{
 
     $requirements = $_REQUEST["requirementlist_hidden"];
     if ($requirements != "") {
@@ -610,7 +631,8 @@ function saveSession_InsertSessionRequirementsToDb($versionid) {
     }
 }
 
-function saveSession_UpdateSessionMetricsToDb($versionid) {
+function saveSession_UpdateSessionMetricsToDb($versionid)
+{
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE mission_sessionmetrics ";
     $sqlUpdate .= "SET    `setup_percent` = '" . mysql_real_escape_string($_REQUEST["setuppercent"]) . "', ";
@@ -627,7 +649,8 @@ function saveSession_UpdateSessionMetricsToDb($versionid) {
     }
 }
 
-function saveSession_UpdateSessionAreasToDb($versionid, $areas) {
+function saveSession_UpdateSessionAreasToDb($versionid, $areas)
+{
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_areas ";
     $sqlDelete .= "WHERE  `versionid` = '$versionid'";
@@ -638,10 +661,11 @@ function saveSession_UpdateSessionAreasToDb($versionid, $areas) {
         echo "saveSession_UpdateSessionAreasToDb: " . mysql_error() . "<br/>";
     }
 
-    saveSession_InsertSessionAreaToDb($versionid,$areas);
+    saveSession_InsertSessionAreaToDb($versionid, $areas);
 }
 
-function saveSession_DeleteSessionsNotesFromDb($versionid) {
+function saveSession_DeleteSessionsNotesFromDb($versionid)
+{
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_debriefnotes ";
     $sqlDelete .= "WHERE  `versionid` = '$versionid'";
@@ -653,7 +677,8 @@ function saveSession_DeleteSessionsNotesFromDb($versionid) {
     }
 }
 
-function saveSession_UpdateSessionBugsToDb($versionid) {
+function saveSession_UpdateSessionBugsToDb($versionid)
+{
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_bugs ";
     $sqlDelete .= "WHERE  `versionid` = '$versionid'";
@@ -668,7 +693,8 @@ function saveSession_UpdateSessionBugsToDb($versionid) {
 
 }
 
-function updateSessionOwner($sessionid, $tester) {
+function updateSessionOwner($sessionid, $tester)
+{
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE `mission` ";
     $sqlUpdate .= "SET    `username` = '$tester' ";
@@ -685,7 +711,8 @@ function updateSessionOwner($sessionid, $tester) {
 
 }
 
-function saveSession_UpdateSessionRequirementsToDb($versionid) {
+function saveSession_UpdateSessionRequirementsToDb($versionid)
+{
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_requirements ";
     $sqlDelete .= "WHERE  `versionid` = '$versionid'";
@@ -700,7 +727,8 @@ function saveSession_UpdateSessionRequirementsToDb($versionid) {
 
 }
 
-function saveSession_UpdateSessionLinkedToDb($versionid) {
+function saveSession_UpdateSessionLinkedToDb($versionid)
+{
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_sessionsconnections ";
     $sqlDelete .= "WHERE  `linked_from_versionid` = '$versionid'";
@@ -719,7 +747,8 @@ function saveSession_UpdateSessionLinkedToDb($versionid) {
  * Delete a session from the database by delete all rows in all tables that have infromation about the session
  * @param $versionid
  */
-function deleteSessionFromDatabase($sessionId) {
+function deleteSessionFromDatabase($sessionId)
+{
 
     $conDeleteSession = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -782,7 +811,8 @@ function deleteSessionFromDatabase($sessionId) {
 }
 
 
-function doesSessionKeyExist($publickey) {
+function doesSessionKeyExist($publickey)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT publickey ";
     $sqlSelect .= "FROM   `mission` ";

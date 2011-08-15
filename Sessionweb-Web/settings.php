@@ -150,7 +150,7 @@ function echoChangeConfig()
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sqlSelect .= "SELECT * FROM settings";
+    $sqlSelect = "SELECT * FROM settings";
 
     $result = mysql_query($sqlSelect);
 
@@ -368,7 +368,7 @@ function insertEnvironmentNameToDb($envName)
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $areaName = mysql_real_escape_string($areaName);
+    $areaName = mysql_real_escape_string($envName);
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO testenvironment ";
@@ -521,7 +521,7 @@ function insertTeamSprintNameToDb($teamsprintName)
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sprintName = mysql_real_escape_string($sprintName);
+    $teamsprintName = mysql_real_escape_string($teamsprintName);
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO teamsprintnames ";
@@ -906,8 +906,6 @@ function updateUserSettingsForLoginUser()
 
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-
-    $md5password = md5($password1);
 
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE `user_settings` ";

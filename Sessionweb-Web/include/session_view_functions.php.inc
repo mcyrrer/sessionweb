@@ -223,13 +223,13 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            " . echoSessionsLinkToView($row["versionid"]) . "\n";
+                echo "            " . echoConnectedToSessions($row["versionid"]) . "\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            " . echoSessionsLinkFromoView($row["versionid"]) . "\n";
+                echo "            " . echoConnectedFromSessions($row["versionid"]) . "\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
@@ -383,7 +383,8 @@ function echoBugsView($versionid)
     echo "</div>\n";
 }
 
-function echoSessionsLinkToView($versionid)
+//Connected to sessions
+function echoConnectedToSessions($versionid)
 {
     $rowSessionLinkedTo = getConnectedSessions($versionid);
 
@@ -391,8 +392,10 @@ function echoSessionsLinkToView($versionid)
     echo "<div id=\"sessionslinkedto\" style=\"background-color:#efefef;\">\n";
 
 
-    foreach ($rowSessionLinkedTo as $versionid)
+    //    foreach ($rowSessionLinkedTo as $versionid)
+    foreach ($rowSessionLinkedTo as $sessionid)
     {
+        $versionid = GetVersionidFromSessionid($sessionid);
         $aSessionToLink = GetSessionIdFromVersionIdNoNewDbConnection($versionid);
         $aSessionTitle = GetSessionTitleFromSessionId($aSessionToLink);
 
@@ -402,7 +405,7 @@ function echoSessionsLinkToView($versionid)
     echo "</div>\n";
 }
 
-function echoSessionsLinkFromoView($versionid)
+function echoConnectedFromSessions($versionid)
 {
     $rowSessionLinkedFrom = getSessionsLinkedFrom($versionid);
 
