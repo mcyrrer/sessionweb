@@ -102,7 +102,7 @@ function echoSessionTable($currentPage, $listSettings) {
     $sqlSelect = createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings);
 
     $result = mysql_query($sqlSelect);
-//    echo "$sqlSelect<br>";
+ //   echo "$sqlSelect<br>";
 //    print_r($listSettings);
     $num_rows = 0;
 
@@ -233,7 +233,7 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
 
     $sqlSelect .= "ORDER BY updated DESC ";
     $sqlSelect .= "LIMIT  $limitDown, $rowsToDisplay ";
-    //	print $sqlSelect;
+
     return $sqlSelect;
 }
 
