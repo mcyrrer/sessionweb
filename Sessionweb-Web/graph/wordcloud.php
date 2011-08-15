@@ -57,9 +57,11 @@ if ($_GET['sessionid'] != "") {
         echo "<H2>Click on the word to add to black list.</H2><br>";
         echo "<div id='addedword'></div>";
     }
-//    print_r($wordCount);
-
+    //    print_r($wordCount);
+    if (count($wordCount) !=0)
+{
     printTagCloud($wordCount);
+}
 
 }
 
@@ -238,7 +240,6 @@ function stripEndAndStartCharsFromWord($lineToProcess)
     $lineToProcess = str_replace("#", "", $lineToProcess);
     $lineToProcess = str_replace("|", "", $lineToProcess);
     $lineToProcess = str_replace("U+00A0", "", $lineToProcess);
-
 
 
     return $lineToProcess;
