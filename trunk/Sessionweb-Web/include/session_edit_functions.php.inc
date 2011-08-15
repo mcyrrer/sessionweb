@@ -186,7 +186,8 @@ function echoSessionlinkEdit($versionid)
 		{
 			foreach($rowSessionSessionlink as $row)
 			{
-				$versionid = $row;
+//				$versionid = $row;
+                $versionid = GetVersionidFromSessionid($row);
 				$aSessionTitle = GetSessionTitle($versionid);
 				$sessionlink = GetSessionIdFromVersionId($versionid);
 				
