@@ -481,6 +481,40 @@ function echoTesterSelect($name) {
     mysql_close($con);
 }
 
+function echoTesterFullNameSelect($name) {
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT username,fullname ";
+    $sqlSelect .= "FROM   members ";
+    //$sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
+    $sqlSelect .= "ORDER  BY fullname ASC";
+
+    $result = mysql_query($sqlSelect);
+
+    echo "                                  <select id=\"select_tester\" name=\"tester\">\n";
+    echo "                                      <option></option>\n";
+
+    while ($row = mysql_fetch_array($result))
+    {
+        $userName = $row['username'];
+        $fullName = $row['fullname'];
+
+        if (strcmp($name, $row['username']) == 0) {
+            echo "                                      <option value='$userName' selected=\"selected\">$fullName</option>\n";
+        }
+        else
+        {
+            echo "                                      <option value='$userName'>$fullName</option>\n";
+        }
+    }
+
+    echo "                                  </select>\n";
+
+    mysql_close($con);
+}
+
 function echoSprintSelect($sprint) {
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");

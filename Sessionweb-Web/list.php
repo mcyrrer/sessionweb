@@ -247,7 +247,8 @@ function echoSearchDiv($listSettings) {
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "    <tr>\n";
     echo "        <td id=\"option_user\">User";
-    echoTesterSelect($listSettings["tester"]);
+    echoTesterFullNameSelect($listSettings["tester"]);
+//    echoTesterSelect($listSettings["tester"]);
     echo "        </td>\n";
     if ($_SESSION['settings']['sprint'] == 1) {
         echo "        <td id=\"option_sprint\">Sprint:";
