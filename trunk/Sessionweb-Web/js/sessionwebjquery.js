@@ -158,8 +158,9 @@ $(document).ready(function() {
                     + "<table width=\"*\" border=\"0\">"
                     + "    <tr>"
                     + "        <td><a href=\""
-                    + url_to_rms + ""
+                    + "session.php?sessionid="
                     + sessionlinkValue
+                    + "&command=view"
                     + "\" class=\"sessionlinkurl\" target=\”_blank\”>" + sessionlinkValue + "</a>"
                     + "        </td>" + "        <td><div id=\"sessionlink_" + sessionlinkValue
                     + "\"> <img src=\"pictures/removeicon.png\" alt=\"[remove]\" /></div>"
