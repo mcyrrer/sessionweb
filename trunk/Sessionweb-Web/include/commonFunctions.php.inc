@@ -124,14 +124,14 @@ function getSessionStatus($versionid) {
 function getSessionNotes($versionid) {
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
-    $sqlSelect .= "FROM   mission_debriefnotes ";
+    $sqlSelect .= "FROM   mission ";
     $sqlSelect .= "WHERE  versionid = $versionid";
     $result = mysql_query($sqlSelect);
     if (!$result) {
         echo "getSessionNotes: " . mysql_error() . "<br/>";
     }
-
-    return mysql_fetch_array($result);
+    $row = mysql_fetch_array($result);
+    return $row['notes'];
 }
 
 function getSessionRequirements($versionid) {

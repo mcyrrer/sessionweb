@@ -67,7 +67,8 @@ echoIconExplanation();
 include("include/footer.php.inc");
 
 
-function echoSessionTable($currentPage, $listSettings) {
+function echoSessionTable($currentPage, $listSettings)
+{
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
     echo "      <td id=\"tableheader_id\" width=\"25\">Id</td>\n";
@@ -102,8 +103,8 @@ function echoSessionTable($currentPage, $listSettings) {
     $sqlSelect = createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings);
 
     $result = mysql_query($sqlSelect);
- //   echo "$sqlSelect<br>";
-//    print_r($listSettings);
+    //   echo "$sqlSelect<br>";
+    //    print_r($listSettings);
     $num_rows = 0;
 
     if ($result) {
@@ -124,7 +125,14 @@ function echoSessionTable($currentPage, $listSettings) {
 
 }
 
-function echoAllSessions($row, $listSettings) {
+/**
+ * Echo all sessions to the table
+ * @param  $row sessions to display
+ * @param  $listSettings filter settings
+ * @return void
+ */
+function echoAllSessions($row, $listSettings)
+{
     // $rowSessionStatus = getSessionStatus($row["versionid"]);
 
     if ($listSettings["status"] != "") {
@@ -152,48 +160,48 @@ function echoAllSessions($row, $listSettings) {
     }
 }
 
-function echoOneSession($row) {
+/**
+ * Echos one session in the session table
+ * @param  $row session to echo
+ * @return void
+ */
+function echoOneSession($row)
+{
     $color = getSessionColorCode($row);
     echo "  <tr class=\"tr_sessionrow \" bgcolor=\"$color\">\n";
     echo "      <td>" . $row["sessionid"] . "</td>\n";
     echo "      <td width='125'>\n";
-    if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        echo "      <a id=\"edit_session" . $row["sessionid"] . "\"  class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\" title=\"Edit session\"/></a>\n";
 
-        echo "      <a id=\"reassign_session" . $row["sessionid"] . "\" class=\"reassign_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=reassign\"><img class=\"picture_reassign_session\" src=\"pictures/user-new-2-small.png\" border=\"0\" alt=\"Reassign session\" title=\"Reassign session\"/></a>\n";
+    echoEditSessionIcon($row);
 
-    }
-    if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        if ($row['executed'] != false && $row['debriefed'] != true) {
-            echo "      <a id=\"debrief_session" . $row["sessionid"] . "\" class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\" title=\"Debrief session\"/></a>\n";
-        }
-    }
-    if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        echo "      <a id=\"delete_session" . $row["sessionid"] . "\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=delete\"><img src=\"pictures/edit-delete-2-small.png\" border=\"0\" alt=\"Delete session\" title=\"Delete session\" class=\"delete_session\"/></a>\n";
-        addjQueryDeletePopUp($row["sessionid"]);
-    }
-    if ($_SESSION['settings']['publicview'] == 1) {
-        echoPublicViewIcon($row);
-    }
+    echoReassignSessionIcon($row);
+
+    echoDebriefSessionIcon($row);
+
+    echoDeleteSessionIcon($row);
+
+    evalPublicViewIcon($row);
+
     echoCopyIcon($row);
+
     addjQueryCopyPopUp($row["sessionid"]);
+
     echo "      </td>\n";
-    $title = $row["title"];
-    if (strlen($row["title"]) > 30) {
-        $title = substr($row["title"], 0, 50) . "...";
-    }
-    echo "      <td >\n";
-    echo "<div id=\"tablerowtitle_" . $row["sessionid"] . "\" title=\"" . $row["title"] . "\">\n";
-    echo "<a id=\"view_session" . $row["sessionid"] . "\" class=\"url_view_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=view\">$title</a></div>\n";
-    echo "</td>\n";
-    echo "      <td id=\"tablerowuser_" . $row["sessionid"] . "\">" . $row["username"] . "</td>\n";
-    if ($_SESSION['settings']['sprint'] == 1) {
-        echo "      <td id=\"tablerowsprint_" . $row["sessionid"] . "\">" . $row["sprintname"] . "</td>\n";
-    }
+
+    echoTitle($row);
+
+    echoSessionUser($row);
+
     //	if($_SESSION['settings']['teamsprint']==1 )
     //	{
     //		echo "      <td id=\"tablerowteamsprint_".$row["sessionid"]."\">".$row["teamsprintname"]."</td>\n";
     //	}
+
+    echoSessionTeam($row);
+}
+
+function echoSessionTeam($row)
+{
     if ($_SESSION['settings']['team'] == 1) {
         echo "      <td id=\"tablerowteam_" . $row["sessionid"] . "\">" . $row["teamname"] . "</td>\n";
     }
@@ -201,7 +209,71 @@ function echoOneSession($row) {
     echo "  </tr>\n";
 }
 
-function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings) {
+
+function echoSessionUser($row)
+{
+    echo "      <td id=\"tablerowuser_" . $row["sessionid"] . "\">" . $row["username"] . "</td>\n";
+    if ($_SESSION['settings']['sprint'] == 1) {
+        echo "      <td id=\"tablerowsprint_" . $row["sessionid"] . "\">" . $row["sprintname"] . "</td>\n";
+    }
+}
+
+
+function echoEditSessionIcon($row)
+{
+    if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
+        echo "      <a id=\"edit_session" . $row["sessionid"] . "\"  class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=edit\"><img class=\"picture_edit_session\" src=\"pictures/edit.png\" border=\"0\" alt=\"edit session\" title=\"Edit session\"/></a>\n";
+    }
+}
+
+function echoTitle($row)
+{
+    $title = $row["title"];
+    if (strlen($row["title"]) > 30) {
+        $title = substr($row["title"], 0, 50) . "...";
+    }
+
+    echo "      <td >\n";
+    echo "<div id=\"tablerowtitle_" . $row["sessionid"] . "\" title=\"" . $row["title"] . "\">\n";
+    echo "<a id=\"view_session" . $row["sessionid"] . "\" class=\"url_view_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=view\">$title</a></div>\n";
+    echo "</td>\n";
+}
+
+
+function echoReassignSessionIcon($row)
+{
+    if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
+        echo "      <a id=\"reassign_session" . $row["sessionid"] . "\" class=\"reassign_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=reassign\"><img class=\"picture_reassign_session\" src=\"pictures/user-new-2-small.png\" border=\"0\" alt=\"Reassign session\" title=\"Reassign session\"/></a>\n";
+
+    }
+}
+
+function echoDebriefSessionIcon($row)
+{
+    if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
+        if ($row['executed'] != false && $row['debriefed'] != true) {
+            echo "      <a id=\"debrief_session" . $row["sessionid"] . "\" class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\" title=\"Debrief session\"/></a>\n";
+        }
+    }
+}
+
+function echoDeleteSessionIcon($row)
+{
+    if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
+        echo "      <a id=\"delete_session" . $row["sessionid"] . "\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=delete\"><img src=\"pictures/edit-delete-2-small.png\" border=\"0\" alt=\"Delete session\" title=\"Delete session\" class=\"delete_session\"/></a>\n";
+        addjQueryDeletePopUp($row["sessionid"]);
+    }
+}
+
+function evalPublicViewIcon($row)
+{
+    if ($_SESSION['settings']['publicview'] == 1) {
+        echoPublicViewIcon($row);
+    }
+}
+
+function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   `sessioninfo` ";
@@ -237,7 +309,8 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
     return $sqlSelect;
 }
 
-function echoSearchDiv($listSettings) {
+function echoSearchDiv($listSettings)
+{
     echo "<img src='pictures/listsettings.png' class='showoption' id='showoptionpicture' alt='Session list settings'>\n";
     echo "<a class='showoption' id='showoptiontext' href=\"#\">Show Search Functionality</a>\n";
 
@@ -248,7 +321,7 @@ function echoSearchDiv($listSettings) {
     echo "    <tr>\n";
     echo "        <td id=\"option_user\">User";
     echoTesterFullNameSelect($listSettings["tester"]);
-//    echoTesterSelect($listSettings["tester"]);
+    //    echoTesterSelect($listSettings["tester"]);
     echo "        </td>\n";
     if ($_SESSION['settings']['sprint'] == 1) {
         echo "        <td id=\"option_sprint\">Sprint:";
@@ -292,10 +365,15 @@ function echoSearchDiv($listSettings) {
     echo "</div>\n";
 }
 
-function echoColorExplanation() {
+function echoColorExplanation()
+{
     echo "<table width=\"*\" border=\"0\">\n";
     echo "    <tr >\n";
     echo "        <td bgcolor=\"#c2c287\">Not Executed\n";
+    echo "        </td>\n";
+    echo "        <td>&rarr;";
+    echo "        </td>\n";
+    echo "        <td bgcolor=\"#66ffff\">In Progress\n";
     echo "        </td>\n";
     echo "        <td>&rarr;";
     echo "        </td>\n";
@@ -309,7 +387,8 @@ function echoColorExplanation() {
     echo "    </table>\n";
 }
 
-function echoIconExplanation() {
+function echoIconExplanation()
+{
     echo "<table width=\"*\" border=\"0\" cellpadding='4' cellspacing='0'>\n";
     echo "    <tr bgcolor='B3B3B3'>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/edit.png\" alt=\"Edit Session\" /></td><td valign=\"top\">Edit Session\n";
@@ -322,24 +401,35 @@ function echoIconExplanation() {
     echo "        </td>\n";
     echo "        <td valign=\"top\"><img src=\"pictures/share-3-small.png\" alt=\"Share Session\" /></td><td valign=\"top\">Share Session\n";
     echo "        </td>\n";
-    echo "        <td valign=\"top\"><img src=\"pictures/edit-copy-9-small.png\" alt=\"Copy Session\" /></td><td valign=\"top\">Share Session\n";
+    echo "        <td valign=\"top\"><img src=\"pictures/edit-copy-9-small.png\" alt=\"Copy Session\" /></td><td valign=\"top\">Copy Session\n";
     echo "        </td>\n";
     echo "    </tr>\n";
     echo "</table>\n";
 }
 
-function getSessionColorCode($rowSessionStatus) {
+function getSessionColorCode($rowSessionStatus)
+{
+    $notes = getSessionNotes($rowSessionStatus['versionid']);
+
     $color = "#c2c287";
+
+    if ($notes != "") //session started but not executed.
+    {
+        $color = '#66ffff';
+    }
+
     if ($rowSessionStatus["executed"] == 1) {
         $color = "#ffff77";
     }
+
     if ($rowSessionStatus["debriefed"] == 1) {
         $color = "#99ff99";
     }
     return $color;
 }
 
-function echoPreviouseAndNextLink($currentPage, $num_rows) {
+function echoPreviouseAndNextLink($currentPage, $num_rows)
+{
     $nextPage = $currentPage + 1;
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "  <tr>\n";
@@ -363,7 +453,13 @@ function echoPreviouseAndNextLink($currentPage, $num_rows) {
     echo "</table>\n";
 }
 
-function addjQueryDeletePopUp($id) {
+/**
+ * Popup for validating if a session should be deleted or not.
+ * @param  $id
+ * @return void
+ */
+function addjQueryDeletePopUp($id)
+{
     //Delete Session questionbox
     echo "              <script type=\"text/javascript\">\n";
     echo "$(\"#delete_session" . $id . "\").click(function(){\n";
@@ -380,7 +476,13 @@ function addjQueryDeletePopUp($id) {
     echo "              </script>\n";
 }
 
-function addjQueryCopyPopUp($id) {
+/**
+ * Popup for validating if a session should be copied or not.
+ * @param  $id
+ * @return void
+ */
+function addjQueryCopyPopUp($id)
+{
     //Copy Session questionbox
     echo "              <script type=\"text/javascript\">\n";
     echo "$(\"#copy_session" . $id . "\").click(function(){\n";
@@ -397,13 +499,15 @@ function addjQueryCopyPopUp($id) {
     echo "              </script>\n";
 }
 
-function echoPublicViewIcon($row) {
+function echoPublicViewIcon($row)
+{
     echo "<a id=\"publicview_session" . $row["sessionid"] . "\" class=\"publicview_session\" href=\"publicview.php?sessionid=" . $row["sessionid"] . "&amp;command=view&amp;publickey=" . $row["publickey"] . "\">";
     echo "  <img src=\"pictures/share-3-small.png\" border=\"0\" alt=\"Share session\" title=\"Share session\"/>";
     echo "</a>\n";
 }
 
-function echoCopyIcon($row) {
+function echoCopyIcon($row)
+{
     echo "<a id=\"copy_session" . $row["sessionid"] . "\" class=\"copy_session\" href=\"session.php?command=copy&amp;sessionid=" . $row["sessionid"] . "\">";
     echo "  <img src=\"pictures/edit-copy-9-small.png\" border=\"0\" alt=\"Copy session\" title=\"Copy session\"/>";
     echo "</a>\n";
