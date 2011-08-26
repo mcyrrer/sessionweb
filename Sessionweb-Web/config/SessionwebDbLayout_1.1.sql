@@ -20,7 +20,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`members` (
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   `password` VARCHAR(100) NOT NULL ,
   PRIMARY KEY (`username`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -32,7 +33,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`sprintnames` (
   `sprintname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`sprintname`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -44,7 +46,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`teamnames` (
   `teamname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`teamname`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -56,7 +59,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`teamsprintnames` (
   `teamsprintname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`teamsprintname`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -75,7 +79,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`sessionid` (
     REFERENCES `sessionwebos`.`members` (`username` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -86,7 +91,8 @@ DROP TABLE IF EXISTS `sessionwebos`.`testenvironment` ;
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`testenvironment` (
   `name` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`name`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -147,7 +153,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
     REFERENCES `sessionwebos`.`testenvironment` (`name` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -160,6 +167,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status` (
   `executed` TINYINT(1)  NOT NULL DEFAULT false ,
   `debriefed` TINYINT(1)  NOT NULL DEFAULT false ,
   `masterdibriefed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `closed` TINYINT(1)  NOT NULL DEFAULT false ,
   `executed_timestamp` TIMESTAMP NULL ,
   `debriefed_timestamp` TIMESTAMP NULL ,
   PRIMARY KEY (`versionid`) ,
@@ -168,7 +176,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status` (
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -189,7 +198,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionmetrics` (
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -214,7 +224,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_debriefnotes` (
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -236,7 +247,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `url_to_rms` VARCHAR(500) NULL ,
   `wordcloud` TINYINT(1)  NULL DEFAULT 1 ,
   PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -248,7 +260,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`areas` (
   `areaname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`areaname`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -273,7 +286,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_areas` (
     REFERENCES `sessionwebos`.`areas` (`areaname` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -292,7 +306,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_bugs` (
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -311,7 +326,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_requirements` (
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -330,7 +346,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionsconnections` (
     REFERENCES `sessionwebos`.`mission` (`versionid` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -356,7 +373,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_settings` (
     REFERENCES `sessionwebos`.`teamnames` (`teamname` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -367,7 +385,55 @@ DROP TABLE IF EXISTS `sessionwebos`.`version` ;
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`version` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versioninstalled` FLOAT NOT NULL DEFAULT 1.1 ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_status_copy1`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_status_copy1` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status_copy1` (
+  `versionid` INT NOT NULL ,
+  `executed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `debriefed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `masterdibriefed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `executed_timestamp` TIMESTAMP NULL ,
+  `debriefed_timestamp` TIMESTAMP NULL ,
+  `closed` VARCHAR(45) NULL ,
+  PRIMARY KEY (`versionid`) ,
+  CONSTRAINT `fk_mission_status_mission1`
+    FOREIGN KEY (`versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_status_copy2`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_status_copy2` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status_copy2` (
+  `versionid` INT NOT NULL ,
+  `executed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `debriefed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `masterdibriefed` TINYINT(1)  NOT NULL DEFAULT false ,
+  `executed_timestamp` TIMESTAMP NULL ,
+  `debriefed_timestamp` TIMESTAMP NULL ,
+  `closed` VARCHAR(45) NULL ,
+  PRIMARY KEY (`versionid`) ,
+  CONSTRAINT `fk_mission_status_mission1`
+    FOREIGN KEY (`versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------

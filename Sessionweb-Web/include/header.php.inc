@@ -2,7 +2,7 @@
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
 echo "<html>\n";
 echo "  <head>\n";
-echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=latin1\">\n";
+echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\">\n";
 echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
