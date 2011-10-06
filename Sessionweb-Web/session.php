@@ -115,9 +115,11 @@ function echoDebriefSession()
         echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
         echo "<h4>Debrief notes</h4>\n";
         echo "<textarea id=\"debriefnotes\" class=\"ckeditor\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\"></textarea>\n";
-        echo "<div>Debriefed: <input type=\"checkbox\" name=\"debriefedcheckbox\" checked=\"checked\" value=\"yes\"></div>\n";
+        echo "<div>Debriefed: <input type=\"checkbox\" class=\"debriefoption\" name=\"debriefedcheckbox\"  value=\"yes\"></div>\n";
         if (strcmp($_SESSION['useradmin'], "1") == 0) {
-            echo "<div>Debriefed by manager: <input type=\"checkbox\" name=\"debriefedbymanagercheckbox\" checked=\"checked\" value=\"yes\"></div>\n";
+            echo "<div>Debriefed by manager: <input type=\"checkbox\" class=\"debriefoption\" name=\"debriefedbymanagercheckbox\" value=\"yes\"></div>\n";
+            echo "<div>Close session (do not mark it as debriefed): <input type=\"checkbox\" class=\"debriefoption\" name=\"closed\" value=\"yes\"></div>\n";
+
         }
         echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
         echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
@@ -132,6 +134,8 @@ function echoDebriefSession()
 
 function saveDebriefedSession()
 {
+
+    //TODO: Add logic to manage a closed session....
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
         $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
         mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -143,9 +147,18 @@ function saveDebriefedSession()
             $debriefed = "true";
         }
 
+
         $masterdibriefed = "false";
         if (strcmp($_REQUEST["debriefedbymanagercheckbox"], "yes") == 0) {
             $masterdibriefed = "true";
+        }
+
+        $closed = "false";
+        if (strcmp($_REQUEST["closed"], "yes") == 0) {
+            $closed = "true";
+            $debriefed = "false";
+            $masterdibriefed = "false";
+
         }
 
         if (doesSessionNotesExist($versionid)) {
@@ -157,7 +170,7 @@ function saveDebriefedSession()
         //        }
 
 
-        saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed);
+        saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed,$closed, $masterdibriefed);
 
         saveSession_InsertSessionDebriefedNotesToDb($versionid, $_REQUEST["debriefnotes"]);
 
@@ -575,7 +588,7 @@ function echoSessionForm()
 
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Charter: </td>\n";
-    echo "                              <td>\n";
+    echo "                              <td>Describe what you will test (E.g. not the defect description), you should think about what to test and not just copy/paste from another source.\n";
     echo "                                  <textarea id=\"textarea1\"name=\"charter\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$charter</textarea>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";
