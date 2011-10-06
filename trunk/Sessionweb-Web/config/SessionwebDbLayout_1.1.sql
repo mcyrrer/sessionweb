@@ -167,9 +167,9 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status` (
   `executed` TINYINT(1)  NOT NULL DEFAULT false ,
   `debriefed` TINYINT(1)  NOT NULL DEFAULT false ,
   `masterdibriefed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `closed` TINYINT(1)  NOT NULL DEFAULT false ,
   `executed_timestamp` TIMESTAMP NULL ,
   `debriefed_timestamp` TIMESTAMP NULL ,
+  `closed` TINYINT(1)  NOT NULL DEFAULT false ,
   PRIMARY KEY (`versionid`) ,
   CONSTRAINT `fk_mission_status_mission1`
     FOREIGN KEY (`versionid` )
@@ -391,55 +391,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `sessionwebos`.`mission_status_copy1`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sessionwebos`.`mission_status_copy1` ;
-
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status_copy1` (
-  `versionid` INT NOT NULL ,
-  `executed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `debriefed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `masterdibriefed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `executed_timestamp` TIMESTAMP NULL ,
-  `debriefed_timestamp` TIMESTAMP NULL ,
-  `closed` VARCHAR(45) NULL ,
-  PRIMARY KEY (`versionid`) ,
-  CONSTRAINT `fk_mission_status_mission1`
-    FOREIGN KEY (`versionid` )
-    REFERENCES `sessionwebos`.`mission` (`versionid` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `sessionwebos`.`mission_status_copy2`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sessionwebos`.`mission_status_copy2` ;
-
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status_copy2` (
-  `versionid` INT NOT NULL ,
-  `executed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `debriefed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `masterdibriefed` TINYINT(1)  NOT NULL DEFAULT false ,
-  `executed_timestamp` TIMESTAMP NULL ,
-  `debriefed_timestamp` TIMESTAMP NULL ,
-  `closed` VARCHAR(45) NULL ,
-  PRIMARY KEY (`versionid`) ,
-  CONSTRAINT `fk_mission_status_mission1`
-    FOREIGN KEY (`versionid` )
-    REFERENCES `sessionwebos`.`mission` (`versionid` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);
 
 -- -----------------------------------------------------
 -- View `sessionwebos`.`sessioninfo`
@@ -454,6 +408,7 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         m.username,
         ms.executed,
         ms.debriefed,
+        ms.closed,
         m.publickey,
         m.updated,
         m.teamname,

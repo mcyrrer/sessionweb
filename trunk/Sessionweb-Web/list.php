@@ -381,9 +381,26 @@ function echoColorExplanation()
     echo "        </td>\n";
     echo "        <td>&rarr;";
     echo "        </td>\n";
-    echo "        <td bgcolor=\"#99ff99\">Debriefed\n";
+        echo "        <td bgcolor=\"#99ff99\">Debriefed\n";
     echo "        </td>\n";
     echo "    </tr>\n";
+        echo "    <tr >\n";
+    echo "        <td>\n";
+    echo "        </td>\n";
+    echo "        <td>";
+    echo "        </td>\n";
+    echo "        <td>\n";
+    echo "        </td>\n";
+    echo "        <td>";
+    echo "        </td>\n";
+    echo "        <td>";
+    echo "        </td>\n";
+    echo "        <td>&rarr;";
+    echo "        </td>\n";
+    echo "        <td bgcolor=\"#ffcccc\">Closed\n";
+    echo "        </td>\n";
+    echo "    </tr>\n";
+
     echo "    </table>\n";
 }
 
@@ -424,6 +441,10 @@ function getSessionColorCode($rowSessionStatus)
 
     if ($rowSessionStatus["debriefed"] == 1) {
         $color = "#99ff99";
+    }
+
+    if ($rowSessionStatus["closed"] == 1) {
+        $color = "#ffcccc";
     }
     return $color;
 }

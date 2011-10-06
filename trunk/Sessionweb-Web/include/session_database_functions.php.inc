@@ -452,12 +452,13 @@ function saveSession_UpdateSessionStatusToDb($versionid)
     }
 }
 
-function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $masterdibriefed)
+function saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $closed, $masterdibriefed)
 {
 
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE mission_status ";
     $sqlUpdate .= "SET    `debriefed` = $debriefed, ";
+    $sqlUpdate .= "       `closed` = $closed, ";
     $sqlUpdate .= "       `masterdibriefed` = $masterdibriefed, ";
     $sqlUpdate .= "       `debriefed_timestamp` = NOW() ";
     $sqlUpdate .= "WHERE versionid='$versionid'";
