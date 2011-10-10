@@ -441,6 +441,7 @@ function saveSession_UpdateSessionStatusToDb($versionid)
     $sqlUpdate .= "UPDATE mission_status ";
     $sqlUpdate .= "SET    `executed` = '$executed', ";
     $sqlUpdate .= "       `debriefed` = 'false', ";
+    $sqlUpdate .= "       `closed` = 'false', ";
     $sqlUpdate .= "       `masterdibriefed` = 'false', ";
     $sqlUpdate .= "       `executed_timestamp` = NOW() ";
     $sqlUpdate .= "WHERE versionid='$versionid'";
