@@ -1,8 +1,8 @@
 <?php
 
-const SESSIONWEB_DB_LAYOUT_1_1_SQL = "SessionwebDbLayout_1.1.sql";
+const SESSIONWEB_DB_LAYOUT_1_1_SQL = "SessionwebDbLayout_1.2.sql";
 const SESSIONWEB_DB_LAYOUT_1_0_SQL = "SessionwebDbLayout_1.0.sql";
-const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_1_SQL = "SessionwebDbLayoutDelta_1.0-_1.1.sql";
+const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_1_SQL = "SessionwebDbLayoutDelta_1.0-_1.2.sql";
 
 
 include_once('config/db.php.inc');
