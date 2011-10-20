@@ -209,7 +209,7 @@ DROP TABLE IF EXISTS `sessionwebos`.`mission_debriefnotes` ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_debriefnotes` (
   `versionid` INT NOT NULL ,
-  `notes` VARCHAR(45) NULL ,
+  `notes` TEXT NULL ,
   `debriefedby` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`versionid`) ,
   INDEX `fk_debriefnotes_users1` (`debriefedby` ASC) ,
