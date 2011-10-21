@@ -1,0 +1,7 @@
+#What version 1.3 will contain
+= Details =
+
+# Support for adding attachments.
+# Support for setting default value for each user for e.g sprint, team etc..
+# Support for bulk export of sessions to a format that is nicer to view on a printed paper. 
+# Misc bug fixes.
