@@ -467,6 +467,6 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, '1.2');
+INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, '1.3');
 
 COMMIT;
