@@ -1,9 +1,9 @@
 <?php
 
-const SESSIONWEB_DB_LAYOUT_1_1_SQL = "SessionwebDbLayout_1.3.sql";
+const SESSIONWEB_DB_LAYOUT_LATEST_SQL = "SessionwebDbLayout_1.3.sql";
 const SESSIONWEB_DB_LAYOUT_1_0_SQL = "SessionwebDbLayout_1.0.sql";
-const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_1_SQL = "SessionwebDbLayoutDelta_1.0-_1.3.sql";
-
+const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
+const SESSIONWEB_LATEST_VERSION = "1.3";
 
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
@@ -19,23 +19,30 @@ if ($_REQUEST[adm_user] != "") {
     mysql_close($con);
 
     if ($_REQUEST['type'] == "upgrade") {
-        $versionArray = getSessionWebVersion();
+            echo "<br><br>To upgrade and add support for UTF-8 please backup your data in the database useing these step-by-step.";
+            echo "<br>1. 'mysqldump --no-create-info -u root -p sessionwebos > outputfile.txt'";
+            echo "<br>2. Install sessionweb 1.2 as a clean installtion.";
+            echo "<br>3. execute 'mysql -u root -p sessionwebos < outputfile.txt'";
+            echo "<br> this will load the data into the database again.";
+       /* $versionArray = getSessionWebVersion();
         //Upgrade to 1.1
         if ($versionArray['versioninstalled'] == null) {
-            $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/" . SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_1_SQL . "";
+            $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/" . SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL . "";
             echo $loadDbWithSessionWebSql . "<br>";
 
             exec($loadDbWithSessionWebSql, $result);
 
-            $sql = "INSERT INTO sessionwebos.version (versioninstalled) VALUES (1.1)";
+            $sql = "INSERT INTO sessionwebos.version (versioninstalled) VALUES (".SESSIONWEB_LATEST_VERSION.")";
             echo $sql . "<br>";
             $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
             mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
             $result = mysql_query($sql);
             mysql_close($con);
             print_r($result);
-            echo "Database sessionwebos updated to 1.1 layout<br>";
-        }
+            echo "Database sessionwebos updated to ".SESSIONWEB_LATEST_VERSION." layout<br>";
+
+*/
+        
         //Upgrade to next version
         //        if($versionArray['versioninstalled']=="1.1")
         //        {
@@ -47,7 +54,7 @@ if ($_REQUEST[adm_user] != "") {
     elseif ($_REQUEST['type'] == "install") {
 
 
-        $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/" . SESSIONWEB_DB_LAYOUT_1_1_SQL . "";
+        $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/" . SESSIONWEB_DB_LAYOUT_LATEST_SQL . "";
 
         exec($loadDbWithSessionWebSql, $result);
 
@@ -110,13 +117,19 @@ if ($_REQUEST[adm_user] != "") {
 
             exit();
         }
+            
             if ($_REQUEST['type'] == "upgrade") {
-
+            echo "<br><br>To upgrade and add support for UTF-8 please follow these step-by-step.";
+            echo "<br>1. Execute (change mysql admin user and password in the file you will use before executing it.) the '<b>sh conf/migrateToUtf8.sh</b>' for *nix system or '<b>config/migrateToUtf8.bat</b>' for windows system.";
+            echo "<br> <br> This will upgrade the database to 1.2 version and migrate it to UTF-8.<br>";
+            echo "<br> Please make sure that you have a valid backup before executing this script!<br> <br> <br> ";
+                exit();
+/*
                 $versionArray = getSessionWebVersion();
 
                 if ($versionArray != null) {
                     echo "Current version installed: " . $versionArray['versioninstalled'] . "<br><br>";
-                    if ($versionArray['versioninstalled'] == "1.1") {
+                    if ($versionArray['versioninstalled'] == SESSIONWEB_LATEST_VERSION) {
                         echo "You already have the latest version installed<br><br>";
                         exit();
                     }
@@ -124,9 +137,9 @@ if ($_REQUEST[adm_user] != "") {
                 else
                 {
                     echo "Current version installed: 1.0<br><br>";
-                    echo "<b>Will upgrade to 1.1</b><br><br>";
+                    echo "<b>Will upgrade to ".SESSIONWEB_LATEST_VERSION."</b><br><br>";
 
-                }
+                }*/
             }
 
             ?>
