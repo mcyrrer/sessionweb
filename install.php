@@ -119,8 +119,8 @@ if ($_REQUEST[adm_user] != "") {
         }
             
             if ($_REQUEST['type'] == "upgrade") {
-                            echo "<br><br>To upgrade and add support for UTF-8 please follow these step-by-step.";
-            echo "<br>1. Execute (change mysql admin user and password before in the file you will use) the '<b>sh conf/migrateToUtf8.sh</b>' for *nix system or '<b>config/migrateToUtf8.bat</b>' for windows system.";
+            echo "<br><br>To upgrade and add support for UTF-8 please follow these step-by-step.";
+            echo "<br>1. Execute (change mysql admin user and password in the file you will use before executing it.) the '<b>sh conf/migrateToUtf8.sh</b>' for *nix system or '<b>config/migrateToUtf8.bat</b>' for windows system.";
             echo "<br> <br> This will upgrade the database to 1.2 version and migrate it to UTF-8.<br>";
             echo "<br> Please make sure that you have a valid backup before executing this script!<br> <br> <br> ";
                 exit();
