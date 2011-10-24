@@ -553,10 +553,9 @@ function echoChangeListSettings()
     $usersettings = getUserSettings();
 
     echo "<h2>Change user settings</h2>";
-    echo "<p>Choose default filter for  the \"List sessions\" page</p>";
     echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
 
-    echo "<input type=\"hidden\" name=\"command\" value= \"changelistsettings\">\n";
+    echo "Choose default filter for  the \"List sessions\" page:<input type=\"hidden\" name=\"command\" value= \"changelistsettings\">\n";
 
     echo "<select id=\"changelistsettings_options\" name=\"listsettings\">\n";
     if ($usersettings['list_view'] == "mine") {
@@ -569,9 +568,35 @@ function echoChangeListSettings()
         echo "<option value=\"mine\">My own sessions</option>\n";
     }
 
-
     echo "</select>\n";
+
+    if ($_SESSION['settings']['team'] == 1) {
+        echo "<br>\n";
+        echo "Select default team:\n";
+        echoTeamSelect("");
+    }
+
+    if ($_SESSION['settings']['sprint'] == 1) {
+        echo "<br>\n";
+        echo "Select default sprint:\n";
+        echoSprintSelect("");
+    }
+
+    if ($_SESSION['settings']['teamsprint'] == 1) {
+        echo "<br>\n";
+        echo "Select default team sprint:\n";
+        echoTeamSprintSelect("");
+    }
+
+    if ($_SESSION['settings']['area'] == 1) {
+        echo "<br>\n";
+        echo "Select default area:\n";
+        echoAreaSelectSingel("");
+    }
+
+
     echo "<br><br>";
+
     echo "<div>Enable or disable autosave when edit a session:<br>";
     if ($usersettings['autosave'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"autosave\" value=\"checked\" checked=\"checked\"></td>";
@@ -912,6 +937,26 @@ function updateUserSettingsForLoginUser()
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE `user_settings` ";
     $sqlUpdate .= "SET    `list_view` ='" . mysql_real_escape_string($_REQUEST['listsettings']) . "' ,";
+    if ($_REQUEST['team'] != '')
+        $sqlUpdate .= "       `default_team` ='" . $_REQUEST['team'] . "' , ";
+    else
+        $sqlUpdate .= "       `default_team` =null , ";
+
+    if ($_REQUEST['sprint'] != '')
+        $sqlUpdate .= "       `default_sprint` ='" . $_REQUEST['sprint'] . "' , ";
+    else
+        $sqlUpdate .= "       `default_sprint` =null , ";
+
+    if ($_REQUEST['teamsprint'] != '')
+        $sqlUpdate .= "       `default_teamsprint` ='" . $_REQUEST['teamsprint'] . "' , ";
+    else
+        $sqlUpdate .= "       `default_teamsprint` =null , ";
+
+    if ($_REQUEST['area'] != '')
+        $sqlUpdate .= "       `default_area` ='" . $_REQUEST['area'] . "' , ";
+    else
+        $sqlUpdate .= "       `default_area` =null , ";
+
     if ($_REQUEST['autosave'] == 'checked')
         $sqlUpdate .= "       `autosave` ='1' ";
     else
