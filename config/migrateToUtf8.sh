@@ -6,3 +6,5 @@ mysql -uroot -pnot2easy -e "TRUNCATE TABLE  sessionwebos.`members`"
 mysql -uroot -pnot2easy -e "TRUNCATE TABLE  sessionwebos.`settings`;"
 mysql -uroot -pnot2easy -e "TRUNCATE TABLE  sessionwebos.`user_settings`;"
 mysql -uroot -pnot2easy sessionwebos < backupOfSW.1.2.OnlyDataNoTables.txt
+rm backupOfSW.1.2.OnlyDataNoTables.txt
+rm backupBeforeUpgradeToSW.1.2.txt
