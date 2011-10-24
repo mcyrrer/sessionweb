@@ -360,6 +360,10 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_settings` (
   `teamname` VARCHAR(100) NULL ,
   `list_view` VARCHAR(45) NULL ,
   `autosave` TINYINT NULL DEFAULT 1 ,
+  `default_team` VARCHAR(100) NULL ,
+  `default_sprint` VARCHAR(100) NULL ,
+  `default_teamsprint` VARCHAR(100) NULL ,
+  `default_area` VARCHAR(100) NULL ,
   PRIMARY KEY (`username`) ,
   INDEX `fk_user_settings_members1` (`username` ASC) ,
   INDEX `fk_user_settings_teamnames1` (`teamname` ASC) ,
@@ -458,7 +462,7 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`) VALUES ('admin', NULL, 'all', NULL);
+INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`, `default_team`, `default_sprint`, `default_teamsprint`, `default_area`) VALUES ('admin', NULL, 'all', NULL, NULL, NULL, NULL, NULL);
 
 COMMIT;
 

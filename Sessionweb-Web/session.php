@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 if (!session_is_registered(myusername)) {
     header("location:index.php");
 }
@@ -170,7 +171,7 @@ function saveDebriefedSession()
         //        }
 
 
-        saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed,$closed, $masterdibriefed);
+        saveSession_UpdateSessionDebriefedStatusToDb($versionid, $debriefed, $closed, $masterdibriefed);
 
         saveSession_InsertSessionDebriefedNotesToDb($versionid, $_REQUEST["debriefnotes"]);
 
@@ -390,7 +391,7 @@ function copySession()
  */
 function echoSessionForm()
 {
-
+    $userSettings = getUserSettings();
     $title = "";
     $team = "";
     $charter = "";
@@ -480,7 +481,10 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td>Team: </td>\n";
         echo "                              <td>\n";
-        echoTeamSelect($team);
+        if ($_REQUEST['sessionid'] != "")
+            echoTeamSelect($team);
+        else
+            echoTeamSelect($userSettings['default_team']);
         echo "                              </td>\n";
         echo "                        </tr>\n";
     }
@@ -488,7 +492,10 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Sprint: </td>\n";
         echo "                              <td>\n";
-        echoSprintSelect($sprint);
+        if ($_REQUEST['sessionid'] != "")
+            echoSprintSelect($sprint);
+        else
+            echoSprintSelect($userSettings['default_sprint']);
         echo "                              </td>\n";
         echo "                        </tr>\n";
     }
@@ -496,7 +503,10 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Team sprint: </td>\n";
         echo "                              <td>\n";
-        echoTeamSprintSelect($teamsprint);
+        if ($_REQUEST['sessionid'] != "")
+            echoTeamSprintSelect($teamsprint);
+        else
+            echoTeamSprintSelect($userSettings['default_teamsprint']);
         echo "                              </td>\n";
         echo "                        </tr>\n";
     }
@@ -505,7 +515,10 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Area: </td>\n";
         echo "                              <td>\n";
-        echoAreaSelect($area);
+        if ($_REQUEST['sessionid'] != "")
+            echoAreaSelect($area);
+        else
+            echoAreaSelect($userSettings['default_area']);
         echo "                              </td>\n";
         echo "                        </tr>\n";
     }
