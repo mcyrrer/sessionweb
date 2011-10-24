@@ -13,7 +13,7 @@ If you do not know how to install/configure it please use XAMPP Server (http://w
 For new installation follow 1.0 instruction
 For Upgrade from 1.0-1.2:
 Replace all files in your sessionweb folder with the new once(do not replace config/db.php.inc) and execute config\migrateToUtf8.bat (Windows) or config/migrateToUtf8.sh (linux or unix)
-====What is new in 1.1====
+====What is new in 1.2====
 Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings.
 UTF-8 support for the database
 Bug fixes
