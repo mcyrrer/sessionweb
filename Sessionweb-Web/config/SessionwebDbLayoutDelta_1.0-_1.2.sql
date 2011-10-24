@@ -2,6 +2,19 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
+ALTER TABLE `sessionwebos`.`mission_status` ADD COLUMN `closed` TINYINT(1) NOT NULL DEFAULT false  AFTER `debriefed_timestamp` ;
+ALTER TABLE `sessionwebos`.`settings`  ADD COLUMN `wordcloud` TINYINT(1) NULL DEFAULT 1  AFTER `url_to_rms` ;
+ALTER TABLE `sessionwebos`.`mission`  CHANGE COLUMN `software` `software` VARCHAR(1024) NULL DEFAULT NULL  ;
+ALTER TABLE `sessionwebos`.`mission_debriefnotes`  CHANGE COLUMN `notes` `notes` TEXT NULL DEFAULT NULL  ;
+ALTER TABLE `sessionwebos`.`user_settings`  ADD COLUMN `autosave` TINYINT(4) NULL DEFAULT 1  AFTER `list_view` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`version` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `versioninstalled` FLOAT NOT NULL DEFAULT 1.2 ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
+
 
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
