@@ -8,13 +8,15 @@ Sessionweb requires PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server (http://www.apachefriends.org/en/xampp.html)
 
 
-==SessionWeb 1.1==
+==SessionWeb 1.2==
 ===Installations Instructions===
 For new installation follow 1.0 instruction
-For Upgrade from 1.0-1.1:
-Replace all files in your sessionweb folder with the new once and execute the config/SessionwebDbLayoutDeelta_1.0-_1.1_DRAFT.sql script to modify the database.
+For Upgrade from 1.0-1.2:
+Replace all files in your sessionweb folder with the new once(do not replace config/db.php.inc) and execute config\migrateToUtf8.bat (Windows) or config/migrateToUtf8.sh (linux or unix)
 ====What is new in 1.1====
-Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings. 
+Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings.
+UTF-8 support for the database
+Bug fixes
 
 ==SessionWeb 1.0==
 ===Installations Instructions===
