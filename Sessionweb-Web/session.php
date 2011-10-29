@@ -630,6 +630,22 @@ function echoSessionForm()
     echo "                                  <textarea id=\"textarea2\" name=\"notes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:400px;\">$notes</textarea>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";
+
+    echo "                        <tr>";
+    echo "                              <td></td>\n";
+    echo "                              <td>\n";
+    echo "                                   <p><img src=\"pictures/line2.png\" alt=\"line\"></p>\n";
+    echo "                              </td>\n";
+    echo "                        </tr>\n";
+
+    echo "                        <tr>\n";
+    echo "                              <td>Attachments:</td>\n";
+    echo "                              <td>\n";
+    if($_GET[''])
+    echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=".$_GET['sessionid']."'>Add attachment</a></p>";
+    echo "                              </td>\n";
+    echo "                        </tr>\n";
+
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";

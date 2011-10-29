@@ -6,16 +6,21 @@ echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\
 echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
-
+echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
 echo "     <script src=\"js/jquery-1.4.4.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";
 if (strstr($_SERVER['PHP_SELF'], "session.php") != false) {
-    echo "<script type=\"text/javascript\" src=\"editor/ckeditor.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"editor/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"editor/adapters/jquery.js\"></script>\n";
+
 }
 echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
 echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery.js\"></script>\n";
+
+
+
 echo "              <script type=\"text/javascript\">\n";
 echo "              var mySessionlinks = \"\";\n";
 echo "              var url_to_dms = \"" . $_SESSION['settings']['url_to_dms'] . "\";\n";
