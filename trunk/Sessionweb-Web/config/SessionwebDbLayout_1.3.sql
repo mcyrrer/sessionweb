@@ -395,6 +395,30 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_attachments`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_attachments` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_attachments` (
+  `id` INT NULL AUTO_INCREMENT ,
+  `mission_versionid` INT NOT NULL ,
+  `filename` VARCHAR(100) NOT NULL ,
+  `mimetype` VARCHAR(45) NOT NULL ,
+  `size` INT NOT NULL ,
+  `data` MEDIUMBLOB NOT NULL ,
+  INDEX `fk_attach_mission1` (`mission_versionid` ASC) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  CONSTRAINT `fk_attach_mission1`
+    FOREIGN KEY (`mission_versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);

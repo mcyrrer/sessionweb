@@ -4,6 +4,23 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 ALTER TABLE `sessionwebos`.`user_settings` ADD COLUMN `default_team` VARCHAR(100) NULL DEFAULT NULL  AFTER `autosave` , ADD COLUMN `default_sprint` VARCHAR(100) NULL DEFAULT NULL  AFTER `default_team` , ADD COLUMN `default_teamsprint` VARCHAR(100) NULL DEFAULT NULL  AFTER `default_sprint` , ADD COLUMN `default_area` VARCHAR(100) NULL DEFAULT NULL  AFTER `default_teamsprint` ;
 
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`attach` (
+  `id` INT(11) NULL DEFAULT NULL AUTO_INCREMENT ,
+  `mission_versionid` INT(11) NOT NULL ,
+  `filename` VARCHAR(100) NOT NULL ,
+  `mimetype` VARCHAR(45) NOT NULL ,
+  `size` INT(11) NOT NULL ,
+  `data` MEDIUMBLOB NOT NULL ,
+  INDEX `fk_attach_mission1` (`mission_versionid` ASC) ,
+  CONSTRAINT `fk_attach_mission1`
+    FOREIGN KEY (`mission_versionid` )
+    REFERENCES `sessionwebos`.`mission` (`versionid` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_swedish_ci;
+
 
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
