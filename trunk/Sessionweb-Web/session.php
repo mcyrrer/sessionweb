@@ -639,10 +639,19 @@ function echoSessionForm()
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
-    echo "                              <td>Attachments:</td>\n";
+    echo "                              <td valign=\"top\">Attachments:</td>\n";
     echo "                              <td>\n";
-    if($_GET[''])
-    echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=".$_GET['sessionid']."'>Add attachment</a></p>";
+    if($_GET['sessionid']!=null)
+    {
+        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=".$_GET['sessionid']."'>Manage attachments</a></p>";
+        echoAttachments();
+
+    }
+    else
+    {
+        echo "                                   <p>To be able to upload attachment the session need to be saved once</p>";
+
+    }
     echo "                              </td>\n";
     echo "                        </tr>\n";
 

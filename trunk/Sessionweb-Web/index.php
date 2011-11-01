@@ -42,6 +42,11 @@ if (!session_is_registered(myusername)) {
     echo "                 </tr>\n";
     echo "                 </table>\n";
     echo "         </form>\n";
+
+        if(strcmp($_GET['login'],"failed")==0)
+    {
+        echo "Wrong user name or password.<br><br>";
+    }
 }
 else
 {

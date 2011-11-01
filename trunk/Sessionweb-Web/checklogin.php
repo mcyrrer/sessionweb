@@ -61,7 +61,8 @@ if($count==1){
 	header("location:index.php");
 }
 else {
-	echo "Wrong Username or Password";
+    header("location:index.php?login=failed");
+	//echo "Wrong Username or Password";
 }
 
 mysql_close($con);

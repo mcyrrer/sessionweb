@@ -1,5 +1,76 @@
 <?php
 
+const GET_FILE_PATH = "include/filemanagement/get.php";
+const DELETE_FILE_PATH = "include/filemanagement/delete.php";
+const THUMB_FILE_PATH = "include/filemanagement/thumbnails/";
+
+function echoAttachments()
+{
+
+
+    $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+
+    $sql = "SELECT id, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
+    //echo $sql;
+    $result = mysql_query($sql) or die($sql . 'Error, query failed');
+    echo "<table border='0'>\n";
+    while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+
+        $id = $row[0];
+        $filename = $row[1];
+        $size = $row[2];
+        $mimetype = $row[3];
+
+        echo "<tr>\n";
+        if (in_array($mimetype, $picture_mimetypes)) {
+            echo "                <td class='preview'> <a href='" . GET_FILE_PATH . "?id=" . $id . "' target='_blank'><img src='" . THUMB_FILE_PATH . htmlspecialchars($filename) . "'></a></td>\n";
+        }
+        else
+        {
+            if (strcmp($mimetype, "application/msword") == 0)
+                echo "                <td class='preview'><img src='pictures/x-office-document.png'></a></td>\n";
+            elseif (strcmp($mimetype, "application/vnd.ms-excel") == 0)
+                echo "                <td class='preview'><img src='pictures/x-office-spreadsheet.png'></a></td>\n";
+            elseif (strcmp($mimetype, "application/vnd.ms-powerpoint") == 0)
+                echo "                <td class='preview'><img src='pictures/x-office-presentation.png'></a></td>\n";
+            elseif (strcmp($mimetype, "text/plain") == 0)
+                echo "                <td class='preview'><img src='pictures/text-x-generic.png'></a></td>\n";
+            elseif (strcmp($mimetype, "application/pdf") == 0)
+                echo "                <td class='preview'><img src='pictures/application-pdf.png'></a></td>\n";
+            elseif (strcmp($mimetype, "text/html") == 0)
+                echo "                <td class='preview'><img src='pictures/text-html-2.png'></a></td>\n";
+            else
+                echo "                <td class='preview'><img src='pictures/blank-mimetype.png'></a></td>\n";
+
+        }
+
+        if (in_array($mimetype, $picture_mimetypes)) {
+            echo "                <td class='name'><a href='" . GET_FILE_PATH . "?id=" . $id . "' target='_blank'>" . $filename . "</a></td>\n";
+
+        }
+        else
+        {
+            echo "                <td class='name'><a href='" . GET_FILE_PATH . "?id=" . $id . "'>" . $filename . "</a></td>\n";
+
+
+        }
+        if ($size / 1024 / 1024 > 1)
+            echo "                <td class='name'>" . number_format($size / 1024 / 1024,2) . "MB</td>\n";
+        else
+            echo "                <td class='name'>" . number_format($size / 1024,2) . "KB</td>\n";
+
+
+        echo "                </tr>\n";
+    }
+    echo "</table>\n";
+
+}
+
+
 function echoSessionAction()
 {
     $sessionid = $_REQUEST["sessionid"];
@@ -250,6 +321,7 @@ function echoViewSession()
                 echo "            </div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
+
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
@@ -265,6 +337,19 @@ function echoViewSession()
                 echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
                 echo "                " . $row["notes"] . "\n";
                 echo "            </div>\n";
+                echo "        </td>\n";
+                echo "    </tr>\n";
+
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+                echo "        </td>\n";
+                echo "    </tr>\n";
+                echo "    <tr>\n";
+                echo "        <td valign=\"top\">Attachments</td>\n";
+                echo "        <td>\n";
+                echoAttachments();
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
