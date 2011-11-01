@@ -10,13 +10,23 @@
  * http://creativecommons.org/licenses/MIT/
  */
 
+/*
+ * TO make sure that MYSQL will work with files up to 16mb execute:
+ * SHOW GLOBAL VARIABLES LIKE 'max_allowed_packet';
+ * SET GLOBAL max_allowed_packet=1024*1024*16;
+ * Change 16 to the nbr of mb you would like to use as max upload.
+ * Ref: http://www.codingforums.com/archive/index.php/t-122544.html
+*/
+
 include_once("../../include/loggedincheck.php");
 
-error_reporting(E_ALL | E_STRICT);
+//error_reporting(E_ALL | E_STRICT);
 
 class UploadHandler
 {
     private $options;
+
+    const MAX_FILE_SIZE = 5248000;
 
     function __construct($options = null)
     {
@@ -211,6 +221,12 @@ class UploadHandler
         $file->size = intval($size);
         $file->type = $type;
         $error = $this->has_error($uploaded_file, $file, $error);
+        if($file->size > self::MAX_FILE_SIZE)
+        {
+                $file->error = 'File to large. File size limit is '.number_format(self::MAX_FILE_SIZE/1024/1024,2) .' mb';
+        }
+        else
+        {
         if (!$error && $file->name) {
             $file_path = $this->options['upload_dir'] . $file->name;
             $append_file = !$this->options['discard_aborted_uploads'] &&
@@ -256,6 +272,7 @@ class UploadHandler
             $file->error = $error;
         }
         unlink($file_path);
+        }
         return $file;
     }
 
