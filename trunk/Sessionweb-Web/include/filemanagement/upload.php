@@ -283,8 +283,6 @@ class UploadHandler
 
         include "../../config/db.php.inc";
 
-        $myFile = "c:/DeleteMetestFile.txt";
-        $fh = fopen($myFile, 'w') or die("can't open file");
 
 
         $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
@@ -296,8 +294,6 @@ class UploadHandler
         $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
                "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
 
-
-          fwrite($fh, $sql);
         $result = mysql_query($sql);
 
         if (!$result) {
@@ -308,7 +304,6 @@ class UploadHandler
 
         $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
 
-        fwrite($fh, $sqlFindLatestId);
         $result2 = mysql_query($sqlFindLatestId);
         $row = mysql_fetch_row($result2);
         //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
@@ -316,8 +311,6 @@ class UploadHandler
         //   print_r($row);
         $id = $row[0];
         //}
-
-        fclose($fh);
 
         mysql_close($con);
         return $id;
