@@ -1,4 +1,5 @@
 <?php
+require_once('include/loggingsetup.php');
 
 const SESSIONWEB_DB_LAYOUT_LATEST_SQL = "SessionwebDbLayout_1.3.sql";
 const SESSIONWEB_DB_LAYOUT_1_0_SQL = "SessionwebDbLayout_1.0.sql";

@@ -1,5 +1,5 @@
 <?php
-
+require_once('include/loggingsetup.php');
 session_start();
 
 if (!session_is_registered(myusername)) {

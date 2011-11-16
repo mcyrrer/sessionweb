@@ -17,7 +17,7 @@
  * Change 16 to the nbr of mb you would like to use as max upload.
  * Ref: http://www.codingforums.com/archive/index.php/t-122544.html
 */
-
+require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 
 //error_reporting(E_ALL | E_STRICT);
@@ -262,6 +262,7 @@ class UploadHandler
                     }
                 }
             } else if ($this->options['discard_aborted_uploads']) {
+                $logger->info('File size issue: '.$file_size . " vs ". $file->size);
                 unlink($file_path);
                 $file->error = 'abort';
             }
