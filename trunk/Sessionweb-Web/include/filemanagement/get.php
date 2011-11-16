@@ -1,5 +1,5 @@
 <?php
-
+require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 
 include "../../config/db.php.inc";

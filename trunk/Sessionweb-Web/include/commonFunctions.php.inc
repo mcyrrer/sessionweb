@@ -2,7 +2,8 @@
 
 include_once('session_database_functions.php.inc');
 
-function getSessionWebSettings() {
+function getSessionWebSettings()
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   settings ";
@@ -11,6 +12,9 @@ function getSessionWebSettings() {
 
     if (!$result) {
         echo "getSessionWebSettings: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
+
     }
     else
     {
@@ -20,7 +24,8 @@ function getSessionWebSettings() {
 }
 
 
-function getSessionMetrics($versionid) {
+function getSessionMetrics($versionid)
+{
     //	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -32,12 +37,15 @@ function getSessionMetrics($versionid) {
 
     if (!$resultSessionMetrics) {
         echo "getSessionMetrics: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelectSessionMetrics());
     }
 
     return mysql_fetch_array($resultSessionMetrics);
 }
 
-function getSessionDebrief($versionid) {
+function getSessionDebrief($versionid)
+{
     //	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -54,7 +62,8 @@ function getSessionDebrief($versionid) {
     return mysql_fetch_array($resultSession);
 }
 
-function getSessionData($sessionid) {
+function getSessionData($sessionid)
+{
     $sqlSelectSession = "";
     $sqlSelectSession .= "SELECT * ";
     $sqlSelectSession .= "FROM   mission ";
@@ -63,6 +72,8 @@ function getSessionData($sessionid) {
 
     if (!$resultSession) {
         echo "getSessionData: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelectSession());
     }
 
     return mysql_fetch_array($resultSession);
@@ -77,14 +88,16 @@ function getSessionPublicKeyBasedOnSessionId($sessionid)
 /**
  * Get the versionid for the given sessionid
  * @param  $sessionid
- * @return versionid as string 
+ * @return versionid as string
  */
-function getSessionVersionId($sessionid) {
+function getSessionVersionId($sessionid)
+{
     $result = getSessionData($sessionid);
     return $result['versionid'];
 }
 
-function doesSessionNotesExist($versionid) {
+function doesSessionNotesExist($versionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -108,7 +121,8 @@ function doesSessionNotesExist($versionid) {
 }
 
 
-function getSessionStatus($versionid) {
+function getSessionStatus($versionid)
+{
     $sqlSelectSessionStatus = "";
     $sqlSelectSessionStatus .= "SELECT * ";
     $sqlSelectSessionStatus .= "FROM   mission_status ";
@@ -121,7 +135,8 @@ function getSessionStatus($versionid) {
     return mysql_fetch_array($resultSessionStatus);
 }
 
-function getSessionNotes($versionid) {
+function getSessionNotes($versionid)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission ";
@@ -129,12 +144,15 @@ function getSessionNotes($versionid) {
     $result = mysql_query($sqlSelect);
     if (!$result) {
         echo "getSessionNotes: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
     }
     $row = mysql_fetch_array($result);
     return $row['notes'];
 }
 
-function getSessionRequirements($versionid) {
+function getSessionRequirements($versionid)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT requirementsid ";
     $sqlSelect .= "FROM   mission_requirements ";
@@ -143,6 +161,8 @@ function getSessionRequirements($versionid) {
 
     if (!$result) {
         echo "getSessionRequirements: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
     }
 
     $resultToReturn = array();
@@ -153,7 +173,8 @@ function getSessionRequirements($versionid) {
     return $resultToReturn;
 }
 
-function getSessionBugs($versionid) {
+function getSessionBugs($versionid)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission_bugs ";
@@ -161,6 +182,8 @@ function getSessionBugs($versionid) {
     $result = mysql_query($sqlSelect);
     if (!$result) {
         echo "getSessionBugs: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
     }
 
     $resultToReturn = array();
@@ -172,7 +195,8 @@ function getSessionBugs($versionid) {
 }
 
 
-function getConnectedSessions($versionid) {
+function getConnectedSessions($versionid)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission_sessionsconnections ";
@@ -181,20 +205,23 @@ function getConnectedSessions($versionid) {
     $result = mysql_query($sqlSelect);
     if (!$result) {
         echo "getConnectedSessions: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
     }
 
     $resultToReturn = array();
     while ($row = mysql_fetch_array($result)) {
-    $sessionid = GetSessionIdFromVersionId($row["linked_to_versionid"]);
+        $sessionid = GetSessionIdFromVersionId($row["linked_to_versionid"]);
         //Importera sessionid från version -> lägg det till arrayen nedan!!!
         $resultToReturn[] = $sessionid;
-//        $resultToReturn[] = $row["linked_to_versionid"];
+        //        $resultToReturn[] = $row["linked_to_versionid"];
     }
 
     return $resultToReturn;
 }
 
-function getSessionsLinkedFrom($versionid) {
+function getSessionsLinkedFrom($versionid)
+{
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission_sessionsconnections ";
@@ -203,6 +230,8 @@ function getSessionsLinkedFrom($versionid) {
     $result = mysql_query($sqlSelect);
     if (!$result) {
         echo "getSessionsLinkedFrom: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
     }
 
     $resultToReturn = array();
@@ -217,7 +246,8 @@ function getSessionsLinkedFrom($versionid) {
  * @param  $versionid
  * @return array
  */
-function getSessionAreas($versionid) {
+function getSessionAreas($versionid)
+{
     $sqlSelectSessionStatus = "";
     $sqlSelectSessionStatus .= "SELECT areaname ";
     $sqlSelectSessionStatus .= "FROM   mission_areas ";
@@ -227,6 +257,8 @@ function getSessionAreas($versionid) {
 
     if (!$resultSessionAreas) {
         echo "getSessionAreas: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelectSessionStatus());
     }
 
     $result = array();
@@ -237,7 +269,8 @@ function getSessionAreas($versionid) {
     return $result;
 }
 
-function createPercentPieChart($setup, $test, $bug, $oppertunity) {
+function createPercentPieChart($setup, $test, $bug, $oppertunity)
+{
 
     $totalTime = $setup + $test + $bug + $oppertunity;
 
@@ -246,7 +279,8 @@ function createPercentPieChart($setup, $test, $bug, $oppertunity) {
     return $imgURL;
 }
 
-function echoTeamSelect($team) {
+function echoTeamSelect($team)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -279,7 +313,8 @@ function echoTeamSelect($team) {
     mysql_close($con);
 }
 
-function echoTestEnvironmentSelect($testenvironment) {
+function echoTestEnvironmentSelect($testenvironment)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -312,7 +347,8 @@ function echoTestEnvironmentSelect($testenvironment) {
     mysql_close($con);
 }
 
-function echoAreaSelect($area) {
+function echoAreaSelect($area)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -356,7 +392,8 @@ function echoAreaSelect($area) {
     mysql_close($con);
 }
 
-function echoAreaSelectSingel($area) {
+function echoAreaSelectSingel($area)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -402,7 +439,8 @@ function echoAreaSelectSingel($area) {
     mysql_close($con);
 }
 
-function echoNumberOfRowToDisplay() {
+function echoNumberOfRowToDisplay()
+{
     echo "<select id=\"select_norowtodisplay\" class=\"metricoption\" name=\"norowdisplay\">\n";
     echo "      <option>30</option>\n";
     echo "      <option>60</option>\n";
@@ -414,7 +452,8 @@ function echoNumberOfRowToDisplay() {
     echo "</select>\n";
 }
 
-function echoStatusTypes($statusToSelect) {
+function echoStatusTypes($statusToSelect)
+{
     echo "<select id=\"select_status_type\" class=\"metricoption\" name=\"status\">\n";
 
     if (strcmp($statusToSelect, "") == 0) {
@@ -450,7 +489,8 @@ function echoStatusTypes($statusToSelect) {
     echo "</select>\n";
 }
 
-function echoTesterSelect($name) {
+function echoTesterSelect($name)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -481,7 +521,8 @@ function echoTesterSelect($name) {
     mysql_close($con);
 }
 
-function echoTesterFullNameSelect($name) {
+function echoTesterFullNameSelect($name)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -515,7 +556,8 @@ function echoTesterFullNameSelect($name) {
     mysql_close($con);
 }
 
-function echoSprintSelect($sprint) {
+function echoSprintSelect($sprint)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -547,7 +589,8 @@ function echoSprintSelect($sprint) {
     mysql_close($con);
 }
 
-function echoTeamSprintSelect($teamsprint) {
+function echoTeamSprintSelect($teamsprint)
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -579,7 +622,8 @@ function echoTeamSprintSelect($teamsprint) {
     mysql_close($con);
 }
 
-function GetSessionPublicKey($versionid) {
+function GetSessionPublicKey($versionid)
+{
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT publickey  ";
@@ -590,6 +634,8 @@ function GetSessionPublicKey($versionid) {
 
     if (!$result) {
         echo "GetSessionPublicKey: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
     }
     else
     {
@@ -599,7 +645,8 @@ function GetSessionPublicKey($versionid) {
     return $publickey;
 }
 
-function getUserSettings() {
+function getUserSettings()
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -619,7 +666,8 @@ function getUserSettings() {
     return mysql_fetch_array($result);
 }
 
-function getSessionWebVersion() {
+function getSessionWebVersion()
+{
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -631,7 +679,7 @@ function getSessionWebVersion() {
 
     if (!$result) {
         return null;
-//        echo "getSessionVersion: " . mysql_error() . "<br/>";
+        //        echo "getSessionVersion: " . mysql_error() . "<br/>";
     }
 
     mysql_close($con);
@@ -654,4 +702,5 @@ function insertAutomaticGoBackOnePage()
     echo "setTimeout(\"location.href = '" . $_SERVER['HTTP_REFERER'] . "';\",3000);\n";
     echo "</script>\n";
 }
+
 ?>

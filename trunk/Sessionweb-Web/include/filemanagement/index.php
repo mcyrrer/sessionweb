@@ -1,4 +1,5 @@
 <?php
+require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 
 const GET_FILE_PATH = "get.php";

@@ -1,4 +1,5 @@
 <?php
+require_once('include/loggingsetup.php');
 //if(is_file("install.php"))
 //{
 //    header("Location: install.php");

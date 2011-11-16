@@ -1,5 +1,5 @@
 <?php
-
+require_once('include/loggingsetup.php');
 include 'config/db.php.inc';
 include_once 'include/commonFunctions.php.inc';
 
@@ -36,7 +36,6 @@ $result=mysql_query($sql);
 if($result!=FALSE)
 {
 	$count=mysql_num_rows($result);
-
 }
 // Mysql_num_row is counting table row
 
@@ -45,6 +44,7 @@ if($result!=FALSE)
 // If result matched $myusername and $mypassword, table row must be 1 row
 
 if($count==1){
+    $logger->info("Loggin for $myusername passed");
 	// Register $myusername, $mypassword and redirect to file "index.php"
 	session_start();
 	$row = mysql_fetch_array($result);
@@ -61,6 +61,7 @@ if($count==1){
 	header("location:index.php");
 }
 else {
+    $logger->info("Loggin for $myusername failed");
     header("location:index.php?login=failed");
 	//echo "Wrong Username or Password";
 }
