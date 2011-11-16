@@ -214,7 +214,7 @@ class UploadHandler
     }
 
 
-    private function handle_file_upload($uploaded_file, $name, $size, $type, $error)
+    private function handle_file_upload($uploaded_file, $name, $size, $type, $error,$logger)
     {
         $logger->debug('File trying to be uploaded:' . $uploaded_file);
         $file = new stdClass();
@@ -351,7 +351,7 @@ class UploadHandler
                             $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
                     isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                             $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
-                    $upload['error'][$index]
+                    $upload['error'][$index], $logger
                 );
             }
         } elseif ($upload) {
@@ -364,7 +364,7 @@ class UploadHandler
                         $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'],
                 isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                         $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'],
-                $upload['error']
+                $upload['error'], $logger
             );
         }
         header('Vary: Accept');
