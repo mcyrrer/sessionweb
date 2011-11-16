@@ -216,7 +216,10 @@ class UploadHandler
 
     private function handle_file_upload($uploaded_file, $name, $size, $type, $error,$logger)
     {
-        $logger->debug('File trying to be uploaded:' . $uploaded_file);
+        $logger->debug('File trying to be uploaded:' . $name);
+        $logger->debug('Temp file name:'. $uploaded_file);
+        $logger->debug('Size:' . $size);
+        $logger->debug('Type:'. $type);
         $file = new stdClass();
         $file->name = $this->trim_file_name($name, $type);
         $file->size = intval($size);
@@ -244,7 +247,7 @@ class UploadHandler
                         );
                     } else {
                         $logger->debug('Will try to upload file to database');
-                        $file->id = $this->uploadToDatabase($uploaded_file, $file);
+                        $file->id = $this->uploadToDatabase($uploaded_file, $file, $logger);
                         move_uploaded_file($uploaded_file, $file_path);
                     }
                 } else {
@@ -281,7 +284,7 @@ class UploadHandler
         return $file;
     }
 
-    private function uploadToDatabase($uploaded_file, $file)
+    private function uploadToDatabase($uploaded_file, $file, $logger)
     {
         $fp = fopen($uploaded_file, 'r');
         $content = fread($fp, filesize($uploaded_file));
@@ -298,9 +301,14 @@ class UploadHandler
         $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
                "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
 
+        $sqlDebug = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
+               "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '........')";
+
         $result = mysql_query($sql);
 
         if (!$result) {
+            $logger->error($file->name .' ' .mysql_error());
+            $logger->debug($sqlDebug);
             //echo "upload_attachment: " . mysql_error() . "<br/>";
 
             //echo $sql;
