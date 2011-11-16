@@ -354,6 +354,7 @@ class UploadHandler
                 );
             }
         } elseif ($upload) {
+            $logger->debug('Singel file: '.$upload['tmp_name']);
             $info[] = $this->handle_file_upload(
                 $upload['tmp_name'],
                 isset($_SERVER['HTTP_X_FILE_NAME']) ?
