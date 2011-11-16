@@ -333,7 +333,7 @@ class UploadHandler
 //        echo json_encode($info);
 //    }
 
-    public function post()
+    public function post($logger)
     {
         $logger->debug('1');
         $upload = isset($_FILES[$this->options['param_name']]) ?
@@ -408,7 +408,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         $logger->debug('Is a POST file upload');
-        $upload_handler->post();
+        $upload_handler->post($logger);
         break;
     case 'DELETE':
         $upload_handler->delete();
