@@ -238,7 +238,6 @@ class UploadHandler
                 $append_file = !$this->options['discard_aborted_uploads'] &&
                                is_file($file_path) && $file->size > filesize($file_path);
                 clearstatcache();
-                $file_size = filesize($file_path);
                 if ($uploaded_file && is_uploaded_file($uploaded_file)) {
                     // multipart/formdata uploads (POST method uploads)
                     if ($append_file) {
@@ -250,7 +249,7 @@ class UploadHandler
                     } else {
                         $logger->debug('Will try to upload file to database');
                         $file->id = $this->uploadToDatabase($uploaded_file, $file, $logger);
-                        //move_uploaded_file($uploaded_file, $file_path);
+                        move_uploaded_file($uploaded_file, $file_path);
                     }
                 } else {
                     // Non-multipart uploads (PUT method support)
@@ -263,6 +262,7 @@ class UploadHandler
 
                 $logger->debug('File_path later:'.$file_path);
                 $logger->debug('FileSize later:'.filesize($file_path));
+                $file_size = filesize($file_path);
 
                 if ($file_size === $file->size) {
                     $file->url = $this->options['download_base'] . "get.php?id=" . $file->id;
@@ -325,7 +325,7 @@ class UploadHandler
             }
 
             $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
-
+            $logger->debug($sqlFindLatestId);
             $result2 = mysql_query($sqlFindLatestId);
             $row = mysql_fetch_row($result2);
             //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
