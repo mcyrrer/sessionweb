@@ -234,9 +234,11 @@ class UploadHandler
         {
             if (!$error && $file->name) {
                 $file_path = $this->options['upload_dir'] . $file->name;
+                $logger->debug('File_path:'.$file_path);
                 $append_file = !$this->options['discard_aborted_uploads'] &&
                                is_file($file_path) && $file->size > filesize($file_path);
                 clearstatcache();
+                $file_size = filesize($file_path);
                 if ($uploaded_file && is_uploaded_file($uploaded_file)) {
                     // multipart/formdata uploads (POST method uploads)
                     if ($append_file) {
@@ -248,7 +250,7 @@ class UploadHandler
                     } else {
                         $logger->debug('Will try to upload file to database');
                         $file->id = $this->uploadToDatabase($uploaded_file, $file, $logger);
-                        move_uploaded_file($uploaded_file, $file_path);
+                        //move_uploaded_file($uploaded_file, $file_path);
                     }
                 } else {
                     // Non-multipart uploads (PUT method support)
@@ -258,7 +260,10 @@ class UploadHandler
                         $append_file ? FILE_APPEND : 0
                     );
                 }
-                $file_size = filesize($file_path);
+
+                $logger->debug('File_path later:'.$file_path);
+                $logger->debug('FileSize later:'.filesize($file_path));
+
                 if ($file_size === $file->size) {
                     $file->url = $this->options['download_base'] . "get.php?id=" . $file->id;
                     foreach ($this->options['image_versions'] as $version => $options) {
@@ -328,7 +333,7 @@ class UploadHandler
             //   print_r($row);
             $id = $row[0];
             //}
-
+            $logger->debug('File id in database: ' . $id);
             mysql_close($con);
             return $id;
         }
