@@ -216,6 +216,7 @@ class UploadHandler
 
     private function handle_file_upload($uploaded_file, $name, $size, $type, $error)
     {
+        $logger->debug('File trying to be uploaded:'.$uploaded_file);
         $file = new stdClass();
         $file->name = $this->trim_file_name($name, $type);
         $file->size = intval($size);
