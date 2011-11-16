@@ -214,12 +214,12 @@ class UploadHandler
     }
 
 
-    private function handle_file_upload($uploaded_file, $name, $size, $type, $error,$logger)
+    private function handle_file_upload($uploaded_file, $name, $size, $type, $error, $logger)
     {
         $logger->debug('File trying to be uploaded:' . $name);
-        $logger->debug('Temp file name:'. $uploaded_file);
+        $logger->debug('Temp file name:' . $uploaded_file);
         $logger->debug('Size:' . $size);
-        $logger->debug('Type:'. $type);
+        $logger->debug('Type:' . $type);
         $file = new stdClass();
         $file->name = $this->trim_file_name($name, $type);
         $file->size = intval($size);
@@ -276,7 +276,7 @@ class UploadHandler
                 $file->delete_url = $this->options['download_base'] . "delete.php?id=" . $file->id;
                 $file->delete_type = 'DELETE';
             } else {
-                $logger->error($name.': Other error');
+                $logger->error($name . ': Other error');
                 $file->error = $error;
             }
             unlink($file_path);
@@ -286,46 +286,55 @@ class UploadHandler
 
     private function uploadToDatabase($uploaded_file, $file, $logger)
     {
-        $fp = fopen($uploaded_file, 'r');
-        $content = fread($fp, filesize($uploaded_file));
-
-        include "../../config/db.php.inc";
+        try {
 
 
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+            $logger->debug('Will open file to be read into memory');
+            $fp = fopen($uploaded_file, 'r');
+            $content = fread($fp, filesize($uploaded_file));
+            $logger->debug('File loaded into memory');
 
-        $content = addslashes($content);
-        $file->name = addslashes($file->name);
+            include "../../config/db.php.inc";
 
-        $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
-               "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
 
-        $sqlDebug = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
-               "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '........')";
+            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-        $result = mysql_query($sql);
+            $content = addslashes($content);
+            $file->name = addslashes($file->name);
 
-        if (!$result) {
-            $logger->error($file->name .' ' .mysql_error());
-            $logger->debug($sqlDebug);
-            //echo "upload_attachment: " . mysql_error() . "<br/>";
+            $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
+                   "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
 
-            //echo $sql;
+            $sqlDebug = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
+                        "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '........')";
+
+            $result = mysql_query($sql);
+
+            if (!$result) {
+                $logger->error($file->name . ' ' . mysql_error());
+                $logger->debug($sqlDebug);
+                //echo "upload_attachment: " . mysql_error() . "<br/>";
+
+                //echo $sql;
+            }
+
+            $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
+
+            $result2 = mysql_query($sqlFindLatestId);
+            $row = mysql_fetch_row($result2);
+            //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
+            //$row = mysql_fetch_row($result2);
+            //   print_r($row);
+            $id = $row[0];
+            //}
+
+            mysql_close($con);
+            return $id;
         }
-
-        $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
-
-        $result2 = mysql_query($sqlFindLatestId);
-        $row = mysql_fetch_row($result2);
-        //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
-        //$row = mysql_fetch_row($result2);
-        //   print_r($row);
-        $id = $row[0];
-        //}
-
-        mysql_close($con);
-        return $id;
+        catch (Exception $e) {
+            $logger->error($e->getMessage());
+        }
     }
 
 //    public function get()
@@ -363,7 +372,7 @@ class UploadHandler
                 );
             }
         } elseif ($upload) {
-            $logger->debug('Singel file: '.$upload['tmp_name']);
+            $logger->debug('Singel file: ' . $upload['tmp_name']);
             $info[] = $this->handle_file_upload(
                 $upload['tmp_name'],
                 isset($_SERVER['HTTP_X_FILE_NAME']) ?
