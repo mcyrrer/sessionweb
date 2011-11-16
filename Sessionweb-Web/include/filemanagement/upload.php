@@ -216,64 +216,67 @@ class UploadHandler
 
     private function handle_file_upload($uploaded_file, $name, $size, $type, $error)
     {
-        $logger->debug('File trying to be uploaded:'.$uploaded_file);
+        $logger->debug('File trying to be uploaded:' . $uploaded_file);
         $file = new stdClass();
         $file->name = $this->trim_file_name($name, $type);
         $file->size = intval($size);
         $file->type = $type;
         $error = $this->has_error($uploaded_file, $file, $error);
-        if($file->size > self::MAX_FILE_SIZE)
-        {
-                $file->error = 'File to large. File size limit is '.number_format(self::MAX_FILE_SIZE/1024/1024,2) .' mb';
+        if ($file->size > self::MAX_FILE_SIZE) {
+            $logger->debug($name . ' is to large. Max size:' . self::MAX_FILE_SIZE . ' File size:' . $file->size);
+
+            $file->error = 'File to large. File size limit is ' . number_format(self::MAX_FILE_SIZE / 1024 / 1024, 2) . ' mb';
         }
         else
         {
-        if (!$error && $file->name) {
-            $file_path = $this->options['upload_dir'] . $file->name;
-            $append_file = !$this->options['discard_aborted_uploads'] &&
-                           is_file($file_path) && $file->size > filesize($file_path);
-            clearstatcache();
-            if ($uploaded_file && is_uploaded_file($uploaded_file)) {
-                // multipart/formdata uploads (POST method uploads)
-                if ($append_file) {
+            if (!$error && $file->name) {
+                $file_path = $this->options['upload_dir'] . $file->name;
+                $append_file = !$this->options['discard_aborted_uploads'] &&
+                               is_file($file_path) && $file->size > filesize($file_path);
+                clearstatcache();
+                if ($uploaded_file && is_uploaded_file($uploaded_file)) {
+                    // multipart/formdata uploads (POST method uploads)
+                    if ($append_file) {
+                        file_put_contents(
+                            $file_path,
+                            fopen($uploaded_file, 'r'),
+                            FILE_APPEND
+                        );
+                    } else {
+                        $logger->debug('Will try to upload file to database');
+                        $file->id = $this->uploadToDatabase($uploaded_file, $file);
+                        move_uploaded_file($uploaded_file, $file_path);
+                    }
+                } else {
+                    // Non-multipart uploads (PUT method support)
                     file_put_contents(
                         $file_path,
-                        fopen($uploaded_file, 'r'),
-                        FILE_APPEND
+                        fopen('php://input', 'r'),
+                        $append_file ? FILE_APPEND : 0
                     );
-                } else {
-                    $file->id = $this->uploadToDatabase($uploaded_file, $file);
-                    move_uploaded_file($uploaded_file, $file_path);
                 }
-            } else {
-                // Non-multipart uploads (PUT method support)
-                file_put_contents(
-                    $file_path,
-                    fopen('php://input', 'r'),
-                    $append_file ? FILE_APPEND : 0
-                );
-            }
-            $file_size = filesize($file_path);
-            if ($file_size === $file->size) {
-                $file->url = $this->options['download_base'] . "get.php?id=" . $file->id;
-                foreach ($this->options['image_versions'] as $version => $options) {
-                    if ($this->create_scaled_image($file->name, $options)) {
-                        $file->{$version . '_url'} = $options['upload_url']
-                                                     . rawurlencode($file->name);
+                $file_size = filesize($file_path);
+                if ($file_size === $file->size) {
+                    $file->url = $this->options['download_base'] . "get.php?id=" . $file->id;
+                    foreach ($this->options['image_versions'] as $version => $options) {
+                        if ($this->create_scaled_image($file->name, $options)) {
+                            $file->{$version . '_url'} = $options['upload_url']
+                                                         . rawurlencode($file->name);
+                        }
                     }
+                } else if ($this->options['discard_aborted_uploads']) {
+                    $logger->error('File size issue: ' . $file_size . " vs " . $file->size);
+                    unlink($file_path);
+                    $file->error = 'abort';
                 }
-            } else if ($this->options['discard_aborted_uploads']) {
-                $logger->info('File size issue: '.$file_size . " vs ". $file->size);
-                unlink($file_path);
-                $file->error = 'abort';
+                $file->size = $file_size;
+                $file->delete_url = $this->options['download_base'] . "delete.php?id=" . $file->id;
+                $file->delete_type = 'DELETE';
+            } else {
+                $logger->error($name.': Other error');
+                $file->error = $error;
             }
-            $file->size = $file_size;
-            $file->delete_url = $this->options['download_base'] . "delete.php?id=" . $file->id;
-            $file->delete_type = 'DELETE';
-        } else {
-            $file->error = $error;
-        }
-        unlink($file_path);
+            unlink($file_path);
         }
         return $file;
     }
@@ -284,7 +287,6 @@ class UploadHandler
         $content = fread($fp, filesize($uploaded_file));
 
         include "../../config/db.php.inc";
-
 
 
         $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
@@ -333,9 +335,11 @@ class UploadHandler
 
     public function post()
     {
+        $logger->debug('1');
         $upload = isset($_FILES[$this->options['param_name']]) ?
                 $_FILES[$this->options['param_name']] : null;
         $info = array();
+        $logger->debug('2');
         if ($upload && is_array($upload['tmp_name'])) {
             foreach ($upload['tmp_name'] as $index => $value) {
                 $info[] = $this->handle_file_upload(
