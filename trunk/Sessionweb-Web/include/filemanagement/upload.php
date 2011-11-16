@@ -341,6 +341,7 @@ class UploadHandler
         $info = array();
         $logger->debug('2');
         if ($upload && is_array($upload['tmp_name'])) {
+            $logger->debug('Uploaded file is in an array... will try to loop through all of them');
             foreach ($upload['tmp_name'] as $index => $value) {
                 $info[] = $this->handle_file_upload(
                     $upload['tmp_name'][$index],
