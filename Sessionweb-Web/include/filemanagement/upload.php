@@ -407,6 +407,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $upload_handler->get();
         break;
     case 'POST':
+        $logger->debug('Is a POST file upload');
         $upload_handler->post();
         break;
     case 'DELETE':
