@@ -105,16 +105,21 @@ if ($_REQUEST[adm_user] != "") {
 </head>
 <body id="main_body">
 <?php
-$foldersToCheckRW = array("config/", "include/filemanagement/files", "include/filemanagement/thumbnails", "log");
+$foldersToCheckRW = array("config/", "include/filemanagement/files/", "include/filemanagement/thumbnails/", "log/");
 foreach ($foldersToCheckRW as $aFolder)
 {
     try
     {
+
         $ourFileName = $aFolder . "testFile.txt";
+       
         $fh = fopen($ourFileName, 'w');
         fwrite($fh, "TestString\n");
         fclose($fh);
-        echo "folder $aFolder is RW => OK<br>";
+        if (file_exists($ourFileName))
+            echo "folder $aFolder is RW => OK<br>";
+        else
+            echo "folder $aFolder is RW => NOK (file could not be created)<br>";
     }
     catch (Exception $e) {
         echo "folder $aFolder is RW => NOK<br>";
