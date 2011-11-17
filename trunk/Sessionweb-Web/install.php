@@ -2,7 +2,6 @@
 require_once('include/loggingsetup.php');
 
 
-
 const SESSIONWEB_DB_LAYOUT_LATEST_SQL = "SessionwebDbLayout_1.3.sql";
 const SESSIONWEB_DB_LAYOUT_1_0_SQL = "SessionwebDbLayout_1.0.sql";
 const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
@@ -112,13 +111,15 @@ foreach ($foldersToCheckRW as $aFolder)
     try
     {
         $ourFileName = $aFolder . "testFile.txt";
-        $ourFileHandle = fopen($ourFileName, 'w');
-        fclose($ourFileHandle);
+        $fh = fopen($ourFileName, 'w');
+        fwrite($fh, "TestString\n");
+        fclose($fh);
         echo "folder $aFolder is RW => OK<br>";
     }
     catch (Exception $e) {
-        echo 'Error: ', $e->getMessage(), "\n";
-        echo "Please change folder $aFolder to allow read write for the www user (chmod 664)";
+        echo "folder $aFolder is RW => NOK<br>";
+        //echo 'Error: ', $e->getMessage(), "\n";
+        echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";
     }
 }
 ?>
