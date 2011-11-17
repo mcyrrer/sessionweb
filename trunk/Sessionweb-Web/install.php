@@ -1,6 +1,8 @@
 <?php
 require_once('include/loggingsetup.php');
 
+
+
 const SESSIONWEB_DB_LAYOUT_LATEST_SQL = "SessionwebDbLayout_1.3.sql";
 const SESSIONWEB_DB_LAYOUT_1_0_SQL = "SessionwebDbLayout_1.0.sql";
 const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
@@ -20,30 +22,30 @@ if ($_REQUEST[adm_user] != "") {
     mysql_close($con);
 
     if ($_REQUEST['type'] == "upgrade") {
-            echo "<br><br>To upgrade and add support for UTF-8 please backup your data in the database useing these step-by-step.";
-            echo "<br>1. 'mysqldump --no-create-info -u root -p sessionwebos > outputfile.txt'";
-            echo "<br>2. Install sessionweb 1.2 as a clean installtion.";
-            echo "<br>3. execute 'mysql -u root -p sessionwebos < outputfile.txt'";
-            echo "<br> this will load the data into the database again.";
-       /* $versionArray = getSessionWebVersion();
-        //Upgrade to 1.1
-        if ($versionArray['versioninstalled'] == null) {
-            $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/" . SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL . "";
-            echo $loadDbWithSessionWebSql . "<br>";
+        echo "<br><br>To upgrade and add support for UTF-8 please backup your data in the database useing these step-by-step.";
+        echo "<br>1. 'mysqldump --no-create-info -u root -p sessionwebos > outputfile.txt'";
+        echo "<br>2. Install sessionweb 1.2 as a clean installtion.";
+        echo "<br>3. execute 'mysql -u root -p sessionwebos < outputfile.txt'";
+        echo "<br> this will load the data into the database again.";
+        /* $versionArray = getSessionWebVersion();
+                //Upgrade to 1.1
+                if ($versionArray['versioninstalled'] == null) {
+                    $loadDbWithSessionWebSql = "mysql -u$adm_user -p$adm_password < config/" . SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL . "";
+                    echo $loadDbWithSessionWebSql . "<br>";
 
-            exec($loadDbWithSessionWebSql, $result);
+                    exec($loadDbWithSessionWebSql, $result);
 
-            $sql = "INSERT INTO sessionwebos.version (versioninstalled) VALUES (".SESSIONWEB_LATEST_VERSION.")";
-            echo $sql . "<br>";
-            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-            $result = mysql_query($sql);
-            mysql_close($con);
-            print_r($result);
-            echo "Database sessionwebos updated to ".SESSIONWEB_LATEST_VERSION." layout<br>";
+                    $sql = "INSERT INTO sessionwebos.version (versioninstalled) VALUES (".SESSIONWEB_LATEST_VERSION.")";
+                    echo $sql . "<br>";
+                    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+                    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+                    $result = mysql_query($sql);
+                    mysql_close($con);
+                    print_r($result);
+                    echo "Database sessionwebos updated to ".SESSIONWEB_LATEST_VERSION." layout<br>";
 
-*/
-        
+        */
+
         //Upgrade to next version
         //        if($versionArray['versioninstalled']=="1.1")
         //        {
@@ -103,6 +105,23 @@ if ($_REQUEST[adm_user] != "") {
 
 </head>
 <body id="main_body">
+<?php
+$foldersToCheckRW = array("config/", "include/filemanagement/files", "include/filemanagement/thumbnails", "log");
+foreach ($foldersToCheckRW as $aFolder)
+{
+    try
+    {
+        $ourFileName = $aFolder . "testFile.txt";
+        $ourFileHandle = fopen($ourFileName, 'w');
+        fclose($ourFileHandle);
+        echo "folder $aFolder is RW => OK<br>";
+    }
+    catch (Exception $e) {
+        echo 'Error: ', $e->getMessage(), "\n";
+        echo "Please change folder $aFolder to allow read write for the www user (chmod 664)";
+    }
+}
+?>
 <div id="form_container">
     <h1><a>Install Sessionweb</a></h1>
 
@@ -118,14 +137,14 @@ if ($_REQUEST[adm_user] != "") {
 
             exit();
         }
-            
+
             if ($_REQUEST['type'] == "upgrade") {
-            echo "<br><br>To upgrade and add support for UTF-8 please follow these step-by-step.";
-            echo "<br>1. Execute (change mysql admin user and password in the file you will use before executing it.) the '<b>sh conf/migrateToUtf8.sh</b>' for *nix system or '<b>config/migrateToUtf8.bat</b>' for windows system.";
-            echo "<br> <br> This will upgrade the database to 1.2 version and migrate it to UTF-8.<br>";
-            echo "<br> Please make sure that you have a valid backup before executing this script!<br> <br> <br> ";
+                echo "<br><br>To upgrade and add support for UTF-8 please follow these step-by-step.";
+                echo "<br>1. Execute (change mysql admin user and password in the file you will use before executing it.) the '<b>sh conf/migrateToUtf8.sh</b>' for *nix system or '<b>config/migrateToUtf8.bat</b>' for windows system.";
+                echo "<br> <br> This will upgrade the database to 1.2 version and migrate it to UTF-8.<br>";
+                echo "<br> Please make sure that you have a valid backup before executing this script!<br> <br> <br> ";
                 exit();
-/*
+                /*
                 $versionArray = getSessionWebVersion();
 
                 if ($versionArray != null) {
@@ -145,7 +164,8 @@ if ($_REQUEST[adm_user] != "") {
 
             ?>
             <p>Add information below to automatically create/upgrade the MySql database and load
-                it with sessionweb tables on this server (localhost) <br>For installation on a linux/unix server please make sure
+                it with sessionweb tables on this server (localhost) <br>For installation on a linux/unix server please
+                make sure
                 that file
                 conf/db.php.inc is possible to write to for the web server user. If not
                 change file permission by executing <b>chmod 666 conf/db.php.inc</b>
