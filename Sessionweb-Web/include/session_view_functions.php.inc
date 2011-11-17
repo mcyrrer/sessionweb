@@ -1,8 +1,9 @@
 <?php
 
-const GET_FILE_PATH = "include/filemanagement/get.php";
-const DELETE_FILE_PATH = "include/filemanagement/delete.php";
-const THUMB_FILE_PATH = "include/filemanagement/thumbnails/";
+define("GET_FILE_PATH","include/filemanagement/get.php");
+define("DELETE_FILE_PATH","include/filemanagement/get.php");
+define("THUMB_FILE_PATH","include/filemanagement/thumbnails/");
+
 
 function echoAttachments()
 {

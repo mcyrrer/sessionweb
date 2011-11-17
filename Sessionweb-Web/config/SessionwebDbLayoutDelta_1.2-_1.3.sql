@@ -65,6 +65,8 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         m.versionid = sm.versionid
 ;
 
+UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '1.3' WHERE  `version`.`id` =1;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
