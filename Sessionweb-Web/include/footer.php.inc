@@ -4,7 +4,7 @@ echo "<img src=\"pictures/line.png\" alt=\"line\"/>\n";
 echo "<br><h6>";
 
 $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+mysql_select_db(DB_NAME_SESSIONWEB)or die("Database not available. Please install <a href='install.php'>sessionweb</a>");
 $result = mysql_query("SELECT * FROM `sessionwebos`.`version`;");
 
 $row = mysql_fetch_array($result);
