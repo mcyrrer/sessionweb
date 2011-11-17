@@ -28,7 +28,6 @@ function executeCommand()
     //Administartor Commands
     if ($_SESSION['useradmin'] == 1) {
         if (strcmp($_GET["command"], "listusers") == 0) {
-            echo "Tjoho";
             echoAllUsersInfo();
         }
         elseif (strcmp($_GET["command"], "adduser") == 0)
@@ -78,6 +77,13 @@ function executeCommand()
         {
             insertSprintNameToDb($_REQUEST["sprintname"]);
         }
+                elseif (strcmp($_REQUEST["command"], "systemcheck") == 0)
+        {
+            echo "<h1>System check</h1>";
+            checkFoldersForRW();
+            checkForMaxAttachmentSize();
+        }
+
 
 
     }
@@ -303,6 +309,7 @@ function echoMenu()
         echo "<a id=\"url_adduser\" href=\"settings.php?command=adduser\">Add user</a> | ";
         echo "<a id=\"url_addenv\" href=\"settings.php?command=addenv\">Add test environment</a> | ";
         echo "<a id=\"url_configuration\" href=\"settings.php?command=config\">Configuration</a> | ";
+        echo "<a id=\"url_systemcheck\" href=\"settings.php?command=systemcheck\">System Check</a> | ";
 
         echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
         echo "</div>";

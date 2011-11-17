@@ -9,6 +9,7 @@ $result = mysql_query("SELECT * FROM `sessionwebos`.`version`;");
 
 $row = mysql_fetch_array($result);
 $versionInstalled = $row['versioninstalled'];
+mysql_close($con);
 
 echo "Sessionweb ver $versionInstalled  | ";
 echo "<a href=\"about.php\"id=\"url_about\">About</a> | ";

@@ -4,7 +4,7 @@ include 'config/db.php.inc';
 include_once 'include/commonFunctions.php.inc';
 
 ob_start();
-
+sleep(0.5); //brute force of password mitigation. It will take too long to brute force if we add a sleep. end user will not detect it.
 // Connect to server and select databse.
 $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
