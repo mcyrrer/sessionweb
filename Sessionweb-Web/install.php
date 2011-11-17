@@ -104,41 +104,7 @@ if ($_REQUEST[adm_user] != "") {
 
 </head>
 <body id="main_body">
-<?php
-//chown -R www-data:www-data files
-$foldersToCheckRW = array("config/", "include/filemanagement/files/", "include/filemanagement/thumbnails/", "log/");
-$foldersOk = true;
-foreach ($foldersToCheckRW as $aFolder)
-{
-    try
-    {
-        $ourFileName = $aFolder . "testFile.txt";
-       
-        $fh = fopen($ourFileName, 'w');
-        fwrite($fh, "TestString\n");
-        fclose($fh);
-        if (file_exists($ourFileName))
-            echo "folder $aFolder is RW => OK<br>";
-        else
-        {
-            echo "folder $aFolder is RW => NOK (file could not be created)<br>";
-            $foldersOk = false;
-        }
-    }
-    catch (Exception $e) {
-        echo "folder $aFolder is RW => NOK<br>";
-        //echo 'Error: ', $e->getMessage(), "\n";
-        echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";
-    }
-}
 
-if(!$foldersOk)
-{
-    echo "Pleas make sure that NOK folders above have read and write access for the WWW user";
-    echo "In ubuntu/linux you can use the chown command to make the www user e.g. 'chown -R www-data:www-data include/filemanagement/files/' ";
-    exit();
-}
-?>
 <div id="form_container">
     <h1><a>Install Sessionweb</a></h1>
 
@@ -147,13 +113,23 @@ if(!$foldersOk)
             <h2>Install Sessionweb</h2>
 
 <?php
-           if ($_REQUEST['type'] == "") {
-            echo "<a href='?type=install'>New Installation</a><br>";
-            echo "<a href='?type=upgrade'>Upgrade</a>";
 
 
-            exit();
-        }
+//chown -R www-data:www-data files
+            if (!checkFoldersForRW()) {
+                exit();
+            }
+
+            checkForMaxAttachmentSize();
+echo "<br><br>";
+
+            if ($_REQUEST['type'] == "") {
+                echo "<a href='?type=install'>New Installation</a><br>";
+                echo "<a href='?type=upgrade'>Upgrade</a>";
+
+
+                exit();
+            }
 
             if ($_REQUEST['type'] == "upgrade") {
                 echo "<br><br>To upgrade and add support for UTF-8 please follow these step-by-step.";
