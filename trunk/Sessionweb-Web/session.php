@@ -643,7 +643,8 @@ function echoSessionForm()
     echo "                              <td>\n";
     if($_GET['sessionid']!=null)
     {
-        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=".$_GET['sessionid']."'>Manage attachments</a></p>";
+
+        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=".$_GET['sessionid']."'>Manage attachments</a> Max file size: ".getMaxUploadSize()." mb</p>";
         echoAttachments();
 
     }
