@@ -107,9 +107,9 @@ if ($_REQUEST[adm_user] != "") {
 <?php
 //chown -R www-data:www-data files
 $foldersToCheckRW = array("config/", "include/filemanagement/files/", "include/filemanagement/thumbnails/", "log/");
+$foldersOk = true;
 foreach ($foldersToCheckRW as $aFolder)
 {
-    $foldersOk = true;
     try
     {
         $ourFileName = $aFolder . "testFile.txt";
