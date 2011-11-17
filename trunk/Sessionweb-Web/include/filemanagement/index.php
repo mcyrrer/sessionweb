@@ -2,9 +2,10 @@
 require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 
-const GET_FILE_PATH = "get.php";
-const DELETE_FILE_PATH = "delete.php";
-const THUMB_FILE_PATH = "thumbnails/";
+define("GET_FILE_PATH", "get.php");
+define("DELETE_FILE_PATH", "delete.php");
+define("THUMB_FILE_PATH","thumbnails/");
+
 include "../../config/db.php.inc";
 
 $picture_mimetypes = array("jpg" => "image/jpeg","jpeg" => "image/jpeg","gif" => "image/gif","png" => "image/png");

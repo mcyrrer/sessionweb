@@ -2,10 +2,10 @@
 require_once('include/loggingsetup.php');
 
 
-const SESSIONWEB_DB_LAYOUT_LATEST_SQL = "SessionwebDbLayout_1.3.sql";
-const SESSIONWEB_DB_LAYOUT_1_0_SQL = "SessionwebDbLayout_1.0.sql";
-const SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
-const SESSIONWEB_LATEST_VERSION = "1.3";
+define("SESSIONWEB_DB_LAYOUT_LATEST_SQL","SessionwebDbLayout_1.3.sql");
+define("SESSIONWEB_DB_LAYOUT_1_0_SQL","SessionwebDbLayout_1.0.sql");
+define("SESSIONWEB_DB_LAYOUT_DELTA_1_0_1_2_SQL", "SessionwebDbLayoutDelta_1.2-_1.3.sql");
+define("SESSIONWEB_LATEST_VERSION","1.3");
 
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
