@@ -133,7 +133,11 @@ foreach ($foldersToCheckRW as $aFolder)
 }
 
 if(!$foldersOk)
+{
+    echo "Pleas make sure that NOK folders above have read and write access for the WWW user";
+    echo "In ubuntu/linux you can use the chown command to make the www user e.g. 'chown -R www-data:www-data include/filemanagement/files/' "
     exit();
+}
 ?>
 <div id="form_container">
     <h1><a>Install Sessionweb</a></h1>
