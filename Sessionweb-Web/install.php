@@ -105,12 +105,13 @@ if ($_REQUEST[adm_user] != "") {
 </head>
 <body id="main_body">
 <?php
+//chown -R www-data:www-data files
 $foldersToCheckRW = array("config/", "include/filemanagement/files/", "include/filemanagement/thumbnails/", "log/");
 foreach ($foldersToCheckRW as $aFolder)
 {
+    $foldersOk = true;
     try
     {
-
         $ourFileName = $aFolder . "testFile.txt";
        
         $fh = fopen($ourFileName, 'w');
@@ -119,7 +120,10 @@ foreach ($foldersToCheckRW as $aFolder)
         if (file_exists($ourFileName))
             echo "folder $aFolder is RW => OK<br>";
         else
+        {
             echo "folder $aFolder is RW => NOK (file could not be created)<br>";
+            $foldersOk = false;
+        }
     }
     catch (Exception $e) {
         echo "folder $aFolder is RW => NOK<br>";
@@ -127,6 +131,9 @@ foreach ($foldersToCheckRW as $aFolder)
         echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";
     }
 }
+
+if(!$foldersOk)
+    exit();
 ?>
 <div id="form_container">
     <h1><a>Install Sessionweb</a></h1>
