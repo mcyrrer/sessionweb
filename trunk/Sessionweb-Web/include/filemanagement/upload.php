@@ -29,7 +29,6 @@ class UploadHandler
 {
     private $options;
 
-    const MAX_FILE_SIZE = 5248000;
 
     function __construct($options = null)
     {
@@ -228,16 +227,21 @@ class UploadHandler
         $file->size = intval($size);
         $file->type = $type;
         $error = $this->has_error($uploaded_file, $file, $error);
-        if ($file->size > self::MAX_FILE_SIZE) {
-            $logger->debug($name . ' is to large. Max size:' . self::MAX_FILE_SIZE . ' File size:' . $file->size);
+        $max_upload = (int)(ini_get('upload_max_filesize'));
+        $max_post = (int)(ini_get('post_max_size'));
+        $memory_limit = (int)(ini_get('memory_limit'));
+        $upload_mb = min($max_upload, $max_post, $memory_limit);
+        $max_file_size = $upload_mb * 1024 * 1024;
+        if ($file->size > $max_file_size) {
+            $logger->debug($name . ' is to large. Max size:' . $max_file_size . ' File size:' . $file->size);
 
-            $file->error = 'File to large. File size limit is ' . number_format(self::MAX_FILE_SIZE / 1024 / 1024, 2) . ' mb';
+            $file->error = 'File to large. File size limit is ' . number_format($max_file_size / 1024 / 1024, 2) . ' mb';
         }
         else
         {
             if (!$error && $file->name) {
                 $file_path = $this->options['upload_dir'] . $file->name;
-                $logger->debug('File_path:'.$file_path);
+                $logger->debug('File_path:' . $file_path);
                 $append_file = !$this->options['discard_aborted_uploads'] &&
                                is_file($file_path) && $file->size > filesize($file_path);
                 clearstatcache();
@@ -263,8 +267,8 @@ class UploadHandler
                     );
                 }
 
-                $logger->debug('File_path later:'.$file_path);
-                $logger->debug('FileSize later:'.filesize($file_path));
+                $logger->debug('File_path later:' . $file_path);
+                $logger->debug('FileSize later:' . filesize($file_path));
                 $file_size = filesize($file_path);
 
                 if ($file_size === $file->size) {
