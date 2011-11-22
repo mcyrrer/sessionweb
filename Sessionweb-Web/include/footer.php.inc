@@ -10,7 +10,10 @@ $result = mysql_query("SELECT * FROM `sessionwebos`.`version`;");
 $row = mysql_fetch_array($result);
 $versionInstalled = $row['versioninstalled'];
 mysql_close($con);
-
+if (file_exists("install"))
+{
+    echo "<H3><blink>NOTE: Installation directory exist (install/). Please delete it to prevent data lost.</blink></H3>";
+}
 echo "Sessionweb ver $versionInstalled  | ";
 echo "<a href=\"about.php\"id=\"url_about\">About</a> | ";
 echo "<a href=\"http://code.google.com/p/sessionweb/\" id=\"url_google_code_sessionweb\">Project Home Page</a> | ";
