@@ -49,27 +49,15 @@ function install()
         $con = @ mysql_connect("localhost", $adminuser, $adminpassword);
         $mysqlExecuter = new MySqlExecuter();
         $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT);
-        mysql_close($con);
 
         if (sizeof($resultOfSql) == 0) {
-            echo "Installation done.<br>";
+            echo "Database created and installed<br>";
+            createDbConfigFile($dbuser, $dbpassword);
+            createDbUser($dbuser, $dbpassword);
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
             echo "Use username <b>admin</b> and password <b>admin</b> to login.<br>";
             echo "<a href='../index.php'>Go to Sessionweb login page</a> ";
-            $configfileString = "<?php
-        define('DB_HOST_SESSIONWEB', 'localhost');
-        define('DB_USER_SESSIONWEB', '$dbuser');
-        define('DB_PASS_SESSIONWEB', '$dbpassword');
-        define('DB_NAME_SESSIONWEB', 'sessionwebos');
-        ?>";
-            $sessionwebPath = str_replace("\\", "/", getcwd());
-            $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
-            $myFile = $sessionwebPath . "/config/db.php.inc";
-            echo $myFile;
-            $fh = fopen($myFile, 'w');
-            fwrite($fh,
-                   $configfileString);
-            fclose($fh);
+
 
         }
         else
@@ -80,14 +68,57 @@ function install()
                 echo $oneError . "<br>";
             }
         }
-
+        mysql_close($con);
     }
-
-
     echo'         </dd>
                 </dl>
             </fieldset>
         </form>';
+}
+
+function createDbUser($dbuser, $dbpassword)
+{
+    $sqlCreateUser = "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword'";
+    $sqlGrantUsage = "GRANT USAGE ON * . * TO  '$dbuser'@'localhost' IDENTIFIED BY  '$dbpassword' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
+    $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `sessionwebos` . * TO  '$dbuser'@'localhost'";
+    if (mysql_query($sqlCreateUser) === false) {
+        echo "failed to create $dbuser user<br>";
+    }
+    else
+    {
+        echo "Created $dbuser user<br>";
+    }
+    if (mysql_query($sqlGrantUsage) === false) {
+        echo "failed to grant usage for $dbuser user<br>";
+    }
+    else
+    {
+        echo "Added grant usage for $dbuser user<br>";
+    }
+    if (mysql_query($sqlGrantSessionweb) === false) {
+        echo "failed to grant usage for sessionweb for $dbuser user<br>";
+    }
+    else
+    {
+        echo "Added grant usage for sessionwebos db for $dbuser user<br>";
+    }
+}
+
+function createDbConfigFile($dbuser, $dbpassword)
+{
+    $configfileString = "<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', '$dbuser');
+        define('DB_PASS_SESSIONWEB', '$dbpassword');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+        ?>";
+    $sessionwebPath = str_replace("\\", "/", getcwd());
+    $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
+    $myFile = $sessionwebPath . "/config/db.php.inc";
+    $fh = fopen($myFile, 'w');
+    fwrite($fh,
+           $configfileString);
+    fclose($fh);
 }
 
 function tryDbConnection($user, $password, $host = 'localhost')
