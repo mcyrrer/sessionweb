@@ -18,13 +18,15 @@ define("INSTALLATION_SCRIPT", "SessionwebDbLayout_1.3.sql");
 <div id="container">
     <div><H1>Installation of Sessionweb</H1></div>
 <?php
-        if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null || $_POST['dbsessionwebuser'] == null || $_POST['dbsessionwebpassword'] == null)
-    echoForm();
-else
-{
-    install();
 
-}
+    echo $sessionwebPath;
+    if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null || $_POST['dbsessionwebuser'] == null || $_POST['dbsessionwebpassword'] == null)
+        echoForm();
+    else
+    {
+        install();
+
+    }
     ?>
 </div>
 </body>
@@ -54,6 +56,20 @@ function install()
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
             echo "Use username <b>admin</b> and password <b>admin</b> to login.<br>";
             echo "<a href='../index.php'>Go to Sessionweb login page</a> ";
+            $configfileString = "<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', '$dbuser');
+        define('DB_PASS_SESSIONWEB', '$dbpassword');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+        ?>";
+            $sessionwebPath = str_replace("\\", "/", getcwd());
+            $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
+            $myFile = $sessionwebPath . "/config/db.php.inc";
+            echo $myFile;
+            $fh = fopen($myFile, 'w');
+            fwrite($fh,
+                   $configfileString);
+            fclose($fh);
 
         }
         else
@@ -106,7 +122,7 @@ function echoForm()
     $dbpassword = $_POST['dbsessionwebpassword'];
 
 
-        echo '<form action="install.php?install=yes" method="post" class="niceform">
+    echo '<form action="install.php?install=yes" method="post" class="niceform">
             <fieldset>
                 <legend>Checking read write for some folders and setup of attachments</legend>
                 <dl>
