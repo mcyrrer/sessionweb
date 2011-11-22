@@ -1,10 +1,10 @@
 <?php
 require_once('include/loggingsetup.php');
-//if(is_file("install.php"))
-//{
-//    header("Location: install.php");
-//    exit();
-//}
+if(!file_exists('config/db.php.inc'))
+{
+    header("Location: install/install.php");
+    exit();
+}
 
 $logout = $_GET["logout"];
 session_start();
