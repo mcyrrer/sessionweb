@@ -11,7 +11,7 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
     $sessionwebPath = $sessionwebPath . "/include/filemanagement/application.js";
     if (updateOneLineInTextFile($sessionwebPath, "maxFileSize:", "        maxFileSize: $maxsizebytes"))
-        echo "Updated /include/filemanagement/application.js with correct value";
+        echo "Was able to automaticly update /include/filemanagement/application.js with correct attachment size value according to your php and mysql config paramateters";
     else
     {
         echo "<b>Failed to update /include/filemanagement/application.js with correct value, please update it manually</b>";
