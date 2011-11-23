@@ -56,6 +56,7 @@ function install()
             createDbUser($dbuser, $dbpassword);
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
             echo "Use username <b>admin</b> and password <b>admin</b> to login.<br>";
+            echo "<br><br>";
             echo "<a href='../index.php'>Go to Sessionweb login page</a> ";
 
 
@@ -68,12 +69,22 @@ function install()
                 echo $oneError . "<br>";
             }
         }
-        mysql_close($con);
+
     }
     echo'         </dd>
                 </dl>
             </fieldset>
+       <fieldset>
+                <legend>Attachment setup</legend>
+                <dl>
+                    <dd>';
+    checkForMaxAttachmentSize(true);
+    echo '</dd>
+                </dl>
+            </fieldset>
+
         </form>';
+    mysql_close($con);
 }
 
 function createDbUser($dbuser, $dbpassword)
@@ -160,7 +171,7 @@ function echoForm()
                     <dd>';
 
     checkFoldersForRWDuringInstallation();
-    checkForMaxAttachmentSize();
+
 
     echo '  </dd>
 
