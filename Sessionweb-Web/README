@@ -2,6 +2,12 @@
 Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 1.3==
+Attachments to sessions implemented
+Personal settings for default sprint, area etc.
+Reworked installation script.
+Bug fixes
+
 ==SessionWeb 1.2==
 UTF-8 support in database
 Misc bugfixes

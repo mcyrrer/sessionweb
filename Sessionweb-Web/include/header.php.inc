@@ -55,10 +55,11 @@ echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";
 
 
+
 if (isset($_SESSION['user'])) {
     echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
-
+echo "      <a class='counterstring' href='include/counterstring.html'>&copy;</a>";
 
 echo "<p><img src=\"pictures/logo.png\" alt=\"Sessionweb logo\"/></p>\n";
 ?>

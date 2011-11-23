@@ -53,7 +53,8 @@ $(document).ready(function() {
         $('#textarea2').ckeditor({ toolbar : 'Basic' });//, { skin : 'office2003' };
     }
 
-
+//************Colorbox ifram for counterstring page****
+    $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
 
 
 //**************FILE UPLOAD i session.php
