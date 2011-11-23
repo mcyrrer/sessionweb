@@ -77,13 +77,15 @@ function executeCommand()
         {
             insertSprintNameToDb($_REQUEST["sprintname"]);
         }
-                elseif (strcmp($_REQUEST["command"], "systemcheck") == 0)
+        elseif (strcmp($_REQUEST["command"], "systemcheck") == 0)
         {
             echo "<h1>System check</h1>";
+            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
             checkFoldersForRW();
             checkForMaxAttachmentSize();
+            mysql_close();
         }
-
 
 
     }
