@@ -27,9 +27,6 @@ function updateOneLineInTextFile($file, $needle, $replace)
 
     if (is_file($file) && is_writable($file)) {
         $lines = file($file);
-
-        echo $needle . "<br>";
-        echo $replace . "<br>";
         $fileContentToSave = "";
         foreach ($lines as $line_num => $line) {
             if (strstr($line,$needle) == false)
