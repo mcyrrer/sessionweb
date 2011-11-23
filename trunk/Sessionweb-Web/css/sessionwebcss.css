@@ -64,3 +64,11 @@ p {
     text-decoration: underline
 }
 
+.counterstring {
+    text-decoration: none;
+}
+
+.counterstingtable {
+    WORD-BREAK:BREAK-ALL;
+    background-color: #cccccc;
+}

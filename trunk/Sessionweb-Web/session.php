@@ -435,7 +435,6 @@ function echoSessionForm()
     {
         $publickey = md5(rand());
     }
-
     echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
     echo "<input type=\"hidden\" name=\"publickey\" value=\"" . $publickey . "\">\n";

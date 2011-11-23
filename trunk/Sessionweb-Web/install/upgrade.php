@@ -51,6 +51,7 @@ function upgrade()
     $versions = array();
     $versions['1.0'] = "SessionwebDbLayoutDelta_1.0-_1.2.sql";
     $versions['1.2'] = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
+    $versions['1.3'] = "SessionwebDbLayoutDelta_1.3-_1.4.sql";
     $currentVersion = getSessionWebVersion();
     if ($currentVersion == null) {
         //Manage 1.0->1.x upgrade.... :(
@@ -63,6 +64,7 @@ function upgrade()
             $con = @ mysql_connect("localhost", $adminuser, $adminpassword);
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
+            
             $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion]);
             mysql_close($con);
 
@@ -84,7 +86,8 @@ function upgrade()
             }
 
         }
-        else if (tryDbConnection($adminuser, $adminpassword)) {
+
+        elseif (tryDbConnection($adminuser, $adminpassword)) {
             echo "Sql file does not exist " . $versions[$currentVersion] . "<br>";
         }
         else
@@ -93,6 +96,10 @@ function upgrade()
 
         }
 
+    }
+    else
+    {
+        echo "You already have upgrade to latest version.";
     }
 
 }
