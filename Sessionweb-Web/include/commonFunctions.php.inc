@@ -2,13 +2,61 @@
 
 include_once('session_database_functions.php.inc');
 
-function checkForMaxAttachmentSize()
+function checkForMaxAttachmentSize($updateJsFile = false)
 {
     $maxsizebytes = getMaxUploadSize() * 1024 * 1024;
     echo "<b>Attachment size setup<br></b>";
-    echo "Attachments max size according to php settings " . getMaxUploadSize() . " mb<br>";
-    echo 'Synchronize this with the value in include\filemanagement\application.js. It should be ' . $maxsizebytes . ' in the js file.<br>';
-    echo 'If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini<br>';
+    echo "Attachments max size according to php and mysql settings <b>" . getMaxUploadSize() . " mb</b><br>";
+    $sessionwebPath = str_replace("\\", "/", getcwd());
+    $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
+    $sessionwebPath = $sessionwebPath . "/include/filemanagement/application.js";
+    if (updateOneLineInTextFile($sessionwebPath, "maxFileSize:", "        maxFileSize: $maxsizebytes"))
+        echo "Updated /include/filemanagement/application.js with correct value";
+    else
+    {
+        echo "<b>Failed to update /include/filemanagement/application.js with correct value, please update it manually</b>";
+        echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
+        echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
+    }
+
+
+}
+
+function updateOneLineInTextFile($file, $needle, $replace)
+{
+
+    if (is_file($file) && is_writable($file)) {
+        $lines = file($file);
+
+        echo $needle . "<br>";
+        echo $replace . "<br>";
+        $fileContentToSave = "";
+        foreach ($lines as $line_num => $line) {
+            if (strstr($line,$needle) == false)
+                $fileContentToSave = $fileContentToSave . $line. "";
+            else
+                $fileContentToSave = $fileContentToSave . $replace . "\n";
+
+        }
+        echo "______________________________________________<br>";
+        echo $fileContentToSave;
+
+        $fh = fopen($file, 'w') or die("can't open file");
+        fwrite($fh, $fileContentToSave);
+        fclose($fh);
+        return true;
+    }
+    else
+    {
+        if (!is_file($file)) {
+            echo "Not a file ";
+        }
+        if (!is_writable($file)) {
+            echo "Not writeable ";
+        }
+        return false;
+    }
+
 
 }
 
@@ -58,9 +106,25 @@ function getMaxUploadSize()
     $max_upload = (int)(ini_get('upload_max_filesize'));
     $max_post = (int)(ini_get('post_max_size'));
     $memory_limit = (int)(ini_get('memory_limit'));
-    $upload_mb = min($max_upload, $max_post, $memory_limit);
+    $sql_limit = getSqlMaxAllowedPacketAsMb();
+    $upload_mb = min($max_upload, $max_post, $memory_limit, $sql_limit);
     return $upload_mb;
 
+}
+
+/**
+ * Get the max_allowed_packaet from mysql db and return the value as bytes.
+ * @return bytes|bool
+ */
+function getSqlMaxAllowedPacketAsMb()
+{
+    $sql = "SHOW GLOBAL VARIABLES LIKE  'max_allowed_packet'";
+    $result = mysql_query($sql);
+    if (!$result) {
+        return false;
+    }
+    $row = mysql_fetch_array($result);
+    return $row['Value'] / 1024 / 1024;
 }
 
 function getSessionWebSettings()

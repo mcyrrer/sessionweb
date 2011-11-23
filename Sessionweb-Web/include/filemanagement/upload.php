@@ -22,6 +22,8 @@
 */
 require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
+include_once("../../config/db.php.inc");
+include_once("../../include/commonFunctions.php.inc");
 
 //error_reporting(E_ALL | E_STRICT);
 
@@ -227,11 +229,16 @@ class UploadHandler
         $file->size = intval($size);
         $file->type = $type;
         $error = $this->has_error($uploaded_file, $file, $error);
+
         $max_upload = (int)(ini_get('upload_max_filesize'));
         $max_post = (int)(ini_get('post_max_size'));
         $memory_limit = (int)(ini_get('memory_limit'));
-        $upload_mb = min($max_upload, $max_post, $memory_limit);
+        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect to db");
+        $sql_limit = getSqlMaxAllowedPacketAsMb();
+        mysql_close($con);
+        $upload_mb = min($max_upload, $max_post, $memory_limit,$sql_limit);
         $max_file_size = $upload_mb * 1024 * 1024;
+
         if ($file->size > $max_file_size) {
             $logger->debug($name . ' is to large. Max size:' . $max_file_size . ' File size:' . $file->size);
 
