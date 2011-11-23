@@ -38,9 +38,6 @@ function updateOneLineInTextFile($file, $needle, $replace)
                 $fileContentToSave = $fileContentToSave . $replace . "\n";
 
         }
-        echo "______________________________________________<br>";
-        echo $fileContentToSave;
-
         $fh = fopen($file, 'w') or die("can't open file");
         fwrite($fh, $fileContentToSave);
         fclose($fh);
