@@ -1,5 +1,0 @@
-#WYSIWYG jquery
-= Introduction =
-
-Session uses WYSIWYG from http://www.openwebware.com/ and they make use of the same way of define a function $().  
-To make this text editor to work with sessionweb(jQuery) you need to change all $( in WYSIWYG to something else. Make a find/replace on all $ to _ and it will work fine.
