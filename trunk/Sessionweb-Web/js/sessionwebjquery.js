@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 
 //**************FILE UPLOAD i session.php
-$(".uploadajax").colorbox({iframe:true, width:"80%", height:"80%"});
+$(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
 
 
 //***************WordCloud add word to stoplist
