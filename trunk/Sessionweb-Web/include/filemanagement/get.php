@@ -8,7 +8,7 @@ $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" 
 
 $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
 mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-$sql = "SELECT * FROM `mission_attachments` WHERE `id` = " . $_GET['id'];
+$sql = "SELECT * FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['id'];
 $result = mysql_query($sql) or die($sql . 'Error, query failed');
 $row = mysql_fetch_array($result);
 

@@ -27,7 +27,6 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     }
 
 
-
 }
 
 function updateOneLineInTextFile($file, $needle, $replace)
@@ -76,8 +75,7 @@ function checkFoldersForRW()
             $fh = fopen($ourFileName, 'w');
             fwrite($fh, "TestString\n");
             fclose($fh);
-            if (file_exists($ourFileName))
-            {
+            if (file_exists($ourFileName)) {
                 echo "folder $aFolder is RW => OK<br>";
                 unlink($ourFileName);
             }
@@ -441,6 +439,22 @@ function echoTeamSelect($team)
     echo "                                  </select>\n";
 
     mysql_close($con);
+}
+
+function addNotification($sessionid, $user)
+{
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $sql = "INSERT INTO `sessionwebos`.`user_sessionsnotification` (`versionid`, `username`) VALUES ('$sessionid', '$user')";
+
+    $result = mysql_query($sql);
+    if (!$result) {
+        return false;
+        $logger->debug("addNotification: ".mysql_error());
+    }
+
+    mysql_close($con);
+    return true;
 }
 
 function echoTestEnvironmentSelect($testenvironment)
