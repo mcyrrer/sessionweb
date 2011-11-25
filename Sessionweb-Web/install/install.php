@@ -235,7 +235,10 @@ function checkFoldersForRWDuringInstallation()
             fwrite($fh, "TestString\n");
             fclose($fh);
             if (file_exists($ourFileName))
+            {
                 echo "folder $aFolder is RW => OK<br>";
+                unlink($ourFileName);
+            }
             else
             {
                 echo "folder $aFolder is RW => NOK (file could not be created)<br>";
