@@ -173,7 +173,6 @@ function getSessionMetrics($versionid)
 
 function getSessionDebrief($versionid)
 {
-    //	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
     $sqlSelect = "";
@@ -183,7 +182,8 @@ function getSessionDebrief($versionid)
     $resultSession = mysql_query($sqlSelect);
 
     if (!$resultSession) {
-        echo "getSessionDebrief: " . mysql_error() . "<br/>";
+        $logger->error("getSessionDebrief: " . mysql_error());
+        return null;
     }
 
     return mysql_fetch_array($resultSession);

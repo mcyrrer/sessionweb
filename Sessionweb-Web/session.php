@@ -111,11 +111,23 @@ function reassignSession()
 function echoDebriefSession()
 {
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
+        $con2 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
 
+        $debriefInfo = getSessionDebrief($_GET["sessionid"]);
+        mysql_close($con2);
+
+        if ($debriefInfo != null) {
+            $debriefComments = "<b>Notes by: " . $debriefInfo['debriefedby'] . "</b><br>" . $debriefInfo['notes'];
+        }
+        else
+        {
+            $debriefComments = "";
+        }
         echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
         echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
         echo "<h4>Debrief notes</h4>\n";
-        echo "<textarea id=\"debriefnotes\" class=\"ckeditor\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\"></textarea>\n";
+
+        echo "<textarea id=\"debriefnotes\" class=\"ckeditor\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$debriefComments</textarea>\n";
         echo "<div>Debriefed: <input type=\"checkbox\" class=\"debriefoption\" name=\"debriefedcheckbox\"  value=\"yes\"></div>\n";
         if (strcmp($_SESSION['useradmin'], "1") == 0) {
             echo "<div>Debriefed by manager: <input type=\"checkbox\" class=\"debriefoption\" name=\"debriefedbymanagercheckbox\" value=\"yes\"></div>\n";
@@ -640,10 +652,9 @@ function echoSessionForm()
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Attachments:</td>\n";
     echo "                              <td>\n";
-    if($_GET['sessionid']!=null)
-    {
+    if ($_GET['sessionid'] != null) {
 
-        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=".$_GET['sessionid']."'>Manage attachments</a> Max file size: ".getMaxUploadSize()." mb</p>";
+        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=" . $_GET['sessionid'] . "'>Manage attachments</a> Max file size: " . getMaxUploadSize() . " mb</p>";
         echoAttachments();
 
     }
