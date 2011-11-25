@@ -1,8 +1,8 @@
 <?php
 
-define("GET_FILE_PATH","include/filemanagement/get.php");
-define("DELETE_FILE_PATH","include/filemanagement/get.php");
-define("THUMB_FILE_PATH","include/filemanagement/thumbnails/");
+define("GET_FILE_PATH", "include/filemanagement/get.php");
+define("DELETE_FILE_PATH", "include/filemanagement/get.php");
+define("THUMB_FILE_PATH", "include/filemanagement/thumbnails/");
 
 
 function echoAttachments()
@@ -15,7 +15,7 @@ function echoAttachments()
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 
-    $sql = "SELECT id, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
+    $sql = "SELECT mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
     //echo $sql;
     $result = mysql_query($sql) or die($sql . 'Error, query failed');
     echo "<table border='0'>\n";
@@ -44,6 +44,8 @@ function echoAttachments()
                 echo "                <td class='preview'><img src='pictures/application-pdf.png'></a></td>\n";
             elseif (strcmp($mimetype, "text/html") == 0)
                 echo "                <td class='preview'><img src='pictures/text-html-2.png'></a></td>\n";
+            elseif (strcmp($mimetype, "application/x-zip-compressed") == 0)
+                echo "                <td class='preview'><img src='pictures/zip_icon.jpg'></a></td>\n";
             else
                 echo "                <td class='preview'><img src='pictures/blank-mimetype.png'></a></td>\n";
 
@@ -60,9 +62,9 @@ function echoAttachments()
 
         }
         if ($size / 1024 / 1024 > 1)
-            echo "                <td class='name'>" . number_format($size / 1024 / 1024,2) . "MB</td>\n";
+            echo "                <td class='name'>" . number_format($size / 1024 / 1024, 2) . "MB</td>\n";
         else
-            echo "                <td class='name'>" . number_format($size / 1024,2) . "KB</td>\n";
+            echo "                <td class='name'>" . number_format($size / 1024, 2) . "KB</td>\n";
 
 
         echo "                </tr>\n";
@@ -104,6 +106,10 @@ function echoSessionAction()
     echo "<img src='pictures/edit-copy-9-small.png' border='0' alt='Copy session' title='Copy session'>";
     echo "</a>";
     echo "<script type='text/javascript'>$('#copy_session').click(function(){ var answer = confirm('Copy session?'); if(answer) { return true; } else { return false; }});  </script>";
+    echo " | ";
+    echo "<a id='addNotification' class='colorboxhrefsmall' href='include/notification.php?sessionid=$sessionid'>";
+
+    echo "<img src='pictures/notify-small.png' border='0' alt='Add notification' title='Notify'></a>";
     mysql_close($con);
 }
 

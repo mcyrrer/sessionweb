@@ -60,7 +60,7 @@ mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
         <table class="files">
             <tbody>
 <?php
-$sql = "SELECT id, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
+$sql = "SELECT mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
 //echo $sql;
 $result = mysql_query($sql) or die($sql . 'Error, query failed');
 

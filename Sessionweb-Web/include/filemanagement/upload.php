@@ -338,7 +338,7 @@ class UploadHandler
                 //echo $sql;
             }
 
-            $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
+            $sqlFindLatestId = "SELECT mission_versionid FROM `mission_attachments` ORDER BY `mission_versionid` DESC LIMIT 0,1";
             $logger->debug($sqlFindLatestId);
             $result2 = mysql_query($sqlFindLatestId);
             $row = mysql_fetch_row($result2);

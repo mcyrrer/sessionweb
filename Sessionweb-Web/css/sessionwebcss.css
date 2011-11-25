@@ -72,3 +72,8 @@ p {
     WORD-BREAK:BREAK-ALL;
     background-color: #cccccc;
 }
+
+.notification {
+    background-color: #EFEFEF;
+    text-align: center;
+}
