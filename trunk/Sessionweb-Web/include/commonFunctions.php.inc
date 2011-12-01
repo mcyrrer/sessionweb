@@ -450,7 +450,6 @@ function addNotification($sessionid, $user)
     $result = mysql_query($sql);
     if (!$result) {
         return false;
-        $logger->debug("addNotification: ".mysql_error());
     }
 
     mysql_close($con);
@@ -847,6 +846,50 @@ function insertAutomaticGoBackOnePage()
     echo "<script type='text/JavaScript'>\n";
     echo "setTimeout(\"location.href = '" . $_SERVER['HTTP_REFERER'] . "';\",3000);\n";
     echo "</script>\n";
+}
+
+function doesUserHaveNotifications()
+{
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sql = "    SELECT COUNT(us.versionid) as COUNT FROM `user_sessionsnotification` as us, mission_status as ms  WHERE us.`username` = '" . $_SESSION['username'] . "' and acknowledge=false and ms.executed=true AND us.versionid=ms.versionid";
+
+    $result = mysql_query($sql);
+
+
+    $row = mysql_fetch_row($result);
+    mysql_close($con);
+
+    if(strcmp($row[0],'0')==0)
+    {
+        return false;
+
+    }
+    else
+    {
+        return true;
+
+    }
+}
+
+function getNofifications()
+{
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sql = "SELECT us . versionid, m . title FROM `user_sessionsnotification` as us, mission as m WHERE us . `username` = '" . $_SESSION['username'] . "' and acknowledge=false";
+    echo "TODO Fix that it is only valid records that is visilbe as in doesUserHaveNotifications()!";
+    $result = mysql_query($sql);
+
+
+    while ($row = mysql_fetch_array($result))
+    {
+        echo " < p><img src = '../pictures/dialog-cancel-3-small.png' id = 'ack_" . $row['versionid'] . "' class = 'acknowledge' alt = 'acknowledge'>\n";
+        echo $row['title'] . "</p>\n";
+    }
+    mysql_close($con);
+
 }
 
 ?>
