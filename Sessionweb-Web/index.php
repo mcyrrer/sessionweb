@@ -1,7 +1,6 @@
 <?php
 require_once('include/loggingsetup.php');
-if(!file_exists('config/db.php.inc'))
-{
+if (!file_exists('config/db.php.inc')) {
     header("Location: install/install.php");
     exit();
 }
@@ -13,10 +12,9 @@ if ($logout == "yes") {
     session_destroy();
     unset($_SESSION);
 }
-
-include("include/header.php.inc");
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
+include("include/header.php.inc");
 
 if ($logout == "yes") {
     echo "         You are logged out. Please log in again to use Sessionweb\n";
@@ -44,8 +42,7 @@ if (!session_is_registered(myusername)) {
     echo "                 </table>\n";
     echo "         </form>\n";
 
-        if(strcmp($_GET['login'],"failed")==0)
-    {
+    if (strcmp($_GET['login'], "failed") == 0) {
         echo "Wrong user name or password.<br><br>";
     }
 }
@@ -57,6 +54,8 @@ else
 }
 
 include("include/footer.php.inc");
+
+
 
 function printLast10SessionsTable()
 {

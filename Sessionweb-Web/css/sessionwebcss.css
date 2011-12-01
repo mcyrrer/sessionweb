@@ -74,6 +74,9 @@ p {
 }
 
 .notification {
-    background-color: #EFEFEF;
     text-align: center;
+}
+
+.notification_list {
+    text-align: left;
 }

@@ -5,12 +5,12 @@ session_start();
 if (!session_is_registered(myusername)) {
     header("location:index.php");
 }
-include("include/header.php.inc");
 include_once('config/db.php.inc');
+include_once ('include/commonFunctions.php.inc');
+include("include/header.php.inc");
 include_once ('include/session_edit_functions.php.inc');
 include_once ('include/session_view_functions.php.inc');
 include_once ('include/session_database_functions.php.inc');
-include_once ('include/commonFunctions.php.inc');
 include_once ('include/session_common_functions.php.inc');
 if (is_file("include/customfunctions.php.inc")) {
     include "include/customfunctions.php.inc";

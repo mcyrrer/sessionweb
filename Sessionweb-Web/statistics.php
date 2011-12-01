@@ -4,9 +4,9 @@ session_start();
 if (!session_is_registered(myusername)) {
     header("location:index.php");
 }
-include("include/header.php.inc");
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
+include("include/header.php.inc");
 echo "<h1>Statistics/Graphs</h1>";
 echo "Graph type:";
 echoGraphTypes();
