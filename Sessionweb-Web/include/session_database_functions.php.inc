@@ -71,7 +71,6 @@ function saveSession_InsertSessionDataToDb($sessionid)
         $_REQUEST["title"] = "Unnamed Session";
         echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
     }
-
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission ";
     $sqlInsert .= "            (`sessionid`, ";

@@ -207,6 +207,23 @@ function getSessionData($sessionid)
     return mysql_fetch_array($resultSession);
 }
 
+function getSessionDataFromVersionId($versionid)
+{
+    $sqlSelectSession = "";
+    $sqlSelectSession .= "SELECT * ";
+    $sqlSelectSession .= "FROM   mission ";
+    $sqlSelectSession .= "WHERE  versionid = $versionid";
+    $resultSession = mysql_query($sqlSelectSession);
+
+    if (!$resultSession) {
+        echo "getSessionDataFromVersionId: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelectSession());
+    }
+
+    return mysql_fetch_array($resultSession);
+}
+
 function getSessionPublicKeyBasedOnSessionId($sessionid)
 {
     $sessionData = getSessionData($sessionid);
@@ -222,6 +239,17 @@ function getSessionVersionId($sessionid)
 {
     $result = getSessionData($sessionid);
     return $result['versionid'];
+}
+
+/**
+ * Get the sessionid for the given versionid
+ * @param  $versionid
+ * @return sessionid as string
+ */
+function getSessionSessionId($versionid)
+{
+    $result = getSessionDataFromVersionId($versionid);
+    return $result['sessionid'];
 }
 
 function doesSessionNotesExist($versionid)
@@ -445,7 +473,8 @@ function addNotification($sessionid, $user)
 {
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-    $sql = "INSERT INTO `sessionwebos`.`user_sessionsnotification` (`versionid`, `username`) VALUES ('$sessionid', '$user')";
+    $versionid = getSessionVersionId($sessionid);
+    $sql = "INSERT INTO `sessionwebos`.`user_sessionsnotification` (`versionid`, `username`) VALUES ('$versionid', '$user')";
 
     $result = mysql_query($sql);
     if (!$result) {
@@ -861,8 +890,7 @@ function doesUserHaveNotifications()
     $row = mysql_fetch_row($result);
     mysql_close($con);
 
-    if(strcmp($row[0],'0')==0)
-    {
+    if (strcmp($row[0], '0') == 0) {
         return false;
 
     }
@@ -873,21 +901,34 @@ function doesUserHaveNotifications()
     }
 }
 
-function getNofifications()
+function getNotifications()
 {
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-    $sql = "SELECT us . versionid, m . title FROM `user_sessionsnotification` as us, mission as m WHERE us . `username` = '" . $_SESSION['username'] . "' and acknowledge=false";
-    echo "TODO Fix that it is only valid records that is visilbe as in doesUserHaveNotifications()!";
+    $sql = "SELECT us.versionid, m.title  FROM `user_sessionsnotification` as us, mission as m, mission_status as ms  WHERE us.`username` = '" . $_SESSION['username'] . "' and acknowledge=false and ms.executed=true AND us.versionid=ms.versionid AND us.versionid=m.versionid";
     $result = mysql_query($sql);
 
 
     while ($row = mysql_fetch_array($result))
     {
-        echo " < p><img src = '../pictures/dialog-cancel-3-small.png' id = 'ack_" . $row['versionid'] . "' class = 'acknowledge' alt = 'acknowledge'>\n";
-        echo $row['title'] . "</p>\n";
+        $sessionid = getSessionSessionId($row['versionid']);
+        echo " <p><a href='?sessionid=$sessionid&cmd=ack'><img src = '../pictures/dialog-cancel-3-small.png' id = 'ack_" . $row['versionid'] . "' class = 'acknowledge' alt = 'acknowledge'></a>\n";
+
+        echo "<a href='../session.php?sessionid=$sessionid&command=view' target='_top' class='link_cat_1'>" . $row['title'] . "</a></p>\n";
     }
+    mysql_close($con);
+
+}
+
+function removeNotification($versionid)
+{
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sql = "DELETE FROM `user_sessionsnotification` WHERE `versionid`='$versionid' AND username='" . $_SESSION['username'] . "';";
+    $result = mysql_query($sql);
+
     mysql_close($con);
 
 }

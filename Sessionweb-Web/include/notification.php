@@ -13,37 +13,61 @@ include_once('commonFunctions.php.inc');
     <title>Notifications</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
+    <link rel="stylesheet" type="text/css" media="all" href="../js/niceforms/niceforms-default.css"/>
+
     <script language="javascript" type="text/javascript" src="../js/jquery-1.4.4.js"></script>
     <script language="javascript" type="text/javascript" src="../js/sessionwebjquery.js"></script>
 </head>
-<div id='notification' class="notification">
-    <h1 class="notification">Notifications</h1>
-<!--    <img src='../pictures/notify-large.png' border='0' alt='Add notification' title='Notify'>-->
+<div>
+    <!--    <img src='../pictures/notify-large.png' border='0' alt='Add notification' title='Notify'>-->
 
     <p></p>
 
     <p></p>
 
     <div>
-        <?php
-        if ($_GET['sessionid'] != null) {
-            if (addNotification($_GET['sessionid'], $_SESSION['username'])) {
+        <fieldset>
+            <legend>Notifications</legend>
+            <dl>
+                <dd>
+                    <?php
+                    if ($_GET['sessionid'] != null) {
+                        if (strcmp($_GET['cmd'], 'add') == 0) {
+                            if (addNotification($_GET['sessionid'], $_SESSION['username'])) {
 
-                echo "Notification enabled for session " . $_GET['sessionid'];
-            }
-            else
-            {
-                echo "Notification already enabled for session " . $_GET['sessionid'];
-            }
-        }
-        else
-        {
-            echo "<div class='notification_list'>";
-            echo "<h2>Notification list</h2>";
-            getNofifications();
-            echo " </div>\n";
-        }
-        ?>
+                                echo "Notification enabled for session " . $_GET['sessionid'];
+                            }
+                            else
+                            {
+                                echo "Notification already enabled for session " . $_GET['sessionid'];
+                            }
+                        }
+                        if (strcmp($_GET['cmd'], 'ack') == 0) {
+                            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+                            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+                            $versionid = getSessionVersionId($_GET['sessionid']);
+                            removeNotification($versionid);
+                            echo "Notification for session " . $_GET['sessionid'] . " removed.";
+                            if (!$con)
+                                mysql_close($con);
+                            echo "<div class='notification_list'>";
+                            getNotifications();
+                            echo " </div>\n";
+                        }
+                    }
+                    else
+                    {
+                        echo "<div class='notification_list'>";
+                        getNotifications();
+                        echo " </div>\n";
+                    }
+                    ?>
+                </dd>
+
+            </dl>
+        </fieldset>
+
+
     </div>
 </div>
 <body>
