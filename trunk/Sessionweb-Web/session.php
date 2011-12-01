@@ -58,7 +58,7 @@ elseif (strcmp($_REQUEST["command"], "copy") == 0)
 
 elseif (strcmp($_REQUEST["command"], "save") == 0)
 {
-    //RapidReporter importer
+/*    //RapidReporter importer
     if (strstr(substr($_REQUEST["notes"], 0, 26), 'Time,Reporter,Type,Content') != false) {
         $_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
         echo "RapidReporter CVS notes parsed to HTML<br/>\n";
@@ -69,7 +69,7 @@ elseif (strcmp($_REQUEST["command"], "save") == 0)
     {
         $_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
         echo "BB Test Assistant XML notes parsed to HTML<br/>\n";
-    }
+    }*/
 
     saveSession();
 }
@@ -434,6 +434,7 @@ function echoSessionForm()
     if ($insertSessionData) {
         $title = htmlspecialchars($rowSessionData["title"]);
         $charter = $rowSessionData["charter"];
+        echo $charter;
         $notes = $rowSessionData["notes"];
         $sprint = $rowSessionData["sprintname"];
         $teamsprint = $rowSessionData["teamsprintname"];

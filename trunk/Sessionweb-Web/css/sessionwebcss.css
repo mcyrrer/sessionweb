@@ -80,3 +80,7 @@ p {
 .notification_list {
     text-align: left;
 }
+
+.link_cat_1 {
+    text-decoration: none;
+}

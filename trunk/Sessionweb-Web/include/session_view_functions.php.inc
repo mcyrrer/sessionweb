@@ -107,7 +107,7 @@ function echoSessionAction()
     echo "</a>";
     echo "<script type='text/javascript'>$('#copy_session').click(function(){ var answer = confirm('Copy session?'); if(answer) { return true; } else { return false; }});  </script>";
     echo " | ";
-    echo "<a id='addNotification' class='colorboxhrefsmall' href='include/notification.php?sessionid=$sessionid'>";
+    echo "<a id='addNotification' class='colorboxhreflarge' href='include/notification.php?sessionid=$sessionid&cmd=add'>";
 
     echo "<img src='pictures/notify-small.png' border='0' alt='Add notification' title='Notify'></a>";
     mysql_close($con);
