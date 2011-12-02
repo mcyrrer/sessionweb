@@ -888,7 +888,8 @@ function doesUserHaveNotifications()
 
 
     $row = mysql_fetch_row($result);
-    mysql_close($con);
+    if ($con)
+        mysql_close($con);
 
     if (strcmp($row[0], '0') == 0) {
         return false;
