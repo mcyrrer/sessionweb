@@ -422,14 +422,16 @@ COLLATE = utf8_general_ci;
 DROP TABLE IF EXISTS `sessionwebos`.`user_sessionsnotification` ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_sessionsnotification` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `username` VARCHAR(45) NOT NULL ,
   `emailnotification` TINYINT(1)  NULL ,
   `emailsent` TINYINT(1)  NULL DEFAULT false ,
+  `acknowledge` TINYINT(1)  NULL DEFAULT false ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_user_sessionsnotification_mission1` (`versionid` ASC) ,
   INDEX `fk_user_sessionsnotification_members1` (`username` ASC) ,
+  UNIQUE INDEX `versionid_UNIQUE` (`versionid` ASC) ,
   CONSTRAINT `fk_user_sessionsnotification_mission1`
     FOREIGN KEY (`versionid` )
     REFERENCES `sessionwebos`.`mission` (`versionid` )

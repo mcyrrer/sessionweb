@@ -2,18 +2,22 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-ALTER TABLE `sessionwebos`.`mission_attachments` COLLATE = utf8_general_ci , DROP COLUMN `id` 
+ALTER TABLE `sessionwebos`.`mission_attachments` COLLATE = utf8_general_ci , DROP COLUMN `mission_versionid` , CHANGE COLUMN `id` `mission_versionid` INT(11) NOT NULL  
+, DROP INDEX `fk_attach_mission1` 
+, ADD INDEX `fk_attach_mission1` (`mission_versionid` ASC) 
 , DROP INDEX `id_UNIQUE` ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_sessionsnotification` (
-  `id` INT(11) NOT NULL ,
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `versionid` INT(11) NOT NULL ,
   `username` VARCHAR(45) NOT NULL ,
   `emailnotification` TINYINT(1) NULL DEFAULT NULL ,
   `emailsent` TINYINT(1) NULL DEFAULT false ,
+  `acknowledge` TINYINT(1) NULL DEFAULT false ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_user_sessionsnotification_mission1` (`versionid` ASC) ,
   INDEX `fk_user_sessionsnotification_members1` (`username` ASC) ,
+  UNIQUE INDEX `versionid_UNIQUE` (`versionid` ASC) ,
   CONSTRAINT `fk_user_sessionsnotification_mission1`
     FOREIGN KEY (`versionid` )
     REFERENCES `sessionwebos`.`mission` (`versionid` )
