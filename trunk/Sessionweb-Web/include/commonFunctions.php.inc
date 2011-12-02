@@ -886,8 +886,8 @@ function doesUserHaveNotifications()
 
     $result = mysql_query($sql);
 
-
-    $row = mysql_fetch_row($result);
+    if ($result)
+        $row = mysql_fetch_row($result);
     if ($con)
         mysql_close($con);
 
