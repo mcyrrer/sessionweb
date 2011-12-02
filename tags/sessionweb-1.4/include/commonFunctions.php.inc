@@ -883,12 +883,13 @@ function doesUserHaveNotifications()
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
     $sql = "    SELECT COUNT(us.versionid) as COUNT FROM `user_sessionsnotification` as us, mission_status as ms  WHERE us.`username` = '" . $_SESSION['username'] . "' and acknowledge=false and ms.executed=true AND us.versionid=ms.versionid";
-
+    
     $result = mysql_query($sql);
 
-
-    $row = mysql_fetch_row($result);
-    mysql_close($con);
+    if($result)
+      $row = mysql_fetch_row($result);
+    if($con)
+       mysql_close($con);
 
     if (strcmp($row[0], '0') == 0) {
         return false;
