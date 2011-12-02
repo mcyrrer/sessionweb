@@ -434,7 +434,7 @@ function echoSessionForm()
     if ($insertSessionData) {
         $title = htmlspecialchars($rowSessionData["title"]);
         $charter = $rowSessionData["charter"];
-        echo $charter;
+
         $notes = $rowSessionData["notes"];
         $sprint = $rowSessionData["sprintname"];
         $teamsprint = $rowSessionData["teamsprintname"];

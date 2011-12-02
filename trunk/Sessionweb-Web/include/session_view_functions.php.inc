@@ -109,7 +109,7 @@ function echoSessionAction()
     echo " | ";
     echo "<a id='addNotification' class='colorboxhreflarge' href='include/notification.php?sessionid=$sessionid&cmd=add'>";
 
-    echo "<img src='pictures/notify-small.png' border='0' alt='Add notification' title='Notify'></a>";
+    echo "<img src='pictures/star_smal.png' border='0' alt='Add notification' title=' Add notification'></a>";
     mysql_close($con);
 }
 

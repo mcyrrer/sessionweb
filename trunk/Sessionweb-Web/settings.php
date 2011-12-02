@@ -607,7 +607,7 @@ function echoChangeListSettings()
 
     echo "<br><br>";
 
-    echo "<div>Enable or disable autosave when edit a session:<br>";
+    echo "<div>Enable autosave when edit a session:";
     if ($usersettings['autosave'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"autosave\" value=\"checked\" checked=\"checked\"></td>";
     }
