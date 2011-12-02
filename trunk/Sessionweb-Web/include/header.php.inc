@@ -48,7 +48,7 @@ if ($_SESSION['user'] != "") {
     echo "      [" . $_SESSION['user'] . "]";
 }
 if (doesUserHaveNotifications()) {
-    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='http://matgus.sdi.sec.intra/sessionweb/include/notification.php'>";
+    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='include/notification.php'>";
 }
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
 echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
