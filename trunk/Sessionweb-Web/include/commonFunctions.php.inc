@@ -180,10 +180,11 @@ function getSessionDebrief($versionid)
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   mission_debriefnotes ";
     $sqlSelect .= "WHERE  versionid = $versionid";
+
     $resultSession = mysql_query($sqlSelect);
 
     if (!$resultSession) {
-        $logger->error("getSessionDebrief: " . mysql_error());
+        //$logger->error("getSessionDebrief: " . mysql_error());
         return null;
     }
 
@@ -200,8 +201,8 @@ function getSessionData($sessionid)
 
     if (!$resultSession) {
         echo "getSessionData: " . mysql_error() . "<br/>";
-        $logger->error(mysql_error());
-        $logger->debug($sqlSelectSession());
+        //$logger->error(mysql_error());
+        //$logger->debug($sqlSelectSession());
     }
 
     return mysql_fetch_array($resultSession);
