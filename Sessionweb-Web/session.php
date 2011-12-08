@@ -58,7 +58,7 @@ elseif (strcmp($_REQUEST["command"], "copy") == 0)
 
 elseif (strcmp($_REQUEST["command"], "save") == 0)
 {
-/*    //RapidReporter importer
+    /*    //RapidReporter importer
     if (strstr(substr($_REQUEST["notes"], 0, 26), 'Time,Reporter,Type,Content') != false) {
         $_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
         echo "RapidReporter CVS notes parsed to HTML<br/>\n";
@@ -112,12 +112,14 @@ function echoDebriefSession()
 {
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
         $con2 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
-        $debriefInfo = getSessionDebrief($_GET["sessionid"]);
+        $versionid = getSessionVersionId($_GET["sessionid"]);
+        $debriefInfo = getSessionDebrief($versionid);
         mysql_close($con2);
 
         if ($debriefInfo != null) {
-            $debriefComments = "<b>Notes by: " . $debriefInfo['debriefedby'] . "</b><br>" . $debriefInfo['notes'];
+            $debriefComments = "<p></p><br>_______________<br><b>Notes by: " . $debriefInfo['debriefedby'] . "</b><br>" . $debriefInfo['notes'];
         }
         else
         {
@@ -128,12 +130,13 @@ function echoDebriefSession()
         echo "<h4>Debrief notes</h4>\n";
 
         echo "<textarea id=\"debriefnotes\" class=\"ckeditor\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$debriefComments</textarea>\n";
-        echo "<div>Debriefed: <input type=\"checkbox\" class=\"debriefoption\" name=\"debriefedcheckbox\"  value=\"yes\"></div>\n";
-        if (strcmp($_SESSION['useradmin'], "1") == 0) {
-            echo "<div>Debriefed by manager: <input type=\"checkbox\" class=\"debriefoption\" name=\"debriefedbymanagercheckbox\" value=\"yes\"></div>\n";
-            echo "<div>Close session (do not mark it as debriefed): <input type=\"checkbox\" class=\"debriefoption\" name=\"closed\" value=\"yes\"></div>\n";
 
+        echo "<input type='radio' name='debriefstatus' value='notdone' checked/> Not debriefed<br />";
+        echo "<input type='radio' name='debriefstatus' value='debriefed' /> Debriefed<br />";
+        if (strcmp($_SESSION['useradmin'], "1") == 0) {
+            echo "<input type='radio' name='debriefstatus' value='closed' /> Closed<br />";
         }
+
         echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
         echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
         echo "</form>\n";
@@ -147,8 +150,6 @@ function echoDebriefSession()
 
 function saveDebriefedSession()
 {
-
-    //TODO: Add logic to manage a closed session....
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
         $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
         mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
@@ -156,23 +157,29 @@ function saveDebriefedSession()
         $versionid = getSessionVersionId($_REQUEST["sessionid"]);
 
         $debriefed = "false";
-        if (strcmp($_REQUEST["debriefedcheckbox"], "yes") == 0) {
+        if (strcmp($_REQUEST["debriefstatus"], "debriefed") == 0) {
+            $closed = "false";
             $debriefed = "true";
+            if($_SESSION['useradmin']==1)
+            {
+                $masterdibriefed = "true";
+            }
+            else
+            {
+                $masterdibriefed = "false";
+            }
         }
-
-
-        $masterdibriefed = "false";
-        if (strcmp($_REQUEST["debriefedbymanagercheckbox"], "yes") == 0) {
-            $masterdibriefed = "true";
-        }
-
-        $closed = "false";
-        if (strcmp($_REQUEST["closed"], "yes") == 0) {
+        elseif (strcmp($_REQUEST["debriefstatus"], "closed") == 0) {
             $closed = "true";
             $debriefed = "false";
             $masterdibriefed = "false";
-
         }
+        elseif (strcmp($_REQUEST["debriefstatus"], "notdone") == 0) {
+                    $closed = "false";
+                    $debriefed = "false";
+                    $masterdibriefed = "false";
+                }
+
 
         if (doesSessionNotesExist($versionid)) {
             saveSession_DeleteSessionsNotesFromDb($versionid);
@@ -275,7 +282,7 @@ function saveSession()
         }
 
     }
-        //Update existing session
+    //Update existing session
     else
     {
         $sessionid = $_REQUEST["sessionid"];

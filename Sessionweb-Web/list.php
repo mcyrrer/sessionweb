@@ -178,14 +178,13 @@ function echoOneSession($row)
 
     echoReassignSessionIcon($row);
 
-    echoDebriefSessionIcon($row);
-
     echoDeleteSessionIcon($row);
 
     evalPublicViewIcon($row);
 
     echoCopyIcon($row);
 
+    echoDebriefSessionIcon($row);
     addjQueryCopyPopUp($row["sessionid"]);
 
     echo "      </td>\n";
@@ -253,7 +252,7 @@ function echoReassignSessionIcon($row)
 function echoDebriefSessionIcon($row)
 {
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        if ($row['executed'] != false && $row['debriefed'] != true) {
+        if ($row['executed'] != false && $row['debriefed'] != true && $row['closed'] != true) {
             echo "      <a id=\"debrief_session" . $row["sessionid"] . "\" class=\"url_edit_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=debrief\"><img class=\"picture_edit_session\" src=\"pictures/debrieficon.png\" border=\"0\" alt=\"debrief session\" title=\"Debrief session\"/></a>\n";
         }
     }

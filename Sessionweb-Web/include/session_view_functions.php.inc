@@ -16,7 +16,7 @@ function echoAttachments()
 
 
     $sql = "SELECT mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
-    //echo $sql;
+
     $result = mysql_query($sql) or die($sql . 'Error, query failed');
     echo "<table border='0'>\n";
     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
@@ -353,10 +353,24 @@ function echoViewSession()
                 echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
+
                 echo "    <tr>\n";
-                echo "        <td valign=\"top\">Attachments</td>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echo "            <h2>Attachments</h2>\n";
+                echo "        </td>\n";
+                echo "    </tr>\n";
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
                 echo "        <td>\n";
                 echoAttachments();
+                echo "        </td>\n";
+                echo "    </tr>\n";
+
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
