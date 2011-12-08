@@ -1,1 +1,0 @@
-UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '1.4' WHERE  `version`.`id` =1;
