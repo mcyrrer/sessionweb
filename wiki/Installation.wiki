@@ -7,6 +7,26 @@ This page may be outdated. Please read the README file in the root folder of the
 Sessionweb requires PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 1.4==
+Go to sessionweb/install to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manualy execute install/SessionwebDbLayoutDelta_1.3-_1.4.sql to 
+upgrade from 1.3->1.4
+
+Install manualy:
+got to sessionweb/install/install.php to check that r/w of folders then
+execute install/SessionwebDbLayout_1.4.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
 ==SessionWeb 1.3==
 ===Installations Instructions===
 New installation: just go to index.php and follow instructions.
