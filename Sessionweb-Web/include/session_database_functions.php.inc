@@ -757,6 +757,11 @@ function deleteSessionFromDatabase($sessionId)
     $versionid = GetVersionidFromSessionid($sessionId);
     //	$sessionId = GetSessionIdFromVersionId($versionid);
 
+    $sqlDeleteAttachments = "";
+    $sqlDeleteAttachments .= "DELETE FROM mission_attachments ";
+    $sqlDeleteAttachments .= "WHERE  mission_versionid = $versionid ";
+    $result = mysql_query($sqlDeleteAttachments);
+
     $sqlDeleteMissionStatus = "";
     $sqlDeleteMissionStatus .= "DELETE FROM mission_status ";
     $sqlDeleteMissionStatus .= "WHERE  versionid = $versionid ";
