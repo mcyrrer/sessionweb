@@ -401,15 +401,27 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
+                echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
+                echo "            <b>Note below made by: " . $sessionDebriefNotes['debriefedby'] ."</b>";
+
                 echo             $sessionDebriefNotes['notes'];
+                echo "</div>";
                 echo "        </td>\n";
                 echo "    </tr>\n";
-                echo "    <tr>\n";
-                echo "        <td></td>\n";
-                echo "        <td>\n";
-                echo "            Debriefed by: " . $sessionDebriefNotes['debriefedby'];
-                echo "        </td>\n";
-                echo "    </tr>\n";
+
+                    echo "    <tr>\n";
+                    echo "        <td></td>\n";
+                    echo "        <td>\n";
+                if (isSessionDebriefed($row["versionid"]) || isSessionClosed($row["versionid"])) {
+
+                    echo "            Debriefed by: " . $sessionDebriefNotes['debriefedby'];
+                }
+                else
+                {
+                    echo "            Session still not debriefed/closed.";
+                }
+                    echo "        </td>\n";
+                    echo "    </tr>\n";
 
                 echo "</table>";
             } else

@@ -119,7 +119,7 @@ function echoDebriefSession()
         mysql_close($con2);
 
         if ($debriefInfo != null) {
-            $debriefComments = "<p></p><br>_______________<br><b>Notes by: " . $debriefInfo['debriefedby'] . "</b><br>" . $debriefInfo['notes'];
+            $debriefComments = "<p></p><br>_______________<br><b>Notes below made by: " . $debriefInfo['debriefedby'] . "</b><br>" . $debriefInfo['notes'];
         }
         else
         {

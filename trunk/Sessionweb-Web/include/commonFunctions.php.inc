@@ -681,11 +681,11 @@ function echoTesterSelect($name)
     while ($row = mysql_fetch_array($result))
     {
         if (strcmp($name, $row['username']) == 0) {
-            echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['username']) . "</option>\n";
+            echo "                                      <option selected=\"selected\">" . htmlspecialchars(utf8_encode($row['username'])) . "</option>\n";
         }
         else
         {
-            echo "                                      <option>" . htmlspecialchars($row['username']) . "</option>\n";
+            echo "                                      <option>" . htmlspecialchars(utf8_encode($row['username'])) . "</option>\n";
         }
     }
 
@@ -933,6 +933,20 @@ function removeNotification($versionid)
 
     mysql_close($con);
 
+}
+
+function isSessionDebriefed($versionId)
+{
+    $missionStatus = getSessionStatus($versionId);
+    if ($missionStatus['debriefed'] == 1)
+        return true;
+}
+
+function isSessionClosed($versionId)
+{
+    $missionStatus = getSessionStatus($versionId);
+    if ($missionStatus['closed'] == 1)
+        return true;
 }
 
 ?>
