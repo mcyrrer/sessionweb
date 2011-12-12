@@ -49,9 +49,15 @@ $(document).ready(function () {
                 ['Maximize', 'ShowBlocks', '-', 'About']
             ];
         CKEDITOR.config.toolbar = 'Basic';
-        $('#textarea1').ckeditor({ toolbar:'Basic' });//, { toolbar : 'ToolBar' };
-        $('#textarea2').ckeditor({ toolbar:'Basic' });//, { skin : 'office2003' };
+
+        $('#textarea1').ckeditor(function () {
+            $('#textarea1').val($.URLDecode(charter));
+        }, { toolbar:'Basic' });
+        $('#textarea2').ckeditor(function () {
+            $('#textarea2').val($.URLDecode(notes));
+        }, { toolbar:'Basic' });
     }
+
 
 //************Colorbox ifram for counterstring page****
     $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
@@ -100,6 +106,7 @@ $(document).ready(function () {
                             var s = today.getSeconds();
                             m = checkTime(m);
                             s = checkTime(s);
+
                             $("#autosaved").empty().append(h + ":" + m + ":" + s);
                         }
                     });

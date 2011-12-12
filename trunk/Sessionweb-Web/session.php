@@ -450,6 +450,18 @@ function echoSessionForm()
         $area = $rowSessionAreas;
         $testenvironment = $rowSessionData["testenvironment"];
         $software = $rowSessionData["software"];
+
+        $noteAsJavaScriptVar = "\"". urlencode($notes) . "\"";
+        $charterAsJavaScriptVar = "\"". urlencode($charter) . "\"";
+        echo '<script type=\'text/javascript\'>
+
+        var notes = '.$noteAsJavaScriptVar.';
+        notes = notes.replace(/\\+/g," ");
+
+        var charter = '.$charterAsJavaScriptVar.';
+        charter = charter.replace(/\\+/g," ");
+
+        </script>';
     }
     else
     {
