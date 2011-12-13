@@ -53,7 +53,7 @@ $failedToCreateGraph = false;
 function dateLineGraphGoogle()
 {
     $sql = "SELECT DATE(executed_timestamp) AS date, COUNT(*) AS count, sessionid  ";
-    $sql .= "FROM sessionwebos.sessioninfo  ";
+    $sql .= "FROM sessioninfo  ";
     $sql .= "WHERE executed = 1  ";
     if ($_GET['tester'] != null) {
         if ($_SESSION['useradmin'] == 1) {
@@ -111,7 +111,7 @@ function dateLineGraphGoogle()
             $sql = "SELECT SUM(duration_time)/ ";
             $sql .= "  (SELECT normalized_session_time ";
             $sql .= "   FROM settings) AS duration ";
-            $sql .= "FROM `sessionwebos`.`sessioninfo`  ";
+            $sql .= "FROM `sessioninfo`  ";
             $sql .= "WHERE DATE(executed_timestamp) = '" . $row['date'] . "' ";
             if ($_GET['tester'] != null) {
                 $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
@@ -164,7 +164,7 @@ function pieTimeDistribution()
 
     //TODO: Fix undefined for team in javascript!!!!!
     $sql = "SELECT SUM(setup_percent) as setup,SUM(test_percent) as test, SUM(bug_percent) as bug, SUM(opportunity_percent) as opportunity, COUNT(*) as numberOfSessions  ";
-    $sql .= "FROM sessionwebos.sessioninfo  ";
+    $sql .= "FROM sessioninfo  ";
     $sql .= "WHERE executed = 1  ";
     if ($_GET['tester'] != null) {
         if ($_SESSION['useradmin'] == 1) {

@@ -107,7 +107,7 @@ function getSessionsLinkedToMasterSession($versionid)
 {
     //echo "<br>processing versionid: $versionid<br>";
     $sessions = array();
-    $sql = "SELECT * FROM `sessionwebos`.`mission_sessionsconnections` where linked_from_versionid=$versionid;";
+    $sql = "SELECT * FROM `mission_sessionsconnections` where linked_from_versionid=$versionid;";
     $result = mysql_query($sql);
 
     if (!$result) {
@@ -154,7 +154,7 @@ function getSessionsLinkedFromMasterSession($versionid)
 {
 
     $sessions = array();
-    $sql = "SELECT * FROM `sessionwebos`.`mission_sessionsconnections` where linked_to_versionid=$versionid;";
+    $sql = "SELECT * FROM `mission_sessionsconnections` where linked_to_versionid=$versionid;";
     $result = mysql_query($sql);
 
     if (!$result) {
