@@ -475,7 +475,7 @@ function addNotification($sessionid, $user)
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
     $versionid = getSessionVersionId($sessionid);
-    $sql = "INSERT INTO `sessionwebos`.`user_sessionsnotification` (`versionid`, `username`) VALUES ('$versionid', '$user')";
+    $sql = "INSERT INTO `user_sessionsnotification` (`versionid`, `username`) VALUES ('$versionid', '$user')";
 
     $result = mysql_query($sql);
     if (!$result) {

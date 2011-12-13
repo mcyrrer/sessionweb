@@ -66,7 +66,7 @@ function printLast10SessionsTable()
 
     $user = $_SESSION['username'];
 
-    $sql = "SELECT * FROM `sessionwebos`.`sessioninfo` WHERE executed = 0 and username = '$user' ORDER BY sessionid limit 0,10;";
+    $sql = "SELECT * FROM `sessioninfo` WHERE executed = 0 and username = '$user' ORDER BY sessionid limit 0,10;";
     $result = mysql_query($sql);
 
     echo "<ul>\n";
@@ -87,22 +87,22 @@ function printSessionsStatus()
 
     $user = $_SESSION['username'];
 
-    $sqlExecuted = "SELECT COUNT(executed) AS executed FROM `sessionwebos`.`sessioninfo` WHERE username = '$user' and executed = 1;";
+    $sqlExecuted = "SELECT COUNT(executed) AS executed FROM `sessioninfo` WHERE username = '$user' and executed = 1;";
     $resultSession = mysql_query($sqlExecuted);
     $executedResultArray = mysql_fetch_array($resultSession);
     $executed = $executedResultArray['executed'];
 
-    $sqlNoRun = "SELECT COUNT(executed) AS norun FROM `sessionwebos`.`sessioninfo` WHERE username = '$user' and executed = 0;";
+    $sqlNoRun = "SELECT COUNT(executed) AS norun FROM `sessioninfo` WHERE username = '$user' and executed = 0;";
     $resultSession = mysql_query($sqlNoRun);
     $NoRunResultArray = mysql_fetch_array($resultSession);
     $noRun = $NoRunResultArray['norun'];
 
-    $sqlDebriefed = "SELECT COUNT(debriefed) AS debriefed FROM `sessionwebos`.`sessioninfo` WHERE username = '$user' and debriefed = 1;";
+    $sqlDebriefed = "SELECT COUNT(debriefed) AS debriefed FROM `sessioninfo` WHERE username = '$user' and debriefed = 1;";
     $resultSession = mysql_query($sqlDebriefed);
     $debriefedResultArray = mysql_fetch_array($resultSession);
     $debriefed = $debriefedResultArray['debriefed'];
 
-    $sqlTotalSessions = "SELECT COUNT(debriefed) AS totalsessions FROM `sessionwebos`.`sessioninfo` WHERE username = '$user';";
+    $sqlTotalSessions = "SELECT COUNT(debriefed) AS totalsessions FROM `sessioninfo` WHERE username = '$user';";
     $resultSession = mysql_query($sqlTotalSessions);
     $totalSessionsResultArray = mysql_fetch_array($resultSession);
     $totalSessions = $totalSessionsResultArray['totalsessions'];
