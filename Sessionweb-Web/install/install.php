@@ -39,6 +39,14 @@ function install()
     $adminpassword = $_POST['dbadminpassword'];
     $dbuser = $_POST['dbsessionwebuser'];
     $dbpassword = $_POST['dbsessionwebpassword'];
+    $dbname = $_POST['dbname'];
+    $dbcreateuser = $_POST['dbcreateuser'];
+    $dbcreatedb = $_POST['dbcreatedb'];
+    if(strcmp($dbcreatedb,"true") === 0 )
+        $createDb = true;
+    else
+        $createDb = false;
+
     echo '<form action="install.php?install=yes" method="post" class="niceform">
             <fieldset>
                 <legend>Installation</legend>
@@ -48,12 +56,17 @@ function install()
     if (tryDbConnection($adminuser, $adminpassword)) {
         $con = @ mysql_connect("localhost", $adminuser, $adminpassword);
         $mysqlExecuter = new MySqlExecuter();
-        $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT);
+        $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT,$dbname,$createDb);
 
         if (sizeof($resultOfSql) == 0) {
             echo "Database created and installed<br>";
-            createDbConfigFile($dbuser, $dbpassword);
-            createDbUser($dbuser, $dbpassword);
+            createDbConfigFile($dbuser, $dbpassword,$dbname);
+            if(strcmp($dbcreateuser,"true") == 0 )
+                createDbUser($dbuser, $dbpassword,$dbname);
+            else
+            {
+                echo "User not created since checkbox was unchecked.<br>";
+            }
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
             echo "Use username <b>admin</b> and password <b>admin</b> to login.<br>";
             echo "<br><br>";
@@ -87,11 +100,11 @@ function install()
     mysql_close($con);
 }
 
-function createDbUser($dbuser, $dbpassword)
+function createDbUser($dbuser, $dbpassword, $dbname)
 {
     $sqlCreateUser = "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword'";
     $sqlGrantUsage = "GRANT USAGE ON * . * TO  '$dbuser'@'localhost' IDENTIFIED BY  '$dbpassword' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
-    $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `sessionwebos` . * TO  '$dbuser'@'localhost'";
+    $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `$dbname` . * TO  '$dbuser'@'localhost'";
     if (mysql_query($sqlCreateUser) === false) {
         echo "failed to create $dbuser user<br>";
     }
@@ -115,13 +128,13 @@ function createDbUser($dbuser, $dbpassword)
     }
 }
 
-function createDbConfigFile($dbuser, $dbpassword)
+function createDbConfigFile($dbuser, $dbpassword, $dbname)
 {
     $configfileString = "<?php
         define('DB_HOST_SESSIONWEB', 'localhost');
         define('DB_USER_SESSIONWEB', '$dbuser');
         define('DB_PASS_SESSIONWEB', '$dbpassword');
-        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+        define('DB_NAME_SESSIONWEB', '$dbname');
         ?>";
     $sessionwebPath = str_replace("\\", "/", getcwd());
     $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
@@ -162,6 +175,11 @@ function echoForm()
     $adminpassword = $_POST['dbadminpassword'];
     $dbuser = $_POST['dbsessionwebuser'];
     $dbpassword = $_POST['dbsessionwebpassword'];
+    $dbname = $_POST['dbname'];
+    if($dbname==null)
+    {
+        $dbname ="sessionwebos";
+    }
 
 
     echo '<form action="install.php?install=yes" method="post" class="niceform">
@@ -197,9 +215,10 @@ function echoForm()
 
            <fieldset>
                 <legend>Sessionweb Database Credentials</legend>
+
                 <dl>
                     <dd>This is the user that sessionweb will use for all normal access like SELECT, INSERT and DELETE.
-                        Should not be the same as the admin user.
+                        Should not be the same as the admin user if posible.
                     </dd>
                 </dl>
                 <dl>
@@ -210,6 +229,14 @@ function echoForm()
                     <dt><label for="dbsessionwebpassword">Password:</label></dt>
                     <dd><input type="password" name="dbsessionwebpassword" id="dbsessionwebpassword" value="' . $dbpassword . '" size="32"
                                maxlength="32"/></dd>
+                </dl>
+                <dl>
+                     <dt><label for="dbname">Database:</label></dt>
+                     <dd><input type="text" name="dbname" id="dbadminpassword" value="' . $dbname . '" size="32" maxlength="32"/></dd>
+                </dl>
+                <dl>
+                     <dd>Create Database: <input type="checkbox" name="dbcreatedb" value="true" checked /></dd>
+                     <dd>Create User: <input type="checkbox" name="dbcreateuser" value="true" checked  /></dd>
                 </dl>
             </fieldset>
 
