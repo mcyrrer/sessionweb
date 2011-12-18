@@ -8,7 +8,7 @@ class MySqlExecuter
      * @param string $sqldelimiter
      * @return array|null array with errors or null if file does not exist
      */
-    function multiQueryFromFile($sqlfileName, $sqldelimiter = ';')
+    function multiQueryFromFile($sqlfileName, $dbname, $createDb, $sqldelimiter = ';')
     {
         $error_log_from_sql_execution = array();
         set_time_limit(0);
@@ -27,14 +27,32 @@ class MySqlExecuter
 
                     if (preg_match('~' . preg_quote($sqldelimiter, '~') . '\s*$~iS', end($query)) === 1) {
                         $query = trim(implode('', $query));
+                        $query = str_replace("sessionwebos", $dbname, $query);
+                        //echo $query;
+                        $skipQuery = false;
 
-                        if (mysql_query($query) === false) {
-                            $error = "SQL: " .$query . "<br> Error Msg: " . mysql_error();
-                            array_push($error_log_from_sql_execution, $error);
-                             //echo '<tr><td>ERROR:</td><td> ' . $query . '</td></tr>';
-                        } else {
-                            // echo '<tr><td>SUCCESS:</td><td>' . $query . '</td></tr>';
+                        if ($createDb == false) {
+                            if (strstr($query, "DROP SCHEMA") != false || strstr($query, "CREATE SCHEMA ") != false) {
+                                $skipQuery = true;
+                            }
                         }
+
+                        if ($skipQuery == false) {
+                            if (mysql_query($query) === false) {
+                                $error = "SQL: " . $query . "<br> Error Msg: " . mysql_error();
+                                array_push($error_log_from_sql_execution, $error);
+                                //echo '<tr><td>ERROR:</td><td> ' . $query . '</td></tr>';
+                            } else {
+                                // echo '<tr><td>SUCCESS:</td><td>' . $query . '</td></tr>';
+                            }
+                        }
+                        else
+                        {
+                            if ($createDb == false) {
+                                echo "Create database query skiped.<br>";
+                            }
+                        }
+
 
                         while (ob_get_level() > 0) {
                             ob_end_flush();
