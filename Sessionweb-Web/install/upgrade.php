@@ -52,6 +52,7 @@ function upgrade()
     $versions['1.0'] = "SessionwebDbLayoutDelta_1.0-_1.2.sql";
     $versions['1.2'] = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
     $versions['1.3'] = "SessionwebDbLayoutDelta_1.3-_1.4.sql";
+    $versions['1.4'] = "SessionwebDbLayoutDelta_1.4-_1.5.sql";
     $currentVersion = getSessionWebVersion();
     if ($currentVersion == null) {
         //Manage 1.0->1.x upgrade.... :(
@@ -65,7 +66,7 @@ function upgrade()
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
             
-            $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion]);
+            $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion],DB_NAME_SESSIONWEB);
             mysql_close($con);
 
             if (sizeof($resultOfSql) == 0) {
