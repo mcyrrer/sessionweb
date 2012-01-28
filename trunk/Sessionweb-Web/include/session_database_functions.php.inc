@@ -83,6 +83,7 @@ function saveSession_InsertSessionDataToDb($sessionid)
     $sqlInsert .= "             `testenvironment`, ";
     $sqlInsert .= "             `software`, ";
     $sqlInsert .= "             `teamname`, ";
+    $sqlInsert .= "             `lastupdatedby`, ";
     $sqlInsert .= "             `publickey`) ";
     $sqlInsert .= "VALUES      ('$sessionid', ";
     $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST["title"]) . "', ";
@@ -125,6 +126,7 @@ function saveSession_InsertSessionDataToDb($sessionid)
     {
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['team']) . "', ";
     }
+    $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
     $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
     $sqlInsert .= ") ";
 
@@ -151,6 +153,7 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
     $sqlInsert .= "             `teamsprintname`, ";
     $sqlInsert .= "             `testenvironment`, ";
     $sqlInsert .= "             `teamname`, ";
+    $sqlInsert .= "             `lastupdatedby`, ";
     $sqlInsert .= "             `publickey`) ";
     $sqlInsert .= "VALUES      ('$sessionid', ";
     $sqlInsert .= "             '" . $sessionToCopy["title"] . "(COPY) ', ";
@@ -185,11 +188,12 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
     {
         $sqlInsert .= "             '" . $sessionToCopy['teamname'] . "', ";
     }
+    $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
     $sqlInsert .= "             '" . $sessionToCopy["publickey"] . "' ";
     $sqlInsert .= ") ";
 
 
-    //echo "SQLINSERT=$sqlInsert";
+    echo "SQLINSERT=$sqlInsert";
 
     $result = mysql_query($sqlInsert);
 
@@ -211,7 +215,7 @@ function saveSession_UpdateSessionDataToDb($sessionid)
     $sqlUpdate .= "SET    `title` = '" . mysql_real_escape_string($_REQUEST["title"]) . "', ";
     $sqlUpdate .= "       `charter` = '" . mysql_real_escape_string($_REQUEST["charter"]) . "', ";
     $sqlUpdate .= "       `notes` = '" . mysql_real_escape_string($_REQUEST["notes"]) . "', ";
-    $sqlUpdate .= "       `username` = '" . $_SESSION['username'] . "', ";
+    $sqlUpdate .= "       `lastupdatedby` = '" . $_SESSION['username'] . "', ";
     if ($_REQUEST['sprint'] == "") {
         $sqlUpdate .= "       `sprintname` = null, ";
     }

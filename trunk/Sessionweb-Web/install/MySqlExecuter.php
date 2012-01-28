@@ -8,7 +8,7 @@ class MySqlExecuter
      * @param string $sqldelimiter
      * @return array|null array with errors or null if file does not exist
      */
-    function multiQueryFromFile($sqlfileName, $dbname, $createDb, $sqldelimiter = ';')
+    function multiQueryFromFile($sqlfileName, $dbname, $createDb=false, $sqldelimiter = ';')
     {
         $error_log_from_sql_execution = array();
         set_time_limit(0);
