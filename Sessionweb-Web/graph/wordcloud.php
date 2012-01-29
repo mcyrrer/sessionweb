@@ -27,6 +27,7 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
     <link rel="stylesheet" href="../css/wordcloud.css">
     <script type="text/javascript" src="../js/jquery-1.4.4.js"></script>
     <script type="text/javascript" src="../js/sessionwebjquery.js"></script>
+    <script type="text/javascript" src="../js/jquery.colorbox-min.js"></script>
 
 
 </head>
@@ -58,10 +59,59 @@ if ($_GET['sessionid'] != "") {
         echo "<div id='addedword'></div>";
     }
     //    print_r($wordCount);
-    if (count($wordCount) !=0)
-{
-    printTagCloud($wordCount);
+    if (count($wordCount) != 0) {
+        printTagCloud($wordCount, 30);
+    }
 }
+if ($_GET['all'] != "") {
+    $sql = "SELECT title, notes,charter FROM sessioninfo ";
+    $sql .= "WHERE executed = 1  ";
+    if ($_GET['tester'] != null) {
+        if ($_SESSION['useradmin'] == 1) {
+            $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
+        }
+    }
+    if ($_GET['team'] != null) {
+        if ($_SESSION['useradmin'] == 1) {
+            $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
+        }
+    }
+    if ($_GET['sprint'] != null) {
+        $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
+    }
+
+    $resultSession = getSessionNotesAncCarters($sql);
+    $num_rows = mysql_num_rows($resultSession);
+    $wordCountArray = array();
+    while ($row = mysql_fetch_array($resultSession)) {
+        $sessionNotes = $row['notes'];
+        $sessionCharter = $row['charter'];
+        $wordCountArray = array_merge_recursive($wordCountArray, countWords($row['notes']));
+        $wordCountArray = array_merge_recursive($wordCountArray, countWords($row['notes']));
+    }
+
+    if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
+        echo "<a href='?all=yes&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
+    }
+    if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
+        echo "<H2>Click on the word to add to black list.</H2><br>";
+        echo "<div id='addedword' class='class'></div>";
+    }
+    $wordCountArraySummary = array();
+    foreach ($wordCountArray as $key => $oneWordArray)
+    {
+        $cnt = 0;
+        foreach ($oneWordArray as $oneWordCount)
+        {
+            $cnt = $cnt + $oneWordCount;
+        }
+        $wordCountArraySummary[$key] = $cnt;
+
+    }
+
+    if (count($wordCountArray) != 0) {
+        printTagCloud($wordCountArraySummary, 200);
+    }
 
 }
 
@@ -107,10 +157,10 @@ function getStopWordList()
     return $stopListWordCloud;
 }
 
-function printTagCloud($tags)
+function printTagCloud($tags, $maxItemToDisplay)
 {
     arsort($tags);
-    $tags = array_slice($tags, 0, 30);
+    $tags = array_slice($tags, 0, $maxItemToDisplay);
     // $tags is the array
     ksort($tags);
 
@@ -144,7 +194,9 @@ function printTagCloud($tags)
             }
             else
             {
-                echo '<a href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</a> ';
+                //                echo '<a href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</a> ';
+                echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</span> ';
+
             }
         }
 
@@ -161,7 +213,7 @@ function countWords($words, $wordCountArray = array())
     $stopWords = getStopWordList();
     $lineToProcess = prepareLine($words);
     $wordsArray = explode(" ", $lineToProcess);
-    //print_r($stopWords);
+    //    print_r($stopWords);
     //    print_r($wordsArray);
     foreach ($wordsArray as $word)
     {
@@ -184,7 +236,7 @@ function countWords($words, $wordCountArray = array())
             }
         }
     }
-    // print_r($wordCountArray);
+    //     print_r($wordCountArray);
 
     return $wordCountArray;
 

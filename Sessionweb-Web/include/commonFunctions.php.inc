@@ -208,6 +208,18 @@ function getSessionData($sessionid)
     return mysql_fetch_array($resultSession);
 }
 
+function getSessionNotesAncCarters($sql)
+{
+
+    $resultSession = mysql_query($sql);
+
+    if (!$resultSession) {
+        echo "getSessionData: " . mysql_error() . "<br/>";
+    }
+
+    return $resultSession;
+}
+
 function getSessionDataFromVersionId($versionid)
 {
     $sqlSelectSession = "";
@@ -369,7 +381,7 @@ function getConnectedSessions($versionid)
     $resultToReturn = array();
     while ($row = mysql_fetch_array($result)) {
         $sessionid = GetSessionIdFromVersionId($row["linked_to_versionid"]);
-        //Importera sessionid från version -> lägg det till arrayen nedan!!!
+        //Importera sessionid frï¿½n version -> lï¿½gg det till arrayen nedan!!!
         $resultToReturn[] = $sessionid;
         //        $resultToReturn[] = $row["linked_to_versionid"];
     }

@@ -50,9 +50,10 @@ echo "<div id='url_graph'></div>";
 function echoGraphTypes()
 {
     echo "<select id='choosegraph'>\n";
-//    echo "    <option value='' >Choose graph</option>\n";
+    //    echo "    <option value='' >Choose graph</option>\n";
     echo "    <option value='line_overtime'>Line graph: Test sessions over time</option>\n";
     echo "    <option value='pie_timedist'>Pie graph: Time distribution</option>\n";
+    echo "    <option value='word_cloud'>Wordcloud</option>\n";
     echo "</select>\n";
 }
 
