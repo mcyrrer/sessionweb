@@ -32,6 +32,11 @@ $failedToCreateGraph = false;
     {
         pieTimeDistribution();
     }
+    elseif (urldecode($_GET['type']) == "word_cloud")
+    {
+        header("Status: 301 Moved Permanently");
+        header("Location:./wordcloud.php?all=yes&" . $_SERVER['QUERY_STRING']);
+    }
     else
     {
         echo "No graph type added";
@@ -71,9 +76,9 @@ function dateLineGraphGoogle()
 
     $sql .= "GROUP BY DATE(executed_timestamp)  ";
     $sql .= "ORDER BY date;";
-//    echo "    <script type='text/javascript'>\n";
-//    echo " alert('$sql');\n";
-//    echo "    </script>\n";
+    //    echo "    <script type='text/javascript'>\n";
+    //    echo " alert('$sql');\n";
+    //    echo "    </script>\n";
     $result = mysql_query($sql);
 
     if ($result) {
@@ -181,9 +186,8 @@ function pieTimeDistribution()
     }
 
 
-   
     $result = mysql_query($sql);
-//       echo $sql; //For debug purpose!
+    //       echo $sql; //For debug purpose!
     if ($result) {
 
         $addComma = false;
@@ -194,8 +198,8 @@ function pieTimeDistribution()
         $bug = $row['bug'];
         $opportunity = $row['opportunity'];
         $numberOfSessions = $row['numberOfSessions'];
-        
-        
+
+
         echo "<script type='text/javascript' src='https://www.google.com/jsapi'></script>\n";
         echo "    <script type='text/javascript'>\n";
         echo "      google.load('visualization', '1', {packages:['corechart']});\n";
