@@ -110,7 +110,7 @@ if ($_GET['all'] != "") {
     }
 
     if (count($wordCountArray) != 0) {
-        printTagCloud($wordCountArraySummary, 200);
+        printTagCloud($wordCountArraySummary, 100);
     }
 
 }
