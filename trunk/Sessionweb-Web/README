@@ -3,6 +3,37 @@ Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 1.5==
+Installation:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manualy execute install/SessionwebDbLayoutDelta_1.4-_1.5.sql to 
+upgrade from 1.4->1.5
+
+Install manualy:
+got to sessionweb/install/install.php to check that r/w of folders is correct then
+execute install/SessionwebDbLayout_1.5.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Issue list for this release 1.5 ===
+ID	Type		Status		Milestone	Summary
+42	Defect		Implemented	Release1.5	Attachments in db is not deleted when a session is deleted
+44	Defect		Implemented	Release1.5	Debriefed note saved when not debriefed
+45	Defect		Implemented	Release1.5	Not possilbe to copy and paste XML into the editor
+46	Enhancement	Implemented	Release1.5	make sessionwebos db name dynamic
+50	Defect		Implemented	Release1.5	Add check that mission notes/charter is shorter then TEXT max length
+53	Defect		Implemented	Release1.5	Do not update owner of session if an admin makes notes in charter etc
+54	Enhancement	Implemented	Release1.5	Add support for wordcloud for all sessions
+
+
 ==SessionWeb 1.4==
 Go to sessionweb/install to install/upgrade
 
