@@ -1,40 +1,39 @@
 <?php
-require_once('include/loggingsetup.php');
-session_start();
-if(!session_is_registered(myusername)){
-    header("location:index.php");
+require_once ('include/loggedincheck.php');
+require_once ('config/db.php.inc');
+
+$table = 'cvs'; // table you want to export
+$file = 'sessionweb.cvs'; // csv name.
+
+$link = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("Can not connect." . mysql_error());
+mysql_select_db(DB_NAME_SESSIONWEB) or die("Can not connect.");
+
+$result = mysql_query("SHOW COLUMNS FROM ".$table."");
+$i = 0;
+
+if (mysql_num_rows($result) > 0) {
+    while ($row = mysql_fetch_assoc($result)) {
+        $csv_output .= $row['Field'].";";
+        $i++;}
 }
+$csv_output .= "\n";
+$values = mysql_query("SELECT * FROM ".$table."");
 
-include_once('config/db.php.inc');
-
-$start= addslashes($_REQUEST["start"]);
-
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-
-//$cur= mysql_query("SELECT * FROM completeCities ".
-//    "WHERE cityName LIKE '{$start}%' LIMIT 1000");
-
-$sqlSelect = "";
-$sqlSelect .= "SELECT * ";
-$sqlSelect .= "FROM   `mission` ";
-$sqlSelect .= "ORDER BY updated DESC " ;
-$sqlSelect .= "LIMIT  0, 30 " ;
-
-$result = mysql_query($sqlSelect);
-
-// Send out the data, with headers identifying it as CSV:
-
-header("Content-type: text/csv");
-header("Content-Disposition: attachment; filename=csv_1.csv");
-
-while ($row= mysql_fetch_assoc($result)) {
-    $sep= "";
-    foreach ($row as $value) {
-        $item= is_numeric($value) ? $value : '"'.addslashes($value).'"';
-        echo $sep.$item;
-        $sep= ',';
+while ($rowr = mysql_fetch_row($values)) {
+    for ($j=0;$j<$i;$j++) {
+        $line = str_replace('\n','',$rowr[$j]);
+        $csv_output .= $line."; ";
     }
-    echo "\n";
+    $csv_output .= "\n";
 }
+
+$filename = $file."_".date("d-m-Y_H-i",time());
+
+header("Content-type: application/vnd.ms-excel");
+header("Content-disposition: csv" . date("Y-m-d") . ".csv");
+header( "Content-disposition: filename=".$filename.".csv");
+
+print $csv_output;
+
+exit;
 ?>
