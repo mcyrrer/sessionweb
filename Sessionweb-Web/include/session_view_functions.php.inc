@@ -15,16 +15,14 @@ function echoAttachments()
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 
-    $sql = "SELECT mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
-
+    $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
     $result = mysql_query($sql) or die($sql . 'Error, query failed');
     echo "<table border='0'>\n";
     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
-
         $id = $row[0];
-        $filename = $row[1];
-        $size = $row[2];
-        $mimetype = $row[3];
+        $filename = $row[2];
+        $size = $row[3];
+        $mimetype = $row[4];
 
         echo "<tr>\n";
         if (in_array($mimetype, $picture_mimetypes)) {

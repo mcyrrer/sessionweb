@@ -4,7 +4,9 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 ALTER TABLE `sessionwebos`.`mission` ADD COLUMN `lastupdatedby` VARCHAR(45) NULL DEFAULT NULL  AFTER `software` , CHANGE COLUMN `charter` `charter` MEDIUMTEXT NULL DEFAULT NULL  , CHANGE COLUMN `notes` `notes` MEDIUMTEXT NULL DEFAULT NULL  ;
 
-ALTER TABLE `sessionwebos`.`mission_attachments` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_attachments` ADD PRIMARY KEY (`id`) ;
+
 
 ALTER TABLE `sessionwebos`.`user_sessionsnotification` COLLATE = utf8_general_ci ;
 
