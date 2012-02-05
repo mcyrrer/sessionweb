@@ -1,0 +1,2 @@
+1. Add title to your requirements and bug links.
+It is easy to add this functionality. Just have a look at include/customfunctions.php.inc.example and change it to your needs. Sessionweb will automaticly fetch the name from this implementation.
