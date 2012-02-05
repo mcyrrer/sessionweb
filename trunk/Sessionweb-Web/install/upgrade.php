@@ -53,6 +53,8 @@ function upgrade()
     $versions['1.2'] = "SessionwebDbLayoutDelta_1.2-_1.3.sql";
     $versions['1.3'] = "SessionwebDbLayoutDelta_1.3-_1.4.sql";
     $versions['1.4'] = "SessionwebDbLayoutDelta_1.4-_1.5.sql";
+    $versions['1.5'] = "SessionwebDbLayoutDelta_1.5-_1.6.sql";
+
     $currentVersion = getSessionWebVersion();
     if ($currentVersion == null) {
         //Manage 1.0->1.x upgrade.... :(

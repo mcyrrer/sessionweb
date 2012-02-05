@@ -73,6 +73,10 @@ p {
     background-color: #cccccc;
 }
 
+.boldred {
+    font-weight: bold;
+    background-color: red;
+}
 .notification {
     text-align: center;
 }
