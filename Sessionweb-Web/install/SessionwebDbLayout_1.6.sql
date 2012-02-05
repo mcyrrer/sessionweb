@@ -85,6 +85,9 @@ DROP TABLE IF EXISTS `sessionwebos`.`testenvironment` ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`testenvironment` (
   `name` VARCHAR(45) NOT NULL ,
+  `url` VARCHAR(500) NULL ,
+  `username` VARCHAR(100) NULL ,
+  `password` VARCHAR(100) NULL ,
   PRIMARY KEY (`name`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -354,13 +357,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`softwareuseautofetched` (
   `versions` TEXT NOT NULL ,
   `missionstatus` VARCHAR(100) NULL ,
   `updated` TIMESTAMP NULL DEFAULT NOW() ,
-  PRIMARY KEY (`id`) ,
-  INDEX `fk_softwareuseautofetched_mission1` (`versionid` ASC) ,
-  CONSTRAINT `fk_softwareuseautofetched_mission1`
-    FOREIGN KEY (`versionid` )
-    REFERENCES `sessionwebos`.`mission` (`versionid` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
 

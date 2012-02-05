@@ -18,11 +18,17 @@ $(document).ready(function () {
 
     }
 
+    if(command=='new')
+    {
+            $('#getsoftwarerunning').hide();
+    }
+
     try {
         var sessionid = $(document).getUrlParam("sessionid");
     }
     catch (err) {
         var sessionid = "null";
+
     }
 
     var sPath = window.location.pathname;
@@ -58,6 +64,20 @@ $(document).ready(function () {
         }, { toolbar:'Basic' });
     }
 
+
+//************Auto get software version running******
+    $('#getsoftwarerunning').click(function() {
+        $('#getswmsg').text('');
+        if($('#select_testenv option:selected').text()!="")
+        {
+            $.get("api/environments/runningversions", { env: $('#select_testenv option:selected').text(), sessionid: sessionid },
+                function(data){
+                    $('#autoswdiv').html(data);
+                });
+        }
+        else
+        $('#getswmsg').text(' Please choose an environment and try again');
+    });
 
 //************Colorbox ifram for counterstring page****
     $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});

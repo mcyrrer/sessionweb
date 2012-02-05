@@ -68,7 +68,7 @@ function executeCommand()
         }
         elseif (strcmp($_REQUEST["command"], "insertenvname") == 0)
         {
-            insertEnvironmentNameToDb($_REQUEST["envname"]);
+            insertEnvironmentNameToDb();
         }
         elseif (strcmp($_GET["command"], "addsprint") == 0) {
             echoAddSprintName();
@@ -139,18 +139,17 @@ function echoAddEnvironment()
     echo "<h2>Add new test environment name</h2>\n";
     echo "<form name=\"envname\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertenvname\">\n";
-    echo "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"0\" cellspacing=\"2\">";
-    echo "    <tr>\n";
-    echo "        <td align=\"left\">\n";
-    echo "            New environment name\n";
-    echo "        </td>\n";
-    echo "        <td><input type=\"text\" size=\"50\" value=\"\" name=\"envname\">\n";
-    echo "        </td>\n";
-    echo "        <td align=\"left\">\n";
-    echo "            <input align=left type=\"submit\" value=\"Add environment\" />\n";
-    echo "        </td>\n";
-    echo "    </tr>\n";
-    echo "</table>";
+    echo "<p>New environment name</p>\n";
+    echo "<p><input type=\"text\" size=\"50\" value=\"\" name=\"envname\"></p>\n";
+    echo "<h3>Optional information</h3>\n";
+    echo "<p>Web page with information about software running on environment:<i>By adding this sessionweb will be able to autofetch running software from environment</i></p>\n";
+    echo "<p><input type=\"text\" size=\"50\" value=\"\" name=\"envautofetchurl\"></p>\n";
+    echo "<p>Username:<i>(fill in if page is password protected)</i></p>\n";
+    echo "<p><input type=\"text\" size=\"50\" value=\"\" name=\"envusername\"></p>\n";
+    echo "<p>Password:<i>(fill in if page is password protected)</i></p>\n";
+    echo "<p><input type=\"password\" size=\"50\" value=\"\" name=\"envpassword\"></p>\n";
+
+    echo "<p><input align=left type=\"submit\" value=\"Add environment\" /></p>\n";
     echo "</form>\n";
 }
 
@@ -375,8 +374,13 @@ function insertTeamNameToDb($teamName)
     mysql_close($con);
 }
 
-function insertEnvironmentNameToDb($envName)
+function insertEnvironmentNameToDb()
 {
+    $envName = $_REQUEST["envname"];
+    $envautofetchurl = $_REQUEST["envautofetchurl"];
+    $envusername = $_REQUEST["envusername"];
+    $envpassword = $_REQUEST["envpassword"];
+
     $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
     mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
@@ -384,15 +388,21 @@ function insertEnvironmentNameToDb($envName)
 
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO testenvironment ";
-    $sqlInsert .= "            (`name`) ";
-    $sqlInsert .= "VALUES      ('$envName')";
+    $sqlInsert .= "            (name, ";
+    $sqlInsert .= "             url, ";
+    $sqlInsert .= "             username, ";
+    $sqlInsert .= "             PASSWORD) ";
+    $sqlInsert .= "VALUES      ('$envName', ";
+    $sqlInsert .= "             '$envautofetchurl', ";
+    $sqlInsert .= "             '$envusername', ";
+    $sqlInsert .= "             '$envpassword') " ;
 
 
     $result = mysql_query($sqlInsert);
 
     if (!$result) {
         if (mysql_errno() == 1062) {
-            echo "<p>Teset environment $areaName not added since it already exists in database.</p>";
+            echo "<p>Test environment $envName not added since it already exists in database.</p>";
         }
         else
         {
@@ -402,7 +412,7 @@ function insertEnvironmentNameToDb($envName)
     }
     else
     {
-        echo "<p>Test environment $areaName added to database</p>\n";
+        echo "<p>Test environment $envName added to database</p>\n";
     }
 
     mysql_close($con);
