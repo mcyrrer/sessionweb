@@ -314,12 +314,14 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `sessionwebos`.`mission_attachments` ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_attachments` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `mission_versionid` INT NOT NULL ,
   `filename` VARCHAR(100) NOT NULL ,
   `mimetype` VARCHAR(45) NOT NULL ,
   `size` INT NOT NULL ,
   `data` MEDIUMBLOB NOT NULL ,
-  INDEX `fk_attach_mission1` (`mission_versionid` ASC) )
+  INDEX `fk_attach_mission1` (`mission_versionid` ASC) ,
+  PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
@@ -357,6 +359,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`softwareuseautofetched` (
   `versions` TEXT NOT NULL ,
   `missionstatus` VARCHAR(100) NULL ,
   `updated` TIMESTAMP NULL DEFAULT NOW() ,
+  `environment` VARCHAR(100) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
