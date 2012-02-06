@@ -567,8 +567,11 @@ function echoSessionForm()
     echo "                              <td valign=\"top\">Software under test: </td>\n";
     echo "                              <td>\n";
     echo "                                  <textarea id=\"textareaswundertest\" name=\"textareaswundertest\" rows=\"20\" cols=\"50\" style=\"width:640px;height:50px;\">$software</textarea>\n";
-    echo "                                  <span id='getsoftwarerunning'>Get software version automaticly</span><p class='boldred' id='getswmsg'></p>";
-    echo "                                  <div id='autoswdiv'></div>";
+    echoFetchVersionAutomaticly();
+/*    echo "                                  <p id='getsoftwarerunning'>\n";
+    echo "                                  <a href='#'>Get software version automaticly</a></p>\n";
+    echo "                                  <p class='boldred' id='getswmsg'></p>";
+    echo "                                  <div id='autoswdiv'></div>";*/
     echo "                              </td>\n";
     echo "                        </tr>\n";
 

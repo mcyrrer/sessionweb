@@ -976,4 +976,38 @@ function isSessionClosed($versionId)
         return true;
 }
 
+function echoFetchVersionAutomaticly()
+{
+    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+    $sql = "SELECT * FROM  testenvironment WHERE  `url` LIKE  '%http%'";
+    $result = mysql_query($sql);
+    $nbrOfRows = mysql_num_rows($result);
+    if ($nbrOfRows != 0) {
+        echo "                                  <p id='getsoftwarerunning'>\n";
+        echo "                                  <a href='#'>Get software version automaticly</a></p>\n";
+        echo "                                  <p class='boldred' id='getswmsg'></p>";
+        echo "                                  <div id='autoswdiv'>";
+
+        if (isset($_GET["sessionid"])) {
+            $versionid = getSessionVersionId($_GET["sessionid"]);
+            $sql = "SELECT * FROM softwareuseautofetched WHERE versionid = $versionid";
+            $result = mysql_query($sql);
+            while ($row = mysql_fetch_array($result))
+            {
+                $id = $row['id'];
+                $date = $row['updated'];
+                $environment = $row['environment'];
+                echo "<p  id='swenv_$id'><a class='uploadajax' href='api/environments/getrunningversions/?id=$id'>$environment($date)</a><span id='$id' class='swenvdelete'> [delete]</span></p>";
+
+            }
+
+        }
+
+        echo "                                  </div>";
+    }
+    mysql_close($con);
+}
+
 ?>

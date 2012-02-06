@@ -18,9 +18,8 @@ $(document).ready(function () {
 
     }
 
-    if(command=='new')
-    {
-            $('#getsoftwarerunning').hide();
+    if (command == 'new') {
+        $('#getsoftwarerunning').hide();
     }
 
     try {
@@ -66,18 +65,47 @@ $(document).ready(function () {
 
 
 //************Auto get software version running******
-    $('#getsoftwarerunning').click(function() {
-        $('#getswmsg').text('');
-        if($('#select_testenv option:selected').text()!="")
-        {
-            $.get("api/environments/runningversions", { env: $('#select_testenv option:selected').text(), sessionid: sessionid },
-                function(data){
-                    $('#autoswdiv').html(data);
+    $('#getsoftwarerunning').click(function () {
+        //$('#getswmsg').text('');
+        if ($('#select_testenv option:selected').text() != "") {
+            $.get("api/environments/setrunningversions", { env:$('#select_testenv option:selected').text(), sessionid:sessionid },
+                function (data) {
+                    var linkInfo = jQuery.parseJSON(data);
+                    if (data!="\"1\"" && data!="\"2\"") {
+                        js = "<script type='text/javascript'> $('.popupajax').colorbox({iframe:true, width:'80%', height:'80%'});" +
+
+                            "$('#swenvdelete_"+linkInfo['id']+"').click(function() {"+
+                            "    $.get('api/environments/removrunningversions', { id: "+linkInfo['id']+" } );" +
+                            "    $('#swenv_"+linkInfo['id']+"').remove();"+
+                            "});"+
+
+                            "</script>";
+                        $('#autoswdiv').append("<p  id='swenv_"+linkInfo['id']+"'><a class='popupajax' href='api/environments/getrunningversions/?id=" + linkInfo['id'] + "'>" + $('#select_testenv option:selected').text() + "(" + linkInfo['date'] + ")</a><span id='swenvdelete_"+linkInfo['id']+"'> [delete]"+ js+"</span></p>");
+                    }
+                    else
+                    {
+                        if (data=="\"1\"") {
+                            $('#getswmsg').text("Authorization failed, please check settings for test environment.");
+
+                        }
+                        else if (data=="\"2\"") {
+                            $('#getswmsg').text("No valid url found for this environment, please update config");
+
+                        }
+
+                    }
                 });
         }
         else
-        $('#getswmsg').text(' Please choose an environment and try again');
+            $('#getswmsg').text(' Please choose an environment and try again');
     });
+    $('.swenvdelete').click(function () {
+        var currentId = $(this).attr('id');
+         $.get('api/environments/removrunningversions', { id: currentId } );
+        $('#swenv_'+currentId).remove();
+
+    });
+
 
 //************Colorbox ifram for counterstring page****
     $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
