@@ -2,9 +2,22 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-ALTER TABLE `sessionwebos`.`mission` ADD COLUMN `lastupdatedby` VARCHAR(45) NULL DEFAULT NULL  AFTER `software` , CHANGE COLUMN `charter` `charter` MEDIUMTEXT NULL DEFAULT NULL  , CHANGE COLUMN `notes` `notes` MEDIUMTEXT NULL DEFAULT NULL  ;
+ALTER TABLE `sessionwebos`.`testenvironment` ADD COLUMN `url` VARCHAR(500) NULL DEFAULT NULL  AFTER `name` , ADD COLUMN `username` VARCHAR(100) NULL DEFAULT NULL  AFTER `url` , ADD COLUMN `password` VARCHAR(100) NULL DEFAULT NULL  AFTER `username` ;
+
 
 ALTER TABLE `sessionwebos`.`user_sessionsnotification` COLLATE = utf8_general_ci ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`softwareuseautofetched` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `versionid` INT(11) NOT NULL ,
+  `versions` TEXT NOT NULL ,
+  `missionstatus` VARCHAR(100) NULL DEFAULT NULL ,
+  `updated` TIMESTAMP NULL DEFAULT NOW() ,
+  `environment` VARCHAR(100) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
 
 
 -- -----------------------------------------------------
@@ -51,7 +64,10 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         AND
         m.versionid = sm.versionid
 ;
-UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '1.5' WHERE  `version`.`id` =1;
+
+UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '1.6' WHERE  `version`.`id` =1;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

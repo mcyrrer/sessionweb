@@ -361,7 +361,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`softwareuseautofetched` (
   `updated` TIMESTAMP NULL DEFAULT NOW() ,
   `environment` VARCHAR(100) NULL ,
   PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
+ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
