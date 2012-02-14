@@ -12,8 +12,8 @@ if (is_file("include/customfunctions.php.inc")) {
 
 //TODO: Add check that public key == key for sessionid.
 //SELECT sessionid,publickey FROM `mission` where sessionid = 46;
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+$con = getMySqlConnection();
+
 
 
 //$versionid = getSessionVersionId($_GET['sessionid']);

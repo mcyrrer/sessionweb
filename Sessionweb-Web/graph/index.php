@@ -21,8 +21,8 @@ $failedToCreateGraph = false;
 <?php
 
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
 
     if (urldecode($_GET['type']) == "line_overtime") {
         //        lineGraph();

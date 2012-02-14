@@ -8,14 +8,14 @@ if (!session_is_registered(myusername)) {
 include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
 
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+$con = getMySqlConnection();
+
 
 $id = $_REQUEST['id'];
 
 
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+$con = getMySqlConnection();
+
 $content = mysql_real_escape_string($content);
 $sql = "SELECT versions FROM softwareuseautofetched WHERE id='$id' ORDER BY id DESC LIMIT 0,1";
 //echo $sql;

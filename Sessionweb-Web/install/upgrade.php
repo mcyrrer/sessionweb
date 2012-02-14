@@ -65,6 +65,8 @@ function upgrade()
 
         if (tryDbConnection($adminuser, $adminpassword) && file_exists($versions[$currentVersion])) {
             $con = @ mysql_connect("localhost", $adminuser, $adminpassword);
+            mysql_query("SET NAMES utf8");
+            mysql_query("SET CHARACTER SET utf8");
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
             
@@ -112,6 +114,8 @@ function tryDbConnection($user, $password, $host = 'localhost')
     try
     {
         $con = @ mysql_connect($host, $user, $password);
+        mysql_query("SET NAMES utf8");
+        mysql_query("SET CHARACTER SET utf8");
         if ($con) {
             mysql_close($con);
             return true;

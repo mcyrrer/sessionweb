@@ -61,8 +61,8 @@ function printLast10SessionsTable()
 {
     echo "<div id='last10sessions'>";
     echo "<h2>10 sessions yet to completed</h2>";
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
 
     $user = $_SESSION['username'];
 
@@ -82,8 +82,8 @@ function printLast10SessionsTable()
 function printSessionsStatus()
 {
     echo "<div id='sessionstatus'>";
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
 
     $user = $_SESSION['username'];
 

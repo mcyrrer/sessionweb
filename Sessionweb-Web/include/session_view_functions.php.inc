@@ -11,8 +11,8 @@ function echoAttachments()
 
     $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    getMySqlConnection();
+
 
 
     $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
@@ -78,8 +78,8 @@ function echoSessionAction()
 {
     $sessionid = $_REQUEST["sessionid"];
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
     $row = getSessionData($sessionid);
 
     echo "Action menu: ";
@@ -116,8 +116,8 @@ function echoSessionAction()
 function echoViewSession()
 {
     if ($_GET["sessionid"] != null) {
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+       $con= getMySqlConnection();
+
 
         $sqlSelectSession = "";
         $sqlSelectSession .= "SELECT * ";
@@ -293,6 +293,13 @@ function echoViewSession()
                 echo str_replace("\n", "<br>", $row["software"]);
                 echo "        </td>\n";
                 echo "    </tr>\n";
+                echo "    <tr>\n";
+                echo "        <td></td>\n";
+                echo "        <td>\n";
+                echoFetchVersionView();
+                echo "        </td>\n";
+                echo "    </tr>\n";
+
 
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
@@ -301,8 +308,8 @@ function echoViewSession()
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
-                $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-                mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+               $con= getMySqlConnection();
+
 
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
@@ -393,8 +400,8 @@ function echoViewSession()
                 echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
-                $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-                mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+               $con= getMySqlConnection();
+
                 echoSessionMetrics($rowSessionMetric, $row["versionid"]);
 
                 $sessionDebriefNotes = getSessionDebrief($row["versionid"]);

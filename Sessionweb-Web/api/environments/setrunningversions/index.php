@@ -10,8 +10,8 @@ error_reporting(0);
 include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
 
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+$con=getMySqlConnection();
+
 
 $environment = $_REQUEST['env'];
 $sessionid = $_REQUEST['sessionid'];
@@ -43,8 +43,7 @@ if ($url != null && $url != "") {
 
     $content = file_get_contents($url, false, $context);
     if ($content != null) {
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+        $con=getMySqlConnection();
         $content = mysql_real_escape_string($content);
         $var1 = "";
         $var1 .= "INSERT INTO softwareuseautofetched ";

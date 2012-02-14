@@ -1,8 +1,15 @@
 <?php
+//mb_internal_encoding('UTF-8');
+//mb_http_output('UTF-8');
+//mb_http_input('UTF-8');
+//mb_language('uni');
+//mb_regex_encoding('UTF-8');
+//ob_start('mb_output_handler');
+
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
 echo "<html>\n";
 echo "  <head>\n";
-echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\">\n";
+echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=utf-8\">\n";
 echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";

@@ -43,8 +43,8 @@ include_once('commonFunctions.php.inc');
                             }
                         }
                         if (strcmp($_GET['cmd'], 'ack') == 0) {
-                            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-                            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+                            $con=getMySqlConnection();
+
                             $versionid = getSessionVersionId($_GET['sessionid']);
                             removeNotification($versionid);
                             echo "Notification for session " . $_GET['sessionid'] . " removed.";

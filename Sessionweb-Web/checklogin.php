@@ -2,16 +2,16 @@
 require_once('include/loggingsetup.php');
 include 'config/db.php.inc';
 include_once 'include/commonFunctions.php.inc';
-
+include_once 'include/db.php';
 ob_start();
 sleep(0.5); //brute force of password mitigation. It will take too long to brute force if we add a sleep. end user will not detect it.
 // Connect to server and select databse.
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-
+//$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+//
+$con = getMySqlConnection();
 // Define $myusername and $mypassword
-$myusername=urlencode($_POST['myusername']);
-$mypassword=urlencode($_POST['mypassword']);
+$myusername=$_POST['myusername'];
+$mypassword=$_POST['mypassword'];
 // encrypt password
 $encrypted_mypassword=md5($mypassword);
 
@@ -23,7 +23,7 @@ $mypassword = mysql_real_escape_string($mypassword);
 
 //encrypt password
 $mypassword = md5($mypassword);
-
+echo $myusername;
 $sql = "";
 $sql .= "SELECT * ";
 $sql .= "FROM   members ";

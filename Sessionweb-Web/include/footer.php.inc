@@ -3,7 +3,7 @@ echo "<br><br><br><br>\n";
 echo "<img src=\"pictures/line.png\" alt=\"line\"/>\n";
 echo "<br><h6>";
 
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+$con=getMySqlConnection();
 mysql_select_db(DB_NAME_SESSIONWEB)or die("Database not available. Please install <a href='install/'>sessionweb</a>");
 $result = mysql_query("SELECT * FROM `version`;");
 
@@ -12,7 +12,7 @@ $versionInstalled = $row['versioninstalled'];
 mysql_close($con);
 if (file_exists("install"))
 {
-    echo "<H3><blink>NOTE: Installation directory exist (install/). Please delete it to prevent data lost.</blink></H3>";
+    echo "<H3>NOTE: Installation directory exist (install/). Please delete it to prevent data lost.</H3>";
 }
 echo "Sessionweb ver $versionInstalled  | ";
 echo "<a href=\"about.php\"id=\"url_about\">About</a> | ";
