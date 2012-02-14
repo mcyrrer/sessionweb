@@ -7,8 +7,8 @@ function echoBugsEdit($versionid)
 	if($versionid!="")
 	{
 
-		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+		$con = getMySqlConnection();
+
 
 		$rowSessionBugs = getSessionBugs($versionid);
 
@@ -82,8 +82,8 @@ function echoRequirementsEdit($versionid)
 	$rowSessionRequirements = "";
 	if($versionid!="")
 	{
-		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+		$con = getMySqlConnection();
+
 
 		$rowSessionRequirements = getSessionRequirements($versionid);
 
@@ -160,8 +160,8 @@ function echoSessionlinkEdit($versionid)
 	$rowSessionSessionlink = "";
 	if($versionid!="")
 	{
-		$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-		mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+		$con = getMySqlConnection();
+
 
 		$rowSessionSessionlink = getConnectedSessions($versionid);
 

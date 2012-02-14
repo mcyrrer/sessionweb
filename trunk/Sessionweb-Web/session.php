@@ -82,8 +82,8 @@ function reassignSessionExecute()
 
     $sessionid = $_REQUEST["sessionid"];
     $tester = $_REQUEST["tester"];
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
     $result = updateSessionOwner($sessionid, $tester);
     mysql_close($con);
     if ($result) {
@@ -111,8 +111,8 @@ function reassignSession()
 function echoDebriefSession()
 {
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        $con2 = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+        $con2 = getMySqlConnection();
+
 
         $versionid = getSessionVersionId($_GET["sessionid"]);
         $debriefInfo = getSessionDebrief($versionid);
@@ -151,8 +151,8 @@ function echoDebriefSession()
 function saveDebriefedSession()
 {
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+        $con=getMySqlConnection();
+
 
         $versionid = getSessionVersionId($_REQUEST["sessionid"]);
 
@@ -226,8 +226,8 @@ function saveSession()
     $sessionid = false;
     $versionid = false;
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
 
     //New session
     if ($_REQUEST["sessionid"] == "") {
@@ -332,8 +332,8 @@ function copySession()
 
 
     $publickey = md5(rand());
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
 
     //Copy session
     if ($_REQUEST["sessionid"] != "") {
@@ -419,8 +419,8 @@ function echoSessionForm()
     $teamsprint = "";
     $area = "";
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con=getMySqlConnection();
+
 
     $insertSessionData = false;
 

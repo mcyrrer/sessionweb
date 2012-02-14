@@ -76,8 +76,8 @@ class UploadHandler
 //    {
 //
 //        //        include "../../config/db.php.inc";
-//        //        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-//        //        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+//        //        getMySqlConnection();
+//        //
 //        //        $sql = "SELECT `id`, `mission_versionid`, `filename`, `size`, `data` FROM `mission_attachments` WHERE `id` = ". $_REQUEST['sessionid'];
 //        //        $result = mysql_query($sql) or die('Error, query failed');
 //        //
@@ -233,7 +233,7 @@ class UploadHandler
         $max_upload = (int)(ini_get('upload_max_filesize'));
         $max_post = (int)(ini_get('post_max_size'));
         $memory_limit = (int)(ini_get('memory_limit'));
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect to db");
+        $con = getMySqlConnection();
         $sql_limit = getSqlMaxAllowedPacketAsMb();
         mysql_close($con);
         $upload_mb = min($max_upload, $max_post, $memory_limit,$sql_limit);
@@ -316,8 +316,8 @@ class UploadHandler
             include "../../config/db.php.inc";
 
 
-            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+            $con=getMySqlConnection();
+
 
             $content = addslashes($content);
             $file->name = addslashes($file->name);

@@ -1,6 +1,7 @@
 <?php
 
 include_once('session_database_functions.php.inc');
+include_once('db.php');
 
 function checkForMaxAttachmentSize($updateJsFile = false)
 {
@@ -155,7 +156,7 @@ function getSessionWebSettings()
 function getSessionMetrics($versionid)
 {
     //	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
 
     $sqlSelectSessionMetrics = "";
     $sqlSelectSessionMetrics .= "SELECT * ";
@@ -174,7 +175,7 @@ function getSessionMetrics($versionid)
 
 function getSessionDebrief($versionid)
 {
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -450,8 +451,8 @@ function createPercentPieChart($setup, $test, $bug, $oppertunity)
 
 function echoTeamSelect($team)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT teamname ";
@@ -484,8 +485,8 @@ function echoTeamSelect($team)
 
 function addNotification($sessionid, $user)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
     $versionid = getSessionVersionId($sessionid);
     $sql = "INSERT INTO `user_sessionsnotification` (`versionid`, `username`) VALUES ('$versionid', '$user')";
 
@@ -500,8 +501,8 @@ function addNotification($sessionid, $user)
 
 function echoTestEnvironmentSelect($testenvironment)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT name ";
@@ -534,8 +535,8 @@ function echoTestEnvironmentSelect($testenvironment)
 
 function getTestEnvironmentInformation($testenvironment)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -549,8 +550,8 @@ function getTestEnvironmentInformation($testenvironment)
 
 function echoAreaSelect($area)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT areaname ";
@@ -594,8 +595,8 @@ function echoAreaSelect($area)
 
 function echoAreaSelectSingel($area)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT areaname ";
@@ -691,8 +692,8 @@ function echoStatusTypes($statusToSelect)
 
 function echoTesterSelect($name)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT username ";
@@ -723,8 +724,8 @@ function echoTesterSelect($name)
 
 function echoTesterFullNameSelect($name)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT username,fullname ";
@@ -758,8 +759,8 @@ function echoTesterFullNameSelect($name)
 
 function echoSprintSelect($sprint)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT sprintname ";
@@ -791,8 +792,8 @@ function echoSprintSelect($sprint)
 
 function echoTeamSprintSelect($teamsprint)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT teamsprintname ";
@@ -847,8 +848,8 @@ function GetSessionPublicKey($versionid)
 
 function getUserSettings()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -868,8 +869,8 @@ function getUserSettings()
 
 function getSessionWebVersion()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -907,8 +908,8 @@ function insertAutomaticGoBackOnePage()
 
 function doesUserHaveNotifications()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sql = "    SELECT COUNT(us.versionid) as COUNT FROM `user_sessionsnotification` as us, mission_status as ms  WHERE us.`username` = '" . $_SESSION['username'] . "' and acknowledge=false and ms.executed=true AND us.versionid=ms.versionid";
 
@@ -932,8 +933,8 @@ function doesUserHaveNotifications()
 
 function getNotifications()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sql = "SELECT us.versionid, m.title  FROM `user_sessionsnotification` as us, mission as m, mission_status as ms  WHERE us.`username` = '" . $_SESSION['username'] . "' and acknowledge=false and ms.executed=true AND us.versionid=ms.versionid AND us.versionid=m.versionid";
     $result = mysql_query($sql);
@@ -952,8 +953,8 @@ function getNotifications()
 
 function removeNotification($versionid)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sql = "DELETE FROM `user_sessionsnotification` WHERE `versionid`='$versionid' AND username='" . $_SESSION['username'] . "';";
     $result = mysql_query($sql);
@@ -978,8 +979,8 @@ function isSessionClosed($versionId)
 
 function echoFetchVersionAutomaticly()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sql = "SELECT * FROM  testenvironment WHERE  `url` LIKE  '%http%'";
     $result = mysql_query($sql);
@@ -1008,6 +1009,36 @@ function echoFetchVersionAutomaticly()
         echo "                                  </div>";
     }
     mysql_close($con);
+}
+
+function echoFetchVersionView()
+{
+
+
+    $sql = "SELECT * FROM  testenvironment WHERE  `url` LIKE  '%http%'";
+    $result = mysql_query($sql);
+    $nbrOfRows = mysql_num_rows($result);
+    if ($nbrOfRows != 0) {
+        echo "                                  <div id='autoswdiv'>";
+
+        if (isset($_GET["sessionid"])) {
+            $versionid = getSessionVersionId($_GET["sessionid"]);
+            $sql = "SELECT * FROM softwareuseautofetched WHERE versionid = $versionid";
+            $result = mysql_query($sql);
+            while ($row = mysql_fetch_array($result))
+            {
+                $id = $row['id'];
+                $date = $row['updated'];
+                $environment = $row['environment'];
+                echo "<p  id='swenv_$id'><a class='uploadajax' href='api/environments/getrunningversions/?id=$id'>$environment($date)</a></p>";
+
+            }
+
+        }
+
+        echo "                                  </div>";
+    }
+
 }
 
 ?>

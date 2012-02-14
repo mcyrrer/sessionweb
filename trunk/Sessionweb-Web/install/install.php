@@ -2,7 +2,7 @@
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 
-define("INSTALLATION_SCRIPT", "SessionwebDbLayout_1.6.sql");
+define("INSTALLATION_SCRIPT", "SessionwebDbLayout_1.7.sql");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -55,6 +55,8 @@ function install()
 
     if (tryDbConnection($adminuser, $adminpassword)) {
         $con = @ mysql_connect("localhost", $adminuser, $adminpassword);
+        mysql_query("SET NAMES utf8");
+        mysql_query("SET CHARACTER SET utf8");
         $mysqlExecuter = new MySqlExecuter();
         $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT,$dbname,$createDb);
 
@@ -150,6 +152,8 @@ function tryDbConnection($user, $password, $host = 'localhost')
     try
     {
         $con = @ mysql_connect($host, $user, $password);
+        mysql_query("SET NAMES utf8");
+        mysql_query("SET CHARACTER SET utf8");
         if ($con) {
             mysql_close($con);
             return true;

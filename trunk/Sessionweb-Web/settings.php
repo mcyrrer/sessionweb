@@ -7,6 +7,7 @@ if (!session_is_registered(myusername)) {
 
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
+include_once ('include/db.php');
 include("include/header.php.inc");
 
 echo "<h1>Settings</h1>\n";
@@ -24,7 +25,6 @@ include("include/footer.php.inc");
 
 function executeCommand()
 {
-
     //Administartor Commands
     if ($_SESSION['useradmin'] == 1) {
         if (strcmp($_GET["command"], "listusers") == 0) {
@@ -80,11 +80,23 @@ function executeCommand()
         elseif (strcmp($_REQUEST["command"], "systemcheck") == 0)
         {
             echo "<h1>System check</h1>";
-            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+            $con=getMySqlConnection();
+
             checkFoldersForRW();
             checkForMaxAttachmentSize();
             mysql_close();
+        }
+        elseif (strcmp($_REQUEST["command"], "customfileds") == 0)
+        {
+            echoManageCustomFileds();
+        }
+        elseif (strcmp($_REQUEST["command"], "insertcustomfields") == 0)
+        {
+            insertCustomFieldsSettingsToDb();
+        }
+        elseif (strcmp($_REQUEST["command"], "insertcustomfieldsadd") == 0)
+        {
+            insertCustomFieldNameToDb();
         }
 
 
@@ -134,6 +146,125 @@ function executeCommand()
 
 }
 
+function insertCustomFieldNameToDb()
+{
+    $con=getMySqlConnection();
+
+    $table = "custom".$_POST['id'];
+    $name = $_POST['custom_name'];
+
+    $sql = "INSERT INTO $table (name) VALUES ('$name')";
+    mysql_query($sql);
+
+    mysql_close();
+    echo "<br><br>Name inserted to database";
+}
+
+function insertCustomFieldsSettingsToDb()
+{
+    $con=getMySqlConnection();
+
+    if ($_REQUEST['custom1_enabled'] == 1)
+        $c1_enable = '1';
+    else
+        $c1_enable = '0';
+    if ($_REQUEST['custom2_enabled'] == 1)
+        $c2_enable = '1';
+    else
+        $c2_enable = '0';
+    if ($_REQUEST['custom2_enabled'] == 1)
+        $c3_enable = '1';
+    else
+        $c3_enable = '0';
+
+    if ($_POST['custom1_multiselect'] == 1)
+        $c1ms_enable = '1';
+    else
+        $c1ms_enable = '0';
+    if ($_POST['custom2_multiselect'] == 1)
+        $c2ms_enable = '1';
+    else
+        $c2ms_enable = '0';
+    if ($_POST['custom3_multiselect'] == 1)
+        $c3ms_enable = '1';
+    else
+        $c3ms_enable = '0';
+
+    $sql = "
+        UPDATE settings
+        SET    custom1 = $c1_enable,
+               custom1_name = '" . $_REQUEST['custom1_name'] . "',
+               custom1_multiselect = $c1ms_enable,
+               custom2 = $c2_enable,
+               custom2_name = '" . $_REQUEST['custom2_name'] . "',
+               custom2_multiselect = $c2ms_enable,
+               custom3 = $c3_enable,
+               custom3_name = '" . $_REQUEST['custom3_name'] . "',
+               custom3_multiselect = $c3ms_enable
+        WHERE  id = '1'";
+    mysql_query($sql);
+    mysql_close();
+
+    echo "Settings updated";
+}
+
+function echoManageCustomFileds()
+{
+    $con=getMySqlConnection();
+
+
+    echo "<h1>Custom fields</h1>";
+    echo "<h2>Fields setup</h2>";
+
+    echo "<form name=\"customfileds\" action=\"settings.php\" method=\"POST\">\n";
+    echo "<input type=\"hidden\" name=\"command\" value= \"insertcustomfields\">\n";
+    echo "<table border='1' bordercolor='' bgcolor=''>
+            <THEAD>
+                <TR>
+                  <TH>ID</TH>
+                  <TH>Name</TH>
+                  <TH>Enable multiselect</TH>
+                  <TH>Enabled</TH>
+                </TR>
+            </THEAD>
+            <tr>
+            <td>1</td>
+            <td> <input type='text' name='custom1_name'/> </td>
+            <td> <input type='checkbox' name='custom1_multiselect' value='1' /> </td>
+            <td> <input type='checkbox' name='custom1_enabled' value='1' /></td>
+            </tr>
+            <tr>
+            <td>2</td>
+            <td> <input type='text' name='custom2_name'/> </td>
+            <td> <input type='checkbox' name='custom2_multiselect' value='1' /> </td>
+            <td> <input type='checkbox' name='custom2_enabled' value='1' /></td>
+            </tr>
+            <tr>
+            <td>3</td>
+            <td> <input type='text' name='custom3_name'/> </td>
+            <td> <input type='checkbox' name='custom3_multiselect' value='1' /> </td>
+            <td> <input type='checkbox' name='custom3_enabled' value='1' /></td>
+            </tr>
+            </table>";
+    echo "<input type='submit' value='Submit' />";
+    echo "</form>";
+
+    echo "<h2>Add value to field</h2>";
+    echo "<form name=\"customfiledsadd\" action=\"settings.php\" method=\"POST\">\n";
+    echo "<input type=\"hidden\" name=\"command\" value= \"insertcustomfieldsadd\">\n";
+
+
+    echo "<select id='select_customname' name='id'>
+	<option>1</option>
+	<option>2</option>
+	<option>3</option>
+    </select>
+    <input type='text' name='custom_name'/>";
+
+    echo "<input type='submit' value='Submit' />";
+    echo "</form>";
+}
+
 function echoAddEnvironment()
 {
     echo "<h2>Add new test environment name</h2>\n";
@@ -156,8 +287,7 @@ function echoAddEnvironment()
 function echoChangeConfig()
 {
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
 
     $sqlSelect = "SELECT * FROM settings";
 
@@ -313,6 +443,7 @@ function echoMenu()
         echo "<a id=\"url_systemcheck\" href=\"settings.php?command=systemcheck\">System Check</a> | ";
 
         echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
+        echo "<a id=\"url_custom\" href=\"settings.php?command=customfileds\">Manage custom fields</a> | ";
         echo "</div>";
     }
     if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
@@ -350,8 +481,8 @@ function echoAddTeamName()
 
 function insertTeamNameToDb($teamName)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $teamName = mysql_real_escape_string($teamName);
 
@@ -381,8 +512,8 @@ function insertEnvironmentNameToDb()
     $envusername = $_REQUEST["envusername"];
     $envpassword = $_REQUEST["envpassword"];
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $areaName = mysql_real_escape_string($envName);
 
@@ -395,7 +526,7 @@ function insertEnvironmentNameToDb()
     $sqlInsert .= "VALUES      ('$envName', ";
     $sqlInsert .= "             '$envautofetchurl', ";
     $sqlInsert .= "             '$envusername', ";
-    $sqlInsert .= "             '$envpassword') " ;
+    $sqlInsert .= "             '$envpassword') ";
 
 
     $result = mysql_query($sqlInsert);
@@ -420,8 +551,8 @@ function insertEnvironmentNameToDb()
 
 function insertAreaNameToDb($areaName)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $areaName = mysql_real_escape_string($areaName);
 
@@ -514,8 +645,8 @@ function echoAddTeamSprintName()
 
 function insertSprintNameToDb($sprintName)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sprintName = mysql_real_escape_string($sprintName);
 
@@ -540,8 +671,7 @@ function insertSprintNameToDb($sprintName)
 
 function insertTeamSprintNameToDb($teamsprintName)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
 
     $teamsprintName = mysql_real_escape_string($teamsprintName);
 
@@ -567,8 +697,8 @@ function insertTeamSprintNameToDb($teamsprintName)
 function echoChangeListSettings()
 {
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $usersettings = getUserSettings();
 
@@ -635,8 +765,8 @@ function echoChangeListSettings()
 
 function echoChangeUserInfo($username)
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $username = mysql_real_escape_string($username);
 
@@ -700,8 +830,8 @@ function echoChangeUserInfo($username)
 
 function echoAllUsersInfo()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -801,8 +931,8 @@ function echoAddUser()
 
 function updateConfig()
 {
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $normlizedsessiontime = 90;
 
@@ -917,8 +1047,8 @@ function updateUserPassword($username, $password1, $password2)
         if (strcmp($password1, $password2) == 0) {
 
 
-            $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-            mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+            $con = getMySqlConnection();
+
 
             $username = mysql_real_escape_string($username);
 
@@ -951,8 +1081,8 @@ function updateUserSettingsForLoginUser()
 {
 
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE `user_settings` ";
@@ -1032,8 +1162,8 @@ function createNewUser()
 
         $md5password = md5($password);
 
-        $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-        mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+        $con = getMySqlConnection();
+
 
         $username = mysql_real_escape_string($username);
         $fullname = mysql_real_escape_string($fullname);
@@ -1108,8 +1238,8 @@ function updateUserSettings($userToChange, $active, $admin, $superuser)
         $superuserToDb = 1;
     }
 
-    $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-    mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+    $con = getMySqlConnection();
+
 
     $activeToDb = mysql_real_escape_string($activeToDb);
     $adminToDb = mysql_real_escape_string($adminToDb);
