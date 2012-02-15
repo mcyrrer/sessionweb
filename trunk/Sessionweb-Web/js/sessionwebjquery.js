@@ -54,13 +54,19 @@ $(document).ready(function () {
                 ['Maximize', 'ShowBlocks', '-', 'About']
             ];
         CKEDITOR.config.toolbar = 'Basic';
-
+        try{
         $('#textarea1').ckeditor(function () {
-            $('#textarea1').val($.URLDecode(charter));
+            if(window.charter!==undefined)
+                $('#textarea1').val($.URLDecode(charter));
         }, { toolbar:'Basic' });
         $('#textarea2').ckeditor(function () {
-            $('#textarea2').val($.URLDecode(notes));
+            if(window.notes!==undefined)
+                $('#textarea2').val($.URLDecode(notes));
         }, { toolbar:'Basic' });
+        }
+        catch (err) {
+
+        }
     }
 
 
