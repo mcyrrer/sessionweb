@@ -45,12 +45,16 @@ function autosave_exe() {
                 var requirementlist_hidden = $("#requirementlist_hidden").val();
                 var sessionlinklist_hidden = $("#sessionlinklist_hidden").val();
                 var select_area = $("#select_area").val();
+                var select_custom1 = $("#select_custom1").val();
+                var select_custom2 = $("#select_custom2").val();
+                var select_custom3 = $("#select_custom3").val();
+
 
                 $.ajax(
                 {
                     type: "POST",
                     url: "autosave.php",
-                    data: "title=" + title + "&sessionid=" + sessionid + "&charter=" + textarea1 + "&notes=" + textarea2 + "&buglist_hidden=" + buglist_hidden + "&requirementlist_hidden=" + requirementlist_hidden + "&sessionlink_hidden=" + sessionlinklist_hidden,
+                    data: "title=" + title + "&sessionid=" + sessionid + "&charter=" + textarea1 + "&notes=" + textarea2 + "&buglist_hidden=" + buglist_hidden + "&requirementlist_hidden=" + requirementlist_hidden + "&sessionlink_hidden=" + sessionlinklist_hidden + "&custom1=" + select_custom1 + "&custom2=" + select_custom2 + "&custom3=" + select_custom3 ,
                     cache: false,
                     success: function(message) {
                         $("#autosaved").empty().append(message);

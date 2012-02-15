@@ -14,7 +14,6 @@ function echoAttachments()
     getMySqlConnection();
 
 
-
     $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
     //echo $sql;
     $result = mysql_query($sql);
@@ -78,7 +77,7 @@ function echoSessionAction()
 {
     $sessionid = $_REQUEST["sessionid"];
 
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
     $row = getSessionData($sessionid);
 
@@ -116,7 +115,7 @@ function echoSessionAction()
 function echoViewSession()
 {
     if ($_GET["sessionid"] != null) {
-       $con= getMySqlConnection();
+        $con = getMySqlConnection();
 
 
         $sqlSelectSession = "";
@@ -262,6 +261,34 @@ function echoViewSession()
                 echo "    </tr>\n";
 
 
+                //Customfields
+                $selectCustomArray = array("custom1", "custom2", "custom3");
+                foreach ($selectCustomArray as $oneSelectToEcho)
+                {
+                    if ($_SESSION['settings'][$oneSelectToEcho] == 1) {
+                        echo "    <tr>\n";
+                        echo "        <td></td>\n";
+                        echo "        <td>\n";
+                        echo "            <h4>" . $_SESSION['settings'][$oneSelectToEcho . '_name'] . "</h4>\n";
+                        echo "        </td>\n";
+                        echo "    </tr>\n";
+                        echo "    <tr>\n";
+                        echo "        <td></td>\n";
+                        echo "        <td>\n";
+                        $itemsToDisplay = getSessionCustomValues($row["versionid"], $oneSelectToEcho);
+                        echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
+
+                        foreach($itemsToDisplay as $item)
+                        {
+                          echo "$item<br>";
+                        }
+                        echo "</div>";
+
+                        echo "        </td>\n";
+                        echo "    </tr>\n";
+                    }
+                }
+
                 //WordCloud
                 if ($_SESSION['settings']['wordcloud'] == 1) {
                     echo "    <tr>\n";
@@ -279,7 +306,6 @@ function echoViewSession()
                     echo "        </td>\n";
                     echo "    </tr>\n";
                 }
-
 
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
@@ -308,7 +334,7 @@ function echoViewSession()
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
-               $con= getMySqlConnection();
+                $con = getMySqlConnection();
 
 
                 echo "    <tr>\n";
@@ -400,7 +426,7 @@ function echoViewSession()
                 echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
-               $con= getMySqlConnection();
+                $con = getMySqlConnection();
 
                 echoSessionMetrics($rowSessionMetric, $row["versionid"]);
 

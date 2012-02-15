@@ -544,6 +544,38 @@ function saveSession_InsertSessionAreaToDb($versionid, $areas)
     }
 }
 
+function saveSession_InsertSessionCustomFieldsToDb($versionid, $tableName, $values)
+{
+    if (!is_array($values)) {
+        $arr = array();
+        $arr[] = $values;
+        $values = $arr;
+    }
+
+    if ($values != null) {
+        //        $areas = $_REQUEST["area"];
+
+        foreach ($values as $value) {
+            if ($value != "") {
+                $sqlInsert = "";
+                $sqlInsert .= "INSERT INTO mission_custom ";
+                $sqlInsert .= "            (`versionid`, ";
+                $sqlInsert .= "            `customtablename`, ";
+                $sqlInsert .= "             `itemname`) ";
+                $sqlInsert .= "VALUES      ($versionid, ";
+                $sqlInsert .= "             '" . mysql_real_escape_string($tableName) . "', ";
+                $sqlInsert .= "             '" . mysql_real_escape_string($value) . "')";
+
+                $result = mysql_query($sqlInsert);
+
+                if (!$result) {
+                    echo "saveSession_InsertSessionCustomFieldsToDb: " . mysql_error() . "<br/>";
+                }
+            }
+        }
+    }
+}
+
 function saveSession_InsertSessionBugsToDb($versionid)
 {
     $bugs = $_REQUEST["buglist_hidden"];
@@ -745,6 +777,39 @@ function saveSession_UpdateSessionLinkedToDb($versionid)
     }
 
     saveSession_InsertSessionSessionsLinksToDb($versionid);
+
+}
+
+function getSessionCustomValues($versionid, $fieldName)
+{
+    $sql = "SELECT itemname FROM mission_custom where versionid = $versionid AND customtablename='$fieldName'";
+    $result = mysql_query($sql);
+    $toReturn = array();
+    while ($row = mysql_fetch_array($result)) {
+       $toReturn[]= $row['itemname'];
+    }
+    return $toReturn;
+
+}
+
+function saveSession_UpdateCustomFieldsToDb($versionid)
+{
+    $sqlDelete = "";
+    $sqlDelete .= "DELETE FROM mission_custom ";
+    $sqlDelete .= "WHERE  `versionid` = '$versionid'";
+
+    $result = mysql_query($sqlDelete);
+
+    if (!$result) {
+        echo "saveSession_UpdateCustomFieldsToDb: " . mysql_error() . "<br/>";
+    }
+
+    $arr = array("custom1", "custom2", "custom3");
+    foreach ($arr as $oneField)
+    {
+        if (isset($_REQUEST[$oneField]))
+            saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
+    }
 
 }
 

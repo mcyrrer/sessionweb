@@ -413,6 +413,23 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `sessionwebos`.`mission_custom`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`mission_custom` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_custom` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `versionid` INT NOT NULL ,
+  `customtablename` VARCHAR(100) NOT NULL ,
+  `itemname` VARCHAR(100) NOT NULL ,
+  INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
+  INDEX `fk_mission_debriefnotes_copy1_areas1` (`customtablename` ASC) ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `lastupdatedby` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `charter` INT, `notes` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);

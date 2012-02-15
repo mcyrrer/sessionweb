@@ -52,6 +52,8 @@ function autosave_UpdateSession($sessionid) {
 
     $sqlUpdate .= "WHERE sessionid='$sessionid'";
 
+    saveSession_UpdateCustomFieldsToDb(getSessionVersionId($sessionid));
+
    // echo $sqlUpdate."<br>";
 
     $result = mysql_query($sqlUpdate);

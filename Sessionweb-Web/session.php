@@ -82,7 +82,7 @@ function reassignSessionExecute()
 
     $sessionid = $_REQUEST["sessionid"];
     $tester = $_REQUEST["tester"];
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
     $result = updateSessionOwner($sessionid, $tester);
     mysql_close($con);
@@ -151,7 +151,7 @@ function echoDebriefSession()
 function saveDebriefedSession()
 {
     if (strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        $con=getMySqlConnection();
+        $con = getMySqlConnection();
 
 
         $versionid = getSessionVersionId($_REQUEST["sessionid"]);
@@ -160,8 +160,7 @@ function saveDebriefedSession()
         if (strcmp($_REQUEST["debriefstatus"], "debriefed") == 0) {
             $closed = "false";
             $debriefed = "true";
-            if($_SESSION['useradmin']==1)
-            {
+            if ($_SESSION['useradmin'] == 1) {
                 $masterdibriefed = "true";
             }
             else
@@ -175,10 +174,10 @@ function saveDebriefedSession()
             $masterdibriefed = "false";
         }
         elseif (strcmp($_REQUEST["debriefstatus"], "notdone") == 0) {
-                    $closed = "false";
-                    $debriefed = "false";
-                    $masterdibriefed = "false";
-                }
+            $closed = "false";
+            $debriefed = "false";
+            $masterdibriefed = "false";
+        }
 
 
         if (doesSessionNotesExist($versionid)) {
@@ -226,7 +225,7 @@ function saveSession()
     $sessionid = false;
     $versionid = false;
 
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
 
     //New session
@@ -274,6 +273,14 @@ function saveSession()
 
             //Create sessionLinks connected to mission
             saveSession_InsertSessionSessionsLinksToDb($versionid);
+
+            //Save Custom fields to db
+            $arr = array("custom1","custom2","custom3");
+            foreach($arr as $oneField)
+            {
+                if(isset($_REQUEST[$oneField]))
+                    saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
+            }
         }
         else
         {
@@ -305,6 +312,9 @@ function saveSession()
         saveSession_UpdateSessionRequirementsToDb($versionid);
 
         saveSession_UpdateSessionLinkedToDb($versionid);
+
+        saveSession_UpdateCustomFieldsToDb($versionid);
+
     }
 
 
@@ -332,7 +342,7 @@ function copySession()
 
 
     $publickey = md5(rand());
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
 
     //Copy session
@@ -419,7 +429,7 @@ function echoSessionForm()
     $teamsprint = "";
     $area = "";
 
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
 
     $insertSessionData = false;
@@ -451,14 +461,14 @@ function echoSessionForm()
         $testenvironment = $rowSessionData["testenvironment"];
         $software = $rowSessionData["software"];
 
-        $noteAsJavaScriptVar = "\"". urlencode($notes) . "\"";
-        $charterAsJavaScriptVar = "\"". urlencode($charter) . "\"";
+        $noteAsJavaScriptVar = "\"" . urlencode($notes) . "\"";
+        $charterAsJavaScriptVar = "\"" . urlencode($charter) . "\"";
         echo '<script type=\'text/javascript\'>
 
-        var notes = '.$noteAsJavaScriptVar.';
+        var notes = ' . $noteAsJavaScriptVar . ';
         notes = notes.replace(/\\+/g," ");
 
-        var charter = '.$charterAsJavaScriptVar.';
+        var charter = ' . $charterAsJavaScriptVar . ';
         charter = charter.replace(/\\+/g," ");
 
         </script>';
@@ -568,12 +578,33 @@ function echoSessionForm()
     echo "                              <td>\n";
     echo "                                  <textarea id=\"textareaswundertest\" name=\"textareaswundertest\" rows=\"20\" cols=\"50\" style=\"width:640px;height:50px;\">$software</textarea>\n";
     echoFetchVersionAutomaticly();
-/*    echo "                                  <p id='getsoftwarerunning'>\n";
-    echo "                                  <a href='#'>Get software version automaticly</a></p>\n";
-    echo "                                  <p class='boldred' id='getswmsg'></p>";
-    echo "                                  <div id='autoswdiv'></div>";*/
+    /*    echo "                                  <p id='getsoftwarerunning'>\n";
+echo "                                  <a href='#'>Get software version automaticly</a></p>\n";
+echo "                                  <p class='boldred' id='getswmsg'></p>";
+echo "                                  <div id='autoswdiv'></div>";*/
     echo "                              </td>\n";
     echo "                        </tr>\n";
+
+    $selectCustomArray = array("custom1", "custom2", "custom3");
+    foreach ($selectCustomArray as $oneSelectToEcho)
+    {
+        if ($_GET["sessionid"] != "") {
+            getMySqlConnection();
+            $itemArray = getSessionCustomValues(getSessionVersionId($_REQUEST['sessionid']), $oneSelectToEcho);
+        }
+        else
+        {
+            $itemArray = array();
+        }
+        if ($_SESSION['settings'][$oneSelectToEcho] == 1) {
+            echo "                        <tr>\n";
+            echo "                              <td valign=\"top\">" . $_SESSION['settings'][$oneSelectToEcho . '_name'] . ": </td>\n";
+            echo "                              <td>\n";
+            echoCustomSelect($oneSelectToEcho, $itemArray);
+            echo "                              </td>\n";
+            echo "                        </tr>\n";
+        }
+    }
 
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Test requirements: </td>\n";

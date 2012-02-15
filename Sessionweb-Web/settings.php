@@ -210,14 +210,34 @@ function insertCustomFieldsSettingsToDb()
 
 function echoManageCustomFileds()
 {
-    $con=getMySqlConnection();
+    $settings = getSettings();
 
+    $con=getMySqlConnection();
 
     echo "<h1>Custom fields</h1>";
     echo "<h2>Fields setup</h2>";
-
+    echo "If you change these values you will need to log out and in again to enable the changes. ";
     echo "<form name=\"customfileds\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertcustomfields\">\n";
+    $c1="";
+    $c2="";
+    $c3="";
+    if($settings['custom1_multiselect'])
+        $c1="checked='checked'";
+    if($settings['custom2_multiselect'])
+        $c2="checked='checked'";
+    if($settings['custom3_multiselect'])
+        $c3="checked='checked'";
+    $ce1="";
+    $ce2="";
+    $ce3="";
+    if($settings['custom1'])
+        $ce1="checked='checked'";
+    if($settings['custom2'])
+        $ce2="checked='checked'";
+    if($settings['custom3'])
+        $ce3="checked='checked'";
+
     echo "<table border='1' bordercolor='' bgcolor=''>
             <THEAD>
                 <TR>
@@ -229,21 +249,21 @@ function echoManageCustomFileds()
             </THEAD>
             <tr>
             <td>1</td>
-            <td> <input type='text' name='custom1_name'/> </td>
-            <td> <input type='checkbox' name='custom1_multiselect' value='1' /> </td>
-            <td> <input type='checkbox' name='custom1_enabled' value='1' /></td>
+            <td> <input type='text' name='custom1_name' value='".$settings['custom1_name']."'/></td>
+            <td> <input type='checkbox' name='custom1_multiselect' value='1' $c1 /> </td>
+            <td> <input type='checkbox' name='custom1_enabled' value='1' $ce1 /></td>
             </tr>
             <tr>
             <td>2</td>
-            <td> <input type='text' name='custom2_name'/> </td>
-            <td> <input type='checkbox' name='custom2_multiselect' value='1' /> </td>
-            <td> <input type='checkbox' name='custom2_enabled' value='1' /></td>
+            <td> <input type='text' name='custom2_name' value='".$settings['custom2_name']."'/> </td>
+            <td> <input type='checkbox' name='custom2_multiselect' value='1' $c2 /> </td>
+            <td> <input type='checkbox' name='custom2_enabled' value='1' $ce2 /></td>
             </tr>
             <tr>
             <td>3</td>
-            <td> <input type='text' name='custom3_name'/> </td>
-            <td> <input type='checkbox' name='custom3_multiselect' value='1' /> </td>
-            <td> <input type='checkbox' name='custom3_enabled' value='1' /></td>
+            <td> <input type='text' name='custom3_name' value='".$settings['custom3_name']."'/> </td>
+            <td> <input type='checkbox' name='custom3_multiselect' value='1' $c3 /> </td>
+            <td> <input type='checkbox' name='custom3_enabled' value='1' $ce3 /></td>
             </tr>
             </table>";
     echo "<input type='submit' value='Submit' />";
@@ -255,9 +275,9 @@ function echoManageCustomFileds()
 
 
     echo "<select id='select_customname' name='id'>
-	<option>1</option>
-	<option>2</option>
-	<option>3</option>
+	<option value='1'>".$settings['custom1_name']."</option>
+	<option value='2'>".$settings['custom2_name']."</option>
+	<option value='3'>".$settings['custom3_name']."</option>
     </select>
     <input type='text' name='custom_name'/>";
 
