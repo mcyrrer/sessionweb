@@ -100,10 +100,7 @@ function echoSessionTable($currentPage, $listSettings)
     $limitDown = ($currentPage * $rowsToDisplay) - $rowsToDisplay;
 
     $con = getMySqlConnection();
-
-
     $sqlSelect = createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings);
-
     $result = mysql_query($sqlSelect);
     //   echo "$sqlSelect<br>";
     //    print_r($listSettings);
