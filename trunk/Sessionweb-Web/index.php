@@ -53,6 +53,7 @@ else
     printLast10SessionsTable();
 }
 
+
 include("include/footer.php.inc");
 
 

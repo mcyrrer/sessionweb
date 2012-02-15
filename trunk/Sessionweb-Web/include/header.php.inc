@@ -14,7 +14,7 @@ echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
-echo "     <script src=\"js/jquery-1.4.4.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/jquery-1.7.1.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";

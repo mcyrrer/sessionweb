@@ -790,6 +790,36 @@ function echoSprintSelect($sprint)
     mysql_close($con);
 }
 
+function echoCustomSelect($customTableName, $customSelectedArray)
+{
+    $con = getMySqlConnection();
+    $sql = "SELECT * FROM $customTableName";
+    $result = mysql_query($sql);
+    if ($_SESSION['settings'][$customTableName.'_multiselect'] == 1) {
+        echo "<select id='select_$customTableName' multiple='multiple' name='" . $customTableName . "[]'>\n";
+
+    }
+    else
+    {
+        echo "<select id='select_$customTableName' name='$customTableName'>\n";
+    }
+    echo "<option value=\"\"></option>\n";
+
+    while ($row = mysql_fetch_array($result))
+    {
+        if (in_array($row['name'], $customSelectedArray)) {
+            echo "<option selected=\"selected\" value=\"" . $row['name'] . "\">" . htmlspecialchars($row['name']) . "</option>\n";
+        }
+        else
+        {
+            echo "<option value=\"" . $row['name'] . "\">" . htmlspecialchars($row['name']) . "</option>\n";
+        }
+    }
+    echo "</select>\n";
+
+    mysql_close($con);
+}
+
 function echoTeamSprintSelect($teamsprint)
 {
     $con = getMySqlConnection();
@@ -861,6 +891,26 @@ function getUserSettings()
 
     if (!$result) {
         echo "getUserSettings: " . mysql_error() . "<br/>";
+    }
+
+    mysql_close($con);
+    return mysql_fetch_array($result);
+}
+
+function getSettings()
+{
+    $con = getMySqlConnection();
+
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT * ";
+    $sqlSelect .= "FROM   settings ";
+
+
+    $result = mysql_query($sqlSelect);
+
+    if (!$result) {
+        echo "getSettings: " . mysql_error() . "<br/>";
     }
 
     mysql_close($con);
