@@ -374,45 +374,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sessionwebos`.`custom1`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sessionwebos`.`custom1` ;
-
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom1` (
-  `name` VARCHAR(100) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`name`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `sessionwebos`.`custom2`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sessionwebos`.`custom2` ;
-
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom2` (
-  `name` VARCHAR(100) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`name`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `sessionwebos`.`custom3`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sessionwebos`.`custom3` ;
-
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom3` (
-  `name` VARCHAR(100) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`name`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `sessionwebos`.`mission_custom`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `sessionwebos`.`mission_custom` ;
@@ -424,6 +385,21 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_custom` (
   `itemname` VARCHAR(100) NOT NULL ,
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
   INDEX `fk_mission_debriefnotes_copy1_areas1` (`customtablename` ASC) ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `sessionwebos`.`custom_items`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `sessionwebos`.`custom_items` ;
+
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom_items` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `tablename` VARCHAR(100) NOT NULL ,
+  `name` VARCHAR(100) NOT NULL ,
+  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;

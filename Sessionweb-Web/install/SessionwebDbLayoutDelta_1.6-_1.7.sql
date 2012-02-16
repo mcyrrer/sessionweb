@@ -1,34 +1,52 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+ALTER SCHEMA `sessionwebos`  DEFAULT CHARACTER SET utf8  DEFAULT COLLATE utf8_general_ci ;
+
 USE `sessionwebos`;
 
+ALTER TABLE `sessionwebos`.`members` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_status` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`sprintnames` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`teamnames` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`sessionid` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`teamsprintnames` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_sessionmetrics` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_debriefnotes` COLLATE = utf8_general_ci ;
 
 ALTER TABLE `sessionwebos`.`settings` COLLATE = utf8_general_ci , ADD COLUMN `custom1` TINYINT(1) NULL DEFAULT NULL  AFTER `wordcloud` , ADD COLUMN `custom1_name` VARCHAR(100) NULL DEFAULT NULL  AFTER `custom1` , ADD COLUMN `custom1_multiselect` TINYINT(1) NULL DEFAULT NULL  AFTER `custom1_name` , ADD COLUMN `custom2` TINYINT(1) NULL DEFAULT NULL  AFTER `custom1_multiselect` , ADD COLUMN `custom2_name` VARCHAR(100) NULL DEFAULT NULL  AFTER `custom2` , ADD COLUMN `custom2_multiselect` TINYINT(1) NULL DEFAULT NULL  AFTER `custom2_name` , ADD COLUMN `custom3` TINYINT(1) NULL DEFAULT NULL  AFTER `custom2_multiselect` , ADD COLUMN `custom3_name` VARCHAR(100) NULL DEFAULT NULL  AFTER `custom3` , ADD COLUMN `custom3_multiselect` TINYINT(1) NULL DEFAULT NULL  AFTER `custom3_name` ;
 
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom1` (
-  `name` VARCHAR(100) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`name`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
+ALTER TABLE `sessionwebos`.`areas` COLLATE = utf8_general_ci ;
 
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom2` (
-  `name` VARCHAR(100) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`name`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
+ALTER TABLE `sessionwebos`.`mission_areas` COLLATE = utf8_general_ci ;
 
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom3` (
-  `name` VARCHAR(100) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`name`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
+ALTER TABLE `sessionwebos`.`mission_bugs` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_requirements` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_sessionsconnections` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`user_settings` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`testenvironment` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`version` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`mission_attachments` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`user_sessionsnotification` COLLATE = utf8_general_ci ;
+
+ALTER TABLE `sessionwebos`.`softwareuseautofetched` CHARACTER SET = utf8 , COLLATE = utf8_general_ci , ENGINE = InnoDB , CHANGE COLUMN `versions` `versions` MEDIUMTEXT NOT NULL  ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_custom` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
@@ -42,6 +60,17 @@ ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
 
+CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom_items` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `tablename` VARCHAR(100) NOT NULL ,
+  `name` VARCHAR(100) NOT NULL ,
+  `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
 
 USE `sessionwebos`;
 
@@ -50,7 +79,7 @@ USE `sessionwebos`;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `sessionwebos`.`sessioninfo`;
 USE `sessionwebos`;
-CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
+CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT 
         m.sessionid,
         m.versionid,
         m.title,
@@ -81,7 +110,6 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         AND
         m.versionid = sm.versionid
 ;
-
 UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '1.7' WHERE  `version`.`id` =1;
 
 SET SQL_MODE=@OLD_SQL_MODE;

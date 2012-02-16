@@ -51,6 +51,13 @@ if ($_SESSION['settings']['analyticsid'] != "") {
 }
 echo "  </head>\n";
 echo "  <body>\n";
+echo "<div id='outer'>";
+echo "<div id='header'>
+        <div id='headercontent'>
+            <h1>Sessionweb<sup>SBTM made easy</sup></h1>
+        </div>
+      </div>";
+echo "<div id='menu'>";
 if ($_SESSION['user'] != "") {
     echo "      [" . $_SESSION['user'] . "]";
 }
@@ -68,6 +75,6 @@ if (isset($_SESSION['user'])) {
     echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
 echo "      <a class='counterstring' href='include/counterstring.html'>&copy;</a>";
-
-echo "<p><img src=\"pictures/logo.png\" alt=\"Sessionweb logo\"/></p>\n";
+echo "</div>";
+echo "<div id='menubottom'></div>";
 ?>
