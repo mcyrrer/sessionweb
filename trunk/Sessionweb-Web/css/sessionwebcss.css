@@ -3,6 +3,98 @@ body {
     font-size: small;
     margin: 8px 10px 16px;
     text-align: left;
+    background: #d4d4d4;
+}
+
+#header
+{
+    position: relative;
+    width: 1140px;
+    height: 5.0em;
+    background: #2B2B2B url('../pictures/topbg.gif') repeat-x;
+    margin-bottom: 2px;
+}
+
+#headercontent
+{
+    position: absolute;
+    bottom: 0em;
+    padding: 0em 2.0em 0.0em 2.0em;
+}
+
+#headercontent h1
+{
+    font-weight: normal;
+    color: #fff;
+    font-size: 2.5em;
+}
+
+#headercontent h1 sup
+{
+    color: #777;
+}
+
+#headercontent h2
+{
+    font-size: 1.0em;
+    font-weight: normal;
+    color: #aaa;
+}
+
+#menu
+{
+    position: relative;
+    width: 1140px;
+    height: 1.5em;
+    background: #808500 repeat-x;
+    margin-bottom: 1.5px;
+}
+
+#menu a
+{
+    padding: 0.1em 1.0em 0.2em 1.0em;
+    color: #fff;
+    text-decoration: none;
+}
+
+#menu a:hover
+{
+    text-decoration: underline;
+}
+#menubottom
+{
+    position: relative;
+    width: 1140px;
+    height: 1.0em;
+    background: url('../pictures/border1.gif') repeat-x;
+    margin-bottom: 2px;
+}
+
+#boldline
+{
+    position: relative;
+    width: 1140px;
+    height: 0.5em;
+    background: #808500 repeat-x;
+    margin-bottom: 2px;
+}
+
+#shortboldline
+{
+    position: relative;
+    width: 1024px;
+    height: 0.5em;
+    background: #808500 repeat-x;
+    margin-bottom: 2px;
+}
+
+#shortthinline
+{
+    position: relative;
+    width: 1024px;
+    height: 0.1em;
+    background: #808500 repeat-x;
+    margin-bottom: 2px;
 }
 
 h1 {
@@ -87,4 +179,40 @@ p {
 
 .link_cat_1 {
     text-decoration: none;
+}
+
+#outer
+{
+    z-index: 2;
+    position: relative;
+    /*
+        The width value below controls the overall width of the design. By default it's set to 82%
+        (so it'll take up 82% of the browser window's width). You can set it to a different percentage
+        value (70%, 90%, etc.) or even a pixel value (760px, 800px, etc.) to enforce a fixed width.
+    */
+    width: 1140px;
+    border: solid 7px #fff;
+    background-color: #fff;
+    margin: 0 auto;
+}
+
+#footer
+{
+    position: relative;
+    width: 1140px;
+    height: 1.5em;
+    background: #aaa;
+    margin-bottom: 2px;
+}
+
+#footer a
+{
+    padding: 0.1em 1.0em 0.2em 1.0em;
+    color: #000000;
+    text-decoration: none;
+}
+
+#footer a:hover
+{
+    text-decoration: underline;
 }

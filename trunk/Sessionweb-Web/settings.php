@@ -153,7 +153,7 @@ function insertCustomFieldNameToDb()
     $table = "custom".$_POST['id'];
     $name = $_POST['custom_name'];
 
-    $sql = "INSERT INTO $table (name) VALUES ('$name')";
+    $sql = "INSERT INTO custom_items (`tablename`, `name`) VALUES ('$table','$name')";
     mysql_query($sql);
 
     mysql_close();

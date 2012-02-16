@@ -793,7 +793,7 @@ function echoSprintSelect($sprint)
 function echoCustomSelect($customTableName, $customSelectedArray)
 {
     $con = getMySqlConnection();
-    $sql = "SELECT * FROM $customTableName";
+    $sql = "SELECT * FROM custom_items WHERE tablename = '$customTableName'";
     $result = mysql_query($sql);
     if ($_SESSION['settings'][$customTableName.'_multiselect'] == 1) {
         echo "<select id='select_$customTableName' multiple='multiple' name='" . $customTableName . "[]'>\n";

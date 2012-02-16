@@ -125,6 +125,8 @@ function echoDebriefSession()
         {
             $debriefComments = "";
         }
+        echo "                                   <div id='shortboldline'></div>";
+
         echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
         echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
         echo "<h4>Debrief notes</h4>\n";
@@ -505,7 +507,7 @@ function echoSessionForm()
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <img src=\"pictures/line.png\" alt=\"line\">\n";
+    echo "                                   <div id='shortboldline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -518,6 +520,7 @@ function echoSessionForm()
     echo "                              <td>Session title: </td>\n";
     echo "                              <td><input id=\"input_title\" type=\"text\" size=\"133\" value=\"$title\" name=\"title\" style=\"width:1024px;height:20px;\"></td>\n";
     echo "                        </tr>\n";
+
     if ($_SESSION['settings']['team'] == 1) {
         echo "                        <tr>\n";
         echo "                              <td>Team: </td>\n";
@@ -632,7 +635,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <img src=\"pictures/line2.png\" alt=\"line\">\n";
+    echo "                                   <div id='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -662,7 +665,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <img src=\"pictures/line2.png\" alt=\"line\">\n";
+    echo "                                   <div id='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -681,7 +684,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <p><img src=\"pictures/line.png\" alt=\"line\"></p>\n";
+    echo "                                   <div id='shortboldline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -701,7 +704,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <p><img src=\"pictures/line2.png\" alt=\"line\"></p>\n";
+    echo "                                   <div id='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -725,7 +728,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <p><img src=\"pictures/line2.png\" alt=\"line\"></p>\n";
+    echo "                                   <div id='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -756,7 +759,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <img src=\"pictures/line2.png\" alt=\"line\">\n";
+    echo "                                   <div id='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -808,7 +811,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <p><img src=\"pictures/line2.png\" alt=\"line\"></p>\n";
+    echo "                                   <div id='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
