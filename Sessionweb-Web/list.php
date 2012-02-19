@@ -278,16 +278,16 @@ function createSelectQueryForSessions($limitDown, $rowsToDisplay, $listSettings)
     if ($listSettings["tester"] != "" || $listSettings["sprint"] != "" || $listSettings["teamsprint"] != "" || $listSettings["team"] != "" | $listSettings["status"] != "") {
         $sqlSelect .= " WHERE  sessionid NOT LIKE \"\" ";
         if ($listSettings["tester"] != "") {
-            $sqlSelect .= "     AND username=\"" . $listSettings["tester"] . "\" ";
+            $sqlSelect .= "     AND username=\"" . urldecode($listSettings["tester"]) . "\" ";
         }
         if ($listSettings["sprint"] != "") {
-            $sqlSelect .= "     AND sprintname=\"" . $listSettings["sprint"] . "\" ";
+            $sqlSelect .= "     AND sprintname=\"" . urldecode($listSettings["sprint"]) . "\" ";
         }
         if ($listSettings["teamsprint"] != "") {
-            $sqlSelect .= "     AND teamsprintname=\"" . $listSettings["teamsprint"] . "\" ";
+            $sqlSelect .= "     AND teamsprintname=\"" . urldecode($listSettings["teamsprint"]) . "\" ";
         }
         if ($listSettings["team"] != "") {
-            $sqlSelect .= "     AND teamname=\"" . $listSettings["team"] . "\" ";
+            $sqlSelect .= "     AND teamname=\"" . urldecode($listSettings["team"]) . "\" ";
         }
         if ($listSettings["status"] != "") {
             if ($listSettings["status"] == "Not Executed")

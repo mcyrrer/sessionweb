@@ -1073,12 +1073,12 @@ function updateUserPassword($username, $password1, $password2)
             $username = mysql_real_escape_string($username);
 
             $md5password = md5($password1);
-
+            $username = urldecode($username);
             $sqlUpdate = "";
             $sqlUpdate .= "UPDATE `members` ";
             $sqlUpdate .= "SET    `password` ='$md5password' ";
             $sqlUpdate .= "WHERE  `members`.`username` = '$username' ";
-
+            echo $sqlUpdate;
             $result = mysql_query($sqlUpdate);
 
             if ($result) {

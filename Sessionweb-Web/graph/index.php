@@ -173,18 +173,17 @@ function pieTimeDistribution()
     $sql .= "WHERE executed = 1  ";
     if ($_GET['tester'] != null) {
         if ($_SESSION['useradmin'] == 1) {
-            $sql .= "AND username = '" . $_GET['tester'] . "' ";
+            $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
         }
     }
     if ($_GET['team'] != null) {
         if ($_SESSION['useradmin'] == 1) {
-            $sql .= "AND teamname = '" . $_GET['team'] . "' ";
+            $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
         }
     }
     if ($_GET['sprint'] != null) {
-        $sql .= "AND sprintname = '" . $_GET['sprint'] . "' ";
+        $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
     }
-
 
     $result = mysql_query($sql);
     //       echo $sql; //For debug purpose!
