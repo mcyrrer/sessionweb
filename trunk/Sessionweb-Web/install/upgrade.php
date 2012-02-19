@@ -157,7 +157,8 @@ function echoForm()
             <fieldset>
                 <legend>Database admin credentials</legend>
                 <dl>
-                    <dd>This is the user that will update the database sessionwebos and create all tables etc in the database.
+                    <dd>First of all: Make sure you have a backup of the database!! <br><br>
+                    This is the user that will update the database sessionwebos and create all tables etc in the database.
                     </dd>
 
                 </dl>

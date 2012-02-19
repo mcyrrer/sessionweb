@@ -28,6 +28,10 @@
                     <dt></dt>
                     <dd><a href="upgrade.php">Upgrade sessionweb</a></dd>
                 </dl>
+                <dl>
+                    <dt></dt>
+                    <dd><a href="fixcharset.php">Set language to support in Mysql</a></dd>
+                </dl>
             </fieldset>
         </div>
 </body>

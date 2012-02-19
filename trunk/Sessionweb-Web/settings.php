@@ -922,21 +922,21 @@ function echoChangePassword($username)
 function echoAddUser()
 {
     echo "<h2>Add user:</h2>\n";
-    echo "<table style=\"text-align: left; width: 1000px;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">\n";
+    echo "<table style=\"text-align: left; width: 800px;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">\n";
     echo "            <form name=\"sprint\" action=\"settings.php\" method= \"POST\">\n";
     echo "                <input type=\"hidden\" name=\"command\" value= \"insertusertodb\">\n";
     echo "                <tr>\n";
-    echo "                    <td width=200>\n";
+    echo "                    <td width=150>\n";
     echo "                        Add User:\n";
     echo "                    </td>\n";
     echo "                    <td align=\"left\">\n";
-    echo "                        Full Name<input type=\"text\" size=\"50\" value=\"\" name=\"fullname\">\n";
+    echo "                        Full Name<input type=\"text\" size=\"40\" value=\"\" name=\"fullname\">\n";
     echo "                    </td>\n";
     echo "                    <td align=\"left\">\n";
-    echo "                        UserName<input type=\"text\" size=\"50\" value=\"\" name=\"username\">\n";
+    echo "                        UserName<input type=\"text\" size=\"40\" value=\"\" name=\"username\">\n";
     echo "                    </td>\n";
     echo "                    <td align=\"left\">\n";
-    echo "                        Password<input type=\"password\" size=\"50\" value=\"\" name=\"swpassword1\">\n";
+    echo "                        Password<input type=\"password\" size=\"40\" value=\"\" name=\"swpassword1\">\n";
     echo "                    </td>\n";
     echo "                    <td>Admin<input type=\"checkbox\" name=\"admin\" value=\"yes\"></td>\n";
     echo "                    <td>Superuser<input type=\"checkbox\" name=\"superuser\" value=\"yes\"></td>\n";
@@ -1209,7 +1209,7 @@ function createNewUser()
         $result = mysql_query($sqlInsert);
 
         if ($result) {
-            echo "User added\n";
+            echo "<div>User added</div>\n";
         }
         else
         {
@@ -1226,7 +1226,7 @@ function createNewUser()
         $result = mysql_query($sqlInsert);
 
         if ($result) {
-            echo "User added\n";
+            echo "<div>User settings added</div>\n";
         }
         else
         {
