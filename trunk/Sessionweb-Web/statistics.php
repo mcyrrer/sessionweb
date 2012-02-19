@@ -42,7 +42,7 @@ echoSprintSelect("");
 echo "<img src='pictures/go-next.png' alt='Show Graph' id='showgraph'>";
 
 echo "<div id='graphdiv'>";
-echo "<iframe id='iframegraph' src='graph/index.php' width='1200' height='600' frameborder='0'></iframe>";
+echo "<iframe id='iframegraph' src='graph/index.php' width='1100' height='600' frameborder='0'></iframe>";
 echo "</div>";
 echo "<div id='url_graph'></div>";
 
