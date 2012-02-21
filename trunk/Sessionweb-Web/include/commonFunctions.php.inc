@@ -709,11 +709,11 @@ function echoTesterSelect($name)
     while ($row = mysql_fetch_array($result))
     {
         if (strcmp($name, $row['username']) == 0) {
-            echo "                                      <option selected=\"selected\">" . htmlspecialchars(utf8_encode($row['username'])) . "</option>\n";
+            echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['username']) . "</option>\n";
         }
         else
         {
-            echo "                                      <option>" . htmlspecialchars(utf8_encode($row['username'])) . "</option>\n";
+            echo "                                      <option>" . htmlspecialchars($row['username']) . "</option>\n";
         }
     }
 

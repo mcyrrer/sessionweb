@@ -193,7 +193,7 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
     $sqlInsert .= ") ";
 
 
-    echo "SQLINSERT=$sqlInsert";
+    #echo "SQLINSERT=$sqlInsert";
 
     $result = mysql_query($sqlInsert);
 
