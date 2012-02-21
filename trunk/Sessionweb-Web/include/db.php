@@ -14,7 +14,7 @@ function getMySqlConnection()
     return $con;
 }
 
-function changeCharsetAndCollation($db,$charset,$collation,$db_server, $db_user, $db_password)
+function changeCharsetAndCollation($db, $charset, $collation, $db_server, $db_user, $db_password)
 {
     // Script written by Vladislav "FractalizeR" Rastrusny
     // http://www.fractalizer.ru
@@ -29,10 +29,10 @@ function changeCharsetAndCollation($db,$charset,$collation,$db_server, $db_user,
     $skip_db_list = array('information_schema', 'mysql');
 
     //Which charset to convert to?
-    $charset = $charset;//"utf8";
+    $charset = $charset; //"utf8";
 
     //Which collation to convert to?
-    $collation = $collation;//"utf8_general_ci";
+    $collation = $collation; //"utf8_general_ci";
 
     //Only print queries without execution?
     $printonly = false;
@@ -49,15 +49,17 @@ function changeCharsetAndCollation($db,$charset,$collation,$db_server, $db_user,
     //Iterating databases
     foreach ($dblist as $dbname) {
         $sql = "SELECT CONCAT('ALTER TABLE `', t.`TABLE_SCHEMA`, '`.`', t.`TABLE_NAME`, '` CONVERT TO CHARACTER SET $charset COLLATE $collation;') as FRST FROM `information_schema`.`TABLES` t WHERE t.`TABLE_SCHEMA` = '$dbname' ORDER BY 1";
-       //echo $sql.'<br>';
+        //echo $sql.'<br>';
         $result = mysql_query($sql) or die(mysql_error());
         while ($row = mysql_fetch_assoc($result)) {
-            echo "\n\n<br><br>";
 
-            echo $row["FRST"] . "\r\n";
+
             if (!$printonly) {
-                mysql_query($row["FRST"]) or die(mysql_error());
-
+                if (strstr($row["FRST"], 'sessioninfo') == false) {
+                    echo $row["FRST"] . "\r\n";
+                    echo "\n\n<br><br>";
+                    mysql_query($row["FRST"]) or die(mysql_error());
+                }
             }
         }
     }
