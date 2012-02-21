@@ -270,6 +270,7 @@ function echoManageCustomFileds()
     echo "</form>";
 
     echo "<h2>Add value to field</h2>";
+    echo "<p>First you have to add filed above before you can add value to it.</p>";
     echo "<form name=\"customfiledsadd\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertcustomfieldsadd\">\n";
 
