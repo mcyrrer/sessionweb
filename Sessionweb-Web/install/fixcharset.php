@@ -153,47 +153,4 @@ function echoForm()
 
 }
 
-function checkFoldersForRWDuringInstallation()
-{
-    echo "<b>Check for Read Write access for certain folders.</b><br>";
-    $foldersToCheckRW = array("../config/", "../include/filemanagement/files/", "../include/filemanagement/thumbnails/", "../log/");
-    $foldersOk = true;
-    foreach ($foldersToCheckRW as $aFolder)
-    {
-        try
-        {
-            $ourFileName = $aFolder . "testFile.txt";
-
-            $fh = fopen($ourFileName, 'w');
-            fwrite($fh, "TestString\n");
-            fclose($fh);
-            if (file_exists($ourFileName)) {
-                echo "folder $aFolder is RW => OK<br>";
-                unlink($ourFileName);
-            }
-            else
-            {
-                echo "folder $aFolder is RW => NOK (file could not be created)<br>";
-                $foldersOk = false;
-            }
-        }
-        catch (Exception $e) {
-            echo "folder $aFolder is RW => NOK<br>";
-            //echo 'Error: ', $e->getMessage(), "\n";
-            echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";
-        }
-    }
-
-    if (!$foldersOk) {
-        echo "Pleas make sure that NOK folders above have read and write access for the WWW user";
-        echo "In ubuntu/linux you can use the chown command to make the www user e.g. 'chown -R www-data:www-data include/filemanagement/files/' ";
-        return false;
-    }
-    else
-    {
-        echo "<br><br>";
-        return true;
-    }
-}
-
 ?>

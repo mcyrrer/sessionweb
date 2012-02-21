@@ -232,7 +232,7 @@ function echoTitle($row)
     }
 
     echo "      <td >\n";
-    echo "<div id=\"tablerowtitle_" . $row["sessionid"] . "\" title=\"" . $row["title"] . "\">\n";
+    echo "<div id=\"tablerowtitle_" . $row["sessionid"] . "\" title=\"" . htmlspecialchars($row["title"]) . "\">\n";
     echo "<a id=\"view_session" . $row["sessionid"] . "\" class=\"url_view_session\" href=\"session.php?sessionid=" . $row["sessionid"] . "&amp;command=view\">$title</a></div>\n";
     echo "</td>\n";
 }
