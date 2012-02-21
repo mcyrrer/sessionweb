@@ -3,6 +3,7 @@ require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 
 include "../../config/db.php.inc";
+require_once("../../include/db.php");
 
 $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
 
