@@ -3,6 +3,8 @@ require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 
 include "../../config/db.php.inc";
+require_once("../../include/db.php");
+
 $con=getMySqlConnection();
 
 $sql = "DELETE FROM mission_attachments WHERE id = " . $_GET['id'];

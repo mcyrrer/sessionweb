@@ -24,6 +24,7 @@ require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 include_once("../../config/db.php.inc");
 include_once("../../include/commonFunctions.php.inc");
+require_once("../../include/db.php");
 
 //error_reporting(E_ALL | E_STRICT);
 
