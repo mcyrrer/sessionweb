@@ -2,6 +2,40 @@
 Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
+==SessionWeb 1.7==
+Installation:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manualy execute 
+install/SessionwebDbLayoutDelta_1.5-_1.6.sql
+install/SessionwebDbLayoutDelta_1.6-_1.7.sql 
+to upgrade from 1.5->1.7
+
+Install manualy:
+got to sessionweb/install/install.php to check that r/w of folders is correct then
+execute install/SessionwebDbLayout_1.7.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Issue list for this release 1.7 ===
+ID	Type		Status		Milestone	Summary
+14	Enhancement	Implemented	Release1.7	Possibility to have a tag called release
+29	Defect		Implemented	Release1.7	Fix error in html footer when db is not setup correct or not at all
+56	Defect		Implemented	Release1.7	Add support for custom fields
+57	Defect		Fixed		Release1.7	Junk chars in database
+58	Defect		Fixed		Release1.7	Remove Js error notes and charter is not defined
+59	Defect		Implemented	Release1.7	Upgrade to jquery 1.7.1 to remove js warnings
+60	Defect		Implemented	Release1.7	Change layout and use more css to layout the page
+61	Defect		Accepted	Release1.7	Not possible to sort on stings containing nonascii chars like åäö
+62	Defect		Implemented	Release1.7	Add support to change mysql collation 
+63	Defect		Implemented	Release1.7	Tool tip text cut off if Title contains double quotes
 
 ==SessionWeb 1.5==
 Installation:
