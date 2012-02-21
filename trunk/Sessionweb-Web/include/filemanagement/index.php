@@ -2,7 +2,6 @@
 require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
 require_once("../../include/db.php");
-error_reporting(E_ALL);
 define("GET_FILE_PATH", "get.php");
 define("DELETE_FILE_PATH", "delete.php");
 define("THUMB_FILE_PATH","thumbnails/");

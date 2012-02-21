@@ -1,13 +1,13 @@
 <?php
 require_once('../../include/loggingsetup.php');
 include_once("../../include/loggedincheck.php");
-
+//include_once("../../include/db.php");
 include "../../config/db.php.inc";
-require_once("../../include/db.php");
 
 $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
 
-$con=getMySqlConnection();
+$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 $sql = "SELECT * FROM `mission_attachments` WHERE `id` = " . $_GET['id'];
 $result = mysql_query($sql) or die($sql . 'Error, query failed');
