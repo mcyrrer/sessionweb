@@ -1,12 +1,15 @@
 <?php
+session_start();
+
 require_once('include/loggingsetup.php');
+include_once('include/db.php');
 if (!file_exists('config/db.php.inc')) {
     header("Location: install/install.php");
     exit();
 }
 
 $logout = $_GET["logout"];
-session_start();
+//session_start();
 
 if ($logout == "yes") {
     session_destroy();
@@ -20,7 +23,8 @@ if ($logout == "yes") {
     echo "         You are logged out. Please log in again to use Sessionweb\n";
 }
 
-if (!session_is_registered(myusername)) {
+//if (!session_is_registered(myusername)) {
+if(!isset($_SESSION['username'])) {
 
     echo "         <form name=\"loginform\" method=\"post\" action=\"checklogin.php\">\n";
     echo "             <table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" bgcolor=\"#FFFFFF\">\n";
@@ -48,6 +52,7 @@ if (!session_is_registered(myusername)) {
 }
 else
 {
+
     echo "         Welcome to sessionweb " . $_SESSION['user'] . "<br> \n";
     printSessionsStatus();
     printLast10SessionsTable();

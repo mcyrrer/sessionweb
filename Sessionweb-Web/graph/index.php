@@ -1,8 +1,6 @@
 <?php
 session_start();
-if (!session_is_registered(myusername)) {
-    header("location:../index.php");
-}
+require_once('../include/validatesession.inc');
 
 //include("../include/header.php.inc");
 include_once('../config/db.php.inc');

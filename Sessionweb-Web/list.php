@@ -2,22 +2,23 @@
 require_once('include/loggingsetup.php');
 
 session_start();
-if (!session_is_registered(myusername)) {
-    header("location:index.php");
-}
-include_once('config/db.php.inc');
-include_once ('include/commonFunctions.php.inc');
-include("include/header.php.inc");
+require_once('include/validatesession.inc');
+require_once("include/db.php");
+require_once('config/db.php.inc');
+require_once ('include/commonFunctions.php.inc');
+require_once("include/header.php.inc");
+//include_once("include/db.php");
+
 
 
 echo "<br>";
 
 $currentPage = $_GET["page"];
 $listSettings = "";
-
 if (count($_REQUEST) < 3 && $_REQUEST["data"] != "stored") {
-
     $userSettings = getUserSettings();
+
+
     if ($userSettings['list_view'] == "all") {
         $tester = "";
     }
@@ -49,6 +50,7 @@ else
         $listSettings = $_SESSION['listsearch'];
     }
 }
+
 
 $_SESSION['listsearch'] = $listSettings;
 

@@ -1,9 +1,7 @@
 <?php
 require_once('include/loggingsetup.php');
 session_start();
-if (!session_is_registered(myusername)) {
-    header("location:index.php");
-}
+require_once('include/validatesession.inc');
 
 include_once('config/db.php.inc');
 include_once ('include/commonFunctions.php.inc');
@@ -1079,7 +1077,7 @@ function updateUserPassword($username, $password1, $password2)
             $sqlUpdate .= "UPDATE `members` ";
             $sqlUpdate .= "SET    `password` ='$md5password' ";
             $sqlUpdate .= "WHERE  `members`.`username` = '$username' ";
-            echo $sqlUpdate;
+            //echo $sqlUpdate;
             $result = mysql_query($sqlUpdate);
 
             if ($result) {

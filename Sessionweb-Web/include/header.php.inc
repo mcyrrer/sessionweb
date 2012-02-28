@@ -61,9 +61,9 @@ echo "<div id='menu'>";
 if ($_SESSION['user'] != "") {
     echo "      [" . $_SESSION['user'] . "]";
 }
-if (doesUserHaveNotifications()) {
-    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='include/notification.php'>";
-}
+//if (doesUserHaveNotifications()) {
+//    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='include/notification.php'>";
+//}
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
 echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
 echo "      <a href=\"list.php\" id=\"url_list\">List sessions</a> |";
@@ -71,7 +71,7 @@ echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";
 
 
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['username'])) {
     echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
 echo "      <a class='counterstring' href='include/counterstring.html'>&copy;</a>";

@@ -1,14 +1,17 @@
 <?php
-require_once('include/loggingsetup.php');
+ob_start();
+//require_once('include/loggingsetup.php');
 include 'config/db.php.inc';
 include_once 'include/commonFunctions.php.inc';
-include_once 'include/db.php';
-ob_start();
+//include_once 'include/db.php';
 sleep(0.5); //brute force of password mitigation. It will take too long to brute force if we add a sleep. end user will not detect it.
 // Connect to server and select databse.
-//$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
+mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
+
+mysql_set_charset('utf8');
 //
-$con = getMySqlConnection();
+//$con = getMySqlConnection();
 // Define $myusername and $mypassword
 $myusername=$_POST['myusername'];
 $mypassword=$_POST['mypassword'];
@@ -23,7 +26,7 @@ $mypassword = mysql_real_escape_string($mypassword);
 
 //encrypt password
 $mypassword = md5($mypassword);
-echo $myusername;
+
 $sql = "";
 $sql .= "SELECT * ";
 $sql .= "FROM   members ";
@@ -35,7 +38,7 @@ $result=mysql_query($sql);
 
 if($result!=FALSE)
 {
-	$count=mysql_num_rows($result);
+    $count=mysql_num_rows($result);
 }
 // Mysql_num_row is counting table row
 
@@ -44,26 +47,31 @@ if($result!=FALSE)
 // If result matched $myusername and $mypassword, table row must be 1 row
 
 if($count==1){
-    $logger->info("Loggin for $myusername passed");
-	// Register $myusername, $mypassword and redirect to file "index.php"
-	session_start();
-	$row = mysql_fetch_array($result);
+    //$logger->info("Loggin for $myusername passed");
+    // Register $myusername, $mypassword and redirect to file "index.php"
+    session_start();
+    $row = mysql_fetch_array($result);
 
-	$_SESSION['user'] = $row['fullname'];
-	$_SESSION['superuser'] = $row['superuser'];
-	$_SESSION['useradmin'] = $row['admin'];
-	$_SESSION['username'] = $myusername;
-	
-	$_SESSION['settings'] = getSessionWebSettings();
+    $_SESSION['user'] = $row['fullname'];
+    $_SESSION['superuser'] = $row['superuser'];
+    $_SESSION['useradmin'] = $row['admin'];
+    $_SESSION['username'] = $myusername;
+    $_SESSION['settings'] = getSessionWebSettings();
 
-	session_register("myusername");
-	session_register("mypassword");
-	header("location:index.php");
+
+
+    //session_register("myusername");
+    //session_register("mypassword");
+    //ob_clean();
+    //echo "User OK!";
+    header("location:index.php");
 }
 else {
-    $logger->info("Loggin for $myusername failed");
+    //$logger->info("Loggin for $myusername failed");
+    //ob_clean();
+    //echo "failed!!";
     header("location:index.php?login=failed");
-	//echo "Wrong Username or Password";
+    //echo "Wrong Username or Password";
 }
 
 mysql_close($con);

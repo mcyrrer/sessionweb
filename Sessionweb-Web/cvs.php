@@ -1,6 +1,8 @@
 <?php
 require_once ('include/loggedincheck.php');
 require_once ('config/db.php.inc');
+session_start();
+require_once('include/validatesession.inc');
 
 $table = 'cvs'; // table you want to export
 $file = 'sessionweb.cvs'; // csv name.

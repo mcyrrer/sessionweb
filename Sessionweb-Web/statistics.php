@@ -1,12 +1,11 @@
 <?php
 require_once('include/loggingsetup.php');
 session_start();
-if (!session_is_registered(myusername)) {
-    header("location:index.php");
-}
-include_once('config/db.php.inc');
-include_once ('include/commonFunctions.php.inc');
-include("include/header.php.inc");
+require_once('include/validatesession.inc');
+require_once('include/db.php');
+require_once('config/db.php.inc');
+require_once ('include/commonFunctions.php.inc');
+require_once("include/header.php.inc");
 echo "<h1>Statistics/Graphs</h1>";
 echo "Graph type:";
 echoGraphTypes();
