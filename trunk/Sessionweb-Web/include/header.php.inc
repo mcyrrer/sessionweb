@@ -15,6 +15,15 @@ echo "      <title>Sessionweb</title>\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
 echo "     <script src=\"js/jquery-1.7.1.js\" type=\"text/javascript\"></script>\n";
+
+if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
+ echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
+ echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid-sessionweb.css\">\n";
+ echo "     <script src=\"js/flexigrid.js\" type=\"text/javascript\"></script>\n";
+ echo "     <script src=\"js/flexigrid-sessionweb.js\" type=\"text/javascript\"></script>\n";
+
+
+}
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";

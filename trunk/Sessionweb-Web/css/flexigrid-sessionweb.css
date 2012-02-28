@@ -3,7 +3,8 @@
     zenlike1.0 by nodethirtythree design
     http://www.nodethirtythree.com
 
-*/
+*//*
+
 
 *
 {
@@ -188,11 +189,13 @@ ul.linklist li
 {
     z-index: 2;
     position: relative;
-    /*
+    */
+/*
         The width value below controls the overall width of the design. By default it's set to 82%
         (so it'll take up 82% of the browser window's width). You can set it to a different percentage
         value (70%, 90%, etc.) or even a pixel value (760px, 800px, etc.) to enforce a fixed width.
-    */
+    *//*
+
     width: 82%;
     border: solid 7px #fff;
     background-color: #fff;
@@ -358,3 +361,4 @@ ul.linklist li
     right: 2.0em;
     bottom: 1.2em;
 }
+*/
