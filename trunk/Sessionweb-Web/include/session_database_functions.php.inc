@@ -544,6 +544,23 @@ function saveSession_InsertSessionAreaToDb($versionid, $areas)
     }
 }
 
+function saveSession_InsertSessionAdditionalTesterToDb($versionid, $testers)
+{
+    if ($testers != null) {
+        foreach ($testers as $tester) {
+            if ($tester != "") {
+                $sqlInsert = "INSERT INTO mission_testers (versionid, tester) VALUES ($versionid, '$tester');";
+
+                $result = mysql_query($sqlInsert);
+
+                if (!$result) {
+                    echo "saveSession_InsertSessionAdditionalTesterToDb: " . mysql_error() . "<br/>";
+                }
+            }
+        }
+    }
+}
+
 function saveSession_InsertSessionCustomFieldsToDb($versionid, $tableName, $values)
 {
     if (!is_array($values)) {
@@ -601,6 +618,7 @@ function saveSession_InsertSessionBugsToDb($versionid)
         }
     }
 }
+
 
 function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
 {
@@ -699,6 +717,21 @@ function saveSession_UpdateSessionAreasToDb($versionid, $areas)
     }
 
     saveSession_InsertSessionAreaToDb($versionid, $areas);
+}
+
+function saveSession_UpdateSessionAdditionalTesterDb($versionid, $additionalTester)
+{
+    $sqlDelete = "";
+    $sqlDelete .= "DELETE FROM mission_testers ";
+    $sqlDelete .= "WHERE  `versionid` = '$versionid'";
+
+    $result = mysql_query($sqlDelete);
+
+    if (!$result) {
+        echo "saveSession_UpdateSessionAdditionalTesterDb: " . mysql_error() . "<br/>";
+    }
+
+    saveSession_InsertSessionAdditionalTesterToDb($versionid, $additionalTester);
 }
 
 function saveSession_DeleteSessionsNotesFromDb($versionid)

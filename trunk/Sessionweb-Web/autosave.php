@@ -1,9 +1,8 @@
 <?php
 require_once('include/loggingsetup.php');
 session_start();
-if (!session_is_registered(myusername)) {
-    header("location:index.php");
-}
+require_once('include/validatesession.inc');
+
 include_once('config/db.php.inc');
 include_once ('include/session_edit_functions.php.inc');
 include_once ('include/session_view_functions.php.inc');

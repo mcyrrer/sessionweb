@@ -1,19 +1,17 @@
 <?php
 require_once('include/loggingsetup.php');
 session_start();
-
-if (!session_is_registered(myusername)) {
-    header("location:index.php");
-}
-include_once('config/db.php.inc');
-include_once ('include/commonFunctions.php.inc');
-include("include/header.php.inc");
-include_once ('include/session_edit_functions.php.inc');
-include_once ('include/session_view_functions.php.inc');
-include_once ('include/session_database_functions.php.inc');
-include_once ('include/session_common_functions.php.inc');
+require_once('include/validatesession.inc');
+require_once('include/db.php');
+require_once('config/db.php.inc');
+require_once ('include/commonFunctions.php.inc');
+require_once("include/header.php.inc");
+require_once ('include/session_edit_functions.php.inc');
+require_once ('include/session_view_functions.php.inc');
+require_once ('include/session_database_functions.php.inc');
+require_once ('include/session_common_functions.php.inc');
 if (is_file("include/customfunctions.php.inc")) {
-    include "include/customfunctions.php.inc";
+    include "require_once/customfunctions.php.inc";
 }
 
 
@@ -267,6 +265,9 @@ function saveSession()
             $areas = $_REQUEST["area"];
             saveSession_InsertSessionAreaToDb($versionid, $areas);
 
+            $additionalTester = $_REQUEST["additionalTester"];
+            saveSession_InsertSessionAdditionalTesterToDb($versionid, $additionalTester);
+
             //Create bugs connected to session
             saveSession_InsertSessionBugsToDb($versionid);
 
@@ -283,6 +284,8 @@ function saveSession()
                 if(isset($_REQUEST[$oneField]))
                     saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
             }
+
+            saveSession_InsertSessionSessionsLinksToDb($versionid);
         }
         else
         {
@@ -306,6 +309,9 @@ function saveSession()
 
         $areas = $_REQUEST["area"];
         saveSession_UpdateSessionAreasToDb($versionid, $areas);
+
+        $additionalTester = $_REQUEST["additionalTester"];
+        saveSession_UpdateSessionAdditionalTesterDb($versionid, $additionalTester);
 
         saveSession_UpdateSessionBugsToDb($versionid);
 
@@ -408,6 +414,7 @@ function copySession()
         //        saveSession_InsertSessionSessionsLinksToDb($versionid);
 
         echo "Copy created...";
+        echo "<div id='editCopy'><a href='session.php?sessionid=$sessionid&command=edit'>Edit session</a></div>";
 
     }
 
@@ -447,6 +454,8 @@ function echoSessionForm()
         $rowSessionStatus = getSessionStatus($rowSessionData["versionid"]);
 
         $rowSessionAreas = getSessionAreas($rowSessionData["versionid"]);
+
+        $rowAdditionalTesters = getSessionAdditionalTester($rowSessionData["versionid"]);
     }
     mysql_close($con);
 
@@ -460,6 +469,7 @@ function echoSessionForm()
         $team = $rowSessionData["teamname"];
         $publickey = $rowSessionData["publickey"];
         $area = $rowSessionAreas;
+        $additionalTesters = $rowAdditionalTesters;
         $testenvironment = $rowSessionData["testenvironment"];
         $software = $rowSessionData["software"];
 
@@ -554,6 +564,19 @@ function echoSessionForm()
         echo "                              </td>\n";
         echo "                        </tr>\n";
     }
+
+
+        echo "                        <tr>\n";
+        echo "                              <td valign=\"top\">Additional tester: </td>\n";
+        echo "                              <td>\n";
+        if ($_REQUEST['sessionid'] != "")
+            echoAdditionalTesterSelect($additionalTesters);
+        else
+            echoAdditionalTesterSelect(null);
+
+
+        echo "                              </td>\n";
+        echo "                        </tr>\n";
 
     if ($_SESSION['settings']['area'] == 1) {
         echo "                        <tr>\n";

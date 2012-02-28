@@ -141,9 +141,9 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            <h2>Session title</h2>\n";
-                echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
-                echo "                " . $row["title"] . "\n";
+                echo "            <h3>Session title</h3>\n";
+                echo "            <div class='graybox'>\n";
+                echo "                <span class='grayboxtext'><span class='larger'>" . $row["title"] . "</span></span>\n";
                 echo "            </div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
@@ -160,12 +160,21 @@ function echoViewSession()
                 echo "                        " . $row["sessionid"] . "\n";
                 echo "                    </div>\n";
                 echo "                </td>\n";
+
+                $sessionid = $row["sessionid"];
+                $versionid = getSessionVersionId($sessionid);
+                $testersArray = getSessionAdditionalTester($versionid);
                 echo "                <td align=\"left\" valign='top'>\n";
-                echo "                    <h4>Owner</h4>\n";
+                echo "                    <h4>Testers</h4>\n";
                 echo "                    <div style=\"background-color:#efefef;\">\n";
-                echo "                        " . $row["username"] . "\n";
+                echo "                        <span class='stronger'>" . $row["username"] . "</span><br>\n";
+                foreach ($testersArray as $tester)
+                {
+                    echo "                        $tester<br>\n";
+                }
                 echo "                    </div>\n";
                 echo "                </td>\n";
+
                 if ($_SESSION['settings']['team'] == 1) {
                     $value = $row["teamname"];
                     if ($row["teamname"] == "") {
@@ -210,9 +219,15 @@ function echoViewSession()
                     echo "                <td align=\"left\" valign='top'>\n";
                     echo "                    <h4>Area</h4>\n";
                     echo "                    <div style=\"background-color:#efefef;\">\n";
-                    foreach ($areaArray as $area)
+                    if (empty($areaArray)) {
+                        echo "                        &nbsp;<br>\n";
+                    }
+                    else
                     {
-                        echo "                        $area<br>\n";
+                        foreach ($areaArray as $area)
+                        {
+                            echo "                        $area<br>\n";
+                        }
                     }
                     echo "                    </div>\n";
                     echo "                </td>\n";
@@ -278,9 +293,9 @@ function echoViewSession()
                         $itemsToDisplay = getSessionCustomValues($row["versionid"], $oneSelectToEcho);
                         echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
 
-                        foreach($itemsToDisplay as $item)
+                        foreach ($itemsToDisplay as $item)
                         {
-                          echo "$item<br>";
+                            echo "$item<br>";
                         }
                         echo "</div>";
 
@@ -353,7 +368,7 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            <img src=\"pictures/line2.png\" alt=\"line\">\n";
+                echo "            <div id='shortboldline'></div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
                 echo "    <tr>\n";
@@ -362,8 +377,8 @@ function echoViewSession()
                 echo "        </td>\n";
                 echo "        <td align=\"left\">\n";
                 echo "        <h2>Charter</h2>\n";
-                echo "            <div style=\"background-color:#efefef;width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">\n";
-                echo "                " . $row["charter"] . "\n";
+                echo "            <div class='graybox'>\n";
+                echo "                <span class='grayboxtext'>" . $row["charter"] . "</span>\n";
                 echo "            </div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
@@ -371,7 +386,7 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+                echo "            <div id='shortboldline'></div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
                 echo "    <tr>\n";
@@ -389,7 +404,7 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+                echo "            <div id='shortboldline'></div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
@@ -409,7 +424,7 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+                echo "            <div id='shortboldline'></div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
 
@@ -423,7 +438,7 @@ function echoViewSession()
                 echo "    <tr>\n";
                 echo "        <td></td>\n";
                 echo "        <td>\n";
-                echo "            <img src=\"pictures/line.png\" alt=\"line\">\n";
+                echo "            <div id='shortboldline'></div>\n";
                 echo "        </td>\n";
                 echo "    </tr>\n";
                 $con = getMySqlConnection();

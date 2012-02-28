@@ -3,12 +3,11 @@ define('NUMBER_OF_CHARS_FILTER', 1);
 define('FILE_STOP_LIST_WORD_CLOUD', '../include/StoplistWordCloud.txt');
 
 session_start();
-if (!session_is_registered(myusername)) {
-    header("location:../index.php");
-}
-include_once('../config/db.php.inc');
-include_once ('../include/commonFunctions.php.inc');
+require_once('../include/validatesession.inc');
 
+require_once('../config/db.php.inc');
+require_once ('../include/commonFunctions.php.inc');
+require_once('../include/db.php');
 
 $wordsCountArray = array();
 

@@ -1,7 +1,7 @@
 <?php
 
 include_once('session_database_functions.php.inc');
-include_once('db.php');
+//include_once('db.php');
 
 function checkForMaxAttachmentSize($updateJsFile = false)
 {
@@ -382,7 +382,7 @@ function getConnectedSessions($versionid)
     $resultToReturn = array();
     while ($row = mysql_fetch_array($result)) {
         $sessionid = GetSessionIdFromVersionId($row["linked_to_versionid"]);
-        //Importera sessionid fr�n version -> l�gg det till arrayen nedan!!!
+        //Importera sessionid fr?n version -> l?gg det till arrayen nedan!!!
         $resultToReturn[] = $sessionid;
         //        $resultToReturn[] = $row["linked_to_versionid"];
     }
@@ -434,6 +434,26 @@ function getSessionAreas($versionid)
     $result = array();
     while ($row = mysql_fetch_array($resultSessionAreas)) {
         $result[] = $row["areaname"];
+    }
+
+    return $result;
+}
+
+function getSessionAdditionalTester($versionid)
+{
+    $sqlSelect = "SELECT * FROM mission_testers WHERE versionid = $versionid";
+
+    $resultSessionAreas = mysql_query($sqlSelect);
+
+    if (!$resultSessionAreas) {
+        echo "getSessionAdditionalTester: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelect());
+    }
+
+    $result = array();
+    while ($row = mysql_fetch_array($resultSessionAreas)) {
+        $result[] = $row["tester"];
     }
 
     return $result;
@@ -548,6 +568,52 @@ function getTestEnvironmentInformation($testenvironment)
     return $row;
 }
 
+function echoAdditionalTesterSelect($testers)
+{
+    $con = getMySqlConnection();
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT username,fullname ";
+    $sqlSelect .= "FROM   members ";
+    $sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
+    $sqlSelect .= "ORDER  BY fullname ASC";
+
+    $result = mysql_query($sqlSelect);
+
+    echo "                                  <select id=\"additionalTester\" name=\"additionalTester[]\" multiple=\"multiple\" size=\"4\">\n";
+
+
+    if (count($testers) == 0) {
+
+        echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
+    }
+    else
+    {
+        echo "                                      <option value=\"\"></option>\n";
+    }
+
+    if (!is_array($testers)) {
+        $oneTester = $testers;
+        $testers = array();
+        $testers[] = $oneTester;
+    }
+    while ($row = mysql_fetch_array($result))
+    {
+        print_r($row);
+        if (in_array($row['username'], $testers)) {
+            echo "                                      <option selected=\"selected\" value=\"" . $row['username'] . "\">" . htmlspecialchars($row['fullname']) . "</option>\n";
+        }
+        else
+        {
+            echo "                                      <option value=\"" . $row['username'] . "\">" . htmlspecialchars($row['fullname']) . "</option>\n";
+        }
+    }
+
+    echo "                                  </select>\n";
+
+    mysql_close($con);
+}
+
 function echoAreaSelect($area)
 {
     $con = getMySqlConnection();
@@ -557,7 +623,6 @@ function echoAreaSelect($area)
     $sqlSelect .= "SELECT areaname ";
     $sqlSelect .= "FROM   areas ";
     $sqlSelect .= "ORDER  BY `areaname` ASC ";
-
     $result = mysql_query($sqlSelect);
 
     echo "                                  <select id=\"select_area\" name=\"area[]\" multiple=\"multiple\" size=\"4\">\n";
@@ -878,8 +943,8 @@ function GetSessionPublicKey($versionid)
 
 function getUserSettings()
 {
-    $con = getMySqlConnection();
 
+    $con = getMySqlConnection();
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
