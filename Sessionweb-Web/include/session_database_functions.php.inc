@@ -39,6 +39,7 @@ function saveSession_CreateNewSessionId()
     }
 }
 
+
 function saveSession_GetSessionIdForNewSession()
 {
     $sqlSelect = "";
