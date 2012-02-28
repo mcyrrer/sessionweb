@@ -28,7 +28,14 @@ function deleteSession(){
 };
 
 function editSession(){
-    alert('hi');
+//    alert('hi');
+    var id = $('.trSelected td:nth-child(1) div').text();
+    window.open ('http://localhost/sessionweb/session.php?sessionid='+id+'&command=edit','_self',false)
+};
+
+function editSession_newtab(){
+    var id = $('.trSelected td:nth-child(1) div').text();
+    window.open ('http://localhost/sessionweb/session.php?sessionid='+id+'&command=edit','_blank',false)
 };
 
 function copySession(){
@@ -42,16 +49,18 @@ $(function() {
                 dataType: 'json',
                 colModel : [
                         {display: 'ID', name : 'id', width : 25, sortable : true, align: 'left'},
-                        {display: 'Status', name : 'status', width : 50, sortable : true, align: 'left'},
-                        {display: 'Title', name : 'title', width : 150, sortable : true, align: 'left'},
-                        {display: 'User', name : 'user', width : 200, sortable : true, align: 'left'},
-                        {display: 'Sprint', name : 'sprint', width : 200, sortable : true, align: 'left'},
-                        {display: 'Team', name : 'team', width : 200, sortable : true, align: 'left'},
-                        {display: 'Updated', name : 'updated', width : 200, sortable : true, align: 'left'},
-                        {display: 'Area', name : 'area', width : 200, sortable : true, align: 'left', hide:true}
+                        {display: 'Status', name : 'status', width : 65, sortable : true, align: 'left'},
+                        {display: 'Title', name : 'title', width : 300, sortable : false, align: 'left'},
+                        {display: 'User', name : 'user', width : 100, sortable : false, align: 'left'},
+                        {display: 'Sprint', name : 'sprint', width : 100, sortable : false, align: 'left'},
+                        {display: 'Team', name : 'team', width : 100, sortable : false, align: 'left'},
+                        {display: 'Updated', name : 'updated', width : 100, sortable : true, align: 'left'},
+                        {display: 'Executed', name : 'executed', width : 100, sortable : true, align: 'left', hide:true},
+                        {display: 'Area', name : 'area', width : 200, sortable : false, align: 'left', hide:true}
                 ],
                  buttons:[
                      {name:'Edit', bclass:'edit', onpress:editSession},
+                     {name:'Edit in new tab', bclass:'edit', onpress:editSession_newtab},
                      {name:'Delete', bclass:'delete', onpress:deleteSession},
                      {name:'Copy', bclass:'copy', onpress:copySession},
                      {name:'Share', bclass:'share', onpress:copySession},

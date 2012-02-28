@@ -13,13 +13,6 @@ $data = getNumberOfSessions($data);
 
 $data = getSessions($data);
 
-$data['rows'][] = array('id' => "1", 'cell' => array("123", "Not Executed", "My Session", "Mattias Gustavsson", "MAR12", "MyPages", "2012-01-01 12:12", "keypad,siren"));
-$data['rows'][] = array('id' => "2", 'cell' => array("2", "Closed", "My Session", "Mattias Gustavsson", "MAR12", "MyPages", "2012-01-01 12:12", "keypad,siren"));
-$data['rows'][] = array('id' => "3", 'cell' => array("3", "In progress", "My Session", "Mattias Gustavsson", "MAR12", "MyPages", "2012-01-01 12:12", "keypad,siren"));
-$data['rows'][] = array('id' => "4", 'cell' => array("4", "Executed", "My Session", "Mattias Gustavsson", "MAR12", "MyPages", "2012-01-01 12:12", "keypad,siren"));
-$data['rows'][] = array('id' => "5", 'cell' => array("5", "Debriefed", "My Session", "Mattias Gustavsson", "MAR12", "MyPages", "2012-01-01 12:12", "keypad,siren"));
-
-
 echo json_encode($data);
 
 mysql_close($con);
@@ -39,8 +32,8 @@ function getSessions($data)
     $numberOfSessionsToDisplay = 50;
     if (isset($_REQUEST['page'])) {
         $page = $_REQUEST['page'];
-        $startLimit = ((int) $page * (int)$numberOfSessionsToDisplay)-$numberOfSessionsToDisplay;
-        $stopLimit =(int) $page * (int)$numberOfSessionsToDisplay;
+        $startLimit = ((int)$page * (int)$numberOfSessionsToDisplay) - $numberOfSessionsToDisplay;
+        $stopLimit = (int)$page * (int)$numberOfSessionsToDisplay;
     }
     else
     {
@@ -48,8 +41,20 @@ function getSessions($data)
         $stopLimit = (int)$numberOfSessionsToDisplay;
     }
 
-    $sql = "SELECT * FROM sessioninfo ORDER BY sessionid DESC LIMIT ".$startLimit.",".$stopLimit.";";
-    //$sql = "SELECT * FROM sessioninfo ORDER BY sessionid DESC LIMIT 0,$numberOfSessionsToDisplay";
+    $sortname = $_REQUEST['sortname'];
+    
+    if (strstr($sortname,"id")!=false)
+        $sortname = "sessionid";
+    elseif (strstr($sortname,"updated")!=false)
+        $sortname = "updated";
+    elseif (strstr($sortname,"executed")!=false)
+        $sortname = "executed_timestamp";
+    else
+        $sortname = "sessionid";
+
+    $sortorder = $_REQUEST['sortorder'];
+    $sql = "SELECT * FROM sessioninfo ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+
     //echo $sql;
 
     $result = mysql_query($sql);
@@ -64,9 +69,14 @@ function getSessions($data)
         $title = $row['title'];
         $username = $row['username'];
         $executed = $row['executed'];
+        if ($executed == 0) {
+            $executed = "-";
+        }
         $debriefed = $row['debriefed'];
         $closed = $row['closed'];
         $updated = $row['updated'];
+        $executed_timestamp = $row['executed_timestamp'];
+
         $teamname = $row['teamname'];
         $sprintname = $row['sprintname'];
         $executed_timestamp = $row['executed_timestamp'];
@@ -81,7 +91,7 @@ function getSessions($data)
         if ($closed == 1) {
             $status = "Closed";
         }
-        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$title", "$username", "$sprintname", "$teamname", "$updated", "keypad,siren"));
+        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$title", "$username", "$sprintname", "$teamname", "$updated", "$executed_timestamp", "keypad,siren"));
     }
     return $data;
 }
