@@ -3,6 +3,7 @@ $buglist = "";
 $(document).ready(function () {
 
     $("#option_list").hide();
+    $("#searchbox").hide();
 
     //Import issue # from textarea to an js array
     var myRequirements = $('#requirementlist_hidden').text().split(',');
@@ -225,6 +226,13 @@ $(document).ready(function () {
     $("[class=showoption]").click(function () {
         $("#option_list").fadeIn("slow");
         $("#showoptiontext").text("");
+    });
+
+    $("#searchbaricon").click(function () {
+        if($("#searchbox").is(':hidden'))
+            $("#searchbox").fadeIn("slow");
+        else
+            $("#searchbox").fadeOut("slow");
     });
 
 //***************Add sessionlink to session and manage if it is deleted***************

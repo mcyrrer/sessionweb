@@ -68,7 +68,7 @@ $(function() {
                      {name:'Reasign', bclass:'reasign', onpress:copySession},
                  ],
                 sortname: "id",
-                sortorder: "asc",
+                sortorder: "desc",
                 usepager: true,
                 title: "Incoming",
                 useRp: false,
