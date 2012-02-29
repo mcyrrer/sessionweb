@@ -7,6 +7,18 @@ require_once('include/db.php');
 ?>
 
     <div id="content">
+        <div id="searchbaricon"></div>
+        <div id="searchbox" class="flexigrid">
+            <form class="expose">
+                <label for="username">Username</label>
+                <input id="username" /><br/>
+
+                <label for="password">Password</label>
+                <input id="password" type="password" /><br/>
+
+            </form>
+
+        </div>
         <!-- Primary content: Stuff that goes in the primary content column (by default, the left column) -->
         <div id="primarycontainer">
             <div id="primarycontent">

@@ -982,6 +982,24 @@ function getSettings()
     return mysql_fetch_array($result);
 }
 
+function getSettingsDoNotCreateMysqlConnection()
+{
+
+
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT * ";
+    $sqlSelect .= "FROM   settings ";
+
+
+    $result = mysql_query($sqlSelect);
+
+    if (!$result) {
+        echo "getSettings: " . mysql_error() . "<br/>";
+    }
+
+    return mysql_fetch_array($result);
+}
+
 function getSessionWebVersion()
 {
     $con = getMySqlConnection();

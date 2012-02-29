@@ -78,6 +78,7 @@ body {
     margin-bottom: 2px;
 }
 
+
 #shortthinline {
     position: relative;
     width: 1024px;
@@ -224,4 +225,13 @@ p {
 .stronger
 {
     font-weight: bolder;
+}
+
+#searchbaricon
+{
+    background-image: url("../pictures/searchbaricon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1100px;
+    height: 3.5em;
 }
