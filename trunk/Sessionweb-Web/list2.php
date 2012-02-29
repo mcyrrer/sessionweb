@@ -4,18 +4,25 @@ require_once('include/validatesession.inc');
 require_once('config/db.php.inc');
 require_once('include/header.php.inc');
 require_once('include/db.php');
+require_once('include/commonFunctions.php.inc');
+require_once('include/session_common_functions.php.inc');
 ?>
 
     <div id="content">
-        <div id="searchbaricon"></div>
         <div id="searchbox" class="flexigrid">
-            <form class="expose">
-                <label for="username">Username</label>
-                <input id="username" /><br/>
-
-                <label for="password">Password</label>
-                <input id="password" type="password" /><br/>
-
+            <form id="sform">
+                <?php
+                echo "Tester:";
+                echoTesterFullNameSelect(null);
+                echo "Sprint:";
+                echoSprintSelect(null);
+                echo "Team:";
+                echoTeamSelect(null);
+                echo "Area";
+                echoAreaSelectSingel(null);
+                echo "Status:";
+                echoStatusTypes(null);
+                ?>
             </form>
 
         </div>
