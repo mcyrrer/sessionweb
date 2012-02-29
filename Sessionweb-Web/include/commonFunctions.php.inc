@@ -727,30 +727,38 @@ function echoStatusTypes($statusToSelect)
     }
     else
     {
-        echo "      <option</option>\n";
+        echo "      <option></option>\n";
     }
     if (strcmp($statusToSelect, "Not Executed") == 0) {
-        echo "      <option selected=\"selected\">Not Executed</option>\n";
+        echo "      <option value='1' selected=\"selected\">Not Executed</option>\n";
     }
     else
     {
-        echo "      <option>Not Executed</option>\n";
+        echo "      <option value='1'>Not Executed</option>\n";
     }
 
     if (strcmp($statusToSelect, "Executed") == 0) {
-        echo "      <option selected=\"selected\">Executed</option>\n";
+        echo "      <option value='2' selected=\"selected\">Executed</option>\n";
     }
     else
     {
-        echo "      <option>Executed</option>\n";
+        echo "      <option value='2'>Executed</option>\n";
     }
 
     if (strcmp($statusToSelect, "Debriefed") == 0) {
-        echo "      <option selected=\"selected\">Debriefed</option>\n";
+        echo "      <option value='3' selected=\"selected\">Debriefed</option>\n";
     }
     else
     {
-        echo "      <option>Debriefed</option>\n";
+        echo "      <option value='3'>Debriefed</option>\n";
+    }
+
+    if (strcmp($statusToSelect, "Closed") == 0) {
+        echo "      <option value='4' selected=\"selected\">Closed</option>\n";
+    }
+    else
+    {
+        echo "      <option value='4'>Closed</option>\n";
     }
     echo "</select>\n";
 }
@@ -800,7 +808,7 @@ function echoTesterFullNameSelect($name)
 
     $result = mysql_query($sqlSelect);
 
-    echo "                                  <select id=\"select_tester\" name=\"tester\">\n";
+    echo "                                  <select id=\"select_tester\" name=\"tester\" class='formChanged'>\n";
     echo "                                      <option></option>\n";
 
     while ($row = mysql_fetch_array($result))

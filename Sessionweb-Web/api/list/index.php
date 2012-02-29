@@ -5,29 +5,90 @@ require_once('../../config/db.php.inc');
 
 $con = getMySqlConnection();
 
+$whereSql = "";
+if($_REQUEST['tester']!=null)
+{
+    if(strpos($whereSql,"WHERE") === false) {
+        $whereSql = "WHERE ";
+    }
+  $username = $_REQUEST['tester'];
+  $whereSql = $whereSql ."username='$username' ";
+}
+
+if($_REQUEST['sprint']!=null)
+{
+    if(strpos($whereSql,"WHERE") === false) {
+        $whereSql = "WHERE ";
+    }
+    else
+    {
+        $whereSql = $whereSql ."AND ";
+    }
+    $sprint = $_REQUEST['sprint'];
+    $whereSql = $whereSql ."sprintname='$sprint' ";
+}
+
+if($_REQUEST['team']!=null)
+{
+    if(strpos($whereSql,"WHERE") === false) {
+        $whereSql = "WHERE ";
+    }
+    else
+    {
+        $whereSql = $whereSql ."AND ";
+    }
+    $team = $_REQUEST['team'];
+    $whereSql = $whereSql ."teamname='$team' ";
+}
+
+if($_REQUEST['status']!=null)
+{
+    $status = $_REQUEST['status'];
+
+    if(strpos($whereSql,"WHERE") === false) {
+        $whereSql = "WHERE ";
+    }
+    else
+    {
+        $whereSql = $whereSql ."AND ";
+    }
+    if($status==1) {
+        $whereSql = $whereSql ."executed=0 ";
+    }
+    elseif($status==2) {
+        $whereSql = $whereSql ."executed=1 AND debriefed=0 AND closed=0 ";
+    }
+    elseif($status==3) {
+        $whereSql = $whereSql ."debriefed=1 ";
+    }
+    elseif($status==4) {
+        $whereSql = $whereSql ."closed=1 ";
+    }
+}
 
 $data = array();
 $data['page'] = (int)$_REQUEST['page'];
 //$data['total'] = 500;
-$data = getNumberOfSessions($data);
+$data = getNumberOfSessions($data,$whereSql);
 
-$data = getSessions($data);
+$data = getSessions($data,$whereSql);
 
 echo json_encode($data);
 
 mysql_close($con);
 
 
-function getNumberOfSessions($data)
+function getNumberOfSessions($data,$whereSql)
 {
-    $sql = "SELECT COUNT(*) as numberofSessions FROM sessioninfo";
+    $sql = "SELECT COUNT(*) as numberofSessions FROM sessioninfo $whereSql";
+    //echo $sql;
     $result = mysql_query($sql);
     $result = mysql_fetch_row($result);
     $data['total'] = $result[0];
     return $data;
 }
 
-function getSessions($data)
+function getSessions($data,$whereSql)
 {
     $numberOfSessionsToDisplay = 50;
     if (isset($_REQUEST['page'])) {
@@ -53,7 +114,7 @@ function getSessions($data)
         $sortname = "sessionid";
 
     $sortorder = $_REQUEST['sortorder'];
-    $sql = "SELECT * FROM sessioninfo ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+    $sql = "SELECT * FROM sessioninfo $whereSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
 
     //echo $sql;
 

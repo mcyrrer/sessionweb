@@ -228,12 +228,6 @@ $(document).ready(function () {
         $("#showoptiontext").text("");
     });
 
-    $("#searchbaricon").click(function () {
-        if($("#searchbox").is(':hidden'))
-            $("#searchbox").fadeIn("slow");
-        else
-            $("#searchbox").fadeOut("slow");
-    });
 
 //***************Add sessionlink to session and manage if it is deleted***************
     $("#add_sessionlink").click(function () {
@@ -423,8 +417,7 @@ $(document).ready(function () {
         $("#iframegraph").attr('src', url);
     });
 
-})
-;
+});
 
 $.extend({URLEncode:function (c) {
     var o = '';
