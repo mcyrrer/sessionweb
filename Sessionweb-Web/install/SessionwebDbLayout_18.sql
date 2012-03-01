@@ -445,6 +445,11 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `lastupdatedby` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `charter` INT, `notes` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT);
 
 -- -----------------------------------------------------
+-- Placeholder table for view `sessionwebos`.`sessionview_with_areas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessionview_with_areas` (`versionid` INT, `sessionid` INT, `title` INT, `charter` INT, `notes` INT, `username` INT, `teamname` INT, `sprintname` INT, `teamsprintname` INT, `depricated` INT, `updated` INT, `publickey` INT, `testenvironment` INT, `software` INT, `lastupdatedby` INT, `areaname` INT);
+
+-- -----------------------------------------------------
 -- View `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `sessionwebos`.`sessioninfo` ;
@@ -480,6 +485,15 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         m.versionid = ms.versionid
         AND
         m.versionid = sm.versionid
+;
+
+-- -----------------------------------------------------
+-- View `sessionwebos`.`sessionview_with_areas`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `sessionwebos`.`sessionview_with_areas` ;
+DROP TABLE IF EXISTS `sessionwebos`.`sessionview_with_areas`;
+USE `sessionwebos`;
+CREATE  OR REPLACE VIEW `sessionwebos`.`sessionview_with_areas` AS select `mission`.`versionid` AS `versionid`,`mission`.`sessionid` AS `sessionid`,`mission`.`title` AS `title`,`mission`.`charter` AS `charter`,`mission`.`notes` AS `notes`,`mission`.`username` AS `username`,`mission`.`teamname` AS `teamname`,`mission`.`sprintname` AS `sprintname`,`mission`.`teamsprintname` AS `teamsprintname`,`mission`.`depricated` AS `depricated`,`mission`.`updated` AS `updated`,`mission`.`publickey` AS `publickey`,`mission`.`testenvironment` AS `testenvironment`,`mission`.`software` AS `software`,`mission`.`lastupdatedby` AS `lastupdatedby`,`mission_areas`.`areaname` AS `areaname` from (`mission` join `mission_areas`) where (`mission`.`versionid` = `mission_areas`.`versionid`)
 ;
 
 

@@ -459,12 +459,53 @@ function getSessionAdditionalTester($versionid)
     return $result;
 }
 
-function createPercentPieChart($setup, $test, $bug, $oppertunity)
+function createPercentPieChart($setup, $test, $bug, $oppertunity,$sizeX=450,$sizeY=150,$labels=null)
 {
 
+    if($labels==null)
+    {
+       $labels = array();
+       $labels[]="Setup($setup%)";
+    }
     $totalTime = $setup + $test + $bug + $oppertunity;
 
-    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=450x150&amp;chd=t:$setup,$test,$bug,$oppertunity&amp;chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&amp;chco=FF0000|00FF00|0000FF|000000&";
+    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=".$sizeX."x".$sizeY."&amp;chd=t:$setup,$test,$bug,$oppertunity&amp;chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&amp;chco=FF0000|00FF00|0000FF|000000&";
+    //	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
+    return $imgURL;
+}
+
+/**
+ * @param array $valuesAndLables key value array, key = lables.
+ * @param int $sizeX
+ * @param int $sizeY
+ * @return string
+ */
+function createChartPie($valuesAndLables,$title=null,$sizeX=450, $sizeY=150,$colors=array('FF0000', '00FF00', '0000FF'))
+{
+    $barTitles = "";
+    $barValues = "";
+    foreach ($valuesAndLables as $key => $value)
+    {
+        $barTitles = $barTitles . "|" . $key;
+        $barValues = $barValues . "," . $value;
+    }
+    //echo $barValues;
+    $barTitles = substr($barTitles,1,strlen($barTitles));
+    $barValues = substr($barValues, 1, strlen($barValues));
+
+    $colors = implode("|",$colors);
+
+    if($title!=null)
+    {
+        $title ="chtt=$title";
+    }
+    else
+    {
+        $title = "";
+    }
+
+
+    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=".$sizeX."x".$sizeY."&amp;chd=t:$barValues&amp;chl=$barTitles&amp;chco=$colors&$title";
     //	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
     return $imgURL;
 }

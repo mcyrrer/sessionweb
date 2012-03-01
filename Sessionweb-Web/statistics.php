@@ -7,6 +7,7 @@ require_once('config/db.php.inc');
 require_once ('include/commonFunctions.php.inc');
 require_once("include/header.php.inc");
 echo "<h1>Statistics/Graphs</h1>";
+echo "<a href='graph/sprintreport.php'>Create sprint report";
 echo "Graph type:";
 echoGraphTypes();
 echo "Tester:";
