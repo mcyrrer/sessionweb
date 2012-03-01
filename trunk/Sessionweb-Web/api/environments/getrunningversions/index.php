@@ -1,12 +1,11 @@
 <?php
 session_start();
-if (!session_is_registered(myusername)) {
-    header("HTTP/1.0 403 Forbidden");
-    echo "No valid user session is active";
-}
+require_once('../../../include/validatesession.inc');
 
 include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
+require_once ('../../../include/db.php');
+
 
 $con = getMySqlConnection();
 
