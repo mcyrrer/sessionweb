@@ -24,27 +24,132 @@ function flexi_colorGridRows() {
 ;
 
 function deleteSession() {
-    alert('hi');
+    var id = $('.trSelected td:nth-child(1) div').text();
+    if (id != "") {
+        $.fn.colorbox({
+            href:'api/session/delete/?sessionid=' + id,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500,
+            onClosed:function () {
+                jQuery("#flexgrid1").flexReload();
+            }
+        });
+    }
+    else {
+        displaySelectSessionMsg();
+    }
 }
-;
+
+function debirefSession() {
+    var id = $('.trSelected td:nth-child(1) div').text();
+    var status = $('.trSelected td:nth-child(2) div').text();
+    var command = "view";
+
+    if (status == "Executed") {
+        if (id != "")
+            window.open('session.php?sessionid=' + id + '&command=debrief', '_blank');
+    }
+    else {
+        $("#msgdiv").fadeIn("slow");
+        $("#msgdiv").text("Session is not executed and can therefore not be debriefed.");
+        $('#msgdiv').fadeOut(3000, function () {
+            // Animation complete.
+        });
+    }
+}
 
 function editSession() {
 //    alert('hi');
     var id = $('.trSelected td:nth-child(1) div').text();
-    window.open('session.php?sessionid=' + id + '&command=edit', '_self', false)
+    if (id != "")
+        window.open('session.php?sessionid=' + id + '&command=edit', '_self', false);
+    else {
+        displaySelectSessionMsg();
+    }
 }
-;
+
 
 function editSession_newtab() {
     var id = $('.trSelected td:nth-child(1) div').text();
-    window.open('session.php?sessionid=' + id + '&command=edit', '_blank', false)
+    if (id != "")
+        window.open('session.php?sessionid=' + id + '&command=edit', '_blank');
+    else {
+        displaySelectSessionMsg();
+    }
 }
-;
+
+function displaySelectSessionMsg() {
+    $("#msgdiv").fadeIn("slow");
+    $("#msgdiv").text("You need to select a session first.");
+    $('#msgdiv').fadeOut(3000, function () {
+        // Animation complete.
+    });
+}
 
 function copySession() {
-    alert('hi');
+    var id = $('.trSelected td:nth-child(1) div').text();
+    if (id != "") {
+        $.fn.colorbox({
+            href:'api/session/copy/?sessionid=' + id,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500,
+            onClosed:function () {
+                jQuery("#flexgrid1").flexReload();
+            }
+        });
+    }
+    else {
+        displaySelectSessionMsg();
+    }
 }
-;
+
+
+function reassignSession() {
+    var id = $('.trSelected td:nth-child(1) div').text();
+    if (id != "") {
+        $.fn.colorbox({
+            href:'api/session/reassign/?sessionid=' + id,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500,
+            onClosed:function () {
+                jQuery("#flexgrid1").flexReload();
+            }
+        });
+    }
+    else {
+        displaySelectSessionMsg();
+    }
+}
+
+function shareSession() {
+    var id = $('.trSelected td:nth-child(1) div').text();
+    if (id != "") {
+        $.fn.colorbox({
+            href:'api/session/share/?sessionid=' + id,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500
+        });
+    }
+    else {
+        displaySelectSessionMsg();
+    }
+}
+
+
+function filterSession() {
+    if ($("#filterbox").is(':hidden'))
+        $("#filterbox").fadeIn("slow");
+    else
+        $("#filterbox").fadeOut("slow");
+}
 
 function searchSession() {
     if ($("#searchbox").is(':hidden'))
@@ -52,7 +157,6 @@ function searchSession() {
     else
         $("#searchbox").fadeOut("slow");
 }
-;
 
 
 $(function () {
@@ -75,9 +179,10 @@ $(function () {
             {name:'Edit in new tab', bclass:'edit', onpress:editSession_newtab},
             {name:'Delete', bclass:'delete', onpress:deleteSession},
             {name:'Copy', bclass:'copy', onpress:copySession},
-            {name:'Share', bclass:'share', onpress:copySession},
-            {name:'Debrief', bclass:'debrief', onpress:copySession},
-            {name:'Reasign', bclass:'reasign', onpress:copySession},
+            {name:'Share', bclass:'share', onpress:shareSession},
+            {name:'Debrief', bclass:'debrief', onpress:debirefSession},
+            {name:'Reasign', bclass:'reasign', onpress:reassignSession},
+            {name:'Filter', bclass:'filter', onpress:filterSession},
             {name:'Search', bclass:'search', onpress:searchSession}
         ],
         sortname:"id",
@@ -104,11 +209,66 @@ function addFormData() {
     return true;
 }
 
+
+function stopRKey(evt) {
+    var evt = (evt) ? evt : ((event) ? event : null);
+    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+}
+
+document.onkeypress = stopRKey;
+
+
 $(document).ready(function () {
 
-    $("select").change(function() {
-        $('#flexgrid1').flexOptions({newp: 1}).flexReload();
+
+
+    $("#searchbox").hide();
+    $("#filterbox").hide();
+
+    $('#helpsearch').click(function () {
+        $.fn.colorbox({
+            href:'api/help/search',
+            open:true,
+            iframe:true,
+            width:500,
+            height:500
+        });
+    });
+
+    $("select").change(function () {
+        $('#flexgrid1').flexOptions({newp:1}).flexReload();
         return false;
+    });
+
+    $('#searchSessions').click(function () {
+        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+    });
+
+    $('#clearSearchSessions').click(function () {
+        $('#searchstring').val('');
+        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+    });
+
+    $(function () {
+        /****************************************************************
+         * Double click for product details
+         ****************************************************************/
+        $('#flexgrid1').dblclick(function (e) {
+            target = $(e.target);
+            while (target.get(0).tagName != "TR") {
+                target = target.parent();
+            }
+            var tmp = target.get(0);
+            var status = target.get(0).childNodes[1].textContent;
+            var id = target.get(0).firstChild.textContent;
+            var command = "view"
+            if (status == "Not Executed") {
+                command = "edit";
+            }
+            var url = "session.php?sessionid=" + id + "&command=" + command;
+            window.location = url
+        });
     });
 
 });

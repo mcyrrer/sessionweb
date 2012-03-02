@@ -8,24 +8,38 @@ require_once('include/commonFunctions.php.inc');
 require_once('include/session_common_functions.php.inc');
 ?>
 
-    <div id="content">
+<div id="content">
+    <form id="sform">
+        <div id="filterbox" class="flexigrid">
+
+            <?php
+            echo "Tester:";
+            echoTesterFullNameSelect(null);
+            echo "Sprint:";
+            echoSprintSelect(null);
+            echo "Team:";
+            echoTeamSelect(null);
+            echo "Area";
+            echoAreaSelectSingel(null);
+            echo "Status:";
+            echoStatusTypes(null);
+            ?>
+
+
+        </div>
         <div id="searchbox" class="flexigrid">
-            <form id="sform">
+            <form id="sform2">
                 <?php
-                echo "Tester:";
-                echoTesterFullNameSelect(null);
-                echo "Sprint:";
-                echoSprintSelect(null);
-                echo "Team:";
-                echoTeamSelect(null);
-                echo "Area";
-                echoAreaSelectSingel(null);
-                echo "Status:";
-                echoStatusTypes(null);
+                echo "Search: <input id='searchstring' type='text' size='50' value='' name='searchstring' style='width:500px;'>";
                 ?>
+                <span id="searchSessions">[Search]</span>
+                <span id="clearSearchSessions">[Clear]</span>
+                <img id="helpsearch" src="pictures/dialog-question.png">
+
             </form>
 
         </div>
+        <div id="msgdiv"></div>
         <!-- Primary content: Stuff that goes in the primary content column (by default, the left column) -->
         <div id="primarycontainer">
             <div id="primarycontent">
@@ -36,7 +50,7 @@ require_once('include/session_common_functions.php.inc');
                 <!-- Primary content area end -->
             </div>
         </div>
-    </div>
+</div>
 <?php
 require_once('include/footer.php.inc');
 ?>

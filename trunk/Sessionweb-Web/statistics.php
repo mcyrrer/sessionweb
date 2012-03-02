@@ -7,7 +7,8 @@ require_once('config/db.php.inc');
 require_once ('include/commonFunctions.php.inc');
 require_once("include/header.php.inc");
 echo "<h1>Statistics/Graphs</h1>";
-echo "<a href='graph/sprintreport.php'>Create sprint report";
+
+echo "<a class='largepopup cboxElement' href='graph/sprintreport.php'>Create sprint report</a><br>";
 echo "Graph type:";
 echoGraphTypes();
 echo "Tester:";
@@ -40,6 +41,8 @@ echoSprintSelect("");
 //echo "Session status:";
 //echoSessionStatusTypesSelect();
 echo "<img src='pictures/go-next.png' alt='Show Graph' id='showgraph'>";
+
+
 
 echo "<div id='graphdiv'>";
 echo "<iframe id='iframegraph' src='graph/index.php' width='1100' height='600' frameborder='0'></iframe>";

@@ -3,8 +3,9 @@ session_start();
 require_once('../include/validatesession.inc');
 
 //include("../include/header.php.inc");
-include_once('../config/db.php.inc');
-include_once ('../include/commonFunctions.php.inc');
+require_once('../config/db.php.inc');
+require_once ('../include/commonFunctions.php.inc');
+require_once ('../include/db.php');
 $failedToCreateGraph = false;
 ?>
 <!DOCTYPE html >

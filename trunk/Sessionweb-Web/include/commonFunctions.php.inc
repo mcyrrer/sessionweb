@@ -1,7 +1,7 @@
 <?php
 
 include_once('session_database_functions.php.inc');
-//include_once('db.php');
+include_once('db.php');
 
 function checkForMaxAttachmentSize($updateJsFile = false)
 {
@@ -157,17 +157,17 @@ function getSessionMetrics($versionid)
 {
     //	$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB ,DB_PASS_SESSIONWEB) or die("cannot connect");
 
-
     $sqlSelectSessionMetrics = "";
     $sqlSelectSessionMetrics .= "SELECT * ";
     $sqlSelectSessionMetrics .= "FROM   mission_sessionmetrics ";
     $sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
     $resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
 
+
     if (!$resultSessionMetrics) {
         echo "getSessionMetrics: " . mysql_error() . "<br/>";
-        $logger->error(mysql_error());
-        $logger->debug($sqlSelectSessionMetrics());
+//        $logger->error(mysql_error());
+//        $logger->debug($sqlSelectSessionMetrics());
     }
 
     return mysql_fetch_array($resultSessionMetrics);
@@ -199,7 +199,6 @@ function getSessionData($sessionid)
     $sqlSelectSession .= "FROM   mission ";
     $sqlSelectSession .= "WHERE  sessionid = $sessionid";
     $resultSession = mysql_query($sqlSelectSession);
-
     if (!$resultSession) {
         echo "getSessionData: " . mysql_error() . "<br/>";
         //$logger->error(mysql_error());
@@ -836,7 +835,21 @@ function echoTesterSelect($name)
     mysql_close($con);
 }
 
-function echoTesterFullNameSelect($name)
+function getTesterFullName($username)
+{
+    $sqlSelect = "";
+    $sqlSelect .= "SELECT fullname ";
+    $sqlSelect .= "FROM   members ";
+    $sqlSelect .= "WHERE username = '$username' ";
+    $sqlSelect .= "ORDER  BY fullname ASC";
+
+    $result = mysql_query($sqlSelect);
+
+    $row = mysql_fetch_row($result);
+    return $row[0];
+}
+
+function echoTesterFullNameSelect($name,$removeInactiveUsers=false)
 {
     $con = getMySqlConnection();
 
@@ -844,9 +857,9 @@ function echoTesterFullNameSelect($name)
     $sqlSelect = "";
     $sqlSelect .= "SELECT username,fullname ";
     $sqlSelect .= "FROM   members ";
-    //$sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
+    if($removeInactiveUsers)
+        $sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
     $sqlSelect .= "ORDER  BY fullname ASC";
-
     $result = mysql_query($sqlSelect);
 
     echo "                                  <select id=\"select_tester\" name=\"tester\" class='formChanged'>\n";

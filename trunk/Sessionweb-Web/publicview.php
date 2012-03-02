@@ -1,7 +1,7 @@
 <?php
 require_once('include/loggingsetup.php');
 include_once('config/db.php.inc');
-
+include_once ('include/db.php');
 include_once ('include/session_view_functions.php.inc');
 include_once ('include/session_database_functions.php.inc');
 include_once ('include/commonFunctions.php.inc');
