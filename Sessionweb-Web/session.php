@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once('include/loggingsetup.php');
 session_start();
 require_once('include/validatesession.inc');
@@ -12,6 +13,21 @@ require_once ('include/session_database_functions.php.inc');
 require_once ('include/session_common_functions.php.inc');
 if (is_file("include/customfunctions.php.inc")) {
     include "require_once/customfunctions.php.inc";
+}
+
+
+if (strcmp($_REQUEST["command"], "edit") == 0) {
+    getMySqlConnection();
+    $rowSessionData = getSessionData($_GET["sessionid"]);
+    if(strcmp($_SESSION['username'],$rowSessionData['username'])!= 0 && $_SESSION['superuser']!=1 && $_SESSION['useradmin']!=1)
+    {
+        echo "You are not the owner of the session, please reassign it to be able to edit it.";
+        mysql_close();
+        $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=".view;
+        header("location:$url");
+        die();
+    }
+    mysql_close();
 }
 
 
@@ -74,6 +90,7 @@ elseif (strcmp($_REQUEST["command"], "save") == 0)
 
 include("include/footer.php.inc");
 
+ob_end_flush();
 
 function reassignSessionExecute()
 {
@@ -446,6 +463,11 @@ function echoSessionForm()
     if (strcmp($_REQUEST["command"], "edit") == 0) {
         $rowSessionData = getSessionData($_GET["sessionid"]);
         $insertSessionData = true;
+
+        if($_SESSION['username']!=$rowSessionData['username'])
+        {
+
+        }
     }
 
     if ($_GET["sessionid"] != "") {

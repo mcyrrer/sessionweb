@@ -65,6 +65,10 @@
 .search {
     background: url(images/search.png) no-repeat center left;
 }
+.filter {
+    background: url(images/filter.png) no-repeat center left;
+}
+
 
 
 

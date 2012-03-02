@@ -3,7 +3,7 @@ $buglist = "";
 $(document).ready(function () {
 
     $("#option_list").hide();
-    $("#searchbox").hide();
+
 
     //Import issue # from textarea to an js array
     var myRequirements = $('#requirementlist_hidden').text().split(',');
@@ -120,6 +120,10 @@ $(document).ready(function () {
 
 //**************FILE UPLOAD i session.php
     $(".uploadajax").colorbox({iframe:true, width:"80%", height:"80%"});
+
+//**************Large popuå i session.php
+    $(".largepopup").colorbox({iframe:true, width:"90%", height:"95%"});
+
 
 //**************Generic Colorboxoverlay
     $("[class=colorboxhrefsmall]").colorbox({iframe:true, width:"40%", height:"40%"});

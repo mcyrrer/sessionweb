@@ -1,0 +1,1 @@
+ALTER TABLE mission ADD FULLTEXT(notes, charter, title,software);
