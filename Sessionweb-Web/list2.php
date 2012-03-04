@@ -13,16 +13,47 @@ require_once('include/session_common_functions.php.inc');
         <div id="filterbox" class="flexigrid">
 
             <?php
+            $userSettings = getUserSettings();
             echo "Tester:";
-            echoTesterFullNameSelect(null);
+            if (isset($_GET['tester'])) {
+                echoTesterFullNameSelect($_REQUEST['tester']);
+            }
+            elseif ($userSettings['list_view'] == "mine") {
+                $tester = $_SESSION['username'];
+                echoTesterFullNameSelect($tester);
+            }
+            else
+            {
+                echoTesterFullNameSelect(null);
+            }
             echo "Sprint:";
-            echoSprintSelect(null);
+            if (isset($_GET['sprint'])) {
+                echoSprintSelect($_REQUEST['sprint']);
+            }
+            else {
+                echoSprintSelect(null);
+            }
             echo "Team:";
-            echoTeamSelect(null);
+            if (isset($_GET['team'])) {
+                echoTeamSelect($_REQUEST['team']);
+            }
+            else {
+                echoTeamSelect(null);
+            }
             echo "Area";
-            echoAreaSelectSingel(null);
+            if (isset($_GET['area'])) {
+                echoAreaSelectSingel($_REQUEST['area']);
+            }
+            else {
+                echoAreaSelectSingel(null);
+            }
             echo "Status:";
-            echoStatusTypes(null);
+            if (isset($_GET['status'])) {
+                echoStatusTypes($_REQUEST['status']);
+            }
+            else {
+                echoStatusTypes(null);
+            }
             ?>
 
 
@@ -30,7 +61,10 @@ require_once('include/session_common_functions.php.inc');
         <div id="searchbox" class="flexigrid">
             <form id="sform2">
                 <?php
-                echo "Search: <input id='searchstring' type='text' size='50' value='' name='searchstring' style='width:500px;'>";
+                if (isset($_REQUEST['searchstring'])) {
+                    $textValue = $_REQUEST['searchstring'];
+                }
+                echo "Search: <input id='searchstring' type='text' size='50' value='" . $textValue . "' name='searchstring' style='width:500px;'>";
                 ?>
                 <span id="searchSessions">[Search]</span>
                 <span id="clearSearchSessions">[Clear]</span>
@@ -48,6 +82,8 @@ require_once('include/session_common_functions.php.inc');
 
 
                 <!-- Primary content area end -->
+                <div id="urldiv"></div>
+
             </div>
         </div>
 </div>

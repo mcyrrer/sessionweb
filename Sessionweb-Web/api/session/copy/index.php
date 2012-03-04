@@ -55,8 +55,9 @@ $title = $sessionDataToCopy["title"];
 echo "<center>";
 echo "<img src='../../../pictures/edit-copy-9-medium.png' alt=''>";
 
-echo "<h2>Copy of session $title created</h2>";
-echo "Title of copy:".$sessionDataToCopy["title"]."(Copy)";
+echo "<h2>Copy session</h2>";
+echo "<p>Title of copy:".$sessionDataToCopy["title"]."(Copy)</p>";
+echo "<p>Copy created</p>";
 echo "<div id='editCopy'><a href='session.php?sessionid=$sessionid&command=edit'>Edit session</a></div>";
 echo "</center>";
 

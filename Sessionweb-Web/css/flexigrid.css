@@ -68,6 +68,9 @@
 .filter {
     background: url(images/filter.png) no-repeat center left;
 }
+.view {
+    background: url(images/debrief.png) no-repeat center left;
+}
 
 
 

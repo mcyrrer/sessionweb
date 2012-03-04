@@ -700,6 +700,12 @@ function echoAreaSelect($area)
 
 function echoAreaSelectSingel($area)
 {
+    if(!is_array($area))
+    {
+        $areaTmp = array();
+        $areaTmp[] = $area;
+        $area = $areaTmp;
+    }
     $con = getMySqlConnection();
 
 
@@ -769,7 +775,7 @@ function echoStatusTypes($statusToSelect)
     {
         echo "      <option></option>\n";
     }
-    if (strcmp($statusToSelect, "Not Executed") == 0) {
+    if (strcmp($statusToSelect, "Not Executed") == 0 || strcmp($statusToSelect, "1") == 0) {
         echo "      <option value='1' selected=\"selected\">Not Executed</option>\n";
     }
     else
@@ -777,7 +783,7 @@ function echoStatusTypes($statusToSelect)
         echo "      <option value='1'>Not Executed</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Executed") == 0) {
+    if (strcmp($statusToSelect, "Executed") == 0 || strcmp($statusToSelect, "2") == 0 ) {
         echo "      <option value='2' selected=\"selected\">Executed</option>\n";
     }
     else
@@ -785,7 +791,7 @@ function echoStatusTypes($statusToSelect)
         echo "      <option value='2'>Executed</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Debriefed") == 0) {
+    if (strcmp($statusToSelect, "Debriefed") == 0 || strcmp($statusToSelect, "3") == 0) {
         echo "      <option value='3' selected=\"selected\">Debriefed</option>\n";
     }
     else
@@ -793,7 +799,7 @@ function echoStatusTypes($statusToSelect)
         echo "      <option value='3'>Debriefed</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Closed") == 0) {
+    if (strcmp($statusToSelect, "Closed") == 0 || strcmp($statusToSelect, "4") == 0) {
         echo "      <option value='4' selected=\"selected\">Closed</option>\n";
     }
     else
