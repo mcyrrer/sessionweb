@@ -70,6 +70,27 @@ function editSession() {
     }
 }
 
+function viewSession() {
+//    alert('hi');
+    var id = $('.trSelected td:nth-child(1) div').text();
+    if (id != "")
+        window.open('session.php?sessionid=' + id + '&command=view', '_self', false);
+    else {
+        displaySelectSessionMsg();
+    }
+}
+
+function viewSession_newtab() {
+//    alert('hi');
+    var id = $('.trSelected td:nth-child(1) div').text();
+    if (id != "")
+        window.open('session.php?sessionid=' + id + '&command=view', '_blank');
+    else {
+        displaySelectSessionMsg();
+    }
+}
+
+
 
 function editSession_newtab() {
     var id = $('.trSelected td:nth-child(1) div').text();
@@ -170,11 +191,14 @@ $(function () {
             {display:'User', name:'user', width:100, sortable:false, align:'left'},
             {display:'Sprint', name:'sprint', width:100, sortable:false, align:'left'},
             {display:'Team', name:'team', width:100, sortable:false, align:'left'},
-            {display:'Updated', name:'updated', width:100, sortable:true, align:'left'},
-            {display:'Executed', name:'executed', width:100, sortable:true, align:'left', hide:true},
-            {display:'Area', name:'area', width:200, sortable:false, align:'left', hide:true}
+            {display:'Area', name:'area', width:100, sortable:false, align:'left', hide:false},
+//            {display:'Environment', name:'env', width:100, sortable:false, align:'left', hide:false},
+            {display:'Updated', name:'updated', width:105, sortable:true, align:'left'},
+            {display:'Executed', name:'executed', width:105, sortable:true, align:'left', hide:true}
         ],
         buttons:[
+            {name:'View', bclass:'view', onpress:viewSession},
+            {name:'View in new tab', bclass:'view', onpress:viewSession_newtab},
             {name:'Edit', bclass:'edit', onpress:editSession},
             {name:'Edit in new tab', bclass:'edit', onpress:editSession_newtab},
             {name:'Delete', bclass:'delete', onpress:deleteSession},
@@ -184,6 +208,7 @@ $(function () {
             {name:'Reasign', bclass:'reasign', onpress:reassignSession},
             {name:'Filter', bclass:'filter', onpress:filterSession},
             {name:'Search', bclass:'search', onpress:searchSession}
+
         ],
         sortname:"id",
         sortorder:"desc",
@@ -194,7 +219,7 @@ $(function () {
         showTableToggleBtn:false,
         resizable:false,
         width:1115,
-        height:800,
+        height:1140,
         onSubmit:addFormData,
         onSuccess:flexi_colorGridRows, //change row colours here
         singleSelect:true
@@ -238,11 +263,26 @@ $(document).ready(function () {
 
     $("select").change(function () {
         $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        setPermSearchUrl();
         return false;
     });
 
+    function setPermSearchUrl()
+    {
+        var tester = $('#select_tester').val();
+        var sprint = $('#select_sprint').val();
+        var team = $('#select_team').val();
+        var area = $('#select_area').val();
+        var status = $('#select_status_type').val();
+
+        var searchstring = $('#searchstring').val();
+        var url = 'list2.php?tester='+tester+'&sprint='+sprint+'&team='+team+'&area='+area+'&status='+status+'&searchstring='+searchstring;
+        $('#urldiv').html('<a href="'+url+'">Perm link to filter/search</a>');
+    }
+
     $('#searchSessions').click(function () {
         $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        setPermSearchUrl();
     });
 
     $('#clearSearchSessions').click(function () {

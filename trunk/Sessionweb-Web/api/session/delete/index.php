@@ -31,8 +31,8 @@ if (strcmp($_SESSION['username'],$sessionInfo['username'])== 0 || $_SESSION['sup
     echo "<center>";
     echo "<img src='../../../pictures/user-trash-full-3.png' alt=''>";
 
-    echo "<h2>Deleted session $title</h2>";
-    echo "Session was deleded.";
+    echo "<h2>Deleted session</h2>";
+    echo "<p> $title</p>";
 
     echo "</center>";
 }

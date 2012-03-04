@@ -19,7 +19,7 @@ if ($_REQUEST['searchstring'] != null) {
     //        $whereSql = $whereSql ."AND ";
     //    }
     $searchstring = mysql_real_escape_string($_REQUEST['searchstring']);
-    $StringSearchSql = $whereSql . "MATCH(charter,notes, title,software) AGAINST ('$searchstring') ";
+    $StringSearchSql = $whereSql . "MATCH(charter,notes, title,software) AGAINST ('$searchstring' IN BOOLEAN MODE) ";
 }
 
 if ($_REQUEST['tester'] != null) {
@@ -57,6 +57,19 @@ if ($_REQUEST['team'] != null) {
     $team = $_REQUEST['team'];
     $whereSql = $whereSql . "teamname='$team' ";
 }
+
+if ($_REQUEST['area'] != null) {
+    if (strpos($whereSql, "WHERE") === false) {
+        $whereSql = "WHERE ";
+    }
+    else
+    {
+        $whereSql = $whereSql . "AND ";
+    }
+    $team = $_REQUEST['area'];
+    $whereSql = $whereSql . "areaname='$team' ";
+}
+
 if ($StringSearchSql == null) {
     if ($_REQUEST['status'] != null) {
         $status = $_REQUEST['status'];
@@ -83,32 +96,42 @@ if ($StringSearchSql == null) {
     }
 }
 
-if($whereSql!="")
-{
-   if($StringSearchSql!=null)
-       $StringSearchSql = " AND $StringSearchSql ";
+if ($whereSql != "") {
+    if ($StringSearchSql != null)
+        $StringSearchSql = " AND $StringSearchSql ";
 }
 else
 {
-    if($StringSearchSql!=null)
+    if ($StringSearchSql != null)
         $StringSearchSql = " WHERE $StringSearchSql ";
 }
 
 $data = array();
 $data['page'] = (int)$_REQUEST['page'];
 //$data['total'] = 500;
-$data = getNumberOfSessions($data, $whereSql,$StringSearchSql);
 
-$data = getSessions($data, $whereSql,$StringSearchSql);
+$data = getNumberOfSessions($data, $whereSql, $StringSearchSql);
+
+$data = getSessions($data, $whereSql, $StringSearchSql);
 
 echo json_encode($data);
 
 mysql_close($con);
 
 
-function getNumberOfSessions($data, $whereSql,$StringSearchSql)
+function getNumberOfSessions($data, $whereSql, $StringSearchSql)
 {
-    $sql = "SELECT COUNT(*) as numberofSessions FROM mission $whereSql";
+
+    $whereSql = str_replace("WHERE", " AND ", $whereSql);
+    $StringSearchSql = str_replace("WHERE", " AND ", $StringSearchSql);
+    if ($_REQUEST['area'] != null) {
+        $sql = "SELECT COUNT(*) as numberofSessions FROM mission as m, mission_status as ms, mission_areas as ma WHERE m.versionid = ms.versionid AND m.versionid=ma.versionid $whereSql $StringSearchSql";
+    }
+    else
+    {
+        $sql = "SELECT COUNT(*) as numberofSessions FROM mission as m, mission_status as ms WHERE m.versionid = ms.versionid $whereSql $StringSearchSql";
+    }
+    //$sql = "SELECT COUNT(*) as numberofSessions FROM mission as m, mission_status as ms WHERE m.versionid = ms.versionid $whereSql $StringSearchSql";
     //echo $sql;
     $result = mysql_query($sql);
     $result = mysql_fetch_row($result);
@@ -116,7 +139,7 @@ function getNumberOfSessions($data, $whereSql,$StringSearchSql)
     return $data;
 }
 
-function getSessions($data, $whereSql,$StringSearchSql)
+function getSessions($data, $whereSql, $StringSearchSql)
 {
     $numberOfSessionsToDisplay = 50;
     if (isset($_REQUEST['page'])) {
@@ -143,15 +166,26 @@ function getSessions($data, $whereSql,$StringSearchSql)
 
     $sortorder = $_REQUEST['sortorder'];
 
-    if($StringSearchSql==null)
-    {
-        $tablename ="sessioninfo";
+    if ($StringSearchSql == null) {
+        $tablename = "sessioninfo";
     }
     else
     {
-        $tablename ="mission";
+        $tablename = "mission";
     }
-    $sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+
+
+    if ($_REQUEST['area'] != null) {
+        $whereSql = str_replace("WHERE", "AND", $whereSql);
+        $StringSearchSql = str_replace("WHERE", "AND", $StringSearchSql);
+        $sql = "SELECT * FROM $tablename as m, mission_areas as ma WHERE m.versionid = ma.versionid $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+    }
+    else
+    {
+        $sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+    }
+
+    //$sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
 
     //echo $sql;
 
@@ -166,7 +200,20 @@ function getSessions($data, $whereSql,$StringSearchSql)
         $versionid = $row['versionid'];
         $title = $row['title'];
         $username = $row['username'];
-        $executed_timestamp = $row['executed_timestamp'];
+        //$testenvironment = $row['testenvironment'];
+
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT fullname ";
+        $sqlSelect .= "FROM   members ";
+        $sqlSelect .= "WHERE username = '$username' ";
+        $sqlSelect .= "ORDER  BY fullname ASC";
+
+        $result2 = mysql_query($sqlSelect);
+
+        $row2 = mysql_fetch_row($result2);
+        $fullname =  $row2[0];
+
+        $updated = $row['updated'];
         $teamname = $row['teamname'];
         $sprintname = $row['sprintname'];
         $executed_timestamp = $row['executed_timestamp'];
@@ -178,7 +225,7 @@ function getSessions($data, $whereSql,$StringSearchSql)
         $resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
 
         $rowMetrics = mysql_fetch_array($resultSessionMetrics);
-       // print_r($rowMetrics);
+        // print_r($rowMetrics);
 
         $executed = $rowMetrics['executed'];
         if ($executed == 0) {
@@ -186,7 +233,7 @@ function getSessions($data, $whereSql,$StringSearchSql)
         }
         $debriefed = $rowMetrics['debriefed'];
         $closed = $rowMetrics['closed'];
-        $updated = $rowMetrics['updated'];
+        //$updated = $rowMetrics['updated'];
 
         $status = "Not Executed";
         if ($executed == 1) {
@@ -198,7 +245,24 @@ function getSessions($data, $whereSql,$StringSearchSql)
         if ($closed == 1) {
             $status = "Closed";
         }
-        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$title", "$username", "$sprintname", "$teamname", "$updated", "$executed_timestamp", "keypad,siren"));
+
+        $areas = "";
+        $notFirstArea = false;
+        $sqlSelectArea = "";
+        $sqlSelectArea .= "SELECT * ";
+        $sqlSelectArea .= "FROM   mission_areas ";
+        $sqlSelectArea .= "WHERE  versionid = $versionid";
+        $resultSessionAreas = mysql_query($sqlSelectArea);
+        while ($row = mysql_fetch_array($resultSessionAreas)) {
+            if ($notFirstArea) {
+                $areas = $areas . ", ";
+            }
+            $areas = $areas . $row['areaname'];
+            $notFirstArea = true;
+        }
+
+
+        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$title", "$fullname", "$sprintname", "$teamname","$areas","$updated", "$executed_timestamp"));
     }
     return $data;
 }
