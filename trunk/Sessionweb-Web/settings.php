@@ -461,7 +461,7 @@ function echoMenu()
         echo "<a id=\"url_configuration\" href=\"settings.php?command=config\">Configuration</a> | ";
         echo "<a id=\"url_systemcheck\" href=\"settings.php?command=systemcheck\">System Check</a> | ";
 
-        echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
+        //echo "<a id=\"url_cvs\" href=\"cvs.php\">Export to cvs</a> | ";
         echo "<a id=\"url_custom\" href=\"settings.php?command=customfileds\">Manage custom fields</a> | ";
         echo "</div>";
     }
