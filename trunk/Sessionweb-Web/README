@@ -2,6 +2,41 @@
 Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
+
+==SessionWeb 18==
+Installation:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manualy execute 
+
+install/SessionwebDbLayoutDelta_1.7-_18.sql 
+to upgrade from 1.7->18
+
+Install manualy:
+got to sessionweb/install/install.php to check that r/w of folders is correct then
+execute install/SessionwebDbLayout_18.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Issue list for this release 18 ===
+ID	Type		Milestone	Summary
+64	Enhancement	Release18	Add support for pair testing 
+65	Defect		Release18	Remove deprecated session_.... usage in php
+66	Defect		Release18	Add add team to default list of filters of list view
+67	Defect		Release18	Replace list view with a new list view with ajax support
+68	Defect		Release18	Add free text search in list view
+69	Defect		Release18	Add support to add a user to a default team
+70	Defect		Release18	Add support to display a message after upgrade of sessionweb
+
+
+
 ==SessionWeb 1.7==
 Installation:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
