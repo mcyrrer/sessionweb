@@ -166,8 +166,8 @@ function getSessionMetrics($versionid)
 
     if (!$resultSessionMetrics) {
         echo "getSessionMetrics: " . mysql_error() . "<br/>";
-//        $logger->error(mysql_error());
-//        $logger->debug($sqlSelectSessionMetrics());
+        //        $logger->error(mysql_error());
+        //        $logger->debug($sqlSelectSessionMetrics());
     }
 
     return mysql_fetch_array($resultSessionMetrics);
@@ -458,17 +458,16 @@ function getSessionAdditionalTester($versionid)
     return $result;
 }
 
-function createPercentPieChart($setup, $test, $bug, $oppertunity,$sizeX=450,$sizeY=150,$labels=null)
+function createPercentPieChart($setup, $test, $bug, $oppertunity, $sizeX = 450, $sizeY = 150, $labels = null)
 {
 
-    if($labels==null)
-    {
-       $labels = array();
-       $labels[]="Setup($setup%)";
+    if ($labels == null) {
+        $labels = array();
+        $labels[] = "Setup($setup%)";
     }
     $totalTime = $setup + $test + $bug + $oppertunity;
 
-    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=".$sizeX."x".$sizeY."&amp;chd=t:$setup,$test,$bug,$oppertunity&amp;chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&amp;chco=FF0000|00FF00|0000FF|000000&";
+    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=" . $sizeX . "x" . $sizeY . "&amp;chd=t:$setup,$test,$bug,$oppertunity&amp;chl=Setup($setup%)|Test($test%)|Bug inv($bug%)|Opportunity($oppertunity%)|&amp;chco=FF0000|00FF00|0000FF|000000&";
     //	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
     return $imgURL;
 }
@@ -479,7 +478,7 @@ function createPercentPieChart($setup, $test, $bug, $oppertunity,$sizeX=450,$siz
  * @param int $sizeY
  * @return string
  */
-function createChartPie($valuesAndLables,$title=null,$sizeX=450, $sizeY=150,$colors=array('FF0000', '00FF00', '0000FF'))
+function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 150, $colors = array('FF0000', '00FF00', '0000FF'))
 {
     $barTitles = "";
     $barValues = "";
@@ -489,14 +488,13 @@ function createChartPie($valuesAndLables,$title=null,$sizeX=450, $sizeY=150,$col
         $barValues = $barValues . "," . $value;
     }
     //echo $barValues;
-    $barTitles = substr($barTitles,1,strlen($barTitles));
+    $barTitles = substr($barTitles, 1, strlen($barTitles));
     $barValues = substr($barValues, 1, strlen($barValues));
 
-    $colors = implode("|",$colors);
+    $colors = implode("|", $colors);
 
-    if($title!=null)
-    {
-        $title ="chtt=$title";
+    if ($title != null) {
+        $title = "chtt=$title";
     }
     else
     {
@@ -504,14 +502,15 @@ function createChartPie($valuesAndLables,$title=null,$sizeX=450, $sizeY=150,$col
     }
 
 
-    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=".$sizeX."x".$sizeY."&amp;chd=t:$barValues&amp;chl=$barTitles&amp;chco=$colors&$title";
+    $imgURL = "http://chart.apis.google.com/chart?cht=p3&amp;chd=s:Uf9a&amp;chs=" . $sizeX . "x" . $sizeY . "&amp;chd=t:$barValues&amp;chl=$barTitles&amp;chco=$colors&$title";
     //	echo "<img alt=\"pie chart\" src=\"$imgURL\" /\">";
     return $imgURL;
 }
 
-function echoTeamSelect($team)
+function echoTeamSelect($team, $createConnection = true)
 {
-    $con = getMySqlConnection();
+    if ($createConnection)
+        $con = getMySqlConnection();
 
 
     $sqlSelect = "";
@@ -540,7 +539,8 @@ function echoTeamSelect($team)
 
     echo "                                  </select>\n";
 
-    mysql_close($con);
+    if ($createConnection)
+        mysql_close($con);
 }
 
 function addNotification($sessionid, $user)
@@ -700,8 +700,7 @@ function echoAreaSelect($area)
 
 function echoAreaSelectSingel($area)
 {
-    if(!is_array($area))
-    {
+    if (!is_array($area)) {
         $areaTmp = array();
         $areaTmp[] = $area;
         $area = $areaTmp;
@@ -783,7 +782,7 @@ function echoStatusTypes($statusToSelect)
         echo "      <option value='1'>Not Executed</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Executed") == 0 || strcmp($statusToSelect, "2") == 0 ) {
+    if (strcmp($statusToSelect, "Executed") == 0 || strcmp($statusToSelect, "2") == 0) {
         echo "      <option value='2' selected=\"selected\">Executed</option>\n";
     }
     else
@@ -855,7 +854,7 @@ function getTesterFullName($username)
     return $row[0];
 }
 
-function echoTesterFullNameSelect($name,$removeInactiveUsers=false)
+function echoTesterFullNameSelect($name, $removeInactiveUsers = false)
 {
     $con = getMySqlConnection();
 
@@ -863,7 +862,7 @@ function echoTesterFullNameSelect($name,$removeInactiveUsers=false)
     $sqlSelect = "";
     $sqlSelect .= "SELECT username,fullname ";
     $sqlSelect .= "FROM   members ";
-    if($removeInactiveUsers)
+    if ($removeInactiveUsers)
         $sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
     $sqlSelect .= "ORDER  BY fullname ASC";
     $result = mysql_query($sqlSelect);
@@ -928,7 +927,7 @@ function echoCustomSelect($customTableName, $customSelectedArray)
     $con = getMySqlConnection();
     $sql = "SELECT * FROM custom_items WHERE tablename = '$customTableName'";
     $result = mysql_query($sql);
-    if ($_SESSION['settings'][$customTableName.'_multiselect'] == 1) {
+    if ($_SESSION['settings'][$customTableName . '_multiselect'] == 1) {
         echo "<select id='select_$customTableName' multiple='multiple' name='" . $customTableName . "[]'>\n";
 
     }
@@ -1009,10 +1008,10 @@ function GetSessionPublicKey($versionid)
     return $publickey;
 }
 
-function getUserSettings()
+function getUserSettings($createConnection = true)
 {
-
-    $con = getMySqlConnection();
+    if ($createConnection)
+        $con = getMySqlConnection();
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
@@ -1026,7 +1025,8 @@ function getUserSettings()
         echo "getUserSettings: " . mysql_error() . "<br/>";
     }
 
-    mysql_close($con);
+    if ($createConnection)
+        mysql_close($con);
     return mysql_fetch_array($result);
 }
 

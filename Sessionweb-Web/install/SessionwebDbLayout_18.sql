@@ -125,6 +125,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
+ALTER TABLE `sessionwebos`.`mission` ADD FULLTEXT(notes, charter, title,software);
+
 
 -- -----------------------------------------------------
 -- Table `sessionwebos`.`mission_status`
@@ -533,6 +535,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, 18);
+INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, 1.8);
 
 COMMIT;

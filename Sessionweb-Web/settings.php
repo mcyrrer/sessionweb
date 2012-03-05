@@ -46,7 +46,7 @@ function executeCommand()
         }
         elseif (strcmp($_REQUEST["command"], "changeusersettings") == 0)
         {
-            updateUserSettings($_REQUEST["usernametoupdate"], $_REQUEST["active"], $_REQUEST["admin"], $_REQUEST["superuser"]);
+            updateUserSettings($_REQUEST["usernametoupdate"], $_REQUEST["active"], $_REQUEST["admin"], $_REQUEST["superuser"], $_REQUEST["team"]);
         }
         elseif (strcmp($_GET["command"], "userinfo") == 0)
         {
@@ -730,11 +730,18 @@ function echoChangeListSettings()
     if ($usersettings['list_view'] == "mine") {
         echo "<option value=\"all\" >All sessions</option>\n";
         echo "<option value=\"mine\" selected>My own sessions</option>\n";
+        echo "<option value=\"team\">My teams sessions</option>\n";
     }
-    else
+    elseif ($usersettings['list_view'] == "team") {
+        echo "<option value=\"all\" >All sessions</option>\n";
+        echo "<option value=\"mine\">My own sessions</option>\n";
+        echo "<option value=\"team\" selected>My teams sessions</option>\n";
+    }else
     {
         echo "<option value=\"all\" selected>All sessions</option>\n";
         echo "<option value=\"mine\">My own sessions</option>\n";
+        echo "<option value=\"team\">My teams sessions</option>\n";
+
     }
 
     echo "</select>\n";
@@ -798,7 +805,7 @@ function echoChangeUserInfo($username)
     $result = mysql_query($sqlSelect);
 
     $row = mysql_fetch_array($result);
-
+    $rowUserSettings = getUserSettings(false);
     echo "<h2>Edit user " . htmlspecialchars($row['fullname']) . "</h2>";
     echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
     echo " <input type=\"hidden\" name=\"usernametoupdate\" value=\"" . urlencode($username) . "\">\n";
@@ -808,6 +815,7 @@ function echoChangeUserInfo($username)
     echo "<tr>";
     echo "<td><b>Name</b></td>";
     echo "<td><b>User name</b></td>";
+    echo "<td><b>Team name</b></td>";
     echo "<td><b>Active</b></td>";
     echo "<td><b>Admin</b></td>";
     echo "<td><b>Superuser</b></td>";
@@ -815,6 +823,9 @@ function echoChangeUserInfo($username)
     echo "<tr>";
     echo "<td>" . htmlspecialchars($row['fullname']) . "</td>";
     echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+    echo "<td>";
+    echoTeamSelect($rowUserSettings['teamname'], false);
+    echo "</td>";
     if ($row['active'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"active\" value=\"checked\" checked=\"checked\"></td>";
     }
@@ -1240,7 +1251,7 @@ function createNewUser()
     }
 }
 
-function updateUserSettings($userToChange, $active, $admin, $superuser)
+function updateUserSettings($userToChange, $active, $admin, $superuser, $team)
 {
     $activeToDb = 0;
     if ($active != "") {
@@ -1276,6 +1287,17 @@ function updateUserSettings($userToChange, $active, $admin, $superuser)
 
     if ($result) {
         echo "User settings changed\n";
+    }
+    else
+    {
+        echo mysql_error();
+    }
+
+    $sqlUpdate =  "UPDATE user_settings SET teamname='$team' WHERE username='$userToChange'";
+    $result = mysql_query($sqlUpdate);
+
+    if ($result) {
+
     }
     else
     {
