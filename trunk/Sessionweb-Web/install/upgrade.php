@@ -4,12 +4,12 @@ include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 include_once ('../config/db.php.inc');
 if ($_SESSION['useradmin'] != 1) {
-   echo "Admin privilege needed to be able to update sessionweb. Please login using a user that have admin rights.";
-   exit();
+    echo "Admin privilege needed to be able to update sessionweb. Please login using a user that have admin rights.";
+    exit();
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Install Sessionweb</title>
@@ -21,20 +21,20 @@ if ($_SESSION['useradmin'] != 1) {
 <body>
 <div id="container">
     <div><H1>Upgrade of Sessionweb</H1></div>
-<?php
-        if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null)
-    echoForm();
-else
-{
-    echo '                <fieldset>
+    <?php
+    if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null)
+        echoForm();
+    else
+    {
+        echo '                <fieldset>
                 <legend>Upgrading to latest sessionweb</legend>
                 <dl>
                     <dd>';
-    upgrade();
-    echo '    </dd>
+        upgrade();
+        echo '    </dd>
                 </dl>
             </fieldset>';
-}
+    }
     ?>
 </div>
 </body>
@@ -57,6 +57,8 @@ function upgrade()
     $versions['1.6'] = "SessionwebDbLayoutDelta_1.6-_1.7.sql";
     $versions['1.7'] = "SessionwebDbLayoutDelta_1.7-_18.sql";
 
+    $messages = array();
+    $messages['1.7'] = "If you got errors like 'Error Msg: Cannot delete or update a parent row: a foreign key constraint fails' during upgrade please execute /install/addFullTextSearchFromInnoDb.sql manually";
 
 
     $currentVersion = getSessionWebVersion();
@@ -73,8 +75,8 @@ function upgrade()
             mysql_query("SET CHARACTER SET utf8");
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
-            
-            $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion],DB_NAME_SESSIONWEB);
+
+            $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion], DB_NAME_SESSIONWEB);
             mysql_close($con);
 
             if (sizeof($resultOfSql) == 0) {
@@ -92,6 +94,9 @@ function upgrade()
                     echo "--------------ERROR--------------<br>";
                     echo $oneError . "<br>";
                 }
+            }
+            if (array_key_exists($currentVersion, $messages)) {
+                echo "<h3>" . $messages[$currentVersion] . "</h3>";
             }
 
         }

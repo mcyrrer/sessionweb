@@ -37,6 +37,10 @@ require_once('include/session_common_functions.php.inc');
             if (isset($_GET['team'])) {
                 echoTeamSelect($_REQUEST['team']);
             }
+            elseif ($userSettings['list_view'] == "team") {
+                $team = $userSettings['teamname'];
+                echoTeamSelect($team);
+            }
             else {
                 echoTeamSelect(null);
             }

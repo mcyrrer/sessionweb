@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once('../../../include/validatesession.inc');
-require_once ('../../../include/db.php');
-include_once('../../../../config/db.php.inc');
-include_once ('../../../../include/commonFunctions.php.inc');
+require_once('../../../../include/validatesession.inc');
+require_once('../../../../include/db.php');
+require_once('../../../../config/db.php.inc');
+require_once('../../../../include/commonFunctions.php.inc');
 
 $con=getMySqlConnection();
 
