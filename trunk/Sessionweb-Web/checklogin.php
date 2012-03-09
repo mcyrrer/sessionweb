@@ -17,15 +17,18 @@ $myusername=$_POST['myusername'];
 $mypassword=$_POST['mypassword'];
 // encrypt password
 $encrypted_mypassword=md5($mypassword);
-
+ //echo   $encrypted_mypassword;
 // To protect MySQL injection (more detail about MySQL injection)
 $myusername = stripslashes($myusername);
 $mypassword = stripslashes($mypassword);
 $myusername = mysql_real_escape_string($myusername);
 $mypassword = mysql_real_escape_string($mypassword);
 
+//echo "Password:".$mypassword;
+
 //encrypt password
 $mypassword = md5($mypassword);
+//echo "[".$mypassword."]<br>";
 
 $sql = "";
 $sql .= "SELECT * ";
