@@ -306,8 +306,11 @@ $(document).ready(function () {
             if (status == "Not Executed") {
                 command = "edit";
             }
+            if (status == "Executed") {
+                command = "debrief";
+            }
             var url = "session.php?sessionid=" + id + "&command=" + command;
-            window.location = url
+            window.open(url, '_blank');
         });
     });
 

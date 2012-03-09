@@ -12,7 +12,7 @@ require_once ('include/session_view_functions.php.inc');
 require_once ('include/session_database_functions.php.inc');
 require_once ('include/session_common_functions.php.inc');
 if (is_file("include/customfunctions.php.inc")) {
-    include "require_once/customfunctions.php.inc";
+    include "include/customfunctions.php.inc";
 }
 
 

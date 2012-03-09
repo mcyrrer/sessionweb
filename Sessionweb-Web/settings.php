@@ -724,6 +724,8 @@ function echoChangeListSettings()
     echo "<h2>Change user settings</h2>";
     echo "<form name=\"userinfo\" action=\"settings.php\" method=\"POST\">";
 
+    echo "<h3>Settings for List sessions</h3>";
+
     echo "Choose default filter for  the \"List sessions\" page:<input type=\"hidden\" name=\"command\" value= \"changelistsettings\">\n";
 
     echo "<select id=\"changelistsettings_options\" name=\"listsettings\">\n";
@@ -745,29 +747,30 @@ function echoChangeListSettings()
     }
 
     echo "</select>\n";
+    echo "<h3>Settings for new session</h3>";
 
     if ($_SESSION['settings']['team'] == 1) {
         echo "<br>\n";
         echo "Select default team:\n";
-        echoTeamSelect("");
+        echoTeamSelect($usersettings['default_team']);
     }
 
     if ($_SESSION['settings']['sprint'] == 1) {
         echo "<br>\n";
         echo "Select default sprint:\n";
-        echoSprintSelect("");
+        echoSprintSelect($usersettings['default_sprint']);
     }
 
     if ($_SESSION['settings']['teamsprint'] == 1) {
         echo "<br>\n";
         echo "Select default team sprint:\n";
-        echoTeamSprintSelect("");
+        echoTeamSprintSelect($usersettings['default_teamsprint']);
     }
 
     if ($_SESSION['settings']['area'] == 1) {
         echo "<br>\n";
         echo "Select default area:\n";
-        echoAreaSelectSingel("");
+        echoAreaSelectSingel($usersettings['default_area']);
     }
 
 
@@ -1079,10 +1082,11 @@ function updateUserPassword($username, $password1, $password2)
 
             $con = getMySqlConnection();
 
-
+            $password1 = stripslashes($password1);
             $username = mysql_real_escape_string($username);
 
             $md5password = md5($password1);
+            //echo   $md5password;
             $username = urldecode($username);
             $sqlUpdate = "";
             $sqlUpdate .= "UPDATE `members` ";
