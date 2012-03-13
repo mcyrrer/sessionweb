@@ -286,8 +286,14 @@ $(document).ready(function () {
         setPermSearchUrl();
     });
 
+    $("#searchstring").change( function() {
+        $("#select_status_type").val(0);
+        $("#select_status_type").attr('disabled', '');
+    });
+
     $('#clearSearchSessions').click(function () {
         $('#searchstring').val('');
+        $("#select_status_type").removeAttr('disabled');
         $('#flexgrid1').flexOptions({newp:1}).flexReload();
     });
 
@@ -314,5 +320,7 @@ $(document).ready(function () {
             window.open(url, '_blank');
         });
     });
+
+
 
 });
