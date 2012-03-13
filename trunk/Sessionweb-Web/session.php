@@ -19,11 +19,10 @@ if (is_file("include/customfunctions.php.inc")) {
 if (strcmp($_REQUEST["command"], "edit") == 0) {
     getMySqlConnection();
     $rowSessionData = getSessionData($_GET["sessionid"]);
-    if(strcmp($_SESSION['username'],$rowSessionData['username'])!= 0 && $_SESSION['superuser']!=1 && $_SESSION['useradmin']!=1)
-    {
+    if (strcmp($_SESSION['username'], $rowSessionData['username']) != 0 && $_SESSION['superuser'] != 1 && $_SESSION['useradmin'] != 1) {
         echo "You are not the owner of the session, please reassign it to be able to edit it.";
         mysql_close();
-        $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=".view;
+        $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=" . view;
         header("location:$url");
         die();
     }
@@ -276,6 +275,7 @@ function saveSession()
             $metrics["bugpercent"] = $_REQUEST["bugpercent"];
             $metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
             $metrics["duration"] = $_REQUEST["duration"];
+            $metrics["mood"] = $_REQUEST["mood"];
             saveSession_InsertSessionMetricsToDb($versionid, $metrics);
 
             //Create areas for session
@@ -295,10 +295,10 @@ function saveSession()
             saveSession_InsertSessionSessionsLinksToDb($versionid);
 
             //Save Custom fields to db
-            $arr = array("custom1","custom2","custom3");
-            foreach($arr as $oneField)
+            $arr = array("custom1", "custom2", "custom3");
+            foreach ($arr as $oneField)
             {
-                if(isset($_REQUEST[$oneField]))
+                if (isset($_REQUEST[$oneField]))
                     saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
             }
 
@@ -464,8 +464,7 @@ function echoSessionForm()
         $rowSessionData = getSessionData($_GET["sessionid"]);
         $insertSessionData = true;
 
-        if($_SESSION['username']!=$rowSessionData['username'])
-        {
+        if ($_SESSION['username'] != $rowSessionData['username']) {
 
         }
     }
@@ -588,17 +587,17 @@ function echoSessionForm()
     }
 
 
-        echo "                        <tr>\n";
-        echo "                              <td valign=\"top\">Additional tester: </td>\n";
-        echo "                              <td>\n";
-        if ($_REQUEST['sessionid'] != "")
-            echoAdditionalTesterSelect($additionalTesters);
-        else
-            echoAdditionalTesterSelect(null);
+    echo "                        <tr>\n";
+    echo "                              <td valign=\"top\">Additional tester: </td>\n";
+    echo "                              <td>\n";
+    if ($_REQUEST['sessionid'] != "")
+        echoAdditionalTesterSelect($additionalTesters);
+    else
+        echoAdditionalTesterSelect(null);
 
 
-        echo "                              </td>\n";
-        echo "                        </tr>\n";
+    echo "                              </td>\n";
+    echo "                        </tr>\n";
 
     if ($_SESSION['settings']['area'] == 1) {
         echo "                        <tr>\n";
@@ -809,7 +808,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
-    echo "                              <td>Metrics: </td>\n";
+    echo "                              <td valign='top'>Metrics: </td>\n";
     echo "                              <td>\n";
     echo "                                    <table width=\"1024\" border=\"0\">\n";
     echo "                                          <tr>\n";
@@ -845,6 +844,14 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                                                </td>\n";
     echo "                                          </tr>\n";
     echo "                                    </table>\n";
+
+    echo "                                          <tr>\n";
+    echo "                                                <td>Session mood: </td>\n";
+    echo "                                                <td>\n";
+
+    echoMoodSelection($rowSessionMetric["mood"]);
+    echo "                                                </td>\n";
+    echo "                                          </tr>\n";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -926,6 +933,46 @@ function echoDurationSelection($selected)
             echo "                                      <option>$index</option>\n";
         }
     }
+}
+
+function echoMoodSelection($selected)
+{
+
+    if ($selected == 0)
+        echo "<input type='radio' name='mood' value='0' style='display:none;' />";
+    else
+        echo "<input type='radio' name='mood' value='0' style='display:none;' checked />";
+
+
+    echo "<table>";
+    echo "<tr>";
+    echo "<td><img src='pictures/emotes/face-cool.png' alt=''></td>";
+    echo "<td><img src='pictures/emotes/face-plain.png' alt=''></td>";
+    echo "<td><img src='pictures/emotes/face-sad.png' alt=''></td>";
+    echo "<td><img src='pictures/emotes/face-angry.png' alt=''></td>";
+    echo "</tr>";
+    echo "<tr>";
+    if ($selected == 1)
+        echo "<td><input type='radio' name='mood' value='1' checked /></td>";
+    else
+        echo "<td><input type='radio' name='mood' value='1'  /></td>";
+
+    if ($selected == 2)
+        echo "<td><input type='radio' name='mood' value='2' checked /></td>";
+    else
+        echo "<td><input type='radio' name='mood' value='2' /></td>";
+
+    if ($selected == 3)
+        echo "<td><input type='radio' name='mood' value='3' checked /></td>";
+    else
+        echo "<td><input type='radio' name='mood' value='3' /></td>";
+
+    if ($selected == 4)
+        echo "<td><input type='radio' name='mood' value='4' checked /></td>";
+    else
+        echo "<td><input type='radio' name='mood' value='4' /></td>";
+    echo "</tr>";
+    echo "</table>";
 }
 
 /**

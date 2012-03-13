@@ -12,10 +12,27 @@ echo "<h1>Statistics/Graphs</h1>";
 ?>
 <table>
     <tr>
-        <td><a class="largepopup cboxElement" href="graph/sprintreport.php">Sprint report</a> <td>
-        <td><a class="mediumpopup cboxElement" href="graph/timedistribution.php">Time distribution</a> <td>
-        <td><a class="mediumpopup cboxElement" href="graph/wordcloud.php?all=true">Word cloud</a> <td>
-        <td><a class="mediumpopup cboxElement" href="graph/progressreport.php">Progress over time</a> <td>
+        <td width="600">
+            <p><span class="larger"> <a class="largepopup cboxElement" href="graph/sprintreport.php">Sprint report</a></span></p>
+
+            <p><img src="pictures/sprintreport.png" alt=""></p>
+        </td>
+        <td>
+            <p><span class="larger"><a class="mediumpopup cboxElement" href="graph/timedistribution.php">Time distribution</a></span></p>
+
+            <p><img src="pictures/timedistribution.png" alt=""></p>
+
+        </td>
+    </tr>
+    <tr>
+        <td width="600">
+            <p><span class="larger"><a class="mediumpopup cboxElement" href="graph/wordcloud.php?all=true">Word cloud</a></span></p>
+            <p><img src="pictures/wordcloud.png" alt=""></p>
+        </td>
+        <td>
+            <p><span class="larger"><a class="mediumpopup cboxElement" href="graph/progressreport.php">Progress over time</a></span></p>
+            <p><img src="pictures/progressovertime.png" alt=""></p>
+        <td>
 
 
     </tr>

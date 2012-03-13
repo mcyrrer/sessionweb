@@ -57,6 +57,8 @@ function upgrade()
     $versions['1.5'] = "SessionwebDbLayoutDelta_1.5-_1.6.sql";
     $versions['1.6'] = "SessionwebDbLayoutDelta_1.6-_1.7.sql";
     $versions['1.7'] = "SessionwebDbLayoutDelta_1.7-_18.sql";
+    $versions['18'] = "SessionwebDbLayoutDelta_18-_19.sql";
+
 
     $messages = array();
     $messages['1.7'] = "If you got errors like 'Error Msg: Cannot delete or update a parent row: a foreign key constraint fails' during upgrade please execute /install/addFullTextSearchFromInnoDb.sql manually";
@@ -83,10 +85,14 @@ function upgrade()
             if (sizeof($resultOfSql) == 0) {
                 $versionAfterUpgrade = getSessionWebVersion();
                 echo "Upgraded to version <b>$versionAfterUpgrade</b><br>";
+                if (array_key_exists($currentVersion, $messages)) {
+                    echo "<h3>" . $messages[$currentVersion] . "</h3>";
+                }
                 //Do recursive upgrade until latest version...
                 if ($versionAfterUpgrade != $currentVersion && array_key_exists($versionAfterUpgrade, $versions)) {
                     upgrade();
                 }
+
             }
             else
             {
@@ -96,9 +102,7 @@ function upgrade()
                     echo $oneError . "<br>";
                 }
             }
-            if (array_key_exists($currentVersion, $messages)) {
-                echo "<h3>" . $messages[$currentVersion] . "</h3>";
-            }
+
 
         }
 
