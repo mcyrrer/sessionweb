@@ -186,6 +186,7 @@ $(function () {
         dataType:'json',
         colModel:[
             {display:'ID', name:'id', width:25, sortable:true, align:'left'},
+//            {display:'Notes', name:'notes', width:30, sortable:true, align:'left'},
             {display:'Status', name:'status', width:65, sortable:true, align:'left'},
             {display:'Title', name:'title', width:300, sortable:false, align:'left'},
             {display:'User', name:'user', width:100, sortable:false, align:'left'},
