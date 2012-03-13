@@ -76,7 +76,7 @@ function dateLineGraphGoogle()
     $sql .= "GROUP BY DATE(executed_timestamp)  ";
     $sql .= "ORDER BY date;";
     //    echo "    <script type='text/javascript'>\n";
-    //    echo " alert('$sql');\n";
+        echo " alert('$sql');\n";
     //    echo "    </script>\n";
     $result = mysql_query($sql);
 
