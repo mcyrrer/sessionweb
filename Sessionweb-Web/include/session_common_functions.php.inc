@@ -2,7 +2,7 @@
 
 function echoExecutedStatus($rowSessionStatus)
 {
-    if($rowSessionStatus["executed"]==1)
+    if($rowSessionStatus["mood"]==1)
     {
         echo "                          Executed\n";
     }
@@ -10,6 +10,22 @@ function echoExecutedStatus($rowSessionStatus)
     {
         echo "                          Not Executed\n";
     }
+}
+
+function echoMoodStatus($rowSessionMetric)
+{
+
+    if($rowSessionMetric["mood"]==1)
+        echo '<img src="pictures/emotes/face-cool.png" alt=""';
+    elseif($rowSessionMetric["mood"]==2)
+        echo '<img src="pictures/emotes/face-plain.png" alt=""';
+    elseif($rowSessionMetric["mood"]==3)
+        echo '<img src="pictures/emotes/face-sad.png" alt=""';
+    elseif($rowSessionMetric["mood"]==4)
+        echo '<img src="pictures/emotes/face-angry.png" alt=""';
+    else
+        echo '-';
+
 }
 
 function echoDebriefedStatus($rowSessionStatus)

@@ -505,12 +505,14 @@ function saveSession_InsertSessionMetricsToDb($versionid, $metrics)
     $sqlInsert .= "             `test_percent`, ";
     $sqlInsert .= "             `bug_percent`, ";
     $sqlInsert .= "             `opportunity_percent`, ";
+    $sqlInsert .= "             `mood`, ";
     $sqlInsert .= "             `duration_time`) ";
     $sqlInsert .= "VALUES      ('$versionid', ";
     $sqlInsert .= "             '" . mysql_real_escape_string($metrics["setuppercent"]) . "', ";
     $sqlInsert .= "             '" . mysql_real_escape_string($metrics["testpercent"]) . "', ";
     $sqlInsert .= "             '" . mysql_real_escape_string($metrics["bugpercent"]) . "', ";
     $sqlInsert .= "             '" . mysql_real_escape_string($metrics["oppertunitypercent"]) . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($metrics["mood"]) . "', ";
     $sqlInsert .= "             '" . mysql_real_escape_string($metrics["duration"]) . "')";
 
     $result = mysql_query($sqlInsert);
@@ -695,6 +697,7 @@ function saveSession_UpdateSessionMetricsToDb($versionid)
     $sqlUpdate .= "       `test_percent` = '" . mysql_real_escape_string($_REQUEST["testpercent"]) . "', ";
     $sqlUpdate .= "       `bug_percent` = '" . mysql_real_escape_string($_REQUEST["bugpercent"]) . "', ";
     $sqlUpdate .= "       `opportunity_percent` = '" . mysql_real_escape_string($_REQUEST["oppertunitypercent"]) . "', ";
+    $sqlUpdate .= "       `mood` = '" . mysql_real_escape_string($_REQUEST["mood"]) . "', ";
     $sqlUpdate .= "       `duration_time` = '" . mysql_real_escape_string($_REQUEST["duration"]) . "' ";
     $sqlUpdate .= "WHERE versionid='$versionid'";
 

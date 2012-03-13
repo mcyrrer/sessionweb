@@ -245,6 +245,15 @@ function echoViewSession()
                     echo "                    </div>\n";
                     echo "                </td>\n";
                 }
+                echo "                </tr>";
+                echo "                <tr>";
+
+                echo "                <td align=\"left\" valign='top'>\n";
+                echo "                      <h4>Mood</h4>\n";
+                echo "                      <div style=\"background-color:#efefef;\">\n";
+                echoMoodStatus($rowSessionMetric);
+                echo "                      </div>\n";
+                echo "                </td>\n";
 
                 echo "                <td align=\"left\" valign='top'>\n";
                 echo "                      <h4>Status</h4>\n";
