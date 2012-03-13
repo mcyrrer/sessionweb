@@ -23,7 +23,7 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
 <head>
     <meta charset="latin-1"/>
     <title>Session word cloud</title>
-    <link rel="stylesheet" href="../css/wordcloud.css">
+    <link rel="stylesheet" href="../css/sessionwebcss.css">
     <script type="text/javascript" src="../js/jquery-1.4.4.js"></script>
     <script type="text/javascript" src="../js/sessionwebjquery.js"></script>
     <script type="text/javascript" src="../js/jquery.colorbox-min.js"></script>
@@ -33,85 +33,137 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
 
 <body>
 
-
 <?php
+echo '<div id="wordcloudbg">';
 
-$con =getMySqlConnection();
-
-if ($_GET['sessionid'] != "") {
-    $sessionid = $_GET['sessionid'];
-    $versionId = getSessionVersionId($_GET['sessionid']);
-    $sessionData = getSessionData($sessionid);
-
-    //print_r($sessionData);
-    $sessionNotes = $sessionData['notes'];
-    $sessionCharter = $sessionData['charter'];
-    $notesWordCount = countWords($sessionData['notes']);
-    $charterWordCount = countWords($sessionData['charter']);
-
-    $wordCount = array_merge($notesWordCount, $charterWordCount);
-    if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
-        echo "<a href='?sessionid=$sessionid&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
-    }
-    if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
-        echo "<H2>Click on the word to add to black list.</H2><br>";
-        echo "<div id='addedword'></div>";
-    }
-    //    print_r($wordCount);
-    if (count($wordCount) != 0) {
-        printTagCloud($wordCount, 30);
-    }
+if ($_GET['sessionid'] != "")
+    printCloud();
+elseif (isset($_REQUEST['tester']) || isset($_REQUEST['team']) || isset($_REQUEST['sprint'])) {
+    //$con = getMySqlConnection();
+    printCloud();
+    //mysql_close($con);
 }
-if ($_GET['all'] != "") {
-    $sql = "SELECT title, notes,charter FROM sessioninfo ";
-    $sql .= "WHERE executed = 1  ";
-    if ($_GET['tester'] != null) {
-        if ($_SESSION['useradmin'] == 1) {
-            $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
-        }
-    }
-    if ($_GET['team'] != null) {
-        if ($_SESSION['useradmin'] == 1) {
-            $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
-        }
-    }
-    if ($_GET['sprint'] != null) {
-        $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
-    }
+else
+{
+    if (isset($_REQUEST['edit'])) {
+        echo '<form method="post" action="wordcloud.php?all=true&edit=yes">';
 
-    $resultSession = getSessionNotesAncCarters($sql);
-    $num_rows = mysql_num_rows($resultSession);
-    $wordCountArray = array();
-    while ($row = mysql_fetch_array($resultSession)) {
-        $sessionNotes = $row['notes'];
-        $sessionCharter = $row['charter'];
-        $wordCountArray = array_merge_recursive($wordCountArray, countWords($row['notes']));
-        $wordCountArray = array_merge_recursive($wordCountArray, countWords($row['notes']));
     }
+    else
 
-    if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
-        echo "<a href='?all=yes&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
+        echo '<form method="post" action="wordcloud.php?all=true">';
+
+    echo "Tester:";
+    if ($_SESSION['useradmin'] == 1) {
+        echoTesterFullNameSelect("");
     }
-    if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
-        echo "<H2>Click on the word to add to black list.</H2><br>";
-        echo "<div id='addedword' class='class'></div>";
-    }
-    $wordCountArraySummary = array();
-    foreach ($wordCountArray as $key => $oneWordArray)
+    else
     {
-        $cnt = 0;
-        foreach ($oneWordArray as $oneWordCount)
-        {
-            $cnt = $cnt + $oneWordCount;
+        echo "<select id='select_tester' name='tester'> \n";
+        echo "        <option></option>\n";
+        echo "        <option>" . $_SESSION['username'] . "</option> \n";
+        echo "</select>\n";
+
+    }
+
+    if ($_SESSION['useradmin'] == 1) {
+        echo "Team:";
+        echoTeamSelect("");
+    }
+
+    echo "Sprint:";
+    echoSprintSelect("");
+
+
+    echo '<input type="submit" name="Submit" value="Generate report">';
+}
+echo "</div>";
+function printCloud()
+{
+    $con = getMySqlConnection();
+
+    if ($_GET['sessionid'] != "") {
+        $sessionid = $_GET['sessionid'];
+        $versionId = getSessionVersionId($_GET['sessionid']);
+        $sessionData = getSessionData($sessionid);
+
+        //print_r($sessionData);
+        $sessionNotes = $sessionData['notes'];
+        $sessionCharter = $sessionData['charter'];
+        $notesWordCount = countWords($sessionData['notes']);
+        $charterWordCount = countWords($sessionData['charter']);
+
+        $wordCount = array_merge($notesWordCount, $charterWordCount);
+        if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
+            echo "<a href='?sessionid=$sessionid&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
         }
-        $wordCountArraySummary[$key] = $cnt;
+        if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
+            echo "<H2>Click on the word to add to black list.</H2><br>";
+            echo "<div id='addedword'></div>";
+        }
+        //    print_r($wordCount);
+        if (count($wordCount) != 0) {
+            printTagCloud($wordCount, 30);
+        }
+    }
+    if ($_GET['all'] != "") {
+        $sql = "SELECT title, notes,charter FROM sessioninfo ";
+        $sql .= "WHERE executed = 1  ";
+        if ($_GET['tester'] != null) {
+            if ($_SESSION['useradmin'] == 1) {
+                $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
+            }
+        }
+        if ($_GET['team'] != null) {
+            if ($_SESSION['useradmin'] == 1) {
+                $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
+            }
+        }
+        if ($_GET['sprint'] != null) {
+            $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
+        }
+        // echo $sql;
+
+        $resultSession = getSessionNotesAncCarters($sql);
+        $num_rows = mysql_num_rows($resultSession);
+        $wordCountArray = array();
+        while ($row = mysql_fetch_array($resultSession)) {
+            $sessionNotes = $row['notes'];
+            $sessionCharter = $row['charter'];
+            $wordCountArray = array_merge_recursive($wordCountArray, countWords($sessionNotes));
+            $wordCountArray = array_merge_recursive($wordCountArray, countWords($sessionCharter));
+        }
+
+        if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
+            echo "<a href='?all=yes&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
+        }
+        if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
+            echo "<H2>Click on the word to add to black list.</H2><br>";
+            echo "<div id='addedword' class='class'></div>";
+        }
+        $wordCountArraySummary = array();
+        //echo count($wordCountArray);
+        foreach ($wordCountArray as $key => $oneWordArray)
+        {
+            //echo "_START_<br>Key:" . $key;
+            //print_r($oneWordArray);
+            //echo "<br>_END_<br>";
+            $cnt = 1;
+            if (is_array($oneWordArray))
+                foreach ($oneWordArray as $oneWordCount)
+                {
+                    $cnt = $cnt + $oneWordCount;
+                }
+            $wordCountArraySummary[$key] = $cnt;
+            // echo  "$key : $cnt\n";
+
+        }
+        if (count($wordCountArray) != 0) {
+            printTagCloud($wordCountArraySummary, 100);
+            //print_r($wordCountArraySummary);
+        }
 
     }
-
-    if (count($wordCountArray) != 0) {
-        printTagCloud($wordCountArraySummary, 100);
-    }
-
 }
 
 ?>
@@ -158,14 +210,15 @@ function getStopWordList()
 
 function printTagCloud($tags, $maxItemToDisplay)
 {
+
     arsort($tags);
     $tags = array_slice($tags, 0, $maxItemToDisplay);
     // $tags is the array
     ksort($tags);
 
 
-    $max_size = 40; // max font size in pixels
-    $min_size = 8; // min font size in pixels
+    $max_size = 80; // max font size in pixels
+    $min_size = 10; // min font size in pixels
 
     // largest and smallest array values
     $max_qty = max(array_values($tags));
@@ -194,12 +247,17 @@ function printTagCloud($tags, $maxItemToDisplay)
             else
             {
                 //                echo '<a href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</a> ';
-                echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</span> ';
+                if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes")
+                    echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</span>';
+                else
+                    echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '"><a href="../list2.php?searchstring=' . $key . '" target="_top">' . $key . '</a></span> ';
+
 
             }
         }
 
     }
+
 }
 
 /**
@@ -235,9 +293,10 @@ function countWords($words, $wordCountArray = array())
             }
         }
     }
-    //     print_r($wordCountArray);
+    //print_r($wordCountArray);
 
     return $wordCountArray;
+
 
 }
 

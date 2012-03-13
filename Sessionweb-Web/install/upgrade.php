@@ -1,5 +1,6 @@
 <?php
-require_once ('../include/loggedincheck.php');
+session_start();
+require_once('../include/validatesession.inc');
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 include_once ('../config/db.php.inc');
@@ -180,7 +181,7 @@ function echoForm()
             </fieldset>
 
             <fieldset class="action">
-                <input type="submit" name="submit" id="submit" value="Install"/>
+                <input type="submit" name="submit" id="submit" value="Upgrade"/>
             </fieldset>
         </form>';
 }

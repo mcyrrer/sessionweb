@@ -121,8 +121,11 @@ $(document).ready(function () {
 //**************FILE UPLOAD i session.php
     $(".uploadajax").colorbox({iframe:true, width:"80%", height:"80%"});
 
-//**************Large popuå i session.php
+//**************Large popup i session.php
     $(".largepopup").colorbox({iframe:true, width:"90%", height:"95%"});
+
+//**************medium popup i session.php
+    $(".mediumpopup").colorbox({iframe:true, width:"50%", height:"50%"});
 
 
 //**************Generic Colorboxoverlay

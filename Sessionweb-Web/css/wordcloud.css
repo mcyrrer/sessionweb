@@ -1,10 +1,7 @@
 body {
-	background-color:#efefef;
-	font-family:monospace;
-	margin: 0px auto;
-	max-width:900px;
-	/*border:solid;*/
-	/*border-color:#FFFFFF;*/
+    background-image: url("../pictures/cloud.png");
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 header {
