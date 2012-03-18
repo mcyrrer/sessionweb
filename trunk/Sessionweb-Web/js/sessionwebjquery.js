@@ -34,7 +34,31 @@ $(document).ready(function () {
     var sPath = window.location.pathname;
     var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 
-    //Initiation of WYSIWUG editor
+///****Save SessionForm
+    $("#sessionform").validate({
+        debug: false,
+        rules: {
+        },
+        messages: {
+        },
+        submitHandler: function(form) {
+
+            // do other stuff for a valid form
+            $.post('session.php?command=save', $("#sessionform").serialize(), function(data) {
+             //   alert('Saved');//$('#results').html(data);
+                $.fn.colorbox({
+                    html:"<h2>Session saved</h2><img src=\"pictures/document-save-5.png\" alt=\"\"><br>Session is saved.",
+                    //href:'api/session/reassign/?sessionid=' + id,
+                    open:true,
+                    width:500,
+                    height:500
+
+                });
+            });
+        }
+    });
+
+//Initiation of WYSIWUG editor
     if (sPage == "session.php" && command == "edit" || sPage == "session.php" && command == "new") {
         CKEDITOR.config.toolbar_Basic =
             [
@@ -160,7 +184,7 @@ $(document).ready(function () {
                 if ($(document).getUrlParam("command") == "edit") {
 
                     $('#sessionform').autosave({
-                        interval:60000, //60000=every 1min
+                        interval:10000, //60000=every 1min
                         save:function (e, o) {
                             var today = new Date();
                             var h = today.getHours();

@@ -64,13 +64,14 @@ function saveSession_GetSessionIdForNewSession()
 }
 
 
-function saveSession_InsertSessionDataToDb($sessionid)
+function saveSession_InsertSessionDataToDb($sessionid, $echo = true)
 {
 
 
     if ($_REQUEST["title"] == "") {
         $_REQUEST["title"] = "Unnamed Session";
-        echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
+        if($echo)
+            echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
     }
     $sqlInsert = "";
     $sqlInsert .= "INSERT INTO mission ";
@@ -925,11 +926,15 @@ function deleteSessionFromDatabase($sessionId)
 
 function doesSessionKeyExist($publickey)
 {
+    if($publickey==null)
+    {
+        return false;
+    }
     $sqlSelect = "";
     $sqlSelect .= "SELECT publickey ";
     $sqlSelect .= "FROM   `mission` ";
     $sqlSelect .= "WHERE  publickey = '$publickey'";
-
+    echo $sqlSelect;
     $result = mysql_query($sqlSelect);
 
     if (!$result) {

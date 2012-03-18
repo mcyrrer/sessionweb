@@ -15,18 +15,19 @@ if (is_file("include/customfunctions.php.inc")) {
     include "include/customfunctions.php.inc";
 }
 
-
 if (strcmp($_REQUEST["command"], "edit") == 0) {
-    getMySqlConnection();
-    $rowSessionData = getSessionData($_GET["sessionid"]);
-    if (strcmp($_SESSION['username'], $rowSessionData['username']) != 0 && $_SESSION['superuser'] != 1 && $_SESSION['useradmin'] != 1) {
-        echo "You are not the owner of the session, please reassign it to be able to edit it.";
+    if (isset($_REQUEST["sessionid"])) {
+        getMySqlConnection();
+        $rowSessionData = getSessionData($_GET["sessionid"]);
+        if (strcmp($_SESSION['username'], $rowSessionData['username']) != 0 && $_SESSION['superuser'] != 1 && $_SESSION['useradmin'] != 1) {
+            echo "You are not the owner of the session, please reassign it to be able to edit it.";
+            mysql_close();
+            $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=" . view;
+            header("location:$url");
+            die();
+        }
         mysql_close();
-        $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=" . view;
-        header("location:$url");
-        die();
     }
-    mysql_close();
 }
 
 
@@ -41,18 +42,6 @@ elseif (strcmp($_REQUEST["command"], "view") == 0)
 elseif (strcmp($_REQUEST["command"], "edit") == 0)
 {
     echoSessionForm();
-}
-elseif (strcmp($_REQUEST["command"], "delete") == 0)
-{
-    deleteSession();
-}
-elseif (strcmp($_REQUEST["command"], "reassign") == 0)
-{
-    reassignSession();
-}
-elseif (strcmp($_REQUEST["command"], "reassignexecute") == 0)
-{
-    reassignSessionExecute();
 }
 elseif (strcmp($_REQUEST["command"], "debrief") == 0)
 {
@@ -91,36 +80,6 @@ include("include/footer.php.inc");
 
 ob_end_flush();
 
-function reassignSessionExecute()
-{
-
-    $sessionid = $_REQUEST["sessionid"];
-    $tester = $_REQUEST["tester"];
-    $con = getMySqlConnection();
-
-    $result = updateSessionOwner($sessionid, $tester);
-    mysql_close($con);
-    if ($result) {
-        echo "Session reassigned.\n";
-    }
-    else
-    {
-        echo "Error, could not reassign session.\n";
-    }
-
-}
-
-function reassignSession()
-{
-    $sessionid = $_REQUEST["sessionid"];
-    echo "<h2>Reassign session</h2>\n";
-    echo "Reassign session $sessionid to:\n";
-    echo "<form id=\"reassignform\" name=\"reassignform\" action=\"session.php?command=reassignexecute\" method=\"POST\" accept-charset=\"utf-8\">\n";
-    echoTesterSelect("");
-    echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
-    echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
-    echo "</form>\n";
-}
 
 function echoDebriefSession()
 {
@@ -143,6 +102,7 @@ function echoDebriefSession()
 
         echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
         echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
+
         echo "<h4>Debrief notes</h4>\n";
 
         echo "<textarea id=\"debriefnotes\" class=\"ckeditor\" name=\"debriefnotes\" rows=\"20\" cols=\"50\" style=\"width:1024px;height:200px;\">$debriefComments</textarea>\n";
@@ -219,11 +179,12 @@ function saveDebriefedSession()
 }
 
 
-function checkSessionTitleNotToLong()
+function checkSessionTitleNotToLong($echo = true)
 {
     $_TITLELENGTH = 500;
 
-    echo "<h1>Save session</h1>\n";
+    if ($echo)
+        echo "<h1>Save session</h1>\n";
     if (strlen($_REQUEST["title"]) > $_TITLELENGTH) {
         echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br/>\n";
     }
@@ -232,11 +193,11 @@ function checkSessionTitleNotToLong()
 /**
  * Save session to database
  */
-function saveSession()
+function saveSession($echo = true)
 {
 
     //insertAutomaticGoBackOnePage();
-    checkSessionTitleNotToLong();
+    checkSessionTitleNotToLong($echo);
 
     $sessionid = false;
     $versionid = false;
@@ -256,7 +217,7 @@ function saveSession()
 
             //Insert sessiondata to mission table
 
-            saveSession_InsertSessionDataToDb($sessionid);
+            saveSession_InsertSessionDataToDb($sessionid, $echo);
 
             //Get versionId from db
             $versionid = saveSession_GetVersionIdForNewSession();
@@ -344,14 +305,16 @@ function saveSession()
 
 
     mysql_close($con);
+    if ($echo) {
+        if (!$alreadySaved) {
+            echo "<p><b>Session saved</b></p>\n";
+            echo "<p><a href=\"session.php?sessionid=$sessionid&command=view\" id=\"view_session\">View session</a></p>";
+            echo "<p><a href=\"session.php?sessionid=$sessionid&command=edit\" id=\"edit_session\">Edit session</a></p>";
 
-    if (!$alreadySaved) {
-        echo "<p><b>Session saved</b></p>\n";
-        echo "<p><a href=\"session.php?sessionid=$sessionid&command=view\" id=\"view_session\">View session</a></p>";
-        echo "<p><a href=\"session.php?sessionid=$sessionid&command=edit\" id=\"edit_session\">Edit session</a></p>";
-
-        echo "<span style=\"color:white\"><div id=\"sessioninfo\">sessionid:<div id=\"sessionid\">$sessionid</div>, versionid:<div id=\"versionid\">$versionid</div></span></div>\n";
+            echo "<span style=\"color:white\"><div id=\"sessioninfo\">sessionid:<div id=\"sessionid\">$sessionid</div>, versionid:<div id=\"versionid\">$versionid</div></span></div>\n";
+        }
     }
+    return $sessionid;
 }
 
 
@@ -460,9 +423,11 @@ function echoSessionForm()
 
     $insertSessionData = false;
 
-    if (strcmp($_REQUEST["command"], "edit") == 0) {
+    if (strcmp($_REQUEST["command"], "edit") == 0 && isset($_REQUEST['sessionid'])) {
         $rowSessionData = getSessionData($_GET["sessionid"]);
         $insertSessionData = true;
+        $sessionid = $_GET["sessionid"];
+        $versionid = getSessionVersionId($sessionid);
 
         if ($_SESSION['username'] != $rowSessionData['username']) {
 
@@ -478,8 +443,29 @@ function echoSessionForm()
 
         $rowAdditionalTesters = getSessionAdditionalTester($rowSessionData["versionid"]);
     }
-    mysql_close($con);
+    else
+    {
+        //        //create new session...
+        $sessionid = saveSession(false);
+        //
+        //        //Will create a new session id to map to a session
+        //        saveSession_CreateNewSessionId();
+        //
+        //        //Get the new session id for user x
+        //        $sessionid = saveSession_GetSessionIdForNewSession();
+        //
+        //
+        //        saveSession_InsertSessionDataToDb($sessionid, $echo);
+        //
+        $con = getMySqlConnection();
 
+        //        //Get versionId from db
+        $versionid = saveSession_GetVersionIdForNewSession();
+        //
+        mysql_close($con);
+
+    }
+    //mysql_close($con);
     if ($insertSessionData) {
         $title = htmlspecialchars($rowSessionData["title"]);
         $charter = $rowSessionData["charter"];
@@ -510,11 +496,13 @@ function echoSessionForm()
     {
         $publickey = md5(rand());
     }
-    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+//    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
     echo "<input type=\"hidden\" name=\"publickey\" value=\"" . $publickey . "\">\n";
-    echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $rowSessionData["sessionid"] . "\">\n";
-    echo "<input type=\"hidden\" name=\"versionid\" value=\"" . $rowSessionData["versionid"] . "\">\n";
+    echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $sessionid . "\">\n";
+    echo "<input type=\"hidden\" name=\"versionid\" value=\"" . $versionid . "\">\n";
     echo "<input type=\"hidden\" name=\"tester\" value=\"" . $_SESSION['username'] . "\">\n";
     echo "<table width=\"1024\" border=\"0\">\n";
     echo "      <tr>\n";
@@ -523,15 +511,15 @@ function echoSessionForm()
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    if ($_REQUEST['command'] == 'edit') {
-        echo "                                   <h1>Edit Session</h1>\n";
-        echo "    <img src='pictures/information-small.png'>Last saved: <span id='autosaved'></span>";
-    }
-    else
-    {
-        echo "                                   <h1>New Session</h1>\n";
-        echo "    <span id='autosaved'> <img src='pictures/information-small.png'> Autosave is enabled after first save of session.</span>";
-    }
+    //   if ($_REQUEST['command'] == 'edit') {
+    echo "                                   <h1>Edit Session</h1>\n";
+    echo "    <img src='pictures/information-small.png'>Last saved: <span id='autosaved'></span>";
+    //    }
+    //    else
+    //    {
+    //        echo "                                   <h1>New Session</h1>\n";
+    //        echo "    <span id='autosaved'> <img src='pictures/information-small.png'> Autosave is enabled after first save of session.</span>";
+    //    }
 
     echo "                              </td>\n";
     echo "                        </tr>\n";
@@ -635,7 +623,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     $selectCustomArray = array("custom1", "custom2", "custom3");
     foreach ($selectCustomArray as $oneSelectToEcho)
     {
-        if ($_GET["sessionid"] != "") {
+        if ($_REQUEST['sessionid'] != "") {
             getMySqlConnection();
             $itemArray = getSessionCustomValues(getSessionVersionId($_REQUEST['sessionid']), $oneSelectToEcho);
         }
@@ -755,11 +743,11 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Attachments:</td>\n";
     echo "                              <td>\n";
-    if ($_GET['sessionid'] != null) {
-
-        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=" . $_GET['sessionid'] . "'>Manage attachments</a> Max file size: " . getMaxUploadSize() . " mb</p>";
+    if ($sessionid != null) {
+          getMySqlConnection();
+        echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=" . $sessionid . "'>Manage attachments</a> Max file size: " . getMaxUploadSize() . " mb</p>";
         echoAttachments();
-
+        mysql_close();
     }
     else
     {
@@ -1053,23 +1041,4 @@ function parseBBTestAssistantNotes($notes)
     }
 
     return $charterParsed;
-}
-
-function deleteSession()
-{
-
-
-    $sessionid = $_REQUEST["sessionid"];
-    insertAutomaticGoBackOnePage();
-    //$versionid = GetSessionIdFromVersionId($_REQUEST["sessionid"]);
-    if ($sessionid != "") {
-        deleteSessionFromDatabase($sessionid);
-
-        echo "Session " . $_REQUEST["sessionid"] . " deleted from database";
-    }
-    else
-    {
-        echo "Session " . $_REQUEST["sessionid"] . " could not be found in database.(Already deleted?)";
-    }
-
 }

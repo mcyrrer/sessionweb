@@ -21,7 +21,8 @@
  * include\filemanagement\thumbnails
 */
 require_once('../../include/loggingsetup.php');
-include_once("../../include/loggedincheck.php");
+session_start();
+require_once('../../include/validatesession.inc');
 include_once("../../config/db.php.inc");
 include_once("../../include/commonFunctions.php.inc");
 require_once("../../include/db.php");

@@ -211,16 +211,16 @@ $(function () {
             {name:'Search', bclass:'search', onpress:searchSession}
 
         ],
-        sortname:"id",
+        sortname:"updated",
         sortorder:"desc",
         usepager:true,
         title:"Sessions",
         useRp:false,
-        rp:50,
+        rp:30,
         showTableToggleBtn:false,
         resizable:false,
         width:1115,
-        height:1140,
+        height:740,
         onSubmit:addFormData,
         onSuccess:flexi_colorGridRows, //change row colours here
         singleSelect:true

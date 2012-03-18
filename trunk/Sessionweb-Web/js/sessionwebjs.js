@@ -13,16 +13,16 @@ function validate_required(field, alerttxt) {
 function validate_form(thisform) {
 
     with (thisform) {
-        if (validate_required(title, "Title must be filled out!") == false) {
-            title.focus();
-            return false;
-        }
+//        if (validate_required(title, "Title must be filled out!") == false) {
+//            title.focus();
+//            return false;
+//        }
 
-        if (validate_metrics(setuppercent, testpercent, bugpercent,
-                oppertunitypercent, executed) == false) {
-            setuppercent.focus();
-            return false;
-        }
+//        if (validate_metrics(setuppercent, testpercent, bugpercent,
+//                oppertunitypercent, executed) == false) {
+//            setuppercent.focus();
+//            return false;
+//        }
 
     }
 }
@@ -48,8 +48,6 @@ function autosave_exe() {
                 var select_custom1 = $("#select_custom1").val();
                 var select_custom2 = $("#select_custom2").val();
                 var select_custom3 = $("#select_custom3").val();
-
-
                 $.ajax(
                 {
                     type: "POST",

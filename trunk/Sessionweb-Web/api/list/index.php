@@ -141,7 +141,7 @@ function getNumberOfSessions($data, $whereSql, $StringSearchSql)
 
 function getSessions($data, $whereSql, $StringSearchSql)
 {
-    $numberOfSessionsToDisplay = 50;
+    $numberOfSessionsToDisplay = $_REQUEST['rp'];
     if (isset($_REQUEST['page'])) {
         $page = $_REQUEST['page'];
         $startLimit = ((int)$page * (int)$numberOfSessionsToDisplay) - $numberOfSessionsToDisplay;
@@ -162,7 +162,7 @@ function getSessions($data, $whereSql, $StringSearchSql)
     elseif (strstr($sortname, "executed") != false)
         $sortname = "executed_timestamp";
     else
-        $sortname = "sessionid";
+        $sortname = "updated";
 
     $sortorder = $_REQUEST['sortorder'];
 
@@ -178,14 +178,14 @@ function getSessions($data, $whereSql, $StringSearchSql)
     if ($_REQUEST['area'] != null) {
         $whereSql = str_replace("WHERE", "AND", $whereSql);
         $StringSearchSql = str_replace("WHERE", "AND", $StringSearchSql);
-        $sql = "SELECT * FROM $tablename as m, mission_areas as ma WHERE m.versionid = ma.versionid $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+        $sql = "SELECT * FROM $tablename as m, mission_areas as ma WHERE m.versionid = ma.versionid $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",$numberOfSessionsToDisplay;";
     }
     else
     {
-        $sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+        $sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",$numberOfSessionsToDisplay;";
     }
 
-    //$sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",50;";
+    //$sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",$numberOfSessionsToDisplay;";
 
     //echo $sql;
 
@@ -200,6 +200,7 @@ function getSessions($data, $whereSql, $StringSearchSql)
         $versionid = $row['versionid'];
         $title = $row['title'];
         $username = $row['username'];
+        $notes = $row['notes'];
         //$testenvironment = $row['testenvironment'];
 
         $sqlSelect = "";
@@ -211,7 +212,7 @@ function getSessions($data, $whereSql, $StringSearchSql)
         $result2 = mysql_query($sqlSelect);
 
         $row2 = mysql_fetch_row($result2);
-        $fullname =  $row2[0];
+        $fullname = $row2[0];
 
         $updated = $row['updated'];
         $teamname = $row['teamname'];
@@ -236,6 +237,11 @@ function getSessions($data, $whereSql, $StringSearchSql)
         //$updated = $rowMetrics['updated'];
 
         $status = "Not Executed";
+        if ($executed == 0 && $notes!=null) {
+            $status = "In progress";
+            //echo "notes'".$notes."'";
+            //$status = "Executed";
+        }
         if ($executed == 1) {
             $status = "Executed";
         }
@@ -245,6 +251,7 @@ function getSessions($data, $whereSql, $StringSearchSql)
         if ($closed == 1) {
             $status = "Closed";
         }
+
 
         $areas = "";
         $notFirstArea = false;
@@ -263,9 +270,8 @@ function getSessions($data, $whereSql, $StringSearchSql)
 
         $sql = "SELECT * FROM sessionwebos.mission_debriefnotes WHERE notes NOT LIKE '' AND versionid = $versionid";
         $resultDoesNotesExist = mysql_query($sql);
-        if(strstr($status,"Executed")!=false && mysql_num_rows($resultDoesNotesExist)!=0)
-        {
-          $debriefComments = "<img src='pictures/notify-star.png' alt='Debrief comments exists'>";
+        if (strstr($status, "Executed") != false && mysql_num_rows($resultDoesNotesExist) != 0) {
+            $debriefComments = "<img src='pictures/notify-star.png' alt='Debrief comments exists'>";
         }
         else
         {
@@ -273,7 +279,7 @@ function getSessions($data, $whereSql, $StringSearchSql)
         }
 
 
-        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$debriefComments $title", "$fullname", "$sprintname", "$teamname","$areas","$updated", "$executed_timestamp"));
+        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$debriefComments $title", "$fullname", "$sprintname", "$teamname", "$areas", "$updated", "$executed_timestamp"));
     }
     return $data;
 }

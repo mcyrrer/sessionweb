@@ -1,6 +1,7 @@
 <?php
 require_once('../../include/loggingsetup.php');
-include_once("../../include/loggedincheck.php");
+session_start();
+require_once('../../include/validatesession.inc');
 //include_once("../../include/db.php");
 include "../../config/db.php.inc";
 

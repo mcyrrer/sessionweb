@@ -1,14 +1,15 @@
-    <?php
+<?php
 require_once('../../include/loggingsetup.php');
-include_once("../../include/loggedincheck.php");
+session_start();
+require_once('../../include/validatesession.inc');
 
 include "../../config/db.php.inc";
 require_once("../../include/db.php");
 
-$con=getMySqlConnection();
+$con = getMySqlConnection();
 
 $sql = "DELETE FROM mission_attachments WHERE id = " . $_GET['id'];
-$result = mysql_query($sql) or die( 'Error, query failed');
+$result = mysql_query($sql) or die('Error, query failed');
 
 mysql_close();
 
