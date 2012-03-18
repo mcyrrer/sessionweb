@@ -1,6 +1,7 @@
 <?php
 require_once('../../include/loggingsetup.php');
-include_once("../../include/loggedincheck.php");
+session_start();
+require_once('../../include/validatesession.inc');
 require_once("../../include/db.php");
 define("GET_FILE_PATH", "get.php");
 define("DELETE_FILE_PATH", "delete.php");

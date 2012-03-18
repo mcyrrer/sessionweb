@@ -25,6 +25,8 @@ if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
 
 }
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
+
 echo "     <script src=\"js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";
 if (strstr($_SERVER['PHP_SELF'], "session.php") != false) {
@@ -74,7 +76,7 @@ if ($_SESSION['user'] != "") {
 //    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='include/notification.php'>";
 //}
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
-echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
+echo "      <a href=\"session.php?command=edit\" id=\"url_newsession\">New session</a> |";
 echo "      <a href=\"list2.php\" id=\"url_list\">List sessions</a> |";
 echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";

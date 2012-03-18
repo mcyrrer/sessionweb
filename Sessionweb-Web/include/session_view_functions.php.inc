@@ -17,6 +17,8 @@ function echoAttachments()
     $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = " . $_GET['sessionid'];
     //echo $sql;
     $result = mysql_query($sql);
+    if($result)
+    {
     echo "<table border='0'>\n";
     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
         $id = $row[0];
@@ -68,7 +70,7 @@ function echoAttachments()
         echo "                </tr>\n";
     }
     echo "</table>\n";
-
+    }
 
 }
 
