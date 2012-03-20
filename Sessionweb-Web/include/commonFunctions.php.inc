@@ -200,7 +200,7 @@ function getSessionData($sessionid)
     $sqlSelectSession .= "WHERE  sessionid = $sessionid";
     $resultSession = mysql_query($sqlSelectSession);
     if (!$resultSession) {
-        echo "getSessionData: " . mysql_error() . "<br/>";
+        echo "getSessionData: " . mysql_error() . "<br/>$sqlSelectSession<br>";
         //$logger->error(mysql_error());
         //$logger->debug($sqlSelectSession());
     }
