@@ -36,23 +36,21 @@ $(document).ready(function () {
 
 ///****Save SessionForm
     $("#sessionform").validate({
-        debug: false,
-        rules: {
+        debug:false,
+        rules:{
         },
-        messages: {
+        messages:{
         },
-        submitHandler: function(form) {
-
+        submitHandler:function (form) {
             // do other stuff for a valid form
-            $.post('session.php?command=save', $("#sessionform").serialize(), function(data) {
-             //   alert('Saved');//$('#results').html(data);
+            var dt = $('#sessionform').serializeArray();
+
+            $.post('api/session/save/', $("#sessionform").serialize(), function (data) {
                 $.fn.colorbox({
-                    html:"<h2>Session saved</h2><img src=\"pictures/document-save-5.png\" alt=\"\"><br>Session is saved.",
-                    //href:'api/session/reassign/?sessionid=' + id,
+                    html:data,
                     open:true,
                     width:500,
                     height:500
-
                 });
             });
         }
@@ -79,15 +77,15 @@ $(document).ready(function () {
                 ['Maximize', 'ShowBlocks', '-', 'About']
             ];
         CKEDITOR.config.toolbar = 'Basic';
-        try{
-        $('#textarea1').ckeditor(function () {
-            if(window.charter!==undefined)
-                $('#textarea1').val($.URLDecode(charter));
-        }, { toolbar:'Basic' });
-        $('#textarea2').ckeditor(function () {
-            if(window.notes!==undefined)
-                $('#textarea2').val($.URLDecode(notes));
-        }, { toolbar:'Basic' });
+        try {
+            $('#textarea1').ckeditor(function () {
+                if (window.charter !== undefined)
+                    $('#textarea1').val($.URLDecode(charter));
+            }, { toolbar:'Basic' });
+            $('#textarea2').ckeditor(function () {
+                if (window.notes !== undefined)
+                    $('#textarea2').val($.URLDecode(notes));
+            }, { toolbar:'Basic' });
         }
         catch (err) {
 
@@ -102,24 +100,23 @@ $(document).ready(function () {
             $.get("api/environments/setrunningversions", { env:$('#select_testenv option:selected').text(), sessionid:sessionid },
                 function (data) {
                     var linkInfo = jQuery.parseJSON(data);
-                    if (data!="\"1\"" && data!="\"2\"") {
+                    if (data != "\"1\"" && data != "\"2\"") {
                         js = "<script type='text/javascript'> $('.popupajax').colorbox({iframe:true, width:'80%', height:'80%'});" +
 
-                            "$('#swenvdelete_"+linkInfo['id']+"').click(function() {"+
-                            "    $.get('api/environments/removrunningversions', { id: "+linkInfo['id']+" } );" +
-                            "    $('#swenv_"+linkInfo['id']+"').remove();"+
-                            "});"+
+                            "$('#swenvdelete_" + linkInfo['id'] + "').click(function() {" +
+                            "    $.get('api/environments/removrunningversions', { id: " + linkInfo['id'] + " } );" +
+                            "    $('#swenv_" + linkInfo['id'] + "').remove();" +
+                            "});" +
 
                             "</script>";
-                        $('#autoswdiv').append("<p  id='swenv_"+linkInfo['id']+"'><a class='popupajax' href='api/environments/getrunningversions/?id=" + linkInfo['id'] + "'>" + $('#select_testenv option:selected').text() + "(" + linkInfo['date'] + ")</a><span id='swenvdelete_"+linkInfo['id']+"'> [delete]"+ js+"</span></p>");
+                        $('#autoswdiv').append("<p  id='swenv_" + linkInfo['id'] + "'><a class='popupajax' href='api/environments/getrunningversions/?id=" + linkInfo['id'] + "'>" + $('#select_testenv option:selected').text() + "(" + linkInfo['date'] + ")</a><span id='swenvdelete_" + linkInfo['id'] + "'> [delete]" + js + "</span></p>");
                     }
-                    else
-                    {
-                        if (data=="\"1\"") {
+                    else {
+                        if (data == "\"1\"") {
                             $('#getswmsg').text("Authorization failed, please check settings for test environment.");
 
                         }
-                        else if (data=="\"2\"") {
+                        else if (data == "\"2\"") {
                             $('#getswmsg').text("No valid url found for this environment, please update config");
 
                         }
@@ -132,8 +129,8 @@ $(document).ready(function () {
     });
     $('.swenvdelete').click(function () {
         var currentId = $(this).attr('id');
-         $.get('api/environments/removrunningversions', { id: currentId } );
-        $('#swenv_'+currentId).remove();
+        $.get('api/environments/removrunningversions', { id:currentId });
+        $('#swenv_' + currentId).remove();
 
     });
 
@@ -149,7 +146,7 @@ $(document).ready(function () {
     $(".largepopup").colorbox({iframe:true, width:"90%", height:"95%"});
 
 //**************medium popup i session.php
-    $(".mediumpopup").colorbox({iframe:true, width:"50%", height:"50%"});
+    $(".mediumpopup").colorbox({iframe:true, width:900, height:600});
 
 
 //**************Generic Colorboxoverlay
@@ -427,7 +424,7 @@ $(document).ready(function () {
 //        var sprint = $.URLEncode($("#select_sprint").val());
         var type = $("#choosegraph").val();
         var tester = $("#select_tester").val();
-        var team =$("#select_team").val();
+        var team = $("#select_team").val();
         var sprint = $("#select_sprint").val();
 
         var url = "graph/index.php?type=" + type;

@@ -18,7 +18,7 @@ if (is_file("include/customfunctions.php.inc")) {
 if (strcmp($_REQUEST["command"], "edit") == 0) {
     if (isset($_REQUEST["sessionid"])) {
         getMySqlConnection();
-        $rowSessionData = getSessionData($_GET["sessionid"]);
+        $rowSessionData = getSessionData($_REQUEST["sessionid"]);
         if (strcmp($_SESSION['username'], $rowSessionData['username']) != 0 && $_SESSION['superuser'] != 1 && $_SESSION['useradmin'] != 1) {
             echo "You are not the owner of the session, please reassign it to be able to edit it.";
             mysql_close();
@@ -26,7 +26,7 @@ if (strcmp($_REQUEST["command"], "edit") == 0) {
             header("location:$url");
             die();
         }
-        mysql_close();
+        mysql_close(getMySqlConnection());
     }
 }
 
@@ -424,9 +424,9 @@ function echoSessionForm()
     $insertSessionData = false;
 
     if (strcmp($_REQUEST["command"], "edit") == 0 && isset($_REQUEST['sessionid'])) {
-        $rowSessionData = getSessionData($_GET["sessionid"]);
+        $rowSessionData = getSessionData($_REQUEST["sessionid"]);
         $insertSessionData = true;
-        $sessionid = $_GET["sessionid"];
+        $sessionid = $_REQUEST["sessionid"];
         $versionid = getSessionVersionId($sessionid);
 
         if ($_SESSION['username'] != $rowSessionData['username']) {
@@ -434,7 +434,7 @@ function echoSessionForm()
         }
     }
 
-    if ($_GET["sessionid"] != "") {
+    if ($_REQUEST["sessionid"] != "") {
         $rowSessionMetric = getSessionMetrics($rowSessionData["versionid"]);
 
         $rowSessionStatus = getSessionStatus($rowSessionData["versionid"]);
@@ -497,7 +497,7 @@ function echoSessionForm()
         $publickey = md5(rand());
     }
 //    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
-    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"\" method=\"POST\" accept-charset=\"utf-8\"\">\n";
 
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
     echo "<input type=\"hidden\" name=\"publickey\" value=\"" . $publickey . "\">\n";
