@@ -25,6 +25,12 @@ $(document).ready(function () {
 
     try {
         var sessionid = $(document).getUrlParam("sessionid");
+        if (sessionid==null)
+        {
+            window.alert( $('#sessionid_input').val() );
+
+            sessionid = $("#sessionid_input").val();
+        }
     }
     catch (err) {
         var sessionid = "null";

@@ -113,7 +113,7 @@ function echoDebriefSession()
             echo "<input type='radio' name='debriefstatus' value='closed' /> Closed<br />";
         }
 
-        echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
+        echo "<input id='sessionid_input' type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
         echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
         echo "</form>\n";
     }
@@ -501,7 +501,7 @@ function echoSessionForm()
 
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
     echo "<input type=\"hidden\" name=\"publickey\" value=\"" . $publickey . "\">\n";
-    echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $sessionid . "\">\n";
+    echo "<input id='sessionid_input' type=\"hidden\" name=\"sessionid\" value=\"" . $sessionid . "\">\n";
     echo "<input type=\"hidden\" name=\"versionid\" value=\"" . $versionid . "\">\n";
     echo "<input type=\"hidden\" name=\"tester\" value=\"" . $_SESSION['username'] . "\">\n";
     echo "<table width=\"1024\" border=\"0\">\n";
@@ -612,9 +612,9 @@ function echoSessionForm()
     echo "                              <td valign=\"top\">Software under test: </td>\n";
     echo "                              <td>\n";
     echo "                                  <textarea id=\"textareaswundertest\" name=\"textareaswundertest\" rows=\"20\" cols=\"50\" style=\"width:640px;height:50px;\">$software</textarea>\n";
-    echoFetchVersionAutomaticly();
+    echoFetchVersionautomatically();
     /*    echo "                                  <p id='getsoftwarerunning'>\n";
-echo "                                  <a href='#'>Get software version automaticly</a></p>\n";
+echo "                                  <a href='#'>Get software version automatically</a></p>\n";
 echo "                                  <p class='boldred' id='getswmsg'></p>";
 echo "                                  <div id='autoswdiv'></div>";*/
     echo "                              </td>\n";
