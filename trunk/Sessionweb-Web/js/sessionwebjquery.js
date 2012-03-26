@@ -25,10 +25,7 @@ $(document).ready(function () {
 
     try {
         var sessionid = $(document).getUrlParam("sessionid");
-        if (sessionid==null)
-        {
-            window.alert( $('#sessionid_input').val() );
-
+        if (sessionid == null) {
             sessionid = $("#sessionid_input").val();
         }
     }
@@ -61,6 +58,42 @@ $(document).ready(function () {
             });
         }
     });
+
+//Session action
+    $('#reassign_session').click(function () {
+        $.fn.colorbox({
+            href:'api/session/reassign/?sessionid=' + sessionid,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500
+            //onClosed:function () {
+            //}
+        });
+    });
+
+    $('#delete_session').click(function () {
+        $.fn.colorbox({
+            href:'api/session/delete/?sessionid=' + sessionid,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500
+            //onClosed:function () {
+            //}
+        });
+    });
+
+    $('#copy_session').click(function () {
+        $.fn.colorbox({
+            href:'api/session/copy/?sessionid=' + sessionid,
+            open:true,
+            iframe:true,
+            width:500,
+            height:500
+        });
+    });
+
 
 //Initiation of WYSIWUG editor
     if (sPage == "session.php" && command == "edit" || sPage == "session.php" && command == "new") {
