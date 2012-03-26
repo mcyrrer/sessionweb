@@ -28,28 +28,28 @@ require_once('include/session_common_functions.php.inc');
             }
             echo "Sprint:";
             if (isset($_GET['sprint'])) {
-                echoSprintSelect($_REQUEST['sprint']);
+                echoSprintSelect($_REQUEST['sprint'],true);
             }
             else {
-                echoSprintSelect(null);
+                echoSprintSelect(null,true);
             }
             echo "Team:";
             if (isset($_GET['team'])) {
-                echoTeamSelect($_REQUEST['team']);
+                echoTeamSelect($_REQUEST['team'],true,true);
             }
             elseif ($userSettings['list_view'] == "team") {
                 $team = $userSettings['teamname'];
-                echoTeamSelect($team);
+                echoTeamSelect($team,true,true);
             }
             else {
-                echoTeamSelect(null);
+                echoTeamSelect(null,true,true);
             }
             echo "Area";
             if (isset($_GET['area'])) {
-                echoAreaSelectSingel($_REQUEST['area']);
+                echoAreaSelectSingel($_REQUEST['area'],true);
             }
             else {
-                echoAreaSelectSingel(null);
+                echoAreaSelectSingel(null,true);
             }
             echo "Status:";
             if (isset($_GET['status'])) {

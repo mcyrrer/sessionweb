@@ -512,16 +512,19 @@ function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 
  * @param $team
  * @param bool $createConnection
  */
-function echoTeamSelect($team, $createConnection = true)
+function echoTeamSelect($team, $createConnection = true, $history = false)
 {
     if ($createConnection)
         $con = getMySqlConnection();
 
-
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT teamname ";
-    $sqlSelect .= "FROM   teamnames ";
-    $sqlSelect .= "ORDER  BY `teamname` ASC ";
+    if (!$history) {
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT teamname ";
+        $sqlSelect .= "FROM   teamnames ";
+        $sqlSelect .= "ORDER  BY `teamname` ASC ";
+    }
+    else
+        $sqlSelect = "SELECT teamname FROM mission where teamname NOT LIKE 'null' group by teamname ASC ";
 
     $result = mysql_query($sqlSelect);
 
@@ -547,7 +550,6 @@ function echoTeamSelect($team, $createConnection = true)
     if ($createConnection)
         mysql_close($con);
 }
-
 
 
 function addNotification($sessionid, $user)
@@ -704,7 +706,7 @@ function echoAreaSelect($area)
     mysql_close($con);
 }
 
-function echoAreaSelectSingel($area)
+function echoAreaSelectSingel($area, $history = false)
 {
     if (!is_array($area)) {
         $areaTmp = array();
@@ -713,11 +715,16 @@ function echoAreaSelectSingel($area)
     }
     $con = getMySqlConnection();
 
-
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT areaname ";
-    $sqlSelect .= "FROM   areas ";
-    $sqlSelect .= "ORDER  BY `areaname` ASC ";
+    if (!$history) {
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT areaname ";
+        $sqlSelect .= "FROM   areas ";
+        $sqlSelect .= "ORDER  BY `areaname` ASC ";
+    }
+    else
+    {
+        $sqlSelect = "SELECT areaname FROM mission_areas where areaname not like 'null' group by areaname ASC;";
+    }
 
     $result = mysql_query($sqlSelect);
 
@@ -903,16 +910,20 @@ function echoTesterFullNameSelect($name, $removeInactiveUsers = false)
     mysql_close($con);
 }
 
-function echoSprintSelect($sprint)
+function echoSprintSelect($sprint, $history = false)
 {
     $con = getMySqlConnection();
 
-
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT sprintname ";
-    $sqlSelect .= "FROM   sprintnames ";
-    $sqlSelect .= "ORDER  BY sprintname ASC";
-
+    if (!$history) {
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT sprintname ";
+        $sqlSelect .= "FROM   sprintnames ";
+        $sqlSelect .= "ORDER  BY sprintname ASC";
+    }
+    else
+    {
+        $sqlSelect = "SELECT sprintname FROM mission where sprintname NOT LIKE 'null' group by sprintname ASC";
+    }
     $result = mysql_query($sqlSelect);
 
     echo "                                  <select id=\"select_sprint\" name=\"sprint\">\n";
