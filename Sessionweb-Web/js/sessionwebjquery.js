@@ -289,13 +289,6 @@ $(document).ready(function () {
     });
 
 
-//***************Show search option in list.php***************
-    $("[class=showoption]").click(function () {
-        $("#option_list").fadeIn("slow");
-        $("#showoptiontext").text("");
-    });
-
-
 //***************Add sessionlink to session and manage if it is deleted***************
     $("#add_sessionlink").click(function () {
         var sessionlinkValue = $("#sessionlink").val() + '';

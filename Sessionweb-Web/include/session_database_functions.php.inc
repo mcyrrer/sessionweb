@@ -66,7 +66,15 @@ function saveSession_GetSessionIdForNewSession()
 
 function saveSession_InsertSessionDataToDb($sessionid, $echo = true)
 {
+    if(isset($_REQUEST["publickey"]))
+    {
+        $publickey = $_REQUEST["publickey"];
+    }
+    else
+    {
+       $publickey = md5(rand());
 
+    }
 
     if ($_REQUEST["title"] == "") {
         $_REQUEST["title"] = "Unnamed Session";
@@ -129,7 +137,7 @@ function saveSession_InsertSessionDataToDb($sessionid, $echo = true)
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['team']) . "', ";
     }
     $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
-    $sqlInsert .= "             '" . $_REQUEST["publickey"] . "' ";
+    $sqlInsert .= "             '" . $publickey . "' ";
     $sqlInsert .= ") ";
 
     //  echo $sqlInsert;
