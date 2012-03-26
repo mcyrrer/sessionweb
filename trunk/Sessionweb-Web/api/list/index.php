@@ -82,15 +82,18 @@ if ($StringSearchSql == null) {
             $whereSql = $whereSql . "AND ";
         }
         if ($status == 1) {
-            $whereSql = $whereSql . "executed=0 ";
+            $whereSql = $whereSql . "executed=0 AND notes LIKE  ''";
         }
         elseif ($status == 2) {
-            $whereSql = $whereSql . "executed=1 AND debriefed=0 AND closed=0 ";
+            $whereSql = $whereSql . "executed=0 AND closed=0 AND notes NOT LIKE  ''";
         }
         elseif ($status == 3) {
-            $whereSql = $whereSql . "debriefed=1 ";
+            $whereSql = $whereSql . "executed=1 AND debriefed=0 AND closed=0 ";
         }
         elseif ($status == 4) {
+            $whereSql = $whereSql . "debriefed=1 ";
+        }
+        elseif ($status == 5) {
             $whereSql = $whereSql . "closed=1 ";
         }
     }

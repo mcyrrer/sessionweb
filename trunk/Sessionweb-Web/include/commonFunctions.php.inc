@@ -507,6 +507,11 @@ function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 
     return $imgURL;
 }
 
+/***
+ * Echo all team defined in table teamnames. These are the teams that currently can be used when creating a new session
+ * @param $team
+ * @param bool $createConnection
+ */
 function echoTeamSelect($team, $createConnection = true)
 {
     if ($createConnection)
@@ -542,6 +547,8 @@ function echoTeamSelect($team, $createConnection = true)
     if ($createConnection)
         mysql_close($con);
 }
+
+
 
 function addNotification($sessionid, $user)
 {
@@ -639,7 +646,6 @@ function echoAdditionalTesterSelect($testers)
     }
     while ($row = mysql_fetch_array($result))
     {
-        print_r($row);
         if (in_array($row['username'], $testers)) {
             echo "                                      <option selected=\"selected\" value=\"" . $row['username'] . "\">" . htmlspecialchars($row['fullname']) . "</option>\n";
         }
@@ -782,28 +788,36 @@ function echoStatusTypes($statusToSelect)
         echo "      <option value='1'>Not Executed</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Executed") == 0 || strcmp($statusToSelect, "2") == 0) {
-        echo "      <option value='2' selected=\"selected\">Executed</option>\n";
+    if (strcmp($statusToSelect, "In progress") == 0 || strcmp($statusToSelect, "2") == 0) {
+        echo "      <option value='2' selected=\"selected\">In progress</option>\n";
     }
     else
     {
-        echo "      <option value='2'>Executed</option>\n";
+        echo "      <option value='2'>In progress</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Debriefed") == 0 || strcmp($statusToSelect, "3") == 0) {
-        echo "      <option value='3' selected=\"selected\">Debriefed</option>\n";
+    if (strcmp($statusToSelect, "Executed") == 0 || strcmp($statusToSelect, "3") == 0) {
+        echo "      <option value='3' selected=\"selected\">Executed</option>\n";
     }
     else
     {
-        echo "      <option value='3'>Debriefed</option>\n";
+        echo "      <option value='3'>Executed</option>\n";
     }
 
-    if (strcmp($statusToSelect, "Closed") == 0 || strcmp($statusToSelect, "4") == 0) {
-        echo "      <option value='4' selected=\"selected\">Closed</option>\n";
+    if (strcmp($statusToSelect, "Debriefed") == 0 || strcmp($statusToSelect, "4") == 0) {
+        echo "      <option value='4' selected=\"selected\">Debriefed</option>\n";
     }
     else
     {
-        echo "      <option value='4'>Closed</option>\n";
+        echo "      <option value='4'>Debriefed</option>\n";
+    }
+
+    if (strcmp($statusToSelect, "Closed") == 0 || strcmp($statusToSelect, "5") == 0) {
+        echo "      <option value='5' selected=\"selected\">Closed</option>\n";
+    }
+    else
+    {
+        echo "      <option value='5'>Closed</option>\n";
     }
     echo "</select>\n";
 }

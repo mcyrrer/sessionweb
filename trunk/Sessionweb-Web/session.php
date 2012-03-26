@@ -98,10 +98,10 @@ function echoDebriefSession()
         {
             $debriefComments = "";
         }
-        echo "                                   <div id='shortboldline'></div>";
+        echo "                                   <div class='shortboldline'></div>";
 
         echo "<img src=\"pictures/line.png\" alt=\"line\">\n";
-        echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
+        echo "<form id=\"sessionform_db\" name=\"sessionform_db\" action=\"session.php?command=debriefed\" method=\"POST\" accept-charset=\"utf-8\">\n";
 
         echo "<h4>Debrief notes</h4>\n";
 
@@ -497,7 +497,7 @@ function echoSessionForm()
         $publickey = md5(rand());
     }
 //    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
-    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"\" method=\"POST\" accept-charset=\"utf-8\"\">\n";
+    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"\" method=\"POST\" accept-charset=\"utf-8\">\n";
 
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
     echo "<input type=\"hidden\" name=\"publickey\" value=\"" . $publickey . "\">\n";
@@ -513,12 +513,12 @@ function echoSessionForm()
     echo "                              <td>\n";
     //   if ($_REQUEST['command'] == 'edit') {
     echo "                                   <h1>Edit Session</h1>\n";
-    echo "    <img src='pictures/information-small.png'>Last saved: <span id='autosaved'></span>";
+    echo "    <img src='pictures/information-small.png' alt=''>Last saved: <span id='autosaved'></span>";
     //    }
     //    else
     //    {
     //        echo "                                   <h1>New Session</h1>\n";
-    //        echo "    <span id='autosaved'> <img src='pictures/information-small.png'> Autosave is enabled after first save of session.</span>";
+    //        echo "    <span id='autosaved'> <img src='pictures/information-small.png' alt=''> Autosave is enabled after first save of session.</span>";
     //    }
 
     echo "                              </td>\n";
@@ -526,7 +526,7 @@ function echoSessionForm()
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortboldline'></div>";
+    echo "                                   <div class='shortboldline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -644,7 +644,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Test requirements: </td>\n";
     echo "                              <td>\n";
-    echo "                              <table width=\"*\" border=\"0\">\n";
+    echo "                              <table border=\"0\">\n";
     echo "                                  <tr>\n";
     echo "                                      <td><input id=\"requirement\" type=\"text\" size=\"50\" value=\"\">\n";
     echo "                                      </td>\n";
@@ -667,14 +667,14 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortthinline'></div>";
+    echo "                                   <div class='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Link to other sessions:</td>\n";
     echo "                              <td>\n";
-    echo "                              <table width=\"*\" border=\"0\">\n";
+    echo "                              <table border=\"0\">\n";
     echo "                                  <tr>\n";
     echo "                                      <td><input id=\"sessionlink\" type=\"text\" size=\"50\" value=\"\">\n";
     echo "                                      </td>\n";
@@ -697,7 +697,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortthinline'></div>";
+    echo "                                   <div class='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -716,7 +716,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortboldline'></div>";
+    echo "                                   <div class='shortboldline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -736,7 +736,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortthinline'></div>";
+    echo "                                   <div class='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -760,14 +760,14 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortthinline'></div>";
+    echo "                                   <div class='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Defects: </td>\n";
     echo "                              <td>\n";
-    echo "                              <table width=\"*\" border=\"0\">\n";
+    echo "                              <table border=\"0\">\n";
     echo "                                  <tr>\n";
     echo "                                      <td><input id=\"bug\" type=\"text\" size=\"50\" value=\"\">\n";
     echo "                                      </td>\n";
@@ -791,7 +791,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortthinline'></div>";
+    echo "                                   <div class='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
 
@@ -838,10 +838,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                                                <td>\n";
 
     echoMoodSelection($rowSessionMetric["mood"]);
-    echo "                                                </td>\n";
     echo "                                          </tr>\n";
-    echo "                              </td>\n";
-    echo "                        </tr>\n";
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
@@ -851,7 +848,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td>\n";
-    echo "                                   <div id='shortthinline'></div>";
+    echo "                                   <div class='shortthinline'></div>";
     echo "                              </td>\n";
     echo "                        </tr>\n";
     echo "                        <tr>\n";
@@ -927,38 +924,38 @@ function echoMoodSelection($selected)
 {
 
     if ($selected == 0)
-        echo "<input type='radio' name='mood' value='0' style='display:none;' />";
+        echo "<input type='radio' name='mood' value='0' style='display:none;'>\n";
     else
-        echo "<input type='radio' name='mood' value='0' style='display:none;' checked />";
+        echo "<input type='radio' name='mood' value='0' style='display:none;' checked>\n";
 
 
-    echo "<table>";
-    echo "<tr>";
-    echo "<td><img src='pictures/emotes/face-cool.png' alt=''></td>";
-    echo "<td><img src='pictures/emotes/face-plain.png' alt=''></td>";
-    echo "<td><img src='pictures/emotes/face-sad.png' alt=''></td>";
-    echo "<td><img src='pictures/emotes/face-angry.png' alt=''></td>";
-    echo "</tr>";
-    echo "<tr>";
+    echo "<table>\n";
+    echo "<tr>\n";
+    echo "<td><img src='pictures/emotes/face-cool.png' alt=''></td>\n";
+    echo "<td><img src='pictures/emotes/face-plain.png' alt=''></td>\n";
+    echo "<td><img src='pictures/emotes/face-sad.png' alt=''></td>\n";
+    echo "<td><img src='pictures/emotes/face-angry.png' alt=''></td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
     if ($selected == 1)
-        echo "<td><input type='radio' name='mood' value='1' checked /></td>";
+        echo "<td><input type='radio' name='mood' value='1' checked /></td>\n";
     else
-        echo "<td><input type='radio' name='mood' value='1'  /></td>";
+        echo "<td><input type='radio' name='mood' value='1'  /></td>\n";
 
     if ($selected == 2)
-        echo "<td><input type='radio' name='mood' value='2' checked /></td>";
+        echo "<td><input type='radio' name='mood' value='2' checked /></td>\n";
     else
-        echo "<td><input type='radio' name='mood' value='2' /></td>";
+        echo "<td><input type='radio' name='mood' value='2' /></td>\n";
 
     if ($selected == 3)
-        echo "<td><input type='radio' name='mood' value='3' checked /></td>";
+        echo "<td><input type='radio' name='mood' value='3' checked /></td>\n";
     else
-        echo "<td><input type='radio' name='mood' value='3' /></td>";
+        echo "<td><input type='radio' name='mood' value='3' /></td>\n";
 
     if ($selected == 4)
-        echo "<td><input type='radio' name='mood' value='4' checked /></td>";
+        echo "<td><input type='radio' name='mood' value='4' checked /></td>\n";
     else
-        echo "<td><input type='radio' name='mood' value='4' /></td>";
+        echo "<td><input type='radio' name='mood' value='4' /></td>\n";
     echo "</tr>";
     echo "</table>";
 }

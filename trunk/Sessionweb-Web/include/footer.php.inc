@@ -16,7 +16,7 @@ echo "<div id='footer'>";
 echo "Sessionweb ver $versionInstalled  | ";
 echo "<a href=\"about.php\"id=\"url_about\">About</a> | ";
 echo "<a href=\"http://code.google.com/p/sessionweb/\" id=\"url_google_code_sessionweb\">Project Home Page</a> | ";
-echo "<a href=\"http://code.google.com/p/sessionweb/issues/list\" id=\"url_submintbug\">Submit a bug report</a></h6><br>\n";
+echo "<a href=\"http://code.google.com/p/sessionweb/issues/list\" id=\"url_submintbug\">Submit a bug report</a><br>\n";
 echo "</div>";
 echo "</div>";
 echo "  </body>\n";
