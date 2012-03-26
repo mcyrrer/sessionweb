@@ -497,28 +497,6 @@ function addjQueryDeletePopUp($id)
     echo "              </script>\n";
 }
 
-/**
- * Popup for validating if a session should be copied or not.
- * @param  $id
- * @return void
- */
-function addjQueryCopyPopUp($id)
-{
-    //Copy Session questionbox
-    echo "              <script type=\"text/javascript\">\n";
-    echo "$(\"#copy_session" . $id . "\").click(function(){\n";
-    echo "        var answer = confirm(\"Copy session?\");\n";
-    echo "        if(answer)\n";
-    echo "        {\n";
-    echo "            return true;\n";
-    echo "        }\n";
-    echo "        else\n";
-    echo "        {\n";
-    echo "            return false;\n";
-    echo "        }\n";
-    echo "});\n";
-    echo "              </script>\n";
-}
 
 function echoPublicViewIcon($row)
 {

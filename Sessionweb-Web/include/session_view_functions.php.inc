@@ -83,30 +83,29 @@ function echoSessionAction()
 
     $row = getSessionData($sessionid);
 
-    echo "Action menu: ";
+    //echo "Action menu: ";
     if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['superuser'], "1") == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
         echo "<a id='edit_session' class='url_edit_session' href='session.php?sessionid=$sessionid&command=edit'>";
         echo "<img class='picture_edit_session' src='pictures/edit.png' border='0' alt='edit session' title='Edit session'>";
         echo "</a>";
-        echo " | <a id='reassign_session' class='reassign_session' href='session.php?sessionid=$sessionid&command=reassign'>";
-        echo "<img class='picture_reassign_session' src='pictures/user-new-2-small.png' border='0' alt='Reassign session' title='Reassign session'>";
-        echo "</a>";
+        echo " | <span id='reassign_session' class='reassign_session'>";
+        echo "<img class='picture_reassign_session' src='pictures/user.gif' border='0' alt='Reassign session' title='Reassign session'>";
+        echo "</span>";
     }
     if (strcmp($_SESSION['username'], $row["username"]) == 0 || strcmp($_SESSION['useradmin'], "1") == 0) {
-        echo " | <a id='delete_session' href='session.php?sessionid=$sessionid&command=delete'>";
-        echo "<img src='pictures/edit-delete-2-small.png' border='0' alt='Delete session' title='Delete session' class='delete_session'>";
-        echo "</a>";
+        echo " | <span id='delete_session'>";
+        echo "<img src='pictures/close.png' border='0' alt='Delete session' title='Delete session' class='delete_session'>";
+        echo "</span>";
     }
-    echo "<script type='text/javascript'>$('#delete_session').click(function(){ var answer = confirm('Delete session from database?'); if(answer) { return true; } else { return false; }});  </script>";
+
     if ($_SESSION['settings']['publicview'] == 1) {
         echo " | <a id='publicview_session' class='publicview_session' href='publicview.php?sessionid=$sessionid&command=view&publickey=" . getSessionPublicKeyBasedOnSessionId($sessionid) . "'>";
-        echo "<img src='pictures/share-3-small.png' border='0' alt='Share session' title='Share session'>";
+        echo "<img src='pictures/share.png' border='0' alt='Share session' title='Share session'>";
         echo "</a>";
     }
-    echo " | <a id='copy_session' class='copy_session' href='session.php?command=copy&sessionid=$sessionid'>";
+    echo " | <span id='copy_session' class='copy_session' href='session.php?command=copy&sessionid=$sessionid'>";
     echo "<img src='pictures/edit-copy-9-small.png' border='0' alt='Copy session' title='Copy session'>";
-    echo "</a>";
-    echo "<script type='text/javascript'>$('#copy_session').click(function(){ var answer = confirm('Copy session?'); if(answer) { return true; } else { return false; }});  </script>";
+    echo "</span>";
     echo " | ";
     echo "<a id='addNotification' class='colorboxhreflarge' href='include/notification.php?sessionid=$sessionid&cmd=add'>";
 
