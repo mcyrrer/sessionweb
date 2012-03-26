@@ -13,7 +13,7 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     $sessionwebPath = $sessionwebPath . "/include/filemanagement/application.js";
     if ($updateJsFile) {
         if (updateOneLineInTextFile($sessionwebPath, "maxFileSize:", "        maxFileSize: $maxsizebytes"))
-            echo "Was able to automaticly update /include/filemanagement/application.js with correct attachment size value according to your php and mysql config paramateters";
+            echo "Was able to automatically update /include/filemanagement/application.js with correct attachment size value according to your php and mysql config paramateters";
         else
         {
             echo "<b>Failed to update /include/filemanagement/application.js with correct value, please update it manually</b>";
@@ -1192,7 +1192,7 @@ function isSessionClosed($versionId)
         return true;
 }
 
-function echoFetchVersionAutomaticly()
+function echoFetchVersionautomatically()
 {
     $con = getMySqlConnection();
 
@@ -1202,7 +1202,7 @@ function echoFetchVersionAutomaticly()
     $nbrOfRows = mysql_num_rows($result);
     if ($nbrOfRows != 0) {
         echo "                                  <p id='getsoftwarerunning'>\n";
-        echo "                                  <a href='#'>Get software version automaticly</a></p>\n";
+        echo "                                  <a href='#'>Get software version automatically</a></p>\n";
         echo "                                  <p class='boldred' id='getswmsg'></p>";
         echo "                                  <div id='autoswdiv'>";
 
