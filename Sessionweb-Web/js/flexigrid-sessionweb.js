@@ -313,6 +313,9 @@ $(document).ready(function () {
             if (status == "Not Executed") {
                 command = "edit";
             }
+            if (status == "In progress") {
+                command = "edit";
+            }
             if (status == "Executed") {
                 command = "debrief";
             }
