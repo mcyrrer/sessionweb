@@ -166,15 +166,15 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
     $sqlInsert .= "             `lastupdatedby`, ";
     $sqlInsert .= "             `publickey`) ";
     $sqlInsert .= "VALUES      ('$sessionid', ";
-    $sqlInsert .= "             '" . $sessionToCopy["title"] . "(COPY) ', ";
-    $sqlInsert .= "             '" . $sessionToCopy["charter"] . "', ";
-    $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy["title"]) . "(COPY) ', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy["charter"]) . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($_SESSION['username']) . "', ";
     if ($sessionToCopy['sprintname'] == "") {
         $sqlInsert .= "             null, ";
     }
     else
     {
-        $sqlInsert .= "             '" . $sessionToCopy['sprintname'] . "', ";
+        $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['sprintname']) . "', ";
     }
     if ($sessionToCopy['teamsprintname'] == "") {
         $sqlInsert .= "             null, ";
@@ -182,28 +182,28 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
     else
     {
 
-        $sqlInsert .= "             '" . $sessionToCopy['teamsprintname'] . "', ";
+        $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['teamsprintname']) . "', ";
     }
     if ($sessionToCopy['testenvironment'] == "") {
         $sqlInsert .= "             null, ";
     }
     else
     {
-        $sqlInsert .= "             '" . $sessionToCopy['testenvironment'] . "', ";
+        $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['testenvironment']) . "', ";
     }
     if ($sessionToCopy['teamname'] == "") {
         $sqlInsert .= "             null, ";
     }
     else
     {
-        $sqlInsert .= "             '" . $sessionToCopy['teamname'] . "', ";
+        $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['teamname']) . "', ";
     }
-    $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
+    $sqlInsert .= "             '" . mysql_real_escape_string($_SESSION['username']) . "', ";
     $sqlInsert .= "             '" . $sessionToCopy["publickey"] . "' ";
     $sqlInsert .= ") ";
 
 
-    #echo "SQLINSERT=$sqlInsert";
+//    echo "SQLINSERT=$sqlInsert\n";
 
     $result = mysql_query($sqlInsert);
 

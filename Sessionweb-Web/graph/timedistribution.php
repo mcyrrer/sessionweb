@@ -47,11 +47,11 @@ else
 
     if ($_SESSION['useradmin'] == 1) {
         echo "Team:";
-        echoTeamSelect("");
+        echoTeamSelect("",true);
     }
 
     echo "Sprint:";
-    echoSprintSelect("");
+    echoSprintSelect("",true);
 
 
     echo '<input type="submit" name="Submit" value="Generate report">';

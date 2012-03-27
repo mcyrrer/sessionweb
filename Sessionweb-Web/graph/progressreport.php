@@ -45,11 +45,11 @@ else
 
     if ($_SESSION['useradmin'] == 1) {
         echo "Team:";
-        echoTeamSelect("");
+        echoTeamSelect("",true);
     }
 
     echo "Sprint:";
-    echoSprintSelect("");
+    echoSprintSelect("",true);
 
 
     echo '<input type="submit" name="Submit" value="Generate report">';
@@ -57,10 +57,24 @@ else
 
 function printChart()
 {
+    $parameters = "";
+    if(strcmp($_REQUEST['tester'],'')!=0)
+    {
+      $parameters = "tester=".$_REQUEST['tester'];
+    }
+    if(strcmp($_REQUEST['team'],'')!=0)
+    {
+        $parameters = $parameters."&team=".$_REQUEST['team'];
+    }
+    if(strcmp($_REQUEST['sprint'],'')!=0)
+    {
+        $parameters = $parameters."&sprint=".$_REQUEST['sprint'];
+    }
     echo "<script type='text/javascript'>
 $(function() {
+    var params = '".$parameters."';
 
-	$.getJSON('../api/statistics/progress/index.php?callback=?', function(data) {
+	$.getJSON('../api/statistics/progress/index.php?'+params+'&callback=?', function(data) {
 		// Create the chart
 		window.chart = new Highcharts.StockChart({
 			chart : {

@@ -32,7 +32,7 @@ else
     echo '<form method="post" action="sprintreport.php">';
 
     echo "Sprint summary: ";
-    echoSprintSelect("");
+    echoSprintSelect("",true);
 
     echo '<input type="submit" name="Submit" value="Generate report">';
 }

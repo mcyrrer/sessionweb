@@ -1,4 +1,7 @@
 <?php
+session_start();
+
+require_once('../../../include/validatesession.inc');
 include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
 require_once ('../../../include/db.php');
@@ -8,29 +11,28 @@ $con = getMySqlConnection();
 
 $sql = "SELECT DATE(executed_timestamp) AS date, COUNT(*) AS count, sessionid,unix_timestamp(executed_timestamp) as epoc  ";
 $sql .= "FROM sessioninfo  ";
-$sql .= "WHERE executed = 1 OR debriefed = 1 OR closed = 1  ";
-if ($_REQUEST['tester'] != null) {
+$sql .= "WHERE (executed = 1 OR debriefed = 1 OR closed = 1)  ";
+if (isset($_REQUEST['tester'])) {
     if ($_SESSION['useradmin'] == 1) {
         $sql .= "AND username = '" . urldecode($_REQUEST['tester']) . "' ";
     }
 }
-if ($_REQUEST['team'] != null) {
+if (strcmp($_REQUEST['team'],'') != 0) {
     if ($_SESSION['useradmin'] == 1) {
         $sql .= "AND teamname = '" . urldecode($_REQUEST['team']) . "' ";
     }
 }
-if ($_REQUEST['sprint'] != null) {
-    $sql .= "AND sprintname = '" . urldecode($_REQUEST['sprint']) . "' ";
+if (strcmp($_REQUEST['sprint'],'') != 0) {
+    $sql .= "AND sprintname = '" . urldecode($_REQUEST['sprint']) . "'  ";
 }
 
 $sql .= "GROUP BY DATE(executed_timestamp)  ";
 $sql .= "ORDER BY date;";
-//    echo "    <script type='text/javascript'>\n";
+//TODO: FIX THAT PARAMETERS IS REALY POPULATED.!!!
+//print_r($_SESSION);
+//echo $sql;
 
-//    echo "    </script>\n";
 $result = mysql_query($sql);
-
-//$sql = "SELECT value,unix_timestamp(timestamp) as epoc  FROM sdigraph.graphdata WHERE name = '".$valueName."' ORDER by timestamp ASC";
 
 $result = mysql_query($sql);
 $callback = $_REQUEST['callback'];
