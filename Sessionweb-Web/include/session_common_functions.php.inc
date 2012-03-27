@@ -2,13 +2,22 @@
 
 function echoExecutedStatus($rowSessionStatus)
 {
-    if($rowSessionStatus["mood"]==1)
+    if($rowSessionStatus["executed"]==1)
     {
         echo "                          Executed\n";
+    }
+    elseif($rowSessionStatus["debriefed"]==1)
+    {
+        echo "                          Debriefed\n";
+    }
+    elseif($rowSessionStatus["closed"]==1)
+    {
+        echo "                          Closed\n";
     }
     else
     {
         echo "                          Not Executed\n";
+
     }
 }
 
