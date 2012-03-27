@@ -24,8 +24,8 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
     <meta charset="latin-1"/>
     <title>Session word cloud</title>
     <link rel="stylesheet" href="../css/sessionwebcss.css">
-    <script type="text/javascript" src="../js/jquery-1.4.4.js"></script>
-    <script type="text/javascript" src="../js/sessionwebjquery.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+<!--    <script type="text/javascript" src="../js/sessionwebjquery.js"></script>-->
     <script type="text/javascript" src="../js/jquery.colorbox-min.js"></script>
 
 
@@ -68,11 +68,11 @@ else
 
     if ($_SESSION['useradmin'] == 1) {
         echo "Team:";
-        echoTeamSelect("");
+        echoTeamSelect("",true);
     }
 
     echo "Sprint:";
-    echoSprintSelect("");
+    echoSprintSelect("",true);
 
 
     echo '<input type="submit" name="Submit" value="Generate report">';
@@ -109,20 +109,20 @@ function printCloud()
     if ($_GET['all'] != "") {
         $sql = "SELECT title, notes,charter FROM sessioninfo ";
         $sql .= "WHERE executed = 1  ";
-        if ($_GET['tester'] != null) {
+        if (strcmp($_REQUEST['tester'],'') != 0) {
             if ($_SESSION['useradmin'] == 1) {
-                $sql .= "AND username = '" . urldecode($_GET['tester']) . "' ";
+                $sql .= "AND username = '" . urldecode($_REQUEST['tester']) . "' ";
             }
         }
-        if ($_GET['team'] != null) {
+        if (strcmp($_REQUEST['team'],'') != 0) {
             if ($_SESSION['useradmin'] == 1) {
-                $sql .= "AND teamname = '" . urldecode($_GET['team']) . "' ";
+                $sql .= "AND teamname = '" . urldecode($_REQUEST['team']) . "' ";
             }
         }
-        if ($_GET['sprint'] != null) {
-            $sql .= "AND sprintname = '" . urldecode($_GET['sprint']) . "' ";
+        if (strcmp($_REQUEST['sprint'],'') != 0) {
+            $sql .= "AND sprintname = '" . urldecode($_REQUEST['sprint']) . "' ";
         }
-        // echo $sql;
+        //echo $sql;
 
         $resultSession = getSessionNotesAncCarters($sql);
         $num_rows = mysql_num_rows($resultSession);

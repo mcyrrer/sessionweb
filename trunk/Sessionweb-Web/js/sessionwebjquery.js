@@ -439,44 +439,6 @@ $(document).ready(function () {
         }
     });
 
-
-//***************Statistic graph typ changed***************
-    $("#choosegraph").change(function () {
-//        $("#graphframe").html($("#choosegraph").val());
-//        $("#select_tester").attr('disabled', 'disabled');
-//        $("#select_team").attr('disabled', 'disabled');
-//        $("#select_sprint").attr('disabled', 'disabled');
-    });
-
-//***************Statistic Change Iframe to choosen graph***************
-    $("#showgraph").click(function () {
-//        var type = $.URLEncode($("#choosegraph").val());
-//        var tester = $.URLEncode($("#select_tester").val());
-//        var team = $.URLEncode($("#select_team").val());
-//        var sprint = $.URLEncode($("#select_sprint").val());
-        var type = $("#choosegraph").val();
-        var tester = $("#select_tester").val();
-        var team = $("#select_team").val();
-        var sprint = $("#select_sprint").val();
-
-        var url = "graph/index.php?type=" + type;
-        if (tester != "")
-            url += "&tester=" + tester;
-//        if (team != "")
-//            alert(team);
-//            if (team != "undefined")
-//                url += "&team=" + team;
-        if (sprint != "")
-            url += "&sprint=" + sprint;
-        if (team != "")
-            url += "&team=" + team;
-
-
-//        + "&tester=" + tester + "&team=" + team + "&sprint=" + sprint + "";
-//        $("#url_graph").html("<a href='" + url + "'>" + url + "</a>");
-        $("#iframegraph").attr('src', url);
-    });
-
 });
 
 $.extend({URLEncode:function (c) {
