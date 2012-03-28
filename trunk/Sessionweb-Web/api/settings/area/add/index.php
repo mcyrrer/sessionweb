@@ -1,86 +1,72 @@
 <?php
 session_start();
 
-require_once('../../../include/validatesession.inc');
+require_once('../../../../include/validatesession.inc');
 
 error_reporting(0);
 
-require_once('../../../config/db.php.inc');
-require_once ('../../../include/commonFunctions.php.inc');
-require_once ('../../../include/db.php');
+require_once('../../../../config/db.php.inc');
+require_once ('../../../../include/db.php');
+require_once ('../../../../include/apistatuscodes.inc');
 
 
-$con=getMySqlConnection();
+
+$response = array();
+if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
+
+    if (isset($_REQUEST['area']) && strlen($_REQUEST['area']) > 0) {
+        $areaName = $_REQUEST['area'];
 
 
-$environment = $_REQUEST['env'];
-$sessionid = $_REQUEST['sessionid'];
-$versionid = getSessionVersionId($sessionid);
-$sessionStatusArray = getSessionStatus($versionid);
+        $con = getMySqlConnection();
 
-$status = '';
-if ($sessionStatusArray['debriefed'] == 1)
-    $status = 'debriefed';
-elseif ($sessionStatusArray['executed'] == 1)
-    $status = 'executed';
-else
-    $status = 'not executed';
+        $areaName = mysql_real_escape_string($areaName);
 
-$row = getTestEnvironmentInformation($environment);
-$envName = $row[0];
-$url = $row[1];
-$username = $row[2];
-$password = $row[3];
+        $sqlInsert = "";
+        $sqlInsert .= "INSERT INTO areas ";
+        $sqlInsert .= "            (`areaname`) ";
+        $sqlInsert .= "VALUES      ('$areaName')";
 
-if ($url != null && $url != "") {
-    if ($username != null && $password != null) {
-        $context = stream_context_create(array(
-            'http' => array(
-                'header' => "Authorization: Basic " . base64_encode("$username:$password")
-            )
-        ));
-    }
 
-    $content = file_get_contents($url, false, $context);
-    if ($content != null) {
-        $con=getMySqlConnection();
-        $content = mysql_real_escape_string($content);
-        $var1 = "";
-        $var1 .= "INSERT INTO softwareuseautofetched ";
-        $var1 .= "            (versionid, ";
-        $var1 .= "             versions, ";
-        $var1 .= "             missionstatus, ";
-        $var1 .= "             environment) ";
+        $result = mysql_query($sqlInsert);
 
-        $var1 .= "VALUES      ($versionid, ";
-        $var1 .= "             '$content', ";
-        $var1 .= "             '$status', ";
-        $var1 .= "             '$envName')";
+        if (!$result) {
+            if (mysql_errno() == 1062) {
+                header("HTTP/1.0 409 Conflict");
+                $response['code'] = ITEM_ALREADY_EXIST;
+                $response['text'] = "ITEM_ALREADY_EXIST";
 
-        mysql_query($var1);
-        //echo $var1;
+            }
+            else
+            {
+                header("HTTP/1.0 500 Internal Server Error");
+                $response['code'] = ITEM_NOT_ADDED;
+                $response['text'] = "ITEM_NOT_ADDED";
 
-        $sql = "SELECT id, updated FROM softwareuseautofetched ORDER BY id DESC LIMIT 0,1";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_row($result);
-        $returnArray = array();
-        $returnArray['id'] = $row[0];
-        $returnArray['date'] = $row[1];
-        echo json_encode($returnArray);
+            }
+        }
+        else
+        {
+            header("HTTP/1.0 201 Created");
+            $response['code'] = ITEM_ADDED;
+            $response['text'] = "ITEM_ADDED";
+
+        }
+
         mysql_close($con);
     }
     else
     {
-        echo json_encode("1"); //Authorization failed, please check settings for test environment.";
+        header("HTTP/1.0 400 Bad Request");
+        $response['code'] = ITEM_NOT_PROVIDED_IN_REQUEST;
+        $response['text'] = "ITEM_NOT_PROVIDED_IN_REQUEST";
     }
-
 }
 else
 {
-    echo json_encode("2"); //No valid url found for this environment, please update config.";
+    header("HTTP/1.0 401 Unauthorized");
+    $response['code'] = UNAUTHORIZED;
+    $response['text'] = "UNAUTHORIZED";
 }
-
-//Get id for added software
-//echo it to div tag (implement new api called viewswrunnung....
-
+echo json_encode($response);
 ?>

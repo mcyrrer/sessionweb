@@ -118,7 +118,7 @@ function upgrade()
     }
     else
     {
-        echo "You already have upgrade to latest version.";
+        echo "You already have the latest version.";
     }
 
 }
@@ -161,8 +161,10 @@ function echoForm()
     $currentversion = getSessionWebVersion();
     if ($currentversion == null)
         $currentversion = "1.0";
+    echo "<b>Make sure that you have made a backup of your database before upgrade!</b><br>";
+
     echo "Current sessionweb version: " . $currentversion . "<br>";
-    echo "Will upgrade to latest release.";
+    echo "Will upgrade to latest released.";
     echo '          </dd>
                 </dl>
             </fieldset>

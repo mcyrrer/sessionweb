@@ -48,6 +48,11 @@ elseif (strcmp($_REQUEST["command"], "debrief") == 0)
     echoViewSession();
     echoDebriefSession();
 }
+elseif (strcmp($_REQUEST["command"], "debriefed") == 0)
+{
+    saveDebriefedSession();
+}
+
 
 //elseif (strcmp($_REQUEST["command"], "save") == 0)
 //{
@@ -105,7 +110,7 @@ function echoDebriefSession()
         }
 
         echo "<input id='sessionid_input' type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
-        echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
+        echo "<p><input type=\"submit\" value=\"Continue\" id='cnt_button' /></p>\n";
         echo "</form>\n";
     }
     else
