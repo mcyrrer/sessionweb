@@ -48,11 +48,12 @@ function autosave_exe() {
                 var select_custom1 = $("#select_custom1").val();
                 var select_custom2 = $("#select_custom2").val();
                 var select_custom3 = $("#select_custom3").val();
+                var formData = $('#sessionform').serializeArray();
                 $.ajax(
                 {
                     type: "POST",
-                    url: "autosave.php",
-                    data: "title=" + title + "&sessionid=" + sessionid + "&charter=" + textarea1 + "&notes=" + textarea2 + "&buglist_hidden=" + buglist_hidden + "&requirementlist_hidden=" + requirementlist_hidden + "&sessionlink_hidden=" + sessionlinklist_hidden + "&custom1=" + select_custom1 + "&custom2=" + select_custom2 + "&custom3=" + select_custom3 ,
+                    url: "api/session/save/index.php",
+                    data: formData ,
                     cache: false,
                     success: function(message) {
                         $("#autosaved").empty().append(message);

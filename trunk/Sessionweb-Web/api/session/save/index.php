@@ -6,12 +6,6 @@ include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
 saveSession(false);
 
-//echo "<h2>Copy session</h2>";
-//echo "<p>Title of copy:".$sessionDataToCopy["title"]."(Copy)</p>";
-//echo "<p>Copy created</p>";
-//echo "<div id='editCopy'><a href='../../../session.php?sessionid=$sessionid&command=edit' target='_top'>Edit session</a></div>";
-//echo "</center>";
-
 /**
  * Save session to database
  */

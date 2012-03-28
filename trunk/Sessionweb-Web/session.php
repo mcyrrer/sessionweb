@@ -48,18 +48,9 @@ elseif (strcmp($_REQUEST["command"], "debrief") == 0)
     echoViewSession();
     echoDebriefSession();
 }
-elseif (strcmp($_REQUEST["command"], "debriefed") == 0)
-{
-    saveDebriefedSession();
-}
 
-elseif (strcmp($_REQUEST["command"], "copy") == 0)
-{
-    copySession();
-}
-
-elseif (strcmp($_REQUEST["command"], "save") == 0)
-{
+//elseif (strcmp($_REQUEST["command"], "save") == 0)
+//{
     /*    //RapidReporter importer
     if (strstr(substr($_REQUEST["notes"], 0, 26), 'Time,Reporter,Type,Content') != false) {
         $_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
@@ -72,9 +63,9 @@ elseif (strcmp($_REQUEST["command"], "save") == 0)
         $_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
         echo "BB Test Assistant XML notes parsed to HTML<br/>\n";
     }*/
-
-    saveSession();
-}
+//
+//    saveSession();
+//}
 
 include("include/footer.php.inc");
 
@@ -191,7 +182,7 @@ function checkSessionTitleNotToLong($echo = true)
 }
 
 /**
- * Save session to database
+ * Save session to database, only used to create a sessionid and not to execute the save button or autosave it uses the new api/session/save
  */
 function saveSession($echo = true)
 {
@@ -272,136 +263,12 @@ function saveSession($echo = true)
         }
 
     }
-    //Update existing session
-    else
-    {
-        $sessionid = $_REQUEST["sessionid"];
-        $versionid = $_REQUEST["versionid"];
-
-        saveSession_UpdateSessionDataToDb($sessionid);
-
-        saveSession_UpdateSessionStatusToDb($versionid);
-
-
-        saveSession_UpdateSessionMetricsToDb($versionid);
-
-        $areas = $_REQUEST["area"];
-        saveSession_UpdateSessionAreasToDb($versionid, $areas);
-
-        $additionalTester = $_REQUEST["additionalTester"];
-        saveSession_UpdateSessionAdditionalTesterDb($versionid, $additionalTester);
-
-        saveSession_UpdateSessionBugsToDb($versionid);
-
-        saveSession_UpdateSessionRequirementsToDb($versionid);
-
-        saveSession_UpdateSessionRequirementsToDb($versionid);
-
-        saveSession_UpdateSessionLinkedToDb($versionid);
-
-        saveSession_UpdateCustomFieldsToDb($versionid);
-
-    }
-
 
     mysql_close($con);
-    if ($echo) {
-        if (!$alreadySaved) {
-            echo "<p><b>Session saved</b></p>\n";
-            echo "<p><a href=\"session.php?sessionid=$sessionid&command=view\" id=\"view_session\">View session</a></p>";
-            echo "<p><a href=\"session.php?sessionid=$sessionid&command=edit\" id=\"edit_session\">Edit session</a></p>";
-
-            echo "<span style=\"color:white\"><div id=\"sessioninfo\">sessionid:<div id=\"sessionid\">$sessionid</div>, versionid:<div id=\"versionid\">$versionid</div></span></div>\n";
-        }
-    }
     return $sessionid;
 }
 
 
-/**
- * Save session to database
- */
-function copySession()
-{
-
-    echo "<h1>Copy session</h1>\n";
-    $sessionid = false;
-    $versionid = false;
-
-
-    $publickey = md5(rand());
-    $con = getMySqlConnection();
-
-
-    //Copy session
-    if ($_REQUEST["sessionid"] != "") {
-
-
-        $sessionDataToCopy = (getSessionData($_REQUEST["sessionid"]));
-
-        $sessionIdToCopy = $_REQUEST["sessionid"];
-
-        //Create a new random key
-        $sessionDataToCopy["publickey"] = md5(rand());
-
-        //Will create a new session id to map to a session
-        saveSession_CreateNewSessionId();
-
-        //Get the new session id for user x
-        $sessionid = saveSession_GetSessionIdForNewSession();
-        echo "SessionId Created: <div id=\"copySessionid\">$sessionid</div>";
-        //Insert sessiondata to mission table
-
-        copySession_InsertSessionDataToDb($sessionid, $sessionDataToCopy);
-
-        //Get versionId from db
-        $versionid = saveSession_GetVersionIdForNewSession();
-
-        $versionIdToCopy = getSessionVersionId($sessionIdToCopy);
-
-        //Create missionstatus record in Db
-        $executed = false;
-        if ($_REQUEST["executed"] != "") {
-            $executed = true;
-        }
-        saveSession_InsertSessionStatusToDb($versionid, $executed);
-
-        //Create metrics record for session
-        $metrics = array();
-        $metrics["setuppercent"] = $_REQUEST["setuppercent"];
-        $metrics["testpercent"] = $_REQUEST["testpercent"];
-        $metrics["bugpercent"] = $_REQUEST["bugpercent"];
-        $metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
-        $metrics["duration"] = $_REQUEST["duration"];
-        saveSession_InsertSessionMetricsToDb($versionid, $metrics);
-
-
-        //Create areas for session
-
-        $areasFromOldSession = getSessionAreas($versionIdToCopy);
-
-        saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
-
-
-        //TODO: Fix the rest of copy session....
-        //Create bugs connected to session
-        //        saveSession_InsertSessionBugsToDb($versionid);
-        //
-        //        //Create requirements connected to mission
-        //        saveSession_InsertSessionRequirementsToDb($versionid);
-        //
-        //        //Create sessionLinks connected to mission
-        //        saveSession_InsertSessionSessionsLinksToDb($versionid);
-
-        echo "Copy created...";
-        echo "<div id='editCopy'><a href='session.php?sessionid=$sessionid&command=edit'>Edit session</a></div>";
-
-    }
-
-
-    mysql_close($con);
-
-}
 
 /**
  *
@@ -497,7 +364,7 @@ function echoSessionForm()
         $publickey = md5(rand());
     }
 //    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
-    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"\" method=\"POST\" accept-charset=\"utf-8\">\n";
+    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"api/session/save/index.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
 
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
     echo "<input type=\"hidden\" name=\"publickey\" value=\"" . $publickey . "\">\n";

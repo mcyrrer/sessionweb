@@ -240,3 +240,8 @@ p {
     width: 1100px;
     height: 3.5em;
 }
+
+#select_area
+{
+    width: 500px;
+}

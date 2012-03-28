@@ -34,8 +34,8 @@ if (strstr($_SERVER['PHP_SELF'], "session.php") != false) {
     echo "     <script type=\"text/javascript\" src=\"editor/adapters/jquery.js\"></script>\n";
 
 }
-echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs.js\"></script>\n";
-echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs-v19.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v19.js\"></script>\n";
 
 
 echo "              <script type=\"text/javascript\">\n";
