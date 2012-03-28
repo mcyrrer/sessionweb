@@ -26,6 +26,9 @@ function checkForMaxAttachmentSize($updateJsFile = false)
         echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
         echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
     }
+    echo "<br>Debug info:<br>";
+    echo echoMaxUploadSizePhp();
+    echo "MySql max_allowed_packet:".getSqlMaxAllowedPacketAsMb()."<br>";
 
 
 }
@@ -115,6 +118,14 @@ function getMaxUploadSize()
     return $upload_mb;
 
 }
+
+function echoMaxUploadSizePhp()
+{
+    echo "PHP upload_max_filesize:". (int)(ini_get('upload_max_filesize'))."<br>";
+    echo "PHP post_max_size:".$max_post = (int)(ini_get('post_max_size'))."<br>";
+    echo "PHP memory_limit:".(int)(ini_get('memory_limit'))."<br>";
+}
+
 
 /**
  * Get the max_allowed_packaet from mysql db and return the value as bytes.

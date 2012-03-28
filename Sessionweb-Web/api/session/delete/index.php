@@ -18,7 +18,7 @@ if(!isset($_REQUEST['delete']))
     echo "<img src='../../../pictures/user-trash-full-3.png' alt=''>";
     echo "<h2>Delete session</h2>\n";
     echo "<p>Title: $title</p>";
-    echo "<p>Are you sure that you whant to delete session?</p>\n";
+    echo "<p>Are you sure that you want to delete session?</p>\n";
     echo "<a href='index.php?sessionid=$sessionid&delete=yes'>Delete</a>\n";
 
     echo "</center>";
