@@ -673,7 +673,7 @@ function echoAreaSelect($area)
     $sqlSelect .= "ORDER  BY `areaname` ASC ";
     $result = mysql_query($sqlSelect);
 
-    echo "                                  <select id=\"select_area\" name=\"area[]\" multiple=\"multiple\" size=\"4\">\n";
+    echo "                                  <select id=\"select_area\" name=\"area[]\" multiple=\"multiple\" size=\"4\" >\n";
 
 
     if (count($area) == 0) {
