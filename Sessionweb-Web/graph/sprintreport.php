@@ -258,7 +258,7 @@ function getAreasConnectedToSession($rowSessions, $areasArray, $totalTimeInSessi
 {
     $versionid = $rowSessions['versionid'];
     $totalTimeInSessions = (int)$totalTimeInSessions + (int)$rowSessions['duration_time'];
-    $sqlAreas = "SELECT * FROM sessionwebos.mission_areas WHERE versionid = $versionid";
+    $sqlAreas = "SELECT * FROM mission_areas WHERE versionid = $versionid";
     $resultTeamAreas = mysql_query($sqlAreas);
     while ($rowTeamAreas = mysql_fetch_array($resultTeamAreas))
     {

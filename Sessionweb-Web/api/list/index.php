@@ -271,7 +271,7 @@ function getSessions($data, $whereSql, $StringSearchSql)
             $notFirstArea = true;
         }
 
-        $sql = "SELECT * FROM sessionwebos.mission_debriefnotes WHERE notes NOT LIKE '' AND versionid = $versionid";
+        $sql = "SELECT * FROM mission_debriefnotes WHERE notes NOT LIKE '' AND versionid = $versionid";
         $resultDoesNotesExist = mysql_query($sql);
         if (strstr($status, "Executed") != false && mysql_num_rows($resultDoesNotesExist) != 0) {
             $debriefComments = "<img src='pictures/notify-star.png' alt='Debrief comments exists'>";
