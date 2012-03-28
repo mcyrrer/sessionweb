@@ -3,17 +3,37 @@ Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 19==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_1.7-_18.sql
+to upgrade from 1.7->18
+
+===Issue list for this release 19 ===
+ID	Type	Milestone	Summary
+71	Defect	Release19	Change from google charts to highcharts
+72	Enhanc.	Release19	Add icon on list view for executed sessions where debrief comments exists
+73	Defect	Release19	Disable/enable executed status button when search box changes
+74	Defect	Release19	Add support for mood metrics
+75	Defect	Release19	Remove the need of a first save before autosave and attachments starts to work
+76	Defect	Release19	Make it possible to remove some areas;sprints and teams without breaking sw
+77	Defect	Release19	Shared session does not displayed as executed.
+
 ==SessionWeb 18==
 Installation:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
 
 Upgrade manually:
-If you can not upgrade please manualy execute 
+If you can not upgrade please manually execute
 
 install/SessionwebDbLayoutDelta_1.7-_18.sql 
 to upgrade from 1.7->18
 
-Install manualy:
+Install manually:
 got to sessionweb/install/install.php to check that r/w of folders is correct then
 execute install/SessionwebDbLayout_18.sql
 then create a file called sessionweb/config/db.php.inc
@@ -42,12 +62,12 @@ Installation:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
 
 Upgrade manually:
-If you can not upgrade please manualy execute 
+If you can not upgrade please manually execute
 install/SessionwebDbLayoutDelta_1.5-_1.6.sql
 install/SessionwebDbLayoutDelta_1.6-_1.7.sql 
 to upgrade from 1.5->1.7
 
-Install manualy:
+Install manually:
 got to sessionweb/install/install.php to check that r/w of folders is correct then
 execute install/SessionwebDbLayout_1.7.sql
 then create a file called sessionweb/config/db.php.inc
@@ -77,10 +97,10 @@ Installation:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
 
 Upgrade manually:
-If you can not upgrade please manualy execute install/SessionwebDbLayoutDelta_1.4-_1.5.sql to 
+If you can not upgrade please manually execute install/SessionwebDbLayoutDelta_1.4-_1.5.sql to
 upgrade from 1.4->1.5
 
-Install manualy:
+Install manually:
 got to sessionweb/install/install.php to check that r/w of folders is correct then
 execute install/SessionwebDbLayout_1.5.sql
 then create a file called sessionweb/config/db.php.inc
@@ -107,10 +127,10 @@ ID	Type		Status		Milestone	Summary
 Go to sessionweb/install to install/upgrade
 
 Upgrade manually:
-If you can not upgrade please manualy execute install/SessionwebDbLayoutDelta_1.3-_1.4.sql to 
+If you can not upgrade please manually execute install/SessionwebDbLayoutDelta_1.3-_1.4.sql to
 upgrade from 1.3->1.4
 
-Install manualy:
+Install manually:
 got to sessionweb/install/install.php to check that r/w of folders then
 execute install/SessionwebDbLayout_1.4.sql
 then create a file called sessionweb/config/db.php.inc
