@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../include/validatesession.inc');
+//require_once('../include/validatesession.inc');
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 include_once ('../config/db.php.inc');
