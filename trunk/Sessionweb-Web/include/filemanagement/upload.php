@@ -120,12 +120,15 @@ class UploadHandler
 //        //                                         )));
 //    }
 
-    private function create_scaled_image($file_name, $options)
+    private function create_scaled_image($file_name, $options,$logger)
     {
+        $logger->debug("$file_name: Creating thumb for file $file_name");
         $file_path = $this->options['upload_dir'] . $file_name;
         $new_file_path = $options['upload_dir'] . $file_name;
         list($img_width, $img_height) = @getimagesize($file_path);
+        $logger->debug("$file_name: Image size: $img_width x $img_height");
         if (!$img_width || !$img_height) {
+            $logger->debug("$file_name: Image width or image hight not an integer");
             return false;
         }
         $scale = min(
@@ -137,10 +140,12 @@ class UploadHandler
         }
         $new_width = $img_width * $scale;
         $new_height = $img_height * $scale;
+        $logger->debug("$file_name: Creating a new thumb $new_width x $new_height");
         $new_img = @imagecreatetruecolor($new_width, $new_height);
         switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
             case 'jpg':
             case 'jpeg':
+                $logger->debug("$file_name: Is a jpg/jpeg");
                 $src_img = @imagecreatefromjpeg($file_path);
                 $write_image = 'imagejpeg';
                 break;
@@ -159,6 +164,7 @@ class UploadHandler
             default:
                 $src_img = $image_method = null;
         }
+        $logger->debug("$file_name: Resizeing the new picture");
         $success = $src_img && @imagecopyresampled(
                                     $new_img,
                                     $src_img,
@@ -169,8 +175,10 @@ class UploadHandler
                                     $img_height
                                 ) && $write_image($new_img, $new_file_path);
         // Free up memory (imagedestroy does not delete files):
+        $logger->debug("$file_name: Free up memory");
         @imagedestroy($src_img);
         @imagedestroy($new_img);
+        $logger->debug("$file_name: thumb created!");
         return $success;
     }
 
@@ -283,7 +291,7 @@ class UploadHandler
                 if ($file_size === $file->size) {
                     $file->url = $this->options['download_base'] . "get.php?id=" . $file->id;
                     foreach ($this->options['image_versions'] as $version => $options) {
-                        if ($this->create_scaled_image($file->name, $options)) {
+                        if ($this->create_scaled_image($file->name, $options,$logger)) {
                             $file->{$version . '_url'} = $options['upload_url']
                                                          . rawurlencode($file->name);
                         }
