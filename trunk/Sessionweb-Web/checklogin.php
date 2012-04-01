@@ -60,6 +60,7 @@ if($count==1){
     $_SESSION['useradmin'] = $row['admin'];
     $_SESSION['username'] = $myusername;
     $_SESSION['settings'] = getSessionWebSettings();
+    $_SESSION['active'] = $row['active'];
 
 
 
