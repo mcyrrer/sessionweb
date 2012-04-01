@@ -19,7 +19,10 @@ if (strcmp($_REQUEST["command"], "edit") == 0) {
     if (isset($_REQUEST["sessionid"])) {
         getMySqlConnection();
         $rowSessionData = getSessionData($_REQUEST["sessionid"]);
+        $logger->debug($_SESSION['username'].": trying to edit session: ". $_REQUEST["sessionid"]. " superuser: " . $_SESSION['superuser']. " admin: ". $_SESSION['useradmin']. " active: ". $_SESSION['active']);
+        $logger->debug($_SESSION['username'].": Session is owned by ". $rowSessionData['username']);
         if (strcmp($_SESSION['username'], $rowSessionData['username']) != 0 && $_SESSION['superuser'] != 1 && $_SESSION['useradmin'] != 1) {
+            $logger->info($_SESSION['username'].": Sessionid:".$_GET["sessionid"]." Redirect to view session since user is not owner of session or superuser/admin");
             echo "You are not the owner of the session, please reassign it to be able to edit it.";
             mysql_close();
             $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=" . view;

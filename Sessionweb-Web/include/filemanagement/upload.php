@@ -120,15 +120,16 @@ class UploadHandler
 //        //                                         )));
 //    }
 
-    private function create_scaled_image($file_name, $options,$logger)
+    private function create_scaled_image($file_name, $options, $logger)
     {
+
         $logger->debug("$file_name: Creating thumb for file $file_name");
         $file_path = $this->options['upload_dir'] . $file_name;
         $new_file_path = $options['upload_dir'] . $file_name;
         list($img_width, $img_height) = @getimagesize($file_path);
         $logger->debug("$file_name: Image size: $img_width x $img_height");
         if (!$img_width || !$img_height) {
-            $logger->debug("$file_name: Image width or image hight not an integer");
+            $logger->error("$file_name: Image width or image height not an integer");
             return false;
         }
         $scale = min(
@@ -141,11 +142,12 @@ class UploadHandler
         $new_width = $img_width * $scale;
         $new_height = $img_height * $scale;
         $logger->debug("$file_name: Creating a new thumb $new_width x $new_height");
+        $logger->debug("$file_name: PHP Memory peek usage before resize: ". (memory_get_peak_usage()/1024/1024)."mb");
         $new_img = @imagecreatetruecolor($new_width, $new_height);
         switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
             case 'jpg':
             case 'jpeg':
-                $logger->debug("$file_name: Is a jpg/jpeg");
+                $logger->debug("$file_name: Creating a new jpg picture");
                 $src_img = @imagecreatefromjpeg($file_path);
                 $write_image = 'imagejpeg';
                 break;
@@ -164,16 +166,16 @@ class UploadHandler
             default:
                 $src_img = $image_method = null;
         }
-        $logger->debug("$file_name: Resizeing the new picture");
+        $logger->debug("$file_name: Resizing the picture into thumb");
         $success = $src_img && @imagecopyresampled(
-                                    $new_img,
-                                    $src_img,
-                                    0, 0, 0, 0,
-                                    $new_width,
-                                    $new_height,
-                                    $img_width,
-                                    $img_height
-                                ) && $write_image($new_img, $new_file_path);
+            $new_img,
+            $src_img,
+            0, 0, 0, 0,
+            $new_width,
+            $new_height,
+            $img_width,
+            $img_height
+        ) && $write_image($new_img, $new_file_path);
         // Free up memory (imagedestroy does not delete files):
         $logger->debug("$file_name: Free up memory");
         @imagedestroy($src_img);
@@ -196,17 +198,18 @@ class UploadHandler
             $file_size = $_SERVER['CONTENT_LENGTH'];
         }
         if ($this->options['max_file_size'] && (
-                $file_size > $this->options['max_file_size'] ||
+            $file_size > $this->options['max_file_size'] ||
                 $file->size > $this->options['max_file_size'])
         ) {
             return 'maxFileSize';
         }
         if ($this->options['min_file_size'] &&
-            $file_size < $this->options['min_file_size']) {
+            $file_size < $this->options['min_file_size']
+        ) {
             return 'minFileSize';
         }
         if (is_int($this->options['max_number_of_files']) && (
-                count($this->get_file_objects()) >= $this->options['max_number_of_files'])
+            count($this->get_file_objects()) >= $this->options['max_number_of_files'])
         ) {
             return 'maxNumberOfFiles';
         }
@@ -221,7 +224,8 @@ class UploadHandler
         $file_name = trim(basename(stripslashes($name)), ".\x00..\x20");
         // Add missing file extension for known image types:
         if (strpos($file_name, '.') === false &&
-            preg_match('/^image\/(gif|jpe?g|png)/', $type, $matches)) {
+            preg_match('/^image\/(gif|jpe?g|png)/', $type, $matches)
+        ) {
             $file_name .= '.' . $matches[1];
         }
         return $file_name;
@@ -230,10 +234,10 @@ class UploadHandler
 
     private function handle_file_upload($uploaded_file, $name, $size, $type, $error, $logger)
     {
-        $logger->debug('File trying to be uploaded:' . $name);
-        $logger->debug('Temp file name:' . $uploaded_file);
-        $logger->debug('Size:' . $size);
-        $logger->debug('Type:' . $type);
+        $logger->debug("$name: trying to be uploaded:" . $name);
+        $logger->debug("$name: Temp file name:" . $uploaded_file);
+        $logger->debug("$name: Size:" . $size);
+        $logger->debug("$name: Type:" . $type);
         $file = new stdClass();
         $file->name = $this->trim_file_name($name, $type);
         $file->size = intval($size);
@@ -246,21 +250,20 @@ class UploadHandler
         $con = getMySqlConnection();
         $sql_limit = getSqlMaxAllowedPacketAsMb();
         mysql_close($con);
-        $upload_mb = min($max_upload, $max_post, $memory_limit,$sql_limit);
+        $upload_mb = min($max_upload, $max_post, $memory_limit, $sql_limit);
         $max_file_size = $upload_mb * 1024 * 1024;
 
         if ($file->size > $max_file_size) {
-            $logger->debug($name . ' is to large. Max size:' . $max_file_size . ' File size:' . $file->size);
+            $logger->debug("$name: is to large. Max size:" . $max_file_size . ' File size:' . $file->size);
 
-            $file->error = 'File to large. File size limit is ' . number_format($max_file_size / 1024 / 1024, 2) . ' mb';
+            $file->error = "$name: to large. File size limit is " . number_format($max_file_size / 1024 / 1024, 2) . ' mb';
         }
-        else
-        {
+        else {
             if (!$error && $file->name) {
                 $file_path = $this->options['upload_dir'] . $file->name;
-                $logger->debug('File_path:' . $file_path);
+                $logger->debug("$name: File_path:" . $file_path);
                 $append_file = !$this->options['discard_aborted_uploads'] &&
-                               is_file($file_path) && $file->size > filesize($file_path);
+                    is_file($file_path) && $file->size > filesize($file_path);
                 clearstatcache();
                 if ($uploaded_file && is_uploaded_file($uploaded_file)) {
                     // multipart/formdata uploads (POST method uploads)
@@ -271,8 +274,9 @@ class UploadHandler
                             FILE_APPEND
                         );
                     } else {
-                        $logger->debug('Will try to upload file to database');
+                        $logger->debug("$name: Will try to upload file to database");
                         $file->id = $this->uploadToDatabase($uploaded_file, $file, $logger);
+
                         move_uploaded_file($uploaded_file, $file_path);
                     }
                 } else {
@@ -284,20 +288,20 @@ class UploadHandler
                     );
                 }
 
-                $logger->debug('File_path later:' . $file_path);
-                $logger->debug('FileSize later:' . filesize($file_path));
+                $logger->debug("$name: File_path later:" . $file_path);
+                $logger->debug("$name: FileSize later:" . filesize($file_path));
                 $file_size = filesize($file_path);
 
                 if ($file_size === $file->size) {
                     $file->url = $this->options['download_base'] . "get.php?id=" . $file->id;
                     foreach ($this->options['image_versions'] as $version => $options) {
-                        if ($this->create_scaled_image($file->name, $options,$logger)) {
+                        if ($this->create_scaled_image($file->name, $options, $logger)) {
                             $file->{$version . '_url'} = $options['upload_url']
-                                                         . rawurlencode($file->name);
+                                . rawurlencode($file->name);
                         }
                     }
                 } else if ($this->options['discard_aborted_uploads']) {
-                    $logger->error('File size issue: ' . $file_size . " vs " . $file->size);
+                    $logger->error("$name: File size issue: " . $file_size . " vs " . $file->size);
                     unlink($file_path);
                     $file->error = 'abort';
                 }
@@ -305,11 +309,13 @@ class UploadHandler
                 $file->delete_url = $this->options['download_base'] . "delete.php?id=" . $file->id;
                 $file->delete_type = 'DELETE';
             } else {
-                $logger->error($name . ': Other error');
+                $logger->error("$name: Other error");
                 $file->error = $error;
             }
             unlink($file_path);
         }
+           $logger->debug("$name: PHP Memory peek usage: " . (memory_get_peak_usage() / 1024 / 1024) . "mb");
+
         return $file;
     }
 
@@ -317,39 +323,43 @@ class UploadHandler
     {
         try {
 
-
-            $logger->debug('Will open file to be read into memory');
+            $name = $file->name;
+            $logger->debug("$name: Will open file to be read into memory");
             $fp = fopen($uploaded_file, 'r');
             $content = fread($fp, filesize($uploaded_file));
-            $logger->debug('File loaded into memory');
+            $logger->debug("$name: File loaded into memory");
 
             include "../../config/db.php.inc";
 
 
-            $con=getMySqlConnection();
+            $con = getMySqlConnection();
 
 
             $content = addslashes($content);
             $file->name = addslashes($file->name);
 
             $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
-                   "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
+                "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
 
             $sqlDebug = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
-                        "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '........')";
+                "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '........')";
 
             $result = mysql_query($sql);
 
             if (!$result) {
-                $logger->error($file->name . ' ' . mysql_error());
-                $logger->debug($sqlDebug);
+                $logger->error($name . ': ' . mysql_error());
+                $logger->debug($name . ': ' . $sqlDebug);
                 //echo "upload_attachment: " . mysql_error() . "<br/>";
 
                 //echo $sql;
             }
+            else {
+                $logger->debug($name . ': File uploaded into database');
+
+            }
 
             $sqlFindLatestId = "SELECT mission_versionid FROM `mission_attachments` ORDER BY `mission_versionid` DESC LIMIT 0,1";
-            $logger->debug($sqlFindLatestId);
+            $logger->debug($name .": ".$sqlFindLatestId);
             $result2 = mysql_query($sqlFindLatestId);
             $row = mysql_fetch_row($result2);
             //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
@@ -357,12 +367,12 @@ class UploadHandler
             //   print_r($row);
             $id = $row[0];
             //}
-            $logger->debug('File id in database: ' . $id);
+            $logger->debug($name . ': File id in database: ' . $id);
             mysql_close($con);
             return $id;
         }
         catch (Exception $e) {
-            $logger->error($e->getMessage());
+            $logger->error($name . ': ' . $e->getMessage());
         }
     }
 
@@ -382,7 +392,7 @@ class UploadHandler
     public function post($logger)
     {
         $upload = isset($_FILES[$this->options['param_name']]) ?
-                $_FILES[$this->options['param_name']] : null;
+            $_FILES[$this->options['param_name']] : null;
         $info = array();
         if ($upload && is_array($upload['tmp_name'])) {
             $logger->debug('Uploaded file is in an array... will try to loop through all of them');
@@ -390,11 +400,11 @@ class UploadHandler
                 $info[] = $this->handle_file_upload(
                     $upload['tmp_name'][$index],
                     isset($_SERVER['HTTP_X_FILE_NAME']) ?
-                            $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
+                        $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
                     isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                            $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
+                        $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
                     isset($_SERVER['HTTP_X_FILE_TYPE']) ?
-                            $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                        $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
                     $upload['error'][$index], $logger
                 );
             }
@@ -403,17 +413,18 @@ class UploadHandler
             $info[] = $this->handle_file_upload(
                 $upload['tmp_name'],
                 isset($_SERVER['HTTP_X_FILE_NAME']) ?
-                        $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'],
+                    $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'],
                 isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                        $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'],
+                    $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'],
                 isset($_SERVER['HTTP_X_FILE_TYPE']) ?
-                        $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'],
+                    $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'],
                 $upload['error'], $logger
             );
         }
         header('Vary: Accept');
         if (isset($_SERVER['HTTP_ACCEPT']) &&
-            (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+            (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+        ) {
             header('Content-type: application/json');
         } else {
             header('Content-type: text/plain');

@@ -42,6 +42,5 @@ $appender->activateOptions();
 
 $logger->removeAllAppenders();
 $logger->addAppender($appender);
-$logger->info("Logger Enabled");
 
 ?>

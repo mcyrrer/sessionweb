@@ -82,6 +82,7 @@ function executeCommand()
 
             checkFoldersForRW();
             checkForMaxAttachmentSize();
+            debugInfo();
             mysql_close();
         }
         elseif (strcmp($_REQUEST["command"], "customfileds") == 0)
@@ -142,6 +143,12 @@ function executeCommand()
     }
 
 
+}
+
+function debugInfo()
+{
+    echo "Browser: ".$_SERVER['HTTP_USER_AGENT']."<br>";
+    echo "PHP Memory peek usage: ". (memory_get_peak_usage()/1024/1024)."mb<br>";
 }
 
 function insertCustomFieldNameToDb()
