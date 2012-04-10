@@ -13,14 +13,14 @@ require_once ('../../../../include/apistatuscodes.inc');
 $response = array();
 if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
 
-    if (isset($_REQUEST['area']) && strlen($_REQUEST['area']) > 0) {
-        $areaName = $_REQUEST['area'];
+    if (isset($_REQUEST['sprint']) && strlen($_REQUEST['sprint']) > 0) {
+        $sprintName = $_REQUEST['sprint'];
 
         $con = getMySqlConnection();
 
-        $areaName = mysql_real_escape_string($areaName);
+        $sprintName = mysql_real_escape_string($sprintName);
 
-        $sql = "DELETE FROM areas WHERE areaname='$areaName';";
+        $sql = "DELETE FROM sprintnames WHERE `sprintname`='$sprintName'";
 
 
         $result = mysql_query($sql);

@@ -11,16 +11,16 @@ require_once ('../../../../include/apistatuscodes.inc');
 
 
 $response = array();
-if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
+if ($_SESSION['useradmin'] == 1) {
 
-    if (isset($_REQUEST['area']) && strlen($_REQUEST['area']) > 0) {
-        $areaName = $_REQUEST['area'];
+    if (isset($_REQUEST['team']) && strlen($_REQUEST['team']) > 0) {
+        $teamName = $_REQUEST['team'];
 
         $con = getMySqlConnection();
 
-        $areaName = mysql_real_escape_string($areaName);
+        $teamName = mysql_real_escape_string($teamName);
 
-        $sql = "DELETE FROM areas WHERE areaname='$areaName';";
+        $sql = "DELETE FROM teamnames WHERE `teamname`='$teamName'";
 
 
         $result = mysql_query($sql);

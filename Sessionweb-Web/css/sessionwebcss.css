@@ -241,6 +241,21 @@ p {
     height: 3.5em;
 }
 
+.divider_settings {
+    position: relative;
+    width: 790px;
+    height: 0.1em;
+    background: #808500 repeat-x;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.divider_settings_noline {
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /*
 #select_area
 {
