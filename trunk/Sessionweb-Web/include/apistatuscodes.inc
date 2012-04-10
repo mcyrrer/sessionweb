@@ -4,6 +4,10 @@ define("ITEM_ALREADY_EXIST", 1);
 define("ITEM_NOT_ADDED", 2);
 define("ITEM_NOT_PROVIDED_IN_REQUEST", 3);
 define("UNAUTHORIZED", 4);
-define("ITEM_REMOVED", 3);
+define("ITEM_REMOVED", 5);
+define("SQL_ERROR", 6);
+define("Ok", 7);
+define("ITEM_NOT_REMOVED", 8);
+
 
 ?>

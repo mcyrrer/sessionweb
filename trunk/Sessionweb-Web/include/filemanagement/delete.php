@@ -10,6 +10,7 @@ $con = getMySqlConnection();
 
 $sql = "DELETE FROM mission_attachments WHERE id = " . $_GET['id'];
 $result = mysql_query($sql) or die('Error, query failed');
+$logger->debug('File with ID :' . $_GET['id'] . ' deleted by ' . $_SESSION['user']);
 
 mysql_close();
 

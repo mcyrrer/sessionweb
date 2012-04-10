@@ -24,6 +24,11 @@ if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
 
 
 }
+
+if (strstr($_SERVER['PHP_SELF'], "settings2.php") != false) {
+
+    echo "     <script src=\"js/sessionweb-settings-v19.js\" type=\"text/javascript\"></script>\n";
+}
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
 
@@ -80,6 +85,8 @@ echo "      <a href=\"session.php?command=edit\" id=\"url_newsession\">New sessi
 echo "      <a href=\"list2.php\" id=\"url_list\">List sessions</a> |";
 echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";
+echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings 2</a> |";
+
 
 
 if (isset($_SESSION['username'])) {
