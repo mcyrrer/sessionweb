@@ -256,6 +256,15 @@ p {
     margin-bottom: 10px;
 }
 
+.log_div {
+    position: relative;
+    width: 300px;
+
+    background: #808500 repeat-x;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /*
 #select_area
 {

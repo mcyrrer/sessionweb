@@ -20,6 +20,8 @@ echo "<p>Title: $title</p>";
 echo "Share this link to make it possible to view the session without a password";
 echo "<p><a href='../../../publicview.php?sessionid=$sessionid&command=view&publickey=$publickey' target='_blank'>Link to session</a></p>";
 
+
 echo "</center>";
+
 
 ?>

@@ -15,6 +15,8 @@ $(document).ready(function () {
     addtestEnvironment();
     removetestEnvironment();
 
+    changePersonalPassword();
+
 });
 
 function populateRemoveAreasSelect() {
@@ -31,11 +33,11 @@ function populateRemoveAreasSelect() {
                 });
             }
             else if (data.status == '401') {
-                $('#log').prepend('<div>Error: Unauthorized.</div>');
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
             }
             else if (data.status == '500') {
-                $('#log').prepend('<div>Error: SQL Error</div>');
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
             }
         }
     });
@@ -126,14 +128,14 @@ function removeArea() {
             url:'api/settings/area/remove/index.php',
             complete:function (data) {
                 if (data.status == '200') {
-                    $('#log').prepend('<div>Area ' + $('#remove_area_select').val() + ' removed.</div>');
+                    $('#log').prepend('<div class="log_div">Area ' + $('#remove_area_select').val() + ' removed.</div>');
                 }
                 else if (data.status == '401') {
-                    $('#log').prepend('<div>Error: Unauthorized.</div>');
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                 }
                 else if (data.status == '500') {
-                    $('#log').prepend('<div>Error: Item not removed</div>');
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
                 }
                 populateRemoveAreasSelect();
             }
@@ -151,27 +153,27 @@ function addArea() {
                 complete:function (data) {
 
                     if (data.status == '201') {
-                        $('#log').prepend('<div>Area ' + $('#areaname').val() + ' added.</div>');
+                        $('#log').prepend('<div class="log_div">Area ' + $('#areaname').val() + ' added.</div>');
                     }
                     else if (data.status == '400') {
-                        $('#log').prepend('<div>Error: Area name not added in request.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Area name not added in request.</div>');
                     }
                     else if (data.status == '401') {
-                        $('#log').prepend('<div>Error: Unauthorized.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                     }
                     else if (data.status == '409') {
-                        $('#log').prepend('<div>Area ' + $('#areaname').val() + ' already exist.</div>');
+                        $('#log').prepend('<div class="log_div">Area ' + $('#areaname').val() + ' already exist.</div>');
                     }
                     else if (data.status == '500') {
-                        $('#log').prepend('<div>Error: Item not added due to internal server error.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
                     }
                     $('#areaname').val('')
                 }
             });
         }
         else {
-            $('#log').prepend('<div>Area name not added in request.</div>');
+            $('#log').prepend('<div class="log_div">Area name not added in request.</div>');
         }
     });
 }
@@ -190,11 +192,11 @@ function populateRemoveTeamsSelect() {
                 });
             }
             else if (data.status == '401') {
-                $('#log').prepend('<div>Error: Unauthorized.</div>');
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
             }
             else if (data.status == '500') {
-                $('#log').prepend('<div>Error: SQL Error</div>');
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
             }
         }
     });
@@ -211,28 +213,28 @@ function addTeam() {
                 complete:function (data) {
 
                     if (data.status == '201') {
-                        $('#log').prepend('<div>Team ' + $('#teamname').val() + ' added.</div>');
+                        $('#log').prepend('<div class="log_div">Team ' + $('#teamname').val() + ' added.</div>');
                         populateRemoveTeamsSelect();
                     }
                     else if (data.status == '400') {
-                        $('#log').prepend('<div>Error: Team name not added in request.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Team name not added in request.</div>');
                     }
                     else if (data.status == '401') {
-                        $('#log').prepend('<div>Error: Unauthorized.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                     }
                     else if (data.status == '409') {
-                        $('#log').prepend('<div>Team ' + $('#teamname').val() + ' already exist.</div>');
+                        $('#log').prepend('<div class="log_div">Team ' + $('#teamname').val() + ' already exist.</div>');
                     }
                     else if (data.status == '500') {
-                        $('#log').prepend('<div>Error: Item not added due to internal server error.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
                     }
                     $('#teamname').val('')
                 }
             });
         }
         else {
-            $('#log').prepend('<div>Team name not added in request.</div>');
+            $('#log').prepend('<div class="log_div">Team name not added in request.</div>');
         }
     });
 }
@@ -245,14 +247,14 @@ function removeTeam() {
             url:'api/settings/team/remove/index.php',
             complete:function (data) {
                 if (data.status == '200') {
-                    $('#log').prepend('<div>Team ' + $('#remove_team_select').val() + ' removed.</div>');
+                    $('#log').prepend('<div class="log_div">Team ' + $('#remove_team_select').val() + ' removed.</div>');
                 }
                 else if (data.status == '401') {
-                    $('#log').prepend('<div>Error: Unauthorized.</div>');
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                 }
                 else if (data.status == '500') {
-                    $('#log').prepend('<div>Error: Item not removed</div>');
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
                 }
                 populateRemoveTeamsSelect();
             }
@@ -275,11 +277,11 @@ function populateRemoveSprintsSelect() {
                 });
             }
             else if (data.status == '401') {
-                $('#log').prepend('<div>Error: Unauthorized.</div>');
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
             }
             else if (data.status == '500') {
-                $('#log').prepend('<div>Error: SQL Error</div>');
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
             }
         }
     });
@@ -296,28 +298,28 @@ function addSprint() {
                 complete:function (data) {
 
                     if (data.status == '201') {
-                        $('#log').prepend('<div>sprint ' + $('#sprintname').val() + ' added.</div>');
+                        $('#log').prepend('<div class="log_div">sprint ' + $('#sprintname').val() + ' added.</div>');
                         populateRemoveSprintsSelect();
                     }
                     else if (data.status == '400') {
-                        $('#log').prepend('<div>Error: sprint name not added in request.</div>');
+                        $('#log').prepend('<div class="log_div">Error: sprint name not added in request.</div>');
                     }
                     else if (data.status == '401') {
-                        $('#log').prepend('<div>Error: Unauthorized.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                     }
                     else if (data.status == '409') {
-                        $('#log').prepend('<div>sprint ' + $('#sprintname').val() + ' already exist.</div>');
+                        $('#log').prepend('<div class="log_div">sprint ' + $('#sprintname').val() + ' already exist.</div>');
                     }
                     else if (data.status == '500') {
-                        $('#log').prepend('<div>Error: Item not added due to internal server error.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
                     }
                     $('#sprintname').val('')
                 }
             });
         }
         else {
-            $('#log').prepend('<div>sprint name not added in request.</div>');
+            $('#log').prepend('<div class="log_div">sprint name not added in request.</div>');
         }
     });
 }
@@ -330,14 +332,14 @@ function removeSprint() {
             url:'api/settings/sprint/remove/index.php',
             complete:function (data) {
                 if (data.status == '200') {
-                    $('#log').prepend('<div>sprint ' + $('#remove_sprint_select').val() + ' removed.</div>');
+                    $('#log').prepend('<div class="log_div">sprint ' + $('#remove_sprint_select').val() + ' removed.</div>');
                 }
                 else if (data.status == '401') {
-                    $('#log').prepend('<div>Error: Unauthorized.</div>');
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                 }
                 else if (data.status == '500') {
-                    $('#log').prepend('<div>Error: Item not removed</div>');
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
                 }
                 populateRemoveSprintsSelect();
             }
@@ -359,11 +361,11 @@ function populateRemovetesTenvironmentsSelect() {
                 });
             }
             else if (data.status == '401') {
-                $('#log').prepend('<div>Error: Unauthorized.</div>');
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
             }
             else if (data.status == '500') {
-                $('#log').prepend('<div>Error: SQL Error</div>');
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
             }
         }
     });
@@ -383,28 +385,28 @@ function addtestEnvironment() {
                 complete:function (data) {
 
                     if (data.status == '201') {
-                        $('#log').prepend('<div>testenvironment ' + $('#teName').val() + ' added.</div>');
+                        $('#log').prepend('<div class="log_div">testenvironment ' + $('#teName').val() + ' added.</div>');
                         populateRemovetesTenvironmentsSelect();
                     }
                     else if (data.status == '400') {
-                        $('#log').prepend('<div>Error: testenvironment name not added in request.</div>');
+                        $('#log').prepend('<div class="log_div">Error: testenvironment name not added in request.</div>');
                     }
                     else if (data.status == '401') {
-                        $('#log').prepend('<div>Error: Unauthorized.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                     }
                     else if (data.status == '409') {
-                        $('#log').prepend('<div>testenvironment ' + $('#teName').val() + ' already exist.</div>');
+                        $('#log').prepend('<div class="log_div">testenvironment ' + $('#teName').val() + ' already exist.</div>');
                     }
                     else if (data.status == '500') {
-                        $('#log').prepend('<div>Error: Item not added due to internal server error.</div>');
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
                     }
                     $('#testenvironmentname').val('')
                 }
             });
         }
         else {
-            $('#log').prepend('<div>testenvironment name not added in request.</div>');
+            $('#log').prepend('<div class="log_div">testenvironment name not added in request.</div>');
         }
     });
 }
@@ -417,18 +419,72 @@ function removetestEnvironment() {
             url:'api/settings/testenvironment/remove/index.php',
             complete:function (data) {
                 if (data.status == '200') {
-                    $('#log').prepend('<div>testenvironment ' + $('#remove_testenvironment_select').val() + ' removed.</div>');
+                    $('#log').prepend('<div class="log_div">testenvironment ' + $('#remove_testenvironment_select').val() + ' removed.</div>');
                 }
                 else if (data.status == '401') {
-                    $('#log').prepend('<div>Error: Unauthorized.</div>');
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                 }
                 else if (data.status == '500') {
-                    $('#log').prepend('<div>Error: Item not removed</div>');
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
                 }
                 populateRemovetesTenvironmentsSelect();
             }
         });
+    });
+}
+
+function changePersonalPassword() {
+    $('#change_personal_password_exe').click(function () {
+
+        if ($('#changepasswordold').val() != '' && $('#changepassword1').val() != '' && $('#changepassword2').val() != '') {
+            if ($('#changepassword1').val() == $('#changepassword2').val()) {
+                if ($('#changepassword1').val().length > 5) {
+                    $.ajax({
+                        type:"GET",
+                        data:"changepasswordold=" + $('#changepasswordold').val() +
+                            "&changepassword1=" + $('#changepassword1').val() +
+                            "&changepassword2=" + $('#changepassword2').val(),
+                        url:'api/settings/user/password/change/index.php',
+                        complete:function (data) {
+
+                            if (data.status == '201') {
+                                $('#log').prepend('<div class="log_div">Password changed.</div>');
+
+                            }
+                            else if (data.status == '400') {
+                                $('#log').prepend('<div class="log_div">Error: parameters is not correct.</div>');
+                            }
+                            else if (data.status == '401') {
+                                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                            }
+                            else if (data.status == '500') {
+                                $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                            }
+                            else
+                            {
+                                $('#log').prepend('<div class="log_div">Error: Some error that could not be determined have happend.</div>');
+
+                            }
+
+                        }
+                    });
+                }
+                else
+                {
+                    $('#log').prepend('<div class="log_div">Password is too short. Need to longer then 5 characters.</div>');
+
+                }
+            }
+            else {
+                $('#log').prepend('<div class="log_div">New Password does not match</div>');
+
+            }
+        }
+        else {
+            $('#log').prepend('<div class="log_div">You need to add your old password AND the new one(twice)</div>');
+        }
     });
 }
 

@@ -19,18 +19,47 @@ require_once('include/session_common_functions.php.inc');
             <td width="800" valign="top">
                 <h3>My Settings</h3>
 
-<!--                <div>-->
-<!--                    <a href="#" id='change_personal_password_menu'>Change password</a>-->
-<!--                </div>-->
-<!--                <div id='change_personal_password'>----</div>-->
-<!---->
-<!--                <div class='divider_settings'></div>-->
-<!---->
-<!--                <div>-->
-<!--                    <a href="#" id='change_personal_settings_menu'>User settings</a>-->
-<!--                </div>-->
-<!--                <div id='change_personal_settings'>----</div>-->
-<!---->
+                <div>
+                    <a href="#" id='change_personal_password_menu'>Change password</a>
+                </div>
+                <div id='change_personal_password'>
+
+                    <table border="0" ><input
+                        type="hidden" name="usernametoupdate" value="mattias">
+                        <input type="hidden" name="command" value="changepassword">
+                        <tr>
+                            <td align="left">
+                                Old password
+                            </td>
+                            <td><input type="password" size="50" value="" id="changepasswordold">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                New password
+                            </td>
+                            <td><input type="password" size="50" value="" id="changepassword1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                Retype password
+                            </td>
+                            <td><input type="password" size="50" value="" id="changepassword2">
+                            </td>
+                        </tr>
+                    </table>
+                    <span id='change_personal_password_exe'>CHANGE PASSWORD</span>
+
+                </div>
+
+                <div class='divider_settings'></div>
+
+                <div>
+                    <a href="#" id='change_personal_settings_menu'>User settings</a>
+                </div>
+                <div id='change_personal_settings'>----</div>
+
 
                 <h3>Manage Content</h3>
 
@@ -95,7 +124,8 @@ require_once('include/session_common_functions.php.inc');
                     <div class='divider_settings'></div>
                     <p>Add testenvironment</p>
                     Name:<br> <input type="text" size="50" value="" id="teName"><br>
-                    Web page with information about software running on environment:<br><i>By adding this sessionweb will be able to automatically fetch running software from this environment</i><br>
+                    Web page with information about software running on environment:<br><i>By adding this sessionweb
+                    will be able to automatically fetch running software from this environment</i><br>
                     <input type="text" size="50" value="" id="teUrl"><br>
                     Username:<br><input type="text" size="50" value="" id="teUser"><br>
                     Password:<br><input type="text" size="50" value="" id="tePassword"><br>
@@ -112,33 +142,33 @@ require_once('include/session_common_functions.php.inc');
 
                 <div class='divider_settings'></div>
 
-<!--                <div>-->
-<!--                    <a href="#" id='custom_fields_menu'>Manage Custom Fields</a>-->
-<!--                </div>-->
-<!--                <div id='add_remove_custom_fields'>-->
-<!--                    <div id='add_custom_fields'>add team</div>-->
-<!--                    <div id='remove_custom_fields'>remove team</div>-->
-<!--                </div>-->
+                <!--                <div>-->
+                <!--                    <a href="#" id='custom_fields_menu'>Manage Custom Fields</a>-->
+                <!--                </div>-->
+                <!--                <div id='add_remove_custom_fields'>-->
+                <!--                    <div id='add_custom_fields'>add team</div>-->
+                <!--                    <div id='remove_custom_fields'>remove team</div>-->
+                <!--                </div>-->
 
                 <div class='divider_settings'></div>
 
                 <h3>Site Settings</h3>
 
-<!--                <div>-->
-<!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->
-<!--                </div>-->
-<!--                <div id='change_configuration'>-->
-<!--                    ----->
-<!--                </div>-->
-<!---->
-<!--                <div class='divider_settings'></div>-->
-<!---->
-<!--                <div>-->
-<!--                    <a href="#" id='systemcheck_menu'>System Check</a>-->
-<!--                </div>-->
-<!--                <div id='systemcheck'>-->
-<!--                    ----->
-<!--                </div>-->
+                <!--                <div>-->
+                <!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->
+                <!--                </div>-->
+                <!--                <div id='change_configuration'>-->
+                <!--                    ----->
+                <!--                </div>-->
+                <!---->
+                <!--                <div class='divider_settings'></div>-->
+                <!---->
+                <!--                <div>-->
+                <!--                    <a href="#" id='systemcheck_menu'>System Check</a>-->
+                <!--                </div>-->
+                <!--                <div id='systemcheck'>-->
+                <!--                    ----->
+                <!--                </div>-->
 
 
             </td>
