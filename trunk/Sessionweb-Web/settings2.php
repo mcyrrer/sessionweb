@@ -53,7 +53,7 @@ require_once('include/session_common_functions.php.inc');
 
                 </div>
 
-                <div class='divider_settings'></div>
+
 
                 <div>
                     <a href="#" id='change_personal_settings_menu'>User settings</a>
@@ -61,7 +61,7 @@ require_once('include/session_common_functions.php.inc');
                 <div id='change_personal_settings'>----</div>
 
 
-                <h3>Manage Content</h3>
+                <h3 id="manage_content">Manage Content</h3>
 
                 <div>
                     <a href="#" id='team_menu'>Manage Team Entries</a>
@@ -77,9 +77,10 @@ require_once('include/session_common_functions.php.inc');
                     <div>
                         <select id='remove_team_select'></select> <span id='remove_team'>REMOVE</span>
                     </div>
+                    <div class='divider_settings'></div>
+
                 </div>
 
-                <div class='divider_settings'></div>
 
                 <div>
                     <a href="#" id='sprint_menu'>Manage Sprint Entries</a>
@@ -95,9 +96,9 @@ require_once('include/session_common_functions.php.inc');
                     <div>
                         <select id='remove_sprint_select'></select> <span id='remove_sprint'>REMOVE</span>
                     </div>
+                    <div class='divider_settings'></div>
                 </div>
 
-                <div class='divider_settings'></div>
 
                 <div>
                     <a href="#" id='area_menu'>Manage Area Entries</a>
@@ -113,9 +114,9 @@ require_once('include/session_common_functions.php.inc');
                     <div>
                         <select id='remove_area_select'></select> <span id='remove_area'>REMOVE</span>
                     </div>
+                    <div class='divider_settings'></div>
                 </div>
 
-                <div class='divider_settings'></div>
 
                 <div>
                     <a href="#" id='testenvironments_menu'>Manage Test Environments Entries</a>
@@ -138,9 +139,9 @@ require_once('include/session_common_functions.php.inc');
                         <select id='remove_testenvironment_select'></select> <span
                         id='remove_testenvironment'>REMOVE</span>
                     </div>
+                    <div class='divider_settings'></div>
                 </div>
 
-                <div class='divider_settings'></div>
 
                 <!--                <div>-->
                 <!--                    <a href="#" id='custom_fields_menu'>Manage Custom Fields</a>-->
@@ -150,9 +151,8 @@ require_once('include/session_common_functions.php.inc');
                 <!--                    <div id='remove_custom_fields'>remove team</div>-->
                 <!--                </div>-->
 
-                <div class='divider_settings'></div>
 
-                <h3>Site Settings</h3>
+                <h3 id="site_settings">Site Settings</h3>
 
                 <!--                <div>-->
                 <!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->

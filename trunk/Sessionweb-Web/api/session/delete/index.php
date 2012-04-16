@@ -4,6 +4,8 @@ require_once('../../../include/validatesession.inc');
 require_once ('../../../include/db.php');
 include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
+include_once('../../../include/session_database_functions.php.inc');
+require_once ('../../../include/loggingsetup.php');
 
 $con = getMySqlConnection();
 $sessionInfo = (getSessionData($_REQUEST["sessionid"]));
@@ -25,7 +27,9 @@ if(!isset($_REQUEST['delete']))
     die();
 }
 if (strcmp($_SESSION['username'],$sessionInfo['username'])== 0 || $_SESSION['superuser']==1 || $_SESSION['useradmin']==1) {
+    $title = getSessionTitle(getSessionVersionId($sessionid));
     deleteSessionFromDatabase($sessionid);
+    $logger->info($_SESSION['username']." deleted session ($sessionid): $title");
 
     $title = $sessionInfo["title"];
     echo "<center>";

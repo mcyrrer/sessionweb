@@ -8,6 +8,7 @@ error_reporting(0);
 require_once('../../../../config/db.php.inc');
 require_once ('../../../../include/db.php');
 require_once ('../../../../include/apistatuscodes.inc');
+require_once ('../../../../include/loggingsetup.php');
 
 
 $response = array();
@@ -33,6 +34,7 @@ if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
         }
         else
         {
+            $logger->info($_SESSION['username']." removed sprint $sprintName");
             header("HTTP/1.0 200 OK");
             $response['code'] = ITEM_REMOVED;
             $response['text'] = "ITEM_REMOVED";

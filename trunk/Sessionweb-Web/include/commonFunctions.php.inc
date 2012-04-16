@@ -203,6 +203,7 @@ function getSessionDebrief($versionid)
     return mysql_fetch_array($resultSession);
 }
 
+
 function getSessionData($sessionid)
 {
     $sqlSelectSession = "";

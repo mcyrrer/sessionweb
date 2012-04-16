@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    getUserSettings();
+
     populateRemoveAreasSelect();
     populateRemoveTeamsSelect();
     populateRemoveSprintsSelect();
@@ -18,6 +20,40 @@ $(document).ready(function () {
     changePersonalPassword();
 
 });
+
+function applyUserSettingsToLayout(userSettings) {
+    if(parseInt(userSettings['superuser'])==0 && parseInt(userSettings['admin'])==0)
+    {
+        $("#manage_content").hide();
+        $("#site_settings").hide();
+    }
+    else if(parseInt(userSettings['admin'])!=1)
+    {
+        $("#team_menu").hide();
+        $("#testenvironments_menu").hide();
+        $("#sprint_menu").hide();
+        $("#site_settings").hide();
+
+    }
+
+}
+
+function getUserSettings() {
+    $.ajax({
+        type:"GET",
+        url:'api/settings/user/sitesettings/get/',
+        complete:function (data, xhr, statusText) {
+            if (data.status == '200') {
+                $('#remove_area_select').html('');
+                var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                applyUserSettingsToLayout(jsonResponseContent);
+            }
+            else if (data.status == '500') {
+                $('#log').prepend('<div class="log_div">Error: SQL Error during load of personal settings</div>');
+            }
+        }
+    });
+}
 
 function populateRemoveAreasSelect() {
     $.ajax({
@@ -462,8 +498,7 @@ function changePersonalPassword() {
                             else if (data.status == '500') {
                                 $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
                             }
-                            else
-                            {
+                            else {
                                 $('#log').prepend('<div class="log_div">Error: Some error that could not be determined have happend.</div>');
 
                             }
@@ -471,8 +506,7 @@ function changePersonalPassword() {
                         }
                     });
                 }
-                else
-                {
+                else {
                     $('#log').prepend('<div class="log_div">Password is too short. Need to longer then 5 characters.</div>');
 
                 }
