@@ -10,6 +10,7 @@ error_reporting(0);
 require_once('../../../../../config/db.php.inc');
 require_once ('../../../../../include/db.php');
 require_once ('../../../../../include/apistatuscodes.inc');
+require_once ('../../../../../include/loggingsetup.php');
 
 
 $response = array();
@@ -47,6 +48,7 @@ if (isset($_REQUEST['changepasswordold']) && strlen($_REQUEST['changepasswordold
         }
         else
         {
+            $logger->debug($_SESSION['username']." changed his/her password");
             header("HTTP/1.0 201 Created");
             $response['code'] = ITEM_ADDED;
             $response['text'] = "ITEM_ADDED";

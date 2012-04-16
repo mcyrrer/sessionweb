@@ -8,6 +8,7 @@ error_reporting(0);
 require_once('../../../../config/db.php.inc');
 require_once ('../../../../include/db.php');
 require_once ('../../../../include/apistatuscodes.inc');
+require_once ('../../../../include/loggingsetup.php');
 
 
 
@@ -47,6 +48,7 @@ if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
         }
         else
         {
+            $logger->info($_SESSION['username']." created area $areaName");
             header("HTTP/1.0 201 Created");
             $response['code'] = ITEM_ADDED;
             $response['text'] = "ITEM_ADDED";
