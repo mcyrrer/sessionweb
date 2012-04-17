@@ -18,17 +18,47 @@ $(document).ready(function () {
     removetestEnvironment();
 
     changePersonalPassword();
+    updatePersonalSettings();
 
 });
 
+function updatePersonalSettings() {
+    $('#change_personal_settings_exe').click(function () {
+
+        $.ajax({
+            type:"GET",
+            data:"listsettings=" + $('#personal_changelistsettings_options').val()
+                + "&team=" + $('#personal_select_team').val()
+                + "&sprint=" + $('#personal_select_sprint').val()
+                + "&area=" + $('#personal_select_area').val(),
+            url:'api/settings/user/personalsettings/update/index.php',
+            complete:function (data) {
+
+                if (data.status == '201') {
+                    $('#log').prepend('<div class="log_div">User settings updated.</div>');
+                }
+                else if (data.status == '400') {
+                    $('#log').prepend('<div class="log_div">Error: User settings not added in request.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: User settings not updated due to internal server error.</div>');
+                }
+                $('#areaname').val('')
+            }
+        });
+    });
+}
+
 function applyUserSettingsToLayout(userSettings) {
-    if(parseInt(userSettings['superuser'])==0 && parseInt(userSettings['admin'])==0)
-    {
+    if (parseInt(userSettings['superuser']) == 0 && parseInt(userSettings['admin']) == 0) {
         $("#manage_content").hide();
         $("#site_settings").hide();
     }
-    else if(parseInt(userSettings['admin'])!=1)
-    {
+    else if (parseInt(userSettings['admin']) != 1) {
         $("#team_menu").hide();
         $("#testenvironments_menu").hide();
         $("#sprint_menu").hide();
