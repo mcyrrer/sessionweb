@@ -24,7 +24,7 @@ require_once('include/session_common_functions.php.inc');
                 </div>
                 <div id='change_personal_password'>
 
-                    <table border="0" ><input
+                    <table border="0"><input
                         type="hidden" name="usernametoupdate" value="mattias">
                         <input type="hidden" name="command" value="changepassword">
                         <tr>
@@ -54,11 +54,11 @@ require_once('include/session_common_functions.php.inc');
                 </div>
 
 
-
                 <div>
                     <a href="#" id='change_personal_settings_menu'>User settings</a>
                 </div>
-                <div id='change_personal_settings'>----</div>
+                <div id='change_personal_settings'><a href="settings.php">Old settings page</a>
+                </div>
 
 
                 <h3 id="manage_content">Manage Content</h3>
@@ -153,7 +153,7 @@ require_once('include/session_common_functions.php.inc');
 
 
                 <h3 id="site_settings">Site Settings</h3>
-
+                <a href="settings.php">Old settings page</a>
                 <!--                <div>-->
                 <!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->
                 <!--                </div>-->
