@@ -10,6 +10,10 @@ define("Ok", 7);
 define("ITEM_NOT_REMOVED", 8);
 define("PASSWORD_DOES_NOT_MATCH", 9);
 define("PARAMETER_NOT_PROVIDED_IN_REQUEST", 10);
+define("ITEM_NOT_UPDATED", 11);
+define("ITEM_UPDATED", 12);
+
+
 
 
 ?>

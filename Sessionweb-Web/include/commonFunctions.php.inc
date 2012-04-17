@@ -519,12 +519,7 @@ function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 
     return $imgURL;
 }
 
-/***
- * Echo all team defined in table teamnames. These are the teams that currently can be used when creating a new session
- * @param $team
- * @param bool $createConnection
- */
-function echoTeamSelect($team, $createConnection = true, $history = false)
+function echoTeamSelect($team, $createConnection = true, $history = false, $id_name="select_team")
 {
     if ($createConnection)
         $con = getMySqlConnection();
@@ -540,7 +535,7 @@ function echoTeamSelect($team, $createConnection = true, $history = false)
 
     $result = mysql_query($sqlSelect);
 
-    echo "                                  <select id=\"select_team\" name=\"team\">\n";
+    echo "                                  <select id=\"$id_name\" name=\"team\">\n";
 
 
     echo "                                      <option></option>\n";
@@ -718,7 +713,7 @@ function echoAreaSelect($area)
     mysql_close($con);
 }
 
-function echoAreaSelectSingel($area, $history = false)
+function echoAreaSelectSingel($area, $history = false, $id_name="select_area")
 {
     if (!is_array($area)) {
         $areaTmp = array();
@@ -740,7 +735,7 @@ function echoAreaSelectSingel($area, $history = false)
 
     $result = mysql_query($sqlSelect);
 
-    echo "                                  <select id=\"select_area\" name=\"area\">\n";
+    echo "                                  <select id=\"$id_name\" name=\"area\">\n";
 
 
     if (count($area) == 0) {
@@ -922,7 +917,7 @@ function echoTesterFullNameSelect($name, $removeInactiveUsers = false)
     mysql_close($con);
 }
 
-function echoSprintSelect($sprint, $history = false)
+function echoSprintSelect($sprint, $history = false, $id_name="select_sprint")
 {
     $con = getMySqlConnection();
 
@@ -938,7 +933,7 @@ function echoSprintSelect($sprint, $history = false)
     }
     $result = mysql_query($sqlSelect);
 
-    echo "                                  <select id=\"select_sprint\" name=\"sprint\">\n";
+    echo "                                  <select id=\"$id_name\" name=\"sprint\">\n";
 
 
     echo "                                      <option></option>\n";

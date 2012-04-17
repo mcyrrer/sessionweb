@@ -6,6 +6,8 @@ require_once('include/header.php.inc');
 require_once('include/db.php');
 require_once('include/commonFunctions.php.inc');
 require_once('include/session_common_functions.php.inc');
+
+$usersettings = getUserSettings();
 ?>
 
 
@@ -57,7 +59,30 @@ require_once('include/session_common_functions.php.inc');
                 <div>
                     <a href="#" id='change_personal_settings_menu'>User settings</a>
                 </div>
-                <div id='change_personal_settings'><a href="settings.php">Old settings page</a>
+                <div id='change_personal_settings'>
+                    <h3>Settings for List sessions</h3>
+                    <select id="personal_changelistsettings_options" name="listsettings">
+                        <option value="all" selected>All sessions</option>
+                        <option value="mine">My own sessions</option>
+                        <option value="team">My teams sessions</option>
+                    </select>
+
+                    <h3>Settings for new session</h3><br>
+                    Select default team:
+                    <?php echoTeamSelect($usersettings['default_team'],true,false,"personal_select_team");?>
+
+                    <br>
+                    Select default sprint:
+                    <?php echoSprintSelect($usersettings['default_sprint'],false,"personal_select_sprint");?>
+
+                    <br>
+                    Select default area:
+                    <?php echoAreaSelectSingel($usersettings['default_area'],false,"personal_select_area");?>
+
+                    <div>
+                    <span id='change_personal_settings_exe'>CHANGE SETTINGS</span>
+                    </div>
+<!--                    <a href="settings.php">Old settings page</a>-->
                 </div>
 
 
