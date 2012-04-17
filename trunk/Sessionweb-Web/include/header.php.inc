@@ -84,8 +84,7 @@ echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
 echo "      <a href=\"session.php?command=edit\" id=\"url_newsession\">New session</a> |";
 echo "      <a href=\"list2.php\" id=\"url_list\">List sessions</a> |";
 echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
-echo "      <a href=\"settings.php\" id=\"url_settings\">Settings</a> |";
-echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings 2</a> |";
+echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
 
 
 
