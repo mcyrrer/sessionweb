@@ -25,7 +25,7 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
     <title>Session word cloud</title>
     <link rel="stylesheet" href="../css/sessionwebcss.css">
     <script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
-<!--    <script type="text/javascript" src="../js/sessionwebjquery-v19.js"></script>-->
+    <script type="text/javascript" src="../js/sessionwebjquery-v19.js"></script>
     <script type="text/javascript" src="../js/jquery.colorbox-min.js"></script>
 
 

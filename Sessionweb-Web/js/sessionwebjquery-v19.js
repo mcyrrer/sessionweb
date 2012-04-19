@@ -38,27 +38,28 @@ $(document).ready(function () {
     var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 
 ///****Save SessionForm
-    $("#sessionform").validate({
-        debug:false,
-        rules:{
-        },
-        messages:{
-        },
-        submitHandler:function (form) {
-            // do other stuff for a valid form
-            var dt = $('#sessionform').serializeArray();
+    if (sPage == "session.php") {
+        $("#sessionform").validate({
+            debug:false,
+            rules:{
+            },
+            messages:{
+            },
+            submitHandler:function (form) {
+                // do other stuff for a valid form
+                var dt = $('#sessionform').serializeArray();
 
-            $.post('api/session/save/', $("#sessionform").serialize(), function (data) {
-                $.fn.colorbox({
-                    html:data,
-                    open:true,
-                    width:500,
-                    height:500
+                $.post('api/session/save/', $("#sessionform").serialize(), function (data) {
+                    $.fn.colorbox({
+                        html:data,
+                        open:true,
+                        width:500,
+                        height:500
+                    });
                 });
-            });
-        }
-    });
-
+            }
+        });
+    }
 //Session action
     $('#reassign_session').click(function () {
         $.fn.colorbox({
