@@ -217,7 +217,7 @@ function addArea() {
                 data:"area=" + $('#areaname').val(),
                 url:'api/settings/area/add/index.php',
                 complete:function (data) {
-
+                    populateRemoveAreasSelect();
                     if (data.status == '201') {
                         $('#log').prepend('<div class="log_div">Area ' + $('#areaname').val() + ' added.</div>');
                     }
