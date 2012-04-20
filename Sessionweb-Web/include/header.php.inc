@@ -17,10 +17,10 @@ echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\"
 echo "     <script src=\"js/jquery-1.7.1.js\" type=\"text/javascript\"></script>\n";
 
 if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
- echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
- echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid-sessionweb.css\">\n";
- echo "     <script src=\"js/flexigrid.js\" type=\"text/javascript\"></script>\n";
- echo "     <script src=\"js/flexigrid-sessionweb.js\" type=\"text/javascript\"></script>\n";
+    echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
+    echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid-sessionweb.css\">\n";
+    echo "     <script src=\"js/flexigrid.js\" type=\"text/javascript\"></script>\n";
+    echo "     <script src=\"js/flexigrid-sessionweb.js\" type=\"text/javascript\"></script>\n";
 
 
 }
@@ -68,9 +68,9 @@ if ($_SESSION['settings']['analyticsid'] != "") {
 echo "  </head>\n";
 echo "  <body>\n";
 echo "<div id='outer'>";
-echo "<div id='header'>
+echo "<div id='header' ".isThisDevlopmentVersion().">
         <div id='headercontent'>
-            <h1>Sessionweb<sup>SBTM made easy</sup></h1>
+            <h1>Sessionweb<sup>SBTM made easy" . printDevelopmentVersionDebugText() . "</sup></h1>
         </div>
       </div>";
 echo "<div id='menu'>";
@@ -87,11 +87,31 @@ echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
 
 
-
 if (isset($_SESSION['username'])) {
     echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
 echo "      <a class='counterstring' href='include/counterstring.html'>&copy;</a>";
 echo "</div>";
 echo "<div id='menubottom'></div>";
+
+
+/**
+ * Function that will print out development if config/debug.txt exist. Is used to easy spot that this is a dev
+ * version of sessionweb.
+ * @return string
+ */
+function printDevelopmentVersionDebugText()
+{
+    if (file_exists("config/developmentversion.txt")) {
+        return " DEVELOPMENT VERSION OF SW";
+    }
+}
+
+function isThisDevlopmentVersion()
+{
+    if (file_exists("config/developmentversion.txt")) {
+        return "class='development'";
+    }
+}
+
 ?>
