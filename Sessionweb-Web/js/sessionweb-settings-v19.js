@@ -20,6 +20,8 @@ $(document).ready(function () {
     changePersonalPassword();
     updatePersonalSettings();
 
+    updateCustomFields();
+
 });
 
 function updatePersonalSettings() {
@@ -120,6 +122,8 @@ function showAndHideHtml() {
     $("#add_remove_custom_fields").hide();
     $("#change_configuration").hide();
     $("#systemcheck").hide();
+    $("#manage_customfields").hide();
+
 
 
     $('#change_personal_password_menu').click(function () {
@@ -183,6 +187,13 @@ function showAndHideHtml() {
             $("#systemcheck").fadeIn("slow");
         else
             $("#systemcheck").fadeOut("slow");
+    });
+
+    $('#customfields_menu').click(function () {
+        if ($("#manage_customfields").is(':hidden'))
+            $("#manage_customfields").fadeIn("slow");
+        else
+            $("#manage_customfields").fadeOut("slow");
     });
 }
 
@@ -268,6 +279,42 @@ function populateRemoveTeamsSelect() {
     });
 }
 
+function updateCustomFields() {
+    $('#update_customfields').click(function () {
+            $.ajax({
+                type:"GET",
+                data:"cf1=" + $('#cf1Name').val()+
+                    "&cf2=" + $('#cf2Name').val()+
+                    "&cf3=" + $('#cf3Name').val()+
+                    "&cf1multiselect=" + $('#cf1multiselect').is(':checked')+
+                    "&cf2multiselect=" + $('#cf2multiselect').is(':checked')+
+                    "&cf3multiselect=" + $('#cf3multiselect').is(':checked')+
+                    "&cf1enabled=" + $('#cf1enabled').is(':checked')+
+                    "&cf2enabled=" + $('#cf2enabled').is(':checked')+
+                    "&cf3enabled=" + $('#cf3enabled').is(':checked'),
+                url:'api/settings/customfields/addupdate/index.php',
+                complete:function (data) {
+
+                    if (data.status == '201') {
+                        $('#log').prepend('<div class="log_div">Custom fields added/updated/enabled.</div>');
+                        populateRemoveTeamsSelect();
+                    }
+                    else if (data.status == '400') {
+                        $('#log').prepend('<div class="log_div">Error: Custom fields parameters not added in request.</div>');
+                    }
+                    else if (data.status == '401') {
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                    }
+                    else if (data.status == '500') {
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                    }
+                    $('#teamname').val('')
+                }
+            });
+
+    });
+}
 
 function addTeam() {
     $('#add_team').click(function () {
