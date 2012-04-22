@@ -9,6 +9,7 @@ require_once('../../../../../config/db.php.inc');
 require_once ('../../../../../include/db.php');
 require_once ('../../../../../include/apistatuscodes.inc');
 require_once ('../../../../../include/loggingsetup.php');
+require_once ('../../../../../include/commonFunctions.php.inc');
 
 
 $response = array();
@@ -71,6 +72,8 @@ if (isset($_REQUEST['listsettings'])) {
         header("HTTP/1.0 201 Created");
         $response['code'] = ITEM_UPDATED;
         $response['text'] = "ITEM_UPDATED";
+        $_SESSION['settings'] = getSessionWebSettings();
+
 
     }
 

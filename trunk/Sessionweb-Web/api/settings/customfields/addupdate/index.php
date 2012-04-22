@@ -9,6 +9,7 @@ require_once('../../../../config/db.php.inc');
 require_once ('../../../../include/db.php');
 require_once ('../../../../include/apistatuscodes.inc');
 require_once ('../../../../include/loggingsetup.php');
+require_once ('../../../../include/commonFunctions.php.inc');
 
 
 
@@ -76,6 +77,7 @@ if ($_SESSION['useradmin'] == 1) {
             header("HTTP/1.0 201 Created");
             $response['code'] = ITEM_ADDED;
             $response['text'] = "ITEM_ADDED";
+            $_SESSION['settings'] = getSessionWebSettings();
         }
 
         mysql_close($con);

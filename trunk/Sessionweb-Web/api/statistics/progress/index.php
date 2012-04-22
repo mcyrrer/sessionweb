@@ -28,9 +28,6 @@ if (strcmp($_REQUEST['sprint'],'') != 0) {
 
 $sql .= "GROUP BY DATE(executed_timestamp)  ";
 $sql .= "ORDER BY date;";
-//TODO: FIX THAT PARAMETERS IS REALY POPULATED.!!!
-//print_r($_SESSION);
-//echo $sql;
 
 $result = mysql_query($sql);
 
