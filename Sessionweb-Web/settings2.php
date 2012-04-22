@@ -27,9 +27,7 @@ $settings = getSettings();
 </div>
 <div id='change_personal_password'>
 
-    <table border="0"><input
-        type="hidden" name="usernametoupdate" value="mattias">
-        <input type="hidden" name="command" value="changepassword">
+    <table border="0">
         <tr>
             <td align="left">
                 Old password
@@ -62,10 +60,22 @@ $settings = getSettings();
 </div>
 <div id='change_personal_settings'>
     <h3>Settings for List sessions</h3>
+    <?php
+    $all = "";
+    $team = "";
+    $mine = "";
+    if($usersettings['list_view'] == "team")
+        $team = "selected";
+    if($usersettings['list_view'] == "all")
+        $all = "selected";
+    if($usersettings['list_view'] == "mine")
+        $mine = "selected";
+
+?>
     <select id="personal_changelistsettings_options" name="listsettings">
-        <option value="all" selected>All sessions</option>
-        <option value="mine">My own sessions</option>
-        <option value="team">My teams sessions</option>
+        <option value="all" <?php echo $all;?>>All sessions</option>
+        <option value="mine" <?php echo $mine;?>>My own sessions</option>
+        <option value="team" <?php echo $team;?>>My teams sessions</option>
     </select>
 
     <h3>Settings for new session</h3><br>
