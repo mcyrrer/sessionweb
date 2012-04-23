@@ -65,14 +65,14 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
     $all = "";
     $team = "";
     $mine = "";
-    if($usersettings['list_view'] == "team")
+    if ($usersettings['list_view'] == "team")
         $team = "selected";
-    if($usersettings['list_view'] == "all")
+    if ($usersettings['list_view'] == "all")
         $all = "selected";
-    if($usersettings['list_view'] == "mine")
+    if ($usersettings['list_view'] == "mine")
         $mine = "selected";
 
-?>
+    ?>
     <select id="personal_changelistsettings_options" name="listsettings">
         <option value="all" <?php echo $all;?>>All sessions</option>
         <option value="mine" <?php echo $mine;?>>My own sessions</option>
@@ -185,24 +185,14 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 <div id='customFieldsEntries_testenvironment'>
     <div class='divider_settings'></div>
     <p>Add Item</p>
-    Field: <?php echo $settings['custom1_name'].""; ?><br> <input type="text" size="50" value="" id="c1Name">
-    <span class='settings_submit' id='add_customFieldsc1Entries'>ADD</span>
-    <div>
-        <select id='remove_customFieldsc1Entries_select'></select>
-        <span class='settings_submit' id='remove_customFieldsc1Entries'>REMOVE</span>
-    </div>
-<!--    Field: --><?php //echo $settings['custom2_name'].""; ?><!--<br> <input type="text" size="50" value="" id="c2Name">-->
-<!--    <span class='settings_submit' id='add_customFieldsc2Entries'>ADD</span>-->
-<!--    <div>-->
-<!--        <select id='remove_customFieldsc2Entries_select'></select>-->
-<!--        <span class='settings_submit' id='remove_customFieldsc2Entries'>REMOVE</span>-->
-<!--    </div>-->
-<!--    Field: --><?php //echo $settings['custom3_name'].""; ?><!--<br> <input type="text" size="50" value="" id="c3Name">-->
-<!--    <span class='settings_submit' id='add_customFieldsc3Entries'>ADD</span>-->
-<!--    <div>-->
-<!--        <select id='remove_customFieldsc3Entries_select'></select>-->
-<!--        <span class='settings_submit' id='remove_customFieldsc3Entries'>REMOVE</span>-->
-<!--    </div>-->
+    <?php
+    echoCustomFieldAddItem("custom1_name", 1, $settings);
+    echoCustomFieldAddItem("custom2_name", 2, $settings);
+
+    echoCustomFieldAddItem("custom2_name", 3, $settings);
+
+    ?>
+
     <div class='divider_settings_noline'></div>
 
     <div class='divider_settings'></div>
@@ -290,6 +280,18 @@ function getCustomFieldProperties($settings)
         $ce3 = "checked='checked'";
     return array($c1, $c2, $c3, $ce1, $ce2, $ce3);
     return array($c1, $c2, $c3, $ce1, $ce2, $ce3);
+}
+
+function echoCustomFieldAddItem($customFieldsName, $customFieldsNo, $settings)
+{
+    if ($settings['custom' . $customFieldsNo] == 1) {
+        echo "Field: " . $settings[$customFieldsName] . "<br> <input type='text' size='50' value='' id='c" . $customFieldsNo . "Name'>";
+        echo "    <span class='settings_submit' id='add_customFieldsc" . $customFieldsNo . "Entries'>ADD</span>";
+        echo "    <div>";
+        echo "        <select id='remove_customFieldsc" . $customFieldsNo . "Entries_select'></select>";
+        echo "        <span class='settings_submit' id='remove_customFieldsc" . $customFieldsNo . "Entries'>REMOVE</span>";
+        echo "    </div>";
+    }
 }
 
 ?>
