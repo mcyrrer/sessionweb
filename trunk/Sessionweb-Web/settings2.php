@@ -9,6 +9,7 @@ require_once('include/session_common_functions.php.inc');
 
 $usersettings = getUserSettings();
 $settings = getSettings();
+list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 ?>
 
 
@@ -178,15 +179,34 @@ $settings = getSettings();
     <div class='divider_settings'></div>
 </div>
 
+<div>
+    <a href="#" id='customFieldsEntries_menu'>Manage Custom Fields Entries</a>
+</div>
+<div id='customFieldsEntries_testenvironment'>
+    <div class='divider_settings'></div>
+    <p>Add Item</p>
+    Field: <?php echo $settings['custom1_name'].""; ?><br> <input type="text" size="50" value="" id="c1Name">
+    <span class='settings_submit' id='add_customFieldsc1Entries'>ADD</span>
+    <div>
+        <select id='remove_customFieldsc1Entries_select'></select>
+        <span class='settings_submit' id='remove_customFieldsc1Entries'>REMOVE</span>
+    </div>
+<!--    Field: --><?php //echo $settings['custom2_name'].""; ?><!--<br> <input type="text" size="50" value="" id="c2Name">-->
+<!--    <span class='settings_submit' id='add_customFieldsc2Entries'>ADD</span>-->
+<!--    <div>-->
+<!--        <select id='remove_customFieldsc2Entries_select'></select>-->
+<!--        <span class='settings_submit' id='remove_customFieldsc2Entries'>REMOVE</span>-->
+<!--    </div>-->
+<!--    Field: --><?php //echo $settings['custom3_name'].""; ?><!--<br> <input type="text" size="50" value="" id="c3Name">-->
+<!--    <span class='settings_submit' id='add_customFieldsc3Entries'>ADD</span>-->
+<!--    <div>-->
+<!--        <select id='remove_customFieldsc3Entries_select'></select>-->
+<!--        <span class='settings_submit' id='remove_customFieldsc3Entries'>REMOVE</span>-->
+<!--    </div>-->
+    <div class='divider_settings_noline'></div>
 
-<!--                <div>-->
-<!--                    <a href="#" id='custom_fields_menu'>Manage Custom Fields</a>-->
-<!--                </div>-->
-<!--                <div id='add_remove_custom_fields'>-->
-<!--                    <div id='add_custom_fields'>add team</div>-->
-<!--                    <div id='remove_custom_fields'>remove team</div>-->
-<!--                </div>-->
-
+    <div class='divider_settings'></div>
+</div>
 
 <h3 id="site_settings">Site Settings</h3>
 
