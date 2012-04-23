@@ -5,6 +5,7 @@ $(document).ready(function () {
     populateRemoveTeamsSelect();
     populateRemoveSprintsSelect();
     populateRemovetesTenvironmentsSelect();
+    populateRemoveCustomItem1Select();
 
     showAndHideHtml();
 
@@ -16,7 +17,8 @@ $(document).ready(function () {
     removeSprint();
     addtestEnvironment();
     removetestEnvironment();
-
+    addCustomItem1();
+    removeCustomItem1();
     changePersonalPassword();
     updatePersonalSettings();
 
@@ -50,6 +52,91 @@ function updatePersonalSettings() {
                     $('#log').prepend('<div class="log_div">Error: User settings not updated due to internal server error.</div>');
                 }
                 $('#areaname').val('')
+            }
+        });
+    });
+}
+
+function addCustomItem1() {
+    $('#add_customFieldsc1Entries').click(function () {
+        if ($('#c1Name').val() != '') {
+            $.ajax({
+                type:"GET",
+                data:"customid=custom1"+
+                    "&itemname=" + $('#c1Name').val(),
+                url:'api/settings/customfields/add/index.php',
+                complete:function (data) {
+                    populateRemoveCustomItem1Select();
+                    if (data.status == '201') {
+                        $('#log').prepend('<div class="log_div">Custom item ' + $('#c1Name').val() + ' added.</div>');
+                    }
+                    else if (data.status == '400') {
+                        $('#log').prepend('<div class="log_div">Error: Custom item name not added in request.</div>');
+                    }
+                    else if (data.status == '401') {
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                    }
+                    else if (data.status == '409') {
+                        $('#log').prepend('<div class="log_div">Custom item ' + $('#c1Name').val() + ' already exist.</div>');
+                    }
+                    else if (data.status == '500') {
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                    }
+                    $('#areaname').val('')
+                }
+            });
+        }
+        else {
+            $('#log').prepend('<div class="log_div">Custom item 1 name not added in request.</div>');
+        }
+    });
+}
+
+function populateRemoveCustomItem1Select() {
+    $.ajax({
+        type:"GET",
+        data:"customid=custom1",
+        url:'api/customfields/getcustomfields/index.php',
+        complete:function (data, xhr, statusText) {
+            if (data.status == '200') {
+                $('#remove_customFieldsc1Entries_select').html('');
+                var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                var optionTxt = "";
+                $.each(jsonResponseContent, function (index, value) {
+                    $('#remove_customFieldsc1Entries_select').append('<option>' + value + '</option>');
+                });
+            }
+            else if (data.status == '401') {
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+            }
+            else if (data.status == '500') {
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
+            }
+        }
+    });
+}
+
+function removeCustomItem1() {
+    $('#remove_customFieldsc1Entries').click(function () {
+        $.ajax({
+            type:"GET",
+            data:"customid=custom1"+
+                "&itemname=" + $('#remove_customFieldsc1Entries_select').val(),
+            url:'api/settings/customfields/remove/index.php',
+            complete:function (data) {
+                if (data.status == '200') {
+                    $('#log').prepend('<div class="log_div">Custom fields ' + $('#remove_customFieldsc1Entries_select').val() + ' removed.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
+                }
+                populateRemoveCustomItem1Select();
             }
         });
     });
@@ -123,8 +210,7 @@ function showAndHideHtml() {
     $("#change_configuration").hide();
     $("#systemcheck").hide();
     $("#manage_customfields").hide();
-
-
+    $("#customFieldsEntries_testenvironment").hide();
 
     $('#change_personal_password_menu').click(function () {
         if ($("#change_personal_password").is(':hidden'))
@@ -194,6 +280,13 @@ function showAndHideHtml() {
             $("#manage_customfields").fadeIn("slow");
         else
             $("#manage_customfields").fadeOut("slow");
+    });
+
+    $('#customFieldsEntries_menu').click(function () {
+        if ($("#customFieldsEntries_testenvironment").is(':hidden'))
+            $("#customFieldsEntries_testenvironment").fadeIn("slow");
+        else
+            $("#customFieldsEntries_testenvironment").fadeOut("slow");
     });
 }
 
