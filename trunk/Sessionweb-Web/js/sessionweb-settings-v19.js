@@ -6,6 +6,8 @@ $(document).ready(function () {
     populateRemoveSprintsSelect();
     populateRemovetesTenvironmentsSelect();
     populateRemoveCustomItem1Select();
+    populateRemoveCustomItem2Select();
+    populateRemoveCustomItem3Select();
 
     showAndHideHtml();
 
@@ -19,6 +21,10 @@ $(document).ready(function () {
     removetestEnvironment();
     addCustomItem1();
     removeCustomItem1();
+    addCustomItem2();
+    removeCustomItem2();
+    addCustomItem3();
+    removeCustomItem3();
     changePersonalPassword();
     updatePersonalSettings();
 
@@ -83,12 +89,84 @@ function addCustomItem1() {
                     else if (data.status == '500') {
                         $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
                     }
-                    $('#areaname').val('')
+                    $('#c1Name').val('')
                 }
             });
         }
         else {
             $('#log').prepend('<div class="log_div">Custom item 1 name not added in request.</div>');
+        }
+    });
+}
+
+function addCustomItem2() {
+    $('#add_customFieldsc2Entries').click(function () {
+        if ($('#c2Name').val() != '') {
+            $.ajax({
+                type:"GET",
+                data:"customid=custom2"+
+                    "&itemname=" + $('#c2Name').val(),
+                url:'api/settings/customfields/add/index.php',
+                complete:function (data) {
+                    populateRemoveCustomItem2Select();
+                    if (data.status == '201') {
+                        $('#log').prepend('<div class="log_div">Custom item ' + $('#c2Name').val() + ' added.</div>');
+                    }
+                    else if (data.status == '400') {
+                        $('#log').prepend('<div class="log_div">Error: Custom item name not added in request.</div>');
+                    }
+                    else if (data.status == '401') {
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                    }
+                    else if (data.status == '409') {
+                        $('#log').prepend('<div class="log_div">Custom item ' + $('#c2Name').val() + ' already exist.</div>');
+                    }
+                    else if (data.status == '500') {
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                    }
+                    $('#c2Name').val('')
+                }
+            });
+        }
+        else {
+            $('#log').prepend('<div class="log_div">Custom item 2 name not added in request.</div>');
+        }
+    });
+}
+
+function addCustomItem3() {
+    $('#add_customFieldsc3Entries').click(function () {
+        if ($('#c3Name').val() != '') {
+            $.ajax({
+                type:"GET",
+                data:"customid=custom3"+
+                    "&itemname=" + $('#c3Name').val(),
+                url:'api/settings/customfields/add/index.php',
+                complete:function (data) {
+                    populateRemoveCustomItem3Select();
+                    if (data.status == '201') {
+                        $('#log').prepend('<div class="log_div">Custom item ' + $('#c3Name').val() + ' added.</div>');
+                    }
+                    else if (data.status == '400') {
+                        $('#log').prepend('<div class="log_div">Error: Custom item name not added in request.</div>');
+                    }
+                    else if (data.status == '401') {
+                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                    }
+                    else if (data.status == '409') {
+                        $('#log').prepend('<div class="log_div">Custom item ' + $('#c3Name').val() + ' already exist.</div>');
+                    }
+                    else if (data.status == '500') {
+                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                    }
+                    $('#c3Name').val('')
+                }
+            });
+        }
+        else {
+            $('#log').prepend('<div class="log_div">Custom item 3 name not added in request.</div>');
         }
     });
 }
@@ -105,6 +183,56 @@ function populateRemoveCustomItem1Select() {
                 var optionTxt = "";
                 $.each(jsonResponseContent, function (index, value) {
                     $('#remove_customFieldsc1Entries_select').append('<option>' + value + '</option>');
+                });
+            }
+            else if (data.status == '401') {
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+            }
+            else if (data.status == '500') {
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
+            }
+        }
+    });
+}
+
+function populateRemoveCustomItem2Select() {
+    $.ajax({
+        type:"GET",
+        data:"customid=custom2",
+        url:'api/customfields/getcustomfields/index.php',
+        complete:function (data, xhr, statusText) {
+            if (data.status == '200') {
+                $('#remove_customFieldsc2Entries_select').html('');
+                var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                var optionTxt = "";
+                $.each(jsonResponseContent, function (index, value) {
+                    $('#remove_customFieldsc2Entries_select').append('<option>' + value + '</option>');
+                });
+            }
+            else if (data.status == '401') {
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+            }
+            else if (data.status == '500') {
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
+            }
+        }
+    });
+}
+
+function populateRemoveCustomItem3Select() {
+    $.ajax({
+        type:"GET",
+        data:"customid=custom3",
+        url:'api/customfields/getcustomfields/index.php',
+        complete:function (data, xhr, statusText) {
+            if (data.status == '200') {
+                $('#remove_customFieldsc3Entries_select').html('');
+                var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                var optionTxt = "";
+                $.each(jsonResponseContent, function (index, value) {
+                    $('#remove_customFieldsc3Entries_select').append('<option>' + value + '</option>');
                 });
             }
             else if (data.status == '401') {
@@ -137,6 +265,54 @@ function removeCustomItem1() {
                     $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
                 }
                 populateRemoveCustomItem1Select();
+            }
+        });
+    });
+}
+
+function removeCustomItem2() {
+    $('#remove_customFieldsc2Entries').click(function () {
+        $.ajax({
+            type:"GET",
+            data:"customid=custom2"+
+                "&itemname=" + $('#remove_customFieldsc2Entries_select').val(),
+            url:'api/settings/customfields/remove/index.php',
+            complete:function (data) {
+                if (data.status == '200') {
+                    $('#log').prepend('<div class="log_div">Custom fields ' + $('#remove_customFieldsc2Entries_select').val() + ' removed.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
+                }
+                populateRemoveCustomItem2Select();
+            }
+        });
+    });
+}
+
+function removeCustomItem3() {
+    $('#remove_customFieldsc3Entries').click(function () {
+        $.ajax({
+            type:"GET",
+            data:"customid=custom3"+
+                "&itemname=" + $('#remove_customFieldsc3Entries_select').val(),
+            url:'api/settings/customfields/remove/index.php',
+            complete:function (data) {
+                if (data.status == '200') {
+                    $('#log').prepend('<div class="log_div">Custom fields ' + $('#remove_customFieldsc3Entries_select').val() + ' removed.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: Item not removed</div>');
+                }
+                populateRemoveCustomItem3Select();
             }
         });
     });
@@ -356,7 +532,6 @@ function populateRemoveTeamsSelect() {
             if (data.status == '200') {
                 $('#remove_team_select').html('');
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
-                var optionTxt = "";
                 $.each(jsonResponseContent, function (index, value) {
                     $('#remove_team_select').append('<option>' + value + '</option>');
                 });
@@ -477,7 +652,6 @@ function populateRemoveSprintsSelect() {
             if (data.status == '200') {
                 $('#remove_sprint_select').html('');
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
-                var optionTxt = "";
                 $.each(jsonResponseContent, function (index, value) {
                     $('#remove_sprint_select').append('<option>' + value + '</option>');
                 });
@@ -561,7 +735,6 @@ function populateRemovetesTenvironmentsSelect() {
             if (data.status == '200') {
                 $('#remove_testenvironment_select').html('');
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
-                var optionTxt = "";
                 $.each(jsonResponseContent, function (index, value) {
                     $('#remove_testenvironment_select').append('<option>' + value + '</option>');
                 });
