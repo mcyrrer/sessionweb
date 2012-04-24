@@ -271,3 +271,7 @@ p {
     border-width: 5px 5px 5px 5px;
     border-color: #00ff17;
 }
+
+.italic {
+    font-style: italic;
+}
