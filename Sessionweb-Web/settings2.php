@@ -232,102 +232,106 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 <div id='add_remove_appconfig'>
     <div class='divider_settings'></div>
     <p>Configure application</p>
-    <table width="*" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td>Normalized Sessions time(min)
-            </td>
-            <td> <input type="text" size="50" value="90" name="normlizedsessiontime">
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td><span class='italic'>If a session is 120min and the normalized Sessions time is 90 the session is counted as 1.33 sessions (120/90).
+
+    <form id="appForm">
+        <table width="*" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>Normalized Sessions time(min)
+                </td>
+                <td><input type="text" size="50" name="normlizedsessiontime" id="normlizedsessiontime">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td><span class='italic'>If a session is 120min and the normalized Sessions time is 90 the session is counted as 1.33 sessions (120/90).
             This is used to be able to compare testers throughput with each other.</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Defect Managment System URL
-            </td>
-            <td> <input type="text" size="50" value="" name="url_to_dms">
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td><span class='italic'>e.g. "http://code.google.com/p/sessionweb/issues/detail?id="  issue number will be added at the end automatically.</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Requirement Management System URL
-            </td>
-            <td> <input type="text" size="50" value="" name="url_to_rms">
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td><span class='italic'>e.g. "http://code.google.com/p/sessionweb/issues/detail?id="  issue number will be added at the end automatically.</span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td><b>Activate Modules</b>
-            </td>
-        </tr>
-        <tr>
-            <td>Team
-            </td>
-            <td> <input type="checkbox" name="team" checked="checked" value="checked" >
-            </td>
-        </tr>
-        <tr>
-            <td>Sprint
-            </td>
-            <td> <input type="checkbox" name="sprint" checked="checked" value="checked" >
-            </td>
-        </tr>
-        <tr>
-            <td>Area
-            </td>
-            <td> <input type="checkbox" name="area" checked="checked" value="checked" >
-            </td>
-        </tr>
-        <tr>
-            <td>Test Environment
-            </td>
-            <td> <input type="checkbox" name="env" checked="checked" value="checked" >
-            </td>
-        </tr>
-        <tr>
-            <td>Public view
-            </td>
-            <td> <input type="checkbox" name="publicview" checked="checked" value="checked" >
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td><span class='italic'>Public view makes it possible for a person that does not have a Sessionweb account to view a session.
+                </td>
+            </tr>
+            <tr>
+                <td>Defect Managment System URL
+                </td>
+                <td><input type="text" size="50" value="" name="url_to_dms" id="url_to_dms">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td><span class='italic'>e.g. "http://code.google.com/p/sessionweb/issues/detail?id="  issue number will be added at the end automatically.</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Requirement Management System URL
+                </td>
+                <td><input type="text" size="50" value="" name="url_to_rms" id="url_to_rms">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td><span class='italic'>e.g. "http://code.google.com/p/sessionweb/issues/detail?id="  issue number will be added at the end automatically.</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td><b>Activate Modules</b>
+                </td>
+            </tr>
+            <tr>
+                <td>Team
+                </td>
+                <td><input type="checkbox" id="app_team" name="team" checked="checked" value="checked">
+                </td>
+            </tr>
+            <tr>
+                <td>Sprint
+                </td>
+                <td><input type="checkbox" id="app_sprint" name="sprint" checked="checked" value="checked">
+                </td>
+            </tr>
+            <tr>
+                <td>Area
+                </td>
+                <td><input type="checkbox" id="app_area" name="area" checked="checked" value="checked">
+                </td>
+            </tr>
+            <tr>
+                <td>Test Environment
+                </td>
+                <td><input type="checkbox" id="app_env" name="env" checked="checked" value="checked">
+                </td>
+            </tr>
+            <tr>
+                <td>Public view
+                </td>
+                <td><input type="checkbox" id="app_publicview" name="publicview" checked="checked" value="checked">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td><span class='italic'>Public view makes it possible for a person that does not have a Sessionweb account to view a session.
             This is made by sharing the public link that contains a unique key for that specific session.</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Word Cloud in session view
-            </td>
-            <td> <input type="checkbox" name="wordcloud" checked="checked" value="checked" >
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td><span class='italic'>In some cases a word cloud makes it easier to get a quick overview of a session.
+                </td>
+            </tr>
+            <tr>
+                <td>Word Cloud in session view
+                </td>
+                <td><input type="checkbox" id="app_wordcloud" name="wordcloud" checked="checked" value="checked">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td><span class='italic'>In some cases a word cloud makes it easier to get a quick overview of a session.
             A word cloud is a presentation of the top 100 words used in the session and the higher the count is the larger font is used.</span>
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
+    </form>
     <span class='settings_submit' id='update_appconfig'>UPDATE</span>
+
     <div class='divider_settings'></div>
 </div>
 
