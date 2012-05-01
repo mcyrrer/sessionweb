@@ -8,6 +8,7 @@ $(document).ready(function () {
     populateRemoveCustomItem1Select();
     populateRemoveCustomItem2Select();
     populateRemoveCustomItem3Select();
+    populateApplicationSettingsSelect();
 
     showAndHideHtml();
 
@@ -29,8 +30,83 @@ $(document).ready(function () {
     updatePersonalSettings();
 
     updateCustomFields();
+    updateApplicationConfig();
 
 });
+
+
+function checkBoxHelper(arrayToUse, arrayItem, idToChange) {
+    if (arrayToUse[arrayItem] == '1') {
+        $(idToChange).attr('checked', true);
+    }
+    else {
+        $(idToChange).attr('checked', false);
+    }
+}
+
+function updateApplicationConfig() {
+    $('#update_appconfig').click(function () {
+        $.ajax({
+            type:"GET",
+            data:$('#appForm').serializeArray(),
+            url:'api/settings/application/settings/save/index.php',
+            complete:function (data) {
+
+                if (data.status == '200') {
+                    $('#log').prepend('<div class="log_div">Custom fields added/updated/enabled.</div>');
+                    populateRemoveTeamsSelect();
+                }
+                else if (data.status == '400') {
+                    $('#log').prepend('<div class="log_div">Error: Custom fields parameters not added in request.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                }
+                $('#teamname').val('')
+            }
+        });
+
+    });
+}
+
+function populateApplicationSettingsSelect() {
+    $.ajax({
+        type:"GET",
+        url:'api/application/getsettings/index.php',
+        complete:function (data, xhr, statusText) {
+            if (data.status == '200') {
+                $('#remove_customFieldsc1Entries_select').html('');
+                var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                var optionTxt = "";
+                $("#normlizedsessiontime").val(jsonResponseContent['normalized_session_time'])
+                $("#url_to_rms").val(jsonResponseContent['url_to_rms']);
+                $("#url_to_dms").val(jsonResponseContent['url_to_dms']);
+                checkBoxHelper(jsonResponseContent, "team", "#app_team");
+                checkBoxHelper(jsonResponseContent, "sprint", "#app_sprint");
+                checkBoxHelper(jsonResponseContent, "area", "#app_area");
+                checkBoxHelper(jsonResponseContent, "testenvironment", "#app_env");
+                checkBoxHelper(jsonResponseContent, "publicview", "#app_publicview");
+                checkBoxHelper(jsonResponseContent, "wordcloud", "#app_wordcloud");
+
+
+                //$.each(jsonResponseContent, function (index, value) {
+                //   $('#remove_customFieldsc1Entries_select').append('<option>' + value + '</option>');
+                //});
+            }
+            else if (data.status == '401') {
+                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+            }
+            else if (data.status == '500') {
+                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
+            }
+        }
+    });
+}
 
 function updatePersonalSettings() {
     $('#change_personal_settings_exe').click(function () {
@@ -68,7 +144,7 @@ function addCustomItem1() {
         if ($('#c1Name').val() != '') {
             $.ajax({
                 type:"GET",
-                data:"customid=custom1"+
+                data:"customid=custom1" +
                     "&itemname=" + $('#c1Name').val(),
                 url:'api/settings/customfields/add/index.php',
                 complete:function (data) {
@@ -104,7 +180,7 @@ function addCustomItem2() {
         if ($('#c2Name').val() != '') {
             $.ajax({
                 type:"GET",
-                data:"customid=custom2"+
+                data:"customid=custom2" +
                     "&itemname=" + $('#c2Name').val(),
                 url:'api/settings/customfields/add/index.php',
                 complete:function (data) {
@@ -140,7 +216,7 @@ function addCustomItem3() {
         if ($('#c3Name').val() != '') {
             $.ajax({
                 type:"GET",
-                data:"customid=custom3"+
+                data:"customid=custom3" +
                     "&itemname=" + $('#c3Name').val(),
                 url:'api/settings/customfields/add/index.php',
                 complete:function (data) {
@@ -250,7 +326,7 @@ function removeCustomItem1() {
     $('#remove_customFieldsc1Entries').click(function () {
         $.ajax({
             type:"GET",
-            data:"customid=custom1"+
+            data:"customid=custom1" +
                 "&itemname=" + $('#remove_customFieldsc1Entries_select').val(),
             url:'api/settings/customfields/remove/index.php',
             complete:function (data) {
@@ -274,7 +350,7 @@ function removeCustomItem2() {
     $('#remove_customFieldsc2Entries').click(function () {
         $.ajax({
             type:"GET",
-            data:"customid=custom2"+
+            data:"customid=custom2" +
                 "&itemname=" + $('#remove_customFieldsc2Entries_select').val(),
             url:'api/settings/customfields/remove/index.php',
             complete:function (data) {
@@ -298,7 +374,7 @@ function removeCustomItem3() {
     $('#remove_customFieldsc3Entries').click(function () {
         $.ajax({
             type:"GET",
-            data:"customid=custom3"+
+            data:"customid=custom3" +
                 "&itemname=" + $('#remove_customFieldsc3Entries_select').val(),
             url:'api/settings/customfields/remove/index.php',
             complete:function (data) {
@@ -387,6 +463,8 @@ function showAndHideHtml() {
     $("#systemcheck").hide();
     $("#manage_customfields").hide();
     $("#customFieldsEntries_testenvironment").hide();
+    $("#add_remove_appconfig").hide();
+
 
     $('#change_personal_password_menu').click(function () {
         if ($("#change_personal_password").is(':hidden'))
@@ -463,6 +541,13 @@ function showAndHideHtml() {
             $("#customFieldsEntries_testenvironment").fadeIn("slow");
         else
             $("#customFieldsEntries_testenvironment").fadeOut("slow");
+    });
+
+    $('#appconfig_menu').click(function () {
+        if ($("#add_remove_appconfig").is(':hidden'))
+            $("#add_remove_appconfig").fadeIn("slow");
+        else
+            $("#add_remove_appconfig").fadeOut("slow");
     });
 }
 
@@ -549,37 +634,37 @@ function populateRemoveTeamsSelect() {
 
 function updateCustomFields() {
     $('#update_customfields').click(function () {
-            $.ajax({
-                type:"GET",
-                data:"cf1=" + $('#cf1Name').val()+
-                    "&cf2=" + $('#cf2Name').val()+
-                    "&cf3=" + $('#cf3Name').val()+
-                    "&cf1multiselect=" + $('#cf1multiselect').is(':checked')+
-                    "&cf2multiselect=" + $('#cf2multiselect').is(':checked')+
-                    "&cf3multiselect=" + $('#cf3multiselect').is(':checked')+
-                    "&cf1enabled=" + $('#cf1enabled').is(':checked')+
-                    "&cf2enabled=" + $('#cf2enabled').is(':checked')+
-                    "&cf3enabled=" + $('#cf3enabled').is(':checked'),
-                url:'api/settings/customfields/addupdate/index.php',
-                complete:function (data) {
+        $.ajax({
+            type:"GET",
+            data:"cf1=" + $('#cf1Name').val() +
+                "&cf2=" + $('#cf2Name').val() +
+                "&cf3=" + $('#cf3Name').val() +
+                "&cf1multiselect=" + $('#cf1multiselect').is(':checked') +
+                "&cf2multiselect=" + $('#cf2multiselect').is(':checked') +
+                "&cf3multiselect=" + $('#cf3multiselect').is(':checked') +
+                "&cf1enabled=" + $('#cf1enabled').is(':checked') +
+                "&cf2enabled=" + $('#cf2enabled').is(':checked') +
+                "&cf3enabled=" + $('#cf3enabled').is(':checked'),
+            url:'api/settings/customfields/addupdate/index.php',
+            complete:function (data) {
 
-                    if (data.status == '201') {
-                        $('#log').prepend('<div class="log_div">Custom fields added/updated/enabled.</div>');
-                        populateRemoveTeamsSelect();
-                    }
-                    else if (data.status == '400') {
-                        $('#log').prepend('<div class="log_div">Error: Custom fields parameters not added in request.</div>');
-                    }
-                    else if (data.status == '401') {
-                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
-
-                    }
-                    else if (data.status == '500') {
-                        $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
-                    }
-                    $('#teamname').val('')
+                if (data.status == '201') {
+                    $('#log').prepend('<div class="log_div">Custom fields added/updated/enabled.</div>');
+                    populateRemoveTeamsSelect();
                 }
-            });
+                else if (data.status == '400') {
+                    $('#log').prepend('<div class="log_div">Error: Custom fields parameters not added in request.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                }
+                $('#teamname').val('')
+            }
+        });
 
     });
 }
