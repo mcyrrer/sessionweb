@@ -917,6 +917,58 @@ function echoTesterFullNameSelect($name, $removeInactiveUsers = false)
     mysql_close($con);
 }
 
+function getApplicationsFromAreaNames()
+{
+    $con = getMySqlConnection();
+    $sql = "select areaname from `areas` GROUP BY areaname";
+    $result = mysql_query($sql);
+    $appNames = array();
+    while ($rowTeamAreas = mysql_fetch_array($result))
+    {
+        $areaName = $rowTeamAreas['areaname'];
+        $areaName = explode('-',$areaName,2);
+        $areaName=str_replace(" ","",$areaName[0]);
+        $appNames[strtoupper($areaName)] = $areaName;
+    }
+    mysql_close($con);
+    return $appNames;
+}
+
+function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_name="select_app")
+{
+    $con = getMySqlConnection();
+    $sql = "select areaname from `areas` GROUP BY areaname";
+    $result = mysql_query($sql);
+    $appNames = array();
+    while ($rowTeamAreas = mysql_fetch_array($result))
+    {
+        $areaName = $rowTeamAreas['areaname'];
+        $areaName = explode('-',$areaName,2);
+        $areaName=str_replace(" ","",$areaName[0]);
+        $appNames[strtoupper($areaName)] = $areaName;
+    }
+    mysql_close($con);
+
+    echo "                                  <select id=\"$id_name\" name=\"sprint\">\n";
+
+
+    echo "                                      <option></option>\n";
+
+    foreach($appNames as $anApp)
+    {
+        if (strcmp($selectedapp, $anApp) == 0) {
+            echo "                                      <option selected=\"selected\">" . htmlspecialchars($anApp) . "</option>\n";
+        }
+        else
+        {
+            echo "                                      <option>" . htmlspecialchars($anApp) . "</option>\n";
+        }
+    }
+
+    echo "                                  </select>\n";
+
+}
+
 function echoSprintSelect($sprint, $history = false, $id_name="select_sprint")
 {
     $con = getMySqlConnection();

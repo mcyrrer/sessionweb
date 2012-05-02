@@ -86,7 +86,6 @@ if ($_SESSION['useradmin'] == 1) {
         header("HTTP/1.0 400 Bad Request");
         $response['code'] = ITEM_NOT_PROVIDED_IN_REQUEST;
         $response['text'] = "ITEM_NOT_PROVIDED_IN_REQUEST";
-        print_r($_REQUEST);
 
     }
 }
