@@ -13,6 +13,14 @@ function getMySqlConnection()
     return $con;
 }
 
+function getMySqliConnection()
+{
+    $con = mysqli_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
+    mysqli_select_db($con,DB_NAME_SESSIONWEB)or die("cannot select DB");
+    mysqli_set_charset($con,'utf8');
+    return $con;
+}
+
 function changeCharsetAndCollation($db, $charset, $collation, $db_server, $db_user, $db_password)
 {
     // Script written by Vladislav "FractalizeR" Rastrusny
