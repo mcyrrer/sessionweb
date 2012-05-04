@@ -14,7 +14,6 @@ require_once ('../../../../../include/commonFunctions.php.inc');
 $response = array();
 
 if ($_SESSION['useradmin'] == 1) {
-    print_r($_REQUEST);
     $con = getMySqlConnection();
 
     $publicview = mysql_real_escape_string($_REQUEST['publicview']);
