@@ -11,83 +11,134 @@ require_once ('../../../../../include/apistatuscodes.inc');
 require_once ('../../../../../include/loggingsetup.php');
 require_once ('../../../../../include/commonFunctions.php.inc');
 
-print_r($_REQUEST);
-exit();
 $response = array();
+
 if ($_SESSION['useradmin'] == 1) {
+    print_r($_REQUEST);
+    $con = getMySqlConnection();
 
-    if (isset($_REQUEST['cf1']) &&
-        isset($_REQUEST['cf2']) &&
-        isset($_REQUEST['cf3']) &&
-        isset($_REQUEST['cf1multiselect']) &&
-        isset($_REQUEST['cf2multiselect']) &&
-        isset($_REQUEST['cf3multiselect']) &&
-        isset($_REQUEST['cf1enabled']) &&
-        isset($_REQUEST['cf2enabled']) &&
-        isset($_REQUEST['cf3enabled'])
-    ) {
-
-        $con = getMySqlConnection();
-
-        $cf1 = mysql_real_escape_string($_REQUEST['cf1']);
-        $cf2 = mysql_real_escape_string($_REQUEST['cf2']);
-        $cf3 = mysql_real_escape_string($_REQUEST['cf3']);
-        $cf1multiselect = mysql_real_escape_string($_REQUEST['cf1multiselect']);
-        $cf2multiselect = mysql_real_escape_string($_REQUEST['cf2multiselect']);
-        $cf3multiselect = mysql_real_escape_string($_REQUEST['cf3multiselect']);
-        $cf1enabled = mysql_real_escape_string($_REQUEST['cf1enabled']);
-        $cf2enabled = mysql_real_escape_string($_REQUEST['cf2enabled']);
-        $cf3enabled = mysql_real_escape_string($_REQUEST['cf3enabled']);
+    $publicview = mysql_real_escape_string($_REQUEST['publicview']);
+    $env = mysql_real_escape_string($_REQUEST['env']);
+    $area = mysql_real_escape_string($_REQUEST['area']);
+    $sprint = mysql_real_escape_string($_REQUEST['sprint']);
+    $team = mysql_real_escape_string($_REQUEST['team']);
+    $url_to_rms = mysql_real_escape_string($_REQUEST['url_to_rms']);
+    $url_to_dms = mysql_real_escape_string($_REQUEST['url_to_dms']);
+    $teamsprint = mysql_real_escape_string($_REQUEST['teamsprint']);
+    $wordcloud = mysql_real_escape_string($_REQUEST["wordcloud"]);
 
 
-        $sqlUpdate = "
-        UPDATE settings
-        SET    custom1 = $cf1enabled,
-               custom1_name = '$cf1',
-               custom1_multiselect = $cf1multiselect,
-               custom2 = $cf2enabled,
-               custom2_name = '$cf2',
-               custom2_multiselect = $cf2multiselect,
-               custom3 = $cf3enabled,
-               custom3_name = '$cf3',
-               custom3_multiselect = $cf3multiselect
-        WHERE  id = '1'";
+    $normlizedsessiontime = 90;
 
-
-        $result = mysql_query($sqlUpdate);
-
-        if (!$result) {
-            if (mysql_errno() == 1062) {
-                header("HTTP/1.0 409 Conflict");
-                $response['code'] = ITEM_ALREADY_EXIST;
-                $response['text'] = "ITEM_ALREADY_EXIST";
-            }
-            else
-            {
-                header("HTTP/1.0 500 Internal Server Error");
-                $response['code'] = SQL_ERROR;
-                $response['text'] = "SQL_ERROR";
-                $logger->error($_SERVER["SCRIPT_NAME"] . ": SQL_ERROR: " . $sqlUpdate);
-            }
-        }
-        else
-        {
-            $logger->info($_SESSION['username'] . " Updated custom fields");
-            header("HTTP/1.0 201 Created");
-            $response['code'] = ITEM_ADDED;
-            $response['text'] = "ITEM_ADDED";
-            $_SESSION['settings'] = getSessionWebSettings();
-        }
-
-        mysql_close($con);
+    if (is_int((int)$_REQUEST["normlizedsessiontime"]) && (int)$_REQUEST["normlizedsessiontime"] != 0) {
+        $normlizedsessiontime = $_REQUEST["normlizedsessiontime"];
     }
     else
     {
         header("HTTP/1.0 400 Bad Request");
-        $response['code'] = ITEM_NOT_PROVIDED_IN_REQUEST;
-        $response['text'] = "ITEM_NOT_PROVIDED_IN_REQUEST";
-
+        $response['code'] = CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST;
+        $response['text'] = "normlizedsessiontime need to be an integer";
     }
+
+    if (strcmp($team, "checked") == 0) {
+        $team = 1;
+    }
+    else
+    {
+        $team = 0;
+    }
+
+    if (strcmp($sprint, "checked") == 0) {
+        $sprint = 1;
+    }
+    else
+    {
+        $sprint = 0;
+    }
+
+    if (strcmp($teamsprint, "checked") == 0) {
+        $teamsprint = 1;
+    }
+    else
+    {
+        $teamsprint = 0;
+    }
+
+    if (strcmp($area, "checked") == 0) {
+        $area = 1;
+    }
+    else
+    {
+        $area = 0;
+    }
+
+    if (strcmp($env, "checked") == 0) {
+        $env = 1;
+    }
+    else
+    {
+        $env = 0;
+    }
+
+    if (strcmp($publicview, "checked") == 0) {
+        $publicview = 1;
+    }
+    else
+    {
+        $publicview = 0;
+    }
+
+    if (strcmp($wordcloud, "checked") == 0) {
+        $wordcloud = 1;
+    }
+    else
+    {
+        $wordcloud = 0;
+    }
+
+    $sqlUpdate = "";
+    $sqlUpdate .= "UPDATE settings ";
+    $sqlUpdate .= "SET    `normalized_session_time` = $normlizedsessiontime, ";
+    $sqlUpdate .= "       `team` = '$team', ";
+    $sqlUpdate .= "       `sprint` = '$sprint', ";
+    $sqlUpdate .= "       `area` = '$area', ";
+    $sqlUpdate .= "       `url_to_dms` = '$url_to_dms', ";
+    $sqlUpdate .= "       `url_to_rms` = '$url_to_rms', ";
+    $sqlUpdate .= "       `testenvironment` = '$env', ";
+    $sqlUpdate .= "       `publicview` = '$publicview', ";
+    $sqlUpdate .= "       `teamsprint` = '$teamsprint', ";
+    $sqlUpdate .= "       `wordcloud` = '$wordcloud' ";
+
+    $result = mysql_query($sqlUpdate);
+
+
+    $result = mysql_query($sqlUpdate);
+
+    if (!$result) {
+        if (mysql_errno() == 1062) {
+            header("HTTP/1.0 409 Conflict");
+            $response['code'] = ITEM_ALREADY_EXIST;
+            $response['text'] = "ITEM_ALREADY_EXIST";
+        }
+        else
+        {
+            header("HTTP/1.0 500 Internal Server Error");
+            $response['code'] = SQL_ERROR;
+            $response['text'] = "SQL_ERROR";
+            $logger->error($_SERVER["SCRIPT_NAME"] . ": SQL_ERROR: " . $sqlUpdate);
+        }
+    }
+    else
+    {
+        $logger->info($_SESSION['username'] . " Updated custom fields");
+        header("HTTP/1.0 201 Created");
+        $response['code'] = ITEM_ADDED;
+        $response['text'] = "ITEM_ADDED";
+        $_SESSION['settings'] = getSessionWebSettings();
+    }
+
+    mysql_close($con);
+
 }
 else
 {

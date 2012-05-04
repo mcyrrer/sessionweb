@@ -27,7 +27,7 @@ if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
 
 if (strstr($_SERVER['PHP_SELF'], "settings2.php") != false) {
 
-    echo "     <script src=\"js/sessionweb-settings-v19.js\" type=\"text/javascript\"></script>\n";
+    echo "     <script src=\"js/sessionweb-settings-v20.js\" type=\"text/javascript\"></script>\n";
 }
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
