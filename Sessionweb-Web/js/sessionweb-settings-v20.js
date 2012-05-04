@@ -52,21 +52,19 @@ function updateApplicationConfig() {
             url:'api/settings/application/settings/save/index.php',
             complete:function (data) {
 
-                if (data.status == '200') {
-                    $('#log').prepend('<div class="log_div">Custom fields added/updated/enabled.</div>');
-                    populateRemoveTeamsSelect();
+                if (data.status == '201') {
+                    $('#log').prepend('<div class="log_div">Application settings updated.</div>');
                 }
                 else if (data.status == '400') {
-                    $('#log').prepend('<div class="log_div">Error: Custom fields parameters not added in request.</div>');
+                    $('#log').prepend('<div class="log_div">Error: Some parameters was missing in request.</div>');
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
 
                 }
                 else if (data.status == '500') {
-                    $('#log').prepend('<div class="log_div">Error: Item not added due to internal server error.</div>');
+                    $('#log').prepend('<div class="log_div">Error: Application settings not updated due to internal server error.</div>');
                 }
-                $('#teamname').val('')
             }
         });
 
