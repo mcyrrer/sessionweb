@@ -1,5 +1,6 @@
 $(document).ready(function () {
     getUserSettings();
+    setupDatePicker();
 
     populateRemoveAreasSelect();
     populateRemoveTeamsSelect();
@@ -31,9 +32,39 @@ $(document).ready(function () {
 
     updateCustomFields();
     updateApplicationConfig();
+    bulkCloseSessions();
 
 });
 
+function bulkCloseSessions() {
+    $('#bulkclosesessions_close').click(function () {
+        $.ajax({
+            type:"GET",
+            data:"from=" + $('#datepicker_bulkclosesessions').val(),
+            url:'api/session/bulkclose/index.php',
+            complete:function (data) {
+                if (data.status == '200') {
+                    $('#log').prepend('<div class="log_div">Sessions older then '+$('#datepicker_bulkclosesessions').val()+' is now in state closed.</div>');
+                }
+                else if (data.status == '400') {
+                    $('#log').prepend('<div class="log_div">Bulk close: Date parameter is not given.</div>');
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: Internal server error. More information exist in server log file.</div>');
+                }
+            }
+        });
+    });
+}
+
+function setupDatePicker()
+{
+    $( "#datepicker_bulkclosesessions" ).datepicker();
+    $( "#datepicker_bulkclosesessions" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+}
 
 function checkBoxHelper(arrayToUse, arrayItem, idToChange) {
     if (arrayToUse[arrayItem] == '1') {
@@ -462,6 +493,8 @@ function showAndHideHtml() {
     $("#manage_customfields").hide();
     $("#customFieldsEntries_testenvironment").hide();
     $("#add_remove_appconfig").hide();
+    $("#bulkclosesessions").hide();
+
 
 
     $('#change_personal_password_menu').click(function () {
@@ -546,6 +579,13 @@ function showAndHideHtml() {
             $("#add_remove_appconfig").fadeIn("slow");
         else
             $("#add_remove_appconfig").fadeOut("slow");
+    });
+
+    $('#bulkclosesessions_menu').click(function () {
+        if ($("#bulkclosesessions").is(':hidden'))
+            $("#bulkclosesessions").fadeIn("slow");
+        else
+            $("#bulkclosesessions").fadeOut("slow");
     });
 }
 
