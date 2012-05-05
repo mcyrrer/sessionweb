@@ -332,7 +332,20 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
     </form>
     <span class='settings_submit' id='update_appconfig'>UPDATE</span>
 
+
+
     <div class='divider_settings'></div>
+</div>
+<div>
+    <a href="#" id='bulkclosesessions_menu'>Bulk close sessions</a>
+</div>
+<div id='bulkclosesessions'>
+    <div class='divider_settings'></div>
+    <p>Bulk close sessions</p>
+    This command will set all sessions  older then the given date that are in state EXECUTED to closed.<br>
+    Close sessions older then:<br> <input type="text" size="10" value="" id="datepicker_bulkclosesessions"><br>
+    <span class='settings_submit' id='bulkclosesessions_close'>CLOSE</span>
+
 </div>
 
 <a href="settings.php">Old settings page</a>
