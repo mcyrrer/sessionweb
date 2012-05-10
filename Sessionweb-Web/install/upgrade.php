@@ -59,6 +59,7 @@ function upgrade()
     $versions['1.6'] = "SessionwebDbLayoutDelta_1.6-_1.7.sql";
     $versions['1.7'] = "SessionwebDbLayoutDelta_1.7-_18.sql";
     $versions['18'] = "SessionwebDbLayoutDelta_18-_19.sql";
+	$versions['19'] = "SessionwebDbLayoutDelta_19-_20.sql";
 
 
     $messages = array();
