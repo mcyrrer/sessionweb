@@ -93,6 +93,11 @@ function printSessionsStatus()
 
     $user = $_SESSION['username'];
 
+    $sqlClosed = "SELECT COUNT(closed) AS closed FROM `sessioninfo` WHERE username = '$user' and closed = 1;";
+    $resultSession = mysql_query($sqlClosed);
+    $closedResultArray = mysql_fetch_array($resultSession);
+    $closed = $closedResultArray['closed'];
+
     $sqlExecuted = "SELECT COUNT(executed) AS executed FROM `sessioninfo` WHERE username = '$user' and executed = 1;";
     $resultSession = mysql_query($sqlExecuted);
     $executedResultArray = mysql_fetch_array($resultSession);
@@ -119,12 +124,26 @@ function printSessionsStatus()
     {
         $debriefProcentage = (intval($debriefed) / intval($totalSessions)) * 100;
     }
-    $notDebriefedCount = intval($executed) - intval($debriefed);
+    $notDebriefedCount = intval($executed) - intval($debriefed)-intval($closed);
     $debriefProcentage = sprintf("%02d", $debriefProcentage);
+
+
+    if ($closed == 0 || $totalSessions == 0) {
+        $closedProcentage = 0;
+    }
+    else
+    {
+        $closedProcentage = (intval($closed) / intval($totalSessions)) * 100;
+    }
+    $notClosedCount = intval($closed) - intval($debriefed)-intval($executed);
+    $closedProcentage = sprintf("%02d", $closedProcentage);
+
 
     echo "<h2>Session statistics for " . $_SESSION['user'] . "</h2>\n";
     echo "<img src = 'http://chart.googleapis.com/chart?chst=d_fnote_title&chld=taped_y|1|004400|l|To do|$noRun'  alt = 'note' />\n";
     echo "<img src = 'http://chart.googleapis.com/chart?chst=d_fnote_title&chld=taped_y|1|004400|l|Executed|$executed'  alt = 'note' />\n";
+    echo "<img src = 'http://chart.googleapis.com/chart?chst=d_fnote_title&chld=taped_y|1|004400|l|Closed|$closed|$closedProcentage%' alt = 'note' />\n";
+
     if ($notDebriefedCount < 10)
         $color = '004400';
     else

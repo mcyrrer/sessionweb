@@ -109,7 +109,6 @@ function populateApplicationSettingsSelect(userSettings) {
             url:'api/application/getsettings/index.php',
             complete:function (data, xhr, statusText) {
                 if (data.status == '200') {
-                    $('#remove_customFieldsc1Entries_select').html('');
                     var jsonResponseContent = jQuery.parseJSON(data.responseText);
                     var optionTxt = "";
                     $("#normlizedsessiontime").val(jsonResponseContent['normalized_session_time'])
@@ -121,11 +120,6 @@ function populateApplicationSettingsSelect(userSettings) {
                     checkBoxHelper(jsonResponseContent, "testenvironment", "#app_env");
                     checkBoxHelper(jsonResponseContent, "publicview", "#app_publicview");
                     checkBoxHelper(jsonResponseContent, "wordcloud", "#app_wordcloud");
-
-
-                    //$.each(jsonResponseContent, function (index, value) {
-                    //   $('#remove_customFieldsc1Entries_select').append('<option>' + value + '</option>');
-                    //});
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
@@ -436,6 +430,7 @@ function applyUserSettingsToLayout(userSettings) {
         $("#testenvironments_menu").hide();
         $("#sprint_menu").hide();
         $("#site_settings").hide();
+        $("#team_menu").hide();
 
     }
 //    else if (parseInt(userSettings['admin']) != 1) {

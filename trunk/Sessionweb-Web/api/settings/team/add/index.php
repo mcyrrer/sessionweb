@@ -13,7 +13,7 @@ require_once ('../../../../include/loggingsetup.php');
 
 
 $response = array();
-if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
+if ($_SESSION['useradmin'] == 1) {
 
     if (isset($_REQUEST['team']) && strlen($_REQUEST['team']) > 0) {
         $teamName = $_REQUEST['team'];
