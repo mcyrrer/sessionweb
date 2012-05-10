@@ -6,7 +6,7 @@ $(document).ready(function () {
 function setupDatePicker()
 {
     var dates = $( "#from, #to" ).datepicker({
-        defaultDate: "+1w",
+        defaultDate: "-2m",
         changeMonth: true,
         numberOfMonths: 3,
         onSelect: function( selectedDate ) {

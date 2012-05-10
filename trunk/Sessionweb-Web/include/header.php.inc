@@ -14,7 +14,9 @@ echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
+echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery-ui-1.8.20.custom.css\">\n";
 echo "     <script src=\"js/jquery-1.7.1.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/jqueryui/jquery-ui-1.8.20.custom.min.js\" type=\"text/javascript\"></script>\n";
 
 if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";

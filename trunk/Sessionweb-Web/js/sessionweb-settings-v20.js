@@ -9,7 +9,6 @@ $(document).ready(function () {
     populateRemoveCustomItem1Select();
     populateRemoveCustomItem2Select();
     populateRemoveCustomItem3Select();
-    populateApplicationSettingsSelect();
 
     showAndHideHtml();
 
@@ -44,7 +43,7 @@ function bulkCloseSessions() {
             url:'api/session/bulkclose/index.php',
             complete:function (data) {
                 if (data.status == '200') {
-                    $('#log').prepend('<div class="log_div">Sessions older then '+$('#datepicker_bulkclosesessions').val()+' is now in state closed.</div>');
+                    $('#log').prepend('<div class="log_div">Sessions older then ' + $('#datepicker_bulkclosesessions').val() + ' is now in state closed.</div>');
                 }
                 else if (data.status == '400') {
                     $('#log').prepend('<div class="log_div">Bulk close: Date parameter is not given.</div>');
@@ -60,10 +59,9 @@ function bulkCloseSessions() {
     });
 }
 
-function setupDatePicker()
-{
-    $( "#datepicker_bulkclosesessions" ).datepicker();
-    $( "#datepicker_bulkclosesessions" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+function setupDatePicker() {
+    $("#datepicker_bulkclosesessions").datepicker();
+    $("#datepicker_bulkclosesessions").datepicker("option", "dateFormat", "yy-mm-dd");
 }
 
 function checkBoxHelper(arrayToUse, arrayItem, idToChange) {
@@ -102,39 +100,43 @@ function updateApplicationConfig() {
     });
 }
 
-function populateApplicationSettingsSelect() {
-    $.ajax({
-        type:"GET",
-        url:'api/application/getsettings/index.php',
-        complete:function (data, xhr, statusText) {
-            if (data.status == '200') {
-                $('#remove_customFieldsc1Entries_select').html('');
-                var jsonResponseContent = jQuery.parseJSON(data.responseText);
-                var optionTxt = "";
-                $("#normlizedsessiontime").val(jsonResponseContent['normalized_session_time'])
-                $("#url_to_rms").val(jsonResponseContent['url_to_rms']);
-                $("#url_to_dms").val(jsonResponseContent['url_to_dms']);
-                checkBoxHelper(jsonResponseContent, "team", "#app_team");
-                checkBoxHelper(jsonResponseContent, "sprint", "#app_sprint");
-                checkBoxHelper(jsonResponseContent, "area", "#app_area");
-                checkBoxHelper(jsonResponseContent, "testenvironment", "#app_env");
-                checkBoxHelper(jsonResponseContent, "publicview", "#app_publicview");
-                checkBoxHelper(jsonResponseContent, "wordcloud", "#app_wordcloud");
+function populateApplicationSettingsSelect(userSettings) {
+    if (parseInt(userSettings['admin']) == 1) {
 
 
-                //$.each(jsonResponseContent, function (index, value) {
-                //   $('#remove_customFieldsc1Entries_select').append('<option>' + value + '</option>');
-                //});
-            }
-            else if (data.status == '401') {
-                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+        $.ajax({
+            type:"GET",
+            url:'api/application/getsettings/index.php',
+            complete:function (data, xhr, statusText) {
+                if (data.status == '200') {
+                    $('#remove_customFieldsc1Entries_select').html('');
+                    var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                    var optionTxt = "";
+                    $("#normlizedsessiontime").val(jsonResponseContent['normalized_session_time'])
+                    $("#url_to_rms").val(jsonResponseContent['url_to_rms']);
+                    $("#url_to_dms").val(jsonResponseContent['url_to_dms']);
+                    checkBoxHelper(jsonResponseContent, "team", "#app_team");
+                    checkBoxHelper(jsonResponseContent, "sprint", "#app_sprint");
+                    checkBoxHelper(jsonResponseContent, "area", "#app_area");
+                    checkBoxHelper(jsonResponseContent, "testenvironment", "#app_env");
+                    checkBoxHelper(jsonResponseContent, "publicview", "#app_publicview");
+                    checkBoxHelper(jsonResponseContent, "wordcloud", "#app_wordcloud");
 
+
+                    //$.each(jsonResponseContent, function (index, value) {
+                    //   $('#remove_customFieldsc1Entries_select').append('<option>' + value + '</option>');
+                    //});
+                }
+                else if (data.status == '401') {
+                    $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+
+                }
+                else if (data.status == '500') {
+                    $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
+                }
             }
-            else if (data.status == '500') {
-                $('#log').prepend('<div class="log_div">Error: SQL Error</div>');
-            }
-        }
-    });
+        });
+    }
 }
 
 function updatePersonalSettings() {
@@ -425,16 +427,29 @@ function removeCustomItem3() {
 
 function applyUserSettingsToLayout(userSettings) {
     if (parseInt(userSettings['superuser']) == 0 && parseInt(userSettings['admin']) == 0) {
-        $("#manage_content").hide();
-        $("#site_settings").hide();
+        $("#adminmenu").hide();
+        $("#contentmenu").hide();
+
     }
-    else if (parseInt(userSettings['admin']) != 1) {
-        $("#team_menu").hide();
+    else if (parseInt(userSettings['superuser']) == 1 && parseInt(userSettings['admin']) == 0) {
+        $("#adminmenu").hide();
         $("#testenvironments_menu").hide();
         $("#sprint_menu").hide();
         $("#site_settings").hide();
 
     }
+//    else if (parseInt(userSettings['admin']) != 1) {
+////        alert("is admin");
+////        $("#testenvironments_menu").hide();
+////        $("#sprint_menu").hide();
+////        $("#site_settings").hide();
+//
+//    }
+//    else
+//    {
+//        alert("is nothing");
+//
+//    }
 
 }
 
@@ -447,10 +462,13 @@ function getUserSettings() {
                 $('#remove_area_select').html('');
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
                 applyUserSettingsToLayout(jsonResponseContent);
+                populateApplicationSettingsSelect(jsonResponseContent);
+
             }
             else if (data.status == '500') {
                 $('#log').prepend('<div class="log_div">Error: SQL Error during load of personal settings</div>');
             }
+//            return jsonResponseContent;
         }
     });
 }
@@ -494,7 +512,6 @@ function showAndHideHtml() {
     $("#customFieldsEntries_testenvironment").hide();
     $("#add_remove_appconfig").hide();
     $("#bulkclosesessions").hide();
-
 
 
     $('#change_personal_password_menu').click(function () {

@@ -11,40 +11,32 @@ require_once ('../../../include/apistatuscodes.inc');
 
 
 $response = array();
-if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
+$con = getMySqlConnection();
 
-    $con = getMySqlConnection();
+$areaName = mysql_real_escape_string($areaName);
 
-    $areaName = mysql_real_escape_string($areaName);
+$sql = "SELECT areaname FROM areas ORDER BY areaname ASC;";
 
-    $sql = "SELECT areaname FROM areas ORDER BY areaname ASC;";
+$result = mysql_query($sql);
 
-    $result = mysql_query($sql);
-
-    if (!$result) {
-        header("HTTP/1.0 500 Internal Server Error");
-        $response['code'] = SQL_ERROR;
-        $response['text'] = "SQL_ERROR";
-    }
-    else
-    {
-        $resultArray = array();
-
-        while ($row = mysql_fetch_array($result))
-        {
-            $response[]=$row['areaname'];
-        }
-        header("HTTP/1.0 200 Ok");
-    }
-
-    mysql_close($con);
+if (!$result) {
+    header("HTTP/1.0 500 Internal Server Error");
+    $response['code'] = SQL_ERROR;
+    $response['text'] = "SQL_ERROR";
 }
-
 else
 {
-    header("HTTP/1.0 401 Unauthorized");
-    $response['code'] = UNAUTHORIZED;
-    $response['text'] = "UNAUTHORIZED";
+    $resultArray = array();
+
+    while ($row = mysql_fetch_array($result))
+    {
+        $response[] = $row['areaname'];
+    }
+    header("HTTP/1.0 200 Ok");
 }
+
+mysql_close($con);
+
+
 echo json_encode($response);
 ?>
