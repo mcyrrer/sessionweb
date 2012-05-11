@@ -32,8 +32,61 @@ $(document).ready(function () {
     updateCustomFields();
     updateApplicationConfig();
     bulkCloseSessions();
+    addNewUser();
 
 });
+
+function addNewUser() {
+    $('#adduser_add').click(function () {
+            $('#usermessages').text('');
+            if ($('#user_fullname').val().length > 3) {
+                if ($('#user_username').val().length > 3) {
+                    if ($('#user_pw1').val().length > 5) {
+                        if ($('#user_pw1').val() == $('#user_pw2').val()) {
+                            $.ajax({
+                                type:"GET",
+                                data:$('#adduserForm').serializeArray(),
+                                url:'api/settings/user/add/index.php',
+                                complete:function (data) {
+
+                                    if (data.status == '201') {
+                                        $('#log').prepend('<div class="log_div">New user added</div>');
+                                    }
+                                    else if (data.status == '400') {
+                                        $('#log').prepend('<div class="log_div">Error: Some parameters was missing in request.</div>');
+                                    }
+                                    else if (data.status == '401') {
+                                        $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                                    }
+                                    else if (data.status == '409') {
+                                        $('#log').prepend('<div class="log_div">Warning: User '+$('#user_username').val()+'already exist!</div>');
+                                    }
+                                    else if (data.status == '500') {
+                                        $('#log').prepend('<div class="log_div">Error: User not added due to internal server error.</div>');
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            $('#usermessages').fadeIn().text("Passwords does not match each other. Please adjust and try again.");
+                        }
+                    }
+                    else {
+                        $('#usermessages').fadeIn().text("Password not 6 chars or longer. Please adjust and try again.");
+                    }
+                }
+                else {
+                    $('#usermessages').fadeIn().text("Username need to be at least 4 chars or longer. Please adjust and try again.");
+                }
+            }
+            else {
+                $('#usermessages').fadeIn().text("Fullname need to be at least 4 chars or longer. Please adjust and try again.");
+            }
+        }
+    )
+    ;
+}
+
 
 function bulkCloseSessions() {
     $('#bulkclosesessions_close').click(function () {
@@ -507,6 +560,8 @@ function showAndHideHtml() {
     $("#customFieldsEntries_testenvironment").hide();
     $("#add_remove_appconfig").hide();
     $("#bulkclosesessions").hide();
+    $("#adduser").hide();
+
 
 
     $('#change_personal_password_menu').click(function () {
@@ -598,6 +653,13 @@ function showAndHideHtml() {
             $("#bulkclosesessions").fadeIn("slow");
         else
             $("#bulkclosesessions").fadeOut("slow");
+    });
+
+    $('#adduser_menu').click(function () {
+        if ($("#adduser").is(':hidden'))
+            $("#adduser").fadeIn("slow");
+        else
+            $("#adduser").fadeOut("slow");
     });
 }
 

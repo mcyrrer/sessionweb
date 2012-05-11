@@ -335,6 +335,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 
         <div class='divider_settings'></div>
     </div>
+
     <div>
         <a href="#" id='bulkclosesessions_menu'>Bulk close sessions</a>
     </div>
@@ -344,6 +345,33 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
         This command will set all sessions older then the given date that are in state EXECUTED to closed.<br>
         Close sessions older then:<br> <input type="text" size="10" value="" id="datepicker_bulkclosesessions"><br>
         <span class='settings_submit' id='bulkclosesessions_close'>CLOSE</span>
+
+    </div>
+
+    <div>
+        <a href="#" id='adduser_menu'>Add user</a>
+    </div>
+    <div id='adduser'>
+        <div class='divider_settings'></div>
+        <p>Add a new user to sessionweb<br>
+        <span id='usermessages'></span></p><br>
+
+        <form id="adduserForm">
+        Full name:<input id="user_fullname"type="text" size="40" value="" name="fullname"><span class="italic">Minimum length is 4 chars</span><br>
+        User name:<input id="user_username" type="text" size="40" value="" name="username"><span class="italic">Minimum length is 4 chars</span><br>
+        Password:<input id="user_pw1" type="password" size="40" value="" name="pw1"> <span class="italic">Minimum length is 6 chars</span> <br>
+        Retype password:<input id="user_pw2" type="password" size="40" value="" name="pw2"><br>
+        <?php
+            if ($_SESSION['settings']['team'] == 1) {
+                echo "Team:";
+                echoTeamSelect("");
+                echo "<br>";
+            }
+            ?>
+        Admin: <input type="checkbox" name="admin" value="yes">
+        Superuser: <input type="checkbox" name="superuser" value="yes"><br>
+        <span class='settings_submit' id='adduser_add'>ADD</span>
+        </form>
 
     </div>
 
