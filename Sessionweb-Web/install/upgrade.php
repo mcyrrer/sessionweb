@@ -104,6 +104,7 @@ function upgrade()
                     echo $oneError . "<br>";
                 }
             }
+            echo "<div><a href='../index.php'>Back to sessionweb</a></div>";
 
 
         }
