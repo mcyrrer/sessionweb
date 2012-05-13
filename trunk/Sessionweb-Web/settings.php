@@ -78,12 +78,13 @@ function executeCommand()
         elseif (strcmp($_REQUEST["command"], "systemcheck") == 0)
         {
             echo "<h1>System check</h1>";
-            $con=getMySqlConnection();
+            $con = getMySqlConnection();
 
             checkFoldersForRW();
             checkForMaxAttachmentSize();
             debugInfo();
             mysql_close();
+            echo "<div><a href='include/phpinfo.php' >Get php info</a></div>";
         }
         elseif (strcmp($_REQUEST["command"], "customfileds") == 0)
         {
@@ -147,15 +148,15 @@ function executeCommand()
 
 function debugInfo()
 {
-    echo "Browser: ".$_SERVER['HTTP_USER_AGENT']."<br>";
-    echo "PHP Memory peek usage: ". (memory_get_peak_usage()/1024/1024)."mb<br>";
+    echo "Browser: " . $_SERVER['HTTP_USER_AGENT'] . "<br>";
+    echo "PHP Memory peek usage: " . (memory_get_peak_usage() / 1024 / 1024) . "mb<br>";
 }
 
 function insertCustomFieldNameToDb()
 {
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
-    $table = "custom".$_POST['id'];
+    $table = "custom" . $_POST['id'];
     $name = $_POST['custom_name'];
 
     $sql = "INSERT INTO custom_items (`tablename`, `name`) VALUES ('$table','$name')";
@@ -167,7 +168,7 @@ function insertCustomFieldNameToDb()
 
 function insertCustomFieldsSettingsToDb()
 {
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
     if ($_REQUEST['custom1_enabled'] == 1)
         $c1_enable = '1';
@@ -217,31 +218,31 @@ function echoManageCustomFileds()
 {
     $settings = getSettings();
 
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
     echo "<h1>Custom fields</h1>";
     echo "<h2>Fields setup</h2>";
     echo "If you change these values you will need to log out and in again to enable the changes. ";
     echo "<form name=\"customfileds\" action=\"settings.php\" method=\"POST\">\n";
     echo "<input type=\"hidden\" name=\"command\" value= \"insertcustomfields\">\n";
-    $c1="";
-    $c2="";
-    $c3="";
-    if($settings['custom1_multiselect'])
-        $c1="checked='checked'";
-    if($settings['custom2_multiselect'])
-        $c2="checked='checked'";
-    if($settings['custom3_multiselect'])
-        $c3="checked='checked'";
-    $ce1="";
-    $ce2="";
-    $ce3="";
-    if($settings['custom1'])
-        $ce1="checked='checked'";
-    if($settings['custom2'])
-        $ce2="checked='checked'";
-    if($settings['custom3'])
-        $ce3="checked='checked'";
+    $c1 = "";
+    $c2 = "";
+    $c3 = "";
+    if ($settings['custom1_multiselect'])
+        $c1 = "checked='checked'";
+    if ($settings['custom2_multiselect'])
+        $c2 = "checked='checked'";
+    if ($settings['custom3_multiselect'])
+        $c3 = "checked='checked'";
+    $ce1 = "";
+    $ce2 = "";
+    $ce3 = "";
+    if ($settings['custom1'])
+        $ce1 = "checked='checked'";
+    if ($settings['custom2'])
+        $ce2 = "checked='checked'";
+    if ($settings['custom3'])
+        $ce3 = "checked='checked'";
 
     echo "<table border='1' bordercolor='' bgcolor=''>
             <THEAD>
@@ -254,19 +255,19 @@ function echoManageCustomFileds()
             </THEAD>
             <tr>
             <td>1</td>
-            <td> <input type='text' name='custom1_name' value='".$settings['custom1_name']."'/></td>
+            <td> <input type='text' name='custom1_name' value='" . $settings['custom1_name'] . "'/></td>
             <td> <input type='checkbox' name='custom1_multiselect' value='1' $c1 /> </td>
             <td> <input type='checkbox' name='custom1_enabled' value='1' $ce1 /></td>
             </tr>
             <tr>
             <td>2</td>
-            <td> <input type='text' name='custom2_name' value='".$settings['custom2_name']."'/> </td>
+            <td> <input type='text' name='custom2_name' value='" . $settings['custom2_name'] . "'/> </td>
             <td> <input type='checkbox' name='custom2_multiselect' value='1' $c2 /> </td>
             <td> <input type='checkbox' name='custom2_enabled' value='1' $ce2 /></td>
             </tr>
             <tr>
             <td>3</td>
-            <td> <input type='text' name='custom3_name' value='".$settings['custom3_name']."'/> </td>
+            <td> <input type='text' name='custom3_name' value='" . $settings['custom3_name'] . "'/> </td>
             <td> <input type='checkbox' name='custom3_multiselect' value='1' $c3 /> </td>
             <td> <input type='checkbox' name='custom3_enabled' value='1' $ce3 /></td>
             </tr>
@@ -281,9 +282,9 @@ function echoManageCustomFileds()
 
 
     echo "<select id='select_customname' name='id'>
-	<option value='1'>".$settings['custom1_name']."</option>
-	<option value='2'>".$settings['custom2_name']."</option>
-	<option value='3'>".$settings['custom3_name']."</option>
+	<option value='1'>" . $settings['custom1_name'] . "</option>
+	<option value='2'>" . $settings['custom2_name'] . "</option>
+	<option value='3'>" . $settings['custom3_name'] . "</option>
     </select>
     <input type='text' name='custom_name'/>";
 
@@ -745,7 +746,7 @@ function echoChangeListSettings()
         echo "<option value=\"all\" >All sessions</option>\n";
         echo "<option value=\"mine\">My own sessions</option>\n";
         echo "<option value=\"team\" selected>My teams sessions</option>\n";
-    }else
+    } else
     {
         echo "<option value=\"all\" selected>All sessions</option>\n";
         echo "<option value=\"mine\">My own sessions</option>\n";
@@ -1304,7 +1305,7 @@ function updateUserSettings($userToChange, $active, $admin, $superuser, $team)
         echo mysql_error();
     }
 
-    $sqlUpdate =  "UPDATE user_settings SET teamname='$team' WHERE username='$userToChange'";
+    $sqlUpdate = "UPDATE user_settings SET teamname='$team' WHERE username='$userToChange'";
     $result = mysql_query($sqlUpdate);
 
     if ($result) {
