@@ -1114,9 +1114,10 @@ function getUserSettings($createConnection = true)
     return mysql_fetch_array($result);
 }
 
-function getSettings()
+function getSettings($createConnection=true)
 {
-    $con = getMySqlConnection();
+    if($createConnection)
+        $con = getMySqlConnection();
 
 
     $sqlSelect = "";
@@ -1130,7 +1131,8 @@ function getSettings()
         echo "getSettings: " . mysql_error() . "<br/>";
     }
 
-    mysql_close($con);
+    if($createConnection)
+        mysql_close($con);
     return mysql_fetch_array($result);
 }
 

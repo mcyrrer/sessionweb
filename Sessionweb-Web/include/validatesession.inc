@@ -1,7 +1,10 @@
 <?php
-if (strstr($_SERVER['PHP_SELF'],"api/")==false) {
+if (strstr($_SERVER['PHP_SELF'], "api/") == false) {
     if (!isset($_SESSION['username'])) {
-        header("Location:index.php");
+        $rootPath = checkIfRootFolder("");
+        echo "$rootPath<br>";
+        header("Location:".$rootPath."index.php");
+        echo "Location:".$rootPath."index.php";
         echo "You are not logged in!";
         die();
     }
@@ -16,4 +19,20 @@ else
         die();
     }
 }
+
+function checkIfRootFolder($pathToRoot)
+{
+    if (file_exists($pathToRoot.'about.php')) {
+        echo "Found root at ".$pathToRoot."about.php<br>";
+        return $pathToRoot;
+    }
+    else
+    {
+        echo "Not Root<br>";
+        $pathToRoot .= "../";
+        $pathToRoot = checkIfRootFolder($pathToRoot);
+    }
+    return $pathToRoot;
+}
+
 ?>
