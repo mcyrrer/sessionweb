@@ -28,7 +28,7 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     }
     echo "<br>Debug info:<br>";
     echo echoMaxUploadSizePhp();
-    echo "MySql max_allowed_packet:".getSqlMaxAllowedPacketAsMb()."<br>";
+    echo "MySql max_allowed_packet:" . getSqlMaxAllowedPacketAsMb() . "<br>";
 
 
 }
@@ -121,9 +121,9 @@ function getMaxUploadSize()
 
 function echoMaxUploadSizePhp()
 {
-    echo "PHP upload_max_filesize:". (int)(ini_get('upload_max_filesize'))."<br>";
-    echo "PHP post_max_size:".$max_post = (int)(ini_get('post_max_size'))."<br>";
-    echo "PHP memory_limit:".(int)(ini_get('memory_limit'))."<br>";
+    echo "PHP upload_max_filesize:" . (int)(ini_get('upload_max_filesize')) . "<br>";
+    echo "PHP post_max_size:" . $max_post = (int)(ini_get('post_max_size')) . "<br>";
+    echo "PHP memory_limit:" . (int)(ini_get('memory_limit')) . "<br>";
 }
 
 
@@ -450,6 +450,28 @@ function getSessionAreas($versionid)
     return $result;
 }
 
+function getAreas()
+{
+    $sqlSelectSessionStatus = "";
+    $sqlSelectSessionStatus .= "SELECT areaname ";
+    $sqlSelectSessionStatus .= "FROM   mission_areas";
+
+    $resultSessionAreas = mysql_query($sqlSelectSessionStatus);
+
+    if (!$resultSessionAreas) {
+        echo "getSessionAreas: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelectSessionStatus());
+    }
+
+    $result = array();
+    while ($row = mysql_fetch_array($resultSessionAreas)) {
+        $result[] = $row["areaname"];
+    }
+
+    return $result;
+}
+
 function getSessionAdditionalTester($versionid)
 {
     $sqlSelect = "SELECT * FROM mission_testers WHERE versionid = $versionid";
@@ -519,7 +541,7 @@ function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 
     return $imgURL;
 }
 
-function echoTeamSelect($team, $createConnection = true, $history = false, $id_name="select_team")
+function echoTeamSelect($team, $createConnection = true, $history = false, $id_name = "select_team")
 {
     if ($createConnection)
         $con = getMySqlConnection();
@@ -713,7 +735,7 @@ function echoAreaSelect($area)
     mysql_close($con);
 }
 
-function echoAreaSelectSingel($area, $history = false, $id_name="select_area")
+function echoAreaSelectSingel($area, $history = false, $id_name = "select_area")
 {
     if (!is_array($area)) {
         $areaTmp = array();
@@ -926,15 +948,22 @@ function getApplicationsFromAreaNames()
     while ($rowTeamAreas = mysql_fetch_array($result))
     {
         $areaName = $rowTeamAreas['areaname'];
-        $areaName = explode('-',$areaName,2);
-        $areaName=str_replace(" ","",$areaName[0]);
+        $areaName = explode('-', $areaName, 2);
+        $areaName = str_replace(" ", "", $areaName[0]);
         $appNames[strtoupper($areaName)] = $areaName;
     }
     mysql_close($con);
     return $appNames;
 }
 
-function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_name="select_app")
+function getApplicationNameFromAreaName($areaName)
+{
+    $areaName = explode('-', $areaName, 2);
+    $areaName = str_replace(" ", "", $areaName[0]);
+    return $areaName;
+}
+
+function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_name = "select_app")
 {
     $con = getMySqlConnection();
     $sql = "select areaname from `areas` GROUP BY areaname";
@@ -943,8 +972,8 @@ function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_n
     while ($rowTeamAreas = mysql_fetch_array($result))
     {
         $areaName = $rowTeamAreas['areaname'];
-        $areaName = explode('-',$areaName,2);
-        $areaName=str_replace(" ","",$areaName[0]);
+        $areaName = explode('-', $areaName, 2);
+        $areaName = str_replace(" ", "", $areaName[0]);
         $appNames[strtoupper($areaName)] = $areaName;
     }
     mysql_close($con);
@@ -954,7 +983,7 @@ function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_n
 
     echo "                                      <option></option>\n";
 
-    foreach($appNames as $anApp)
+    foreach ($appNames as $anApp)
     {
         if (strcmp($selectedapp, $anApp) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($anApp) . "</option>\n";
@@ -969,7 +998,7 @@ function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_n
 
 }
 
-function echoSprintSelect($sprint, $history = false, $id_name="select_sprint")
+function echoSprintSelect($sprint, $history = false, $id_name = "select_sprint")
 {
     $con = getMySqlConnection();
 
@@ -1114,9 +1143,9 @@ function getUserSettings($createConnection = true)
     return mysql_fetch_array($result);
 }
 
-function getSettings($createConnection=true)
+function getSettings($createConnection = true)
 {
-    if($createConnection)
+    if ($createConnection)
         $con = getMySqlConnection();
 
 
@@ -1131,7 +1160,7 @@ function getSettings($createConnection=true)
         echo "getSettings: " . mysql_error() . "<br/>";
     }
 
-    if($createConnection)
+    if ($createConnection)
         mysql_close($con);
     return mysql_fetch_array($result);
 }
@@ -1326,6 +1355,23 @@ function echoFetchVersionView()
         echo "                                  </div>";
     }
 
+}
+
+function str_startsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+}
+
+function str_endsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+    if ($length == 0) {
+        return true;
+    }
+
+    $start  = $length * -1; //negative
+    return (substr($haystack, $start) === $needle);
 }
 
 ?>

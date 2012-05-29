@@ -10,7 +10,7 @@ include("include/header.php.inc");
 
 echo "<h1>Settings</h1>\n";
 
-echoMenu();
+//echoMenu();
 
 executeCommand();
 
