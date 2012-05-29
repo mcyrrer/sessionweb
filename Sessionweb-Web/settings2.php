@@ -375,7 +375,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 
     </div>
 
-    <a href="settings.php">Old settings page</a>
+    <a href="settings.php?command=listusers">User management</a>
     <!--                <div>-->
     <!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->
     <!--                </div>-->
