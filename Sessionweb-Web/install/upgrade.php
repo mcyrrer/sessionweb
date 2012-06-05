@@ -24,7 +24,7 @@ if ($_SESSION['useradmin'] != 1) {
 <div id="container">
     <div><H1>Upgrade of Sessionweb</H1></div>
     <?php
-    if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null)
+    if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']))
         echoForm();
     else
     {
@@ -59,7 +59,7 @@ function upgrade()
     $versions['1.6'] = "SessionwebDbLayoutDelta_1.6-_1.7.sql";
     $versions['1.7'] = "SessionwebDbLayoutDelta_1.7-_18.sql";
     $versions['18'] = "SessionwebDbLayoutDelta_18-_19.sql";
-	$versions['19'] = "SessionwebDbLayoutDelta_19-_20.sql";
+    $versions['19'] = "SessionwebDbLayoutDelta_19-_20.sql";
 
 
     $messages = array();
@@ -150,11 +150,23 @@ function tryDbConnection($user, $password, $host = 'localhost')
 
 function echoForm()
 {
-    if (strstr($_GET['install'], "yes") != false) {
+    if (isset($_GET['install']) && strstr($_GET['install'], "yes") != false) {
         echo "<p>Some of the fields was empty, please fill all fields and try again.</p>";
     }
-    $adminuser = $_POST['dbadminuser'];
-    $adminpassword = $_POST['dbadminpassword'];
+    if (isset($_POST['dbadminuser'])) {
+        $adminuser = $_POST['dbadminuser'];
+    }
+    else
+    {
+        $adminuser = "";
+    }
+    if (isset($_POST['dbadminpassword'])) {
+        $adminpassword = $_POST['dbadminpassword'];
+    }
+    else
+    {
+        $adminpassword = "";
+    }
 
     echo '<form action="upgrade.php" method="post" class="niceform">
             <fieldset>
