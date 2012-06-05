@@ -52,31 +52,33 @@ echo "              var url_to_rms = \"" . $_SESSION['settings']['url_to_rms'] .
 
 echo "              </script>\n";
 
-if ($_SESSION['settings']['analyticsid'] != "") {
-    echo " <script type=\"text/javascript\">\n";
+if (isset($_SESSION['settings'])) {
+    if ($_SESSION['settings']['analyticsid'] != "") {
+        echo " <script type=\"text/javascript\">\n";
 
-    echo "   var _gaq = _gaq || [];\n";
-    echo "   _gaq.push(['_setAccount', '" . $_SESSION['settings']['analyticsid'] . "']);\n";
-    echo "   _gaq.push(['_trackPageview']);\n";
+        echo "   var _gaq = _gaq || [];\n";
+        echo "   _gaq.push(['_setAccount', '" . $_SESSION['settings']['analyticsid'] . "']);\n";
+        echo "   _gaq.push(['_trackPageview']);\n";
 
-    echo "   (function() {\n";
-    echo "     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n";
-    echo "     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n";
-    echo "     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n";
-    echo "   })();\n";
+        echo "   (function() {\n";
+        echo "     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n";
+        echo "     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n";
+        echo "     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n";
+        echo "   })();\n";
 
-    echo " </script>\n";
+        echo " </script>\n";
+    }
 }
 echo "  </head>\n";
 echo "  <body>\n";
 echo "<div id='outer'>";
-echo "<div id='header' ".isThisDevlopmentVersion().">
+echo "<div id='header' " . isThisDevlopmentVersion() . ">
         <div id='headercontent'>
             <h1>Sessionweb<sup>SBTM made easy" . printDevelopmentVersionDebugText() . "</sup></h1>
         </div>
       </div>";
 echo "<div id='menu'>";
-if ($_SESSION['user'] != "") {
+if (isset($_SESSION['user'] ) && $_SESSION['user'] != "") {
     echo "      [" . $_SESSION['user'] . "]";
 }
 //if (doesUserHaveNotifications()) {

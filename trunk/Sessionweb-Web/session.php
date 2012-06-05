@@ -19,10 +19,10 @@ if (strcmp($_REQUEST["command"], "edit") == 0) {
     if (isset($_REQUEST["sessionid"])) {
         getMySqlConnection();
         $rowSessionData = getSessionData($_REQUEST["sessionid"]);
-        $logger->debug($_SESSION['username'].": trying to edit session: ". $_REQUEST["sessionid"]. " superuser: " . $_SESSION['superuser']. " admin: ". $_SESSION['useradmin']. " active: ". $_SESSION['active']);
-        $logger->debug("'".$_SESSION['username']."': Session is owned by '". $rowSessionData['username']."'");
+        //$logger->debug($_SESSION['username'] . ": trying to edit session: " . $_REQUEST["sessionid"] . " superuser: " . $_SESSION['superuser'] . " admin: " . $_SESSION['useradmin'] . " active: " . $_SESSION['active']);
+        //$logger->debug("'" . $_SESSION['username'] . "': Session is owned by '" . $rowSessionData['username'] . "'");
         if (strcmp($_SESSION['username'], $rowSessionData['username']) != 0 && $_SESSION['superuser'] != 1 && $_SESSION['useradmin'] != 1) {
-            $logger->info($_SESSION['username'].": Sessionid:".$_GET["sessionid"]." Redirect to view session since user is not owner of session or superuser/admin");
+            $logger->info($_SESSION['username'] . ": Sessionid:" . $_GET["sessionid"] . " Redirect to view session since user is not owner of session or superuser/admin");
             echo "You are not the owner of the session, please reassign it to be able to edit it.";
             mysql_close();
             $url = "session.php?sessionid=" . $_GET["sessionid"] . "&command=" . view;
@@ -59,18 +59,18 @@ elseif (strcmp($_REQUEST["command"], "debriefed") == 0)
 
 //elseif (strcmp($_REQUEST["command"], "save") == 0)
 //{
-    /*    //RapidReporter importer
-    if (strstr(substr($_REQUEST["notes"], 0, 26), 'Time,Reporter,Type,Content') != false) {
-        $_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
-        echo "RapidReporter CVS notes parsed to HTML<br/>\n";
-    }
+/*    //RapidReporter importer
+if (strstr(substr($_REQUEST["notes"], 0, 26), 'Time,Reporter,Type,Content') != false) {
+    $_REQUEST["notes"] = parseRapidReporterNotes($_REQUEST["notes"]);
+    echo "RapidReporter CVS notes parsed to HTML<br/>\n";
+}
 
-        //BB test assistant importer
-    elseif (strstr(substr($_REQUEST["notes"], 0, 43), "xml version") != false)
-    {
-        $_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
-        echo "BB Test Assistant XML notes parsed to HTML<br/>\n";
-    }*/
+    //BB test assistant importer
+elseif (strstr(substr($_REQUEST["notes"], 0, 43), "xml version") != false)
+{
+    $_REQUEST["notes"] = parseBBTestAssistantNotes($_REQUEST["notes"]);
+    echo "BB Test Assistant XML notes parsed to HTML<br/>\n";
+}*/
 //
 //    saveSession();
 //}
@@ -184,7 +184,7 @@ function checkSessionTitleNotToLong($echo = true)
 
     if ($echo)
         echo "<h1>Save session</h1>\n";
-    if (strlen($_REQUEST["title"]) > $_TITLELENGTH) {
+    if (isset($_REQUEST["title"]) && strlen($_REQUEST["title"]) > $_TITLELENGTH) {
         echo "<b>Warning:</b> Title of session is exceding the maximum number of chars ($_TITLELENGTH). Will only save the first $_TITLELENGTH chars<br/>\n";
     }
 }
@@ -205,7 +205,7 @@ function saveSession($echo = true)
 
 
     //New session
-    if ($_REQUEST["sessionid"] == "") {
+    if (isset($_REQUEST["sessionid"]) && $_REQUEST["sessionid"] == "") {
         if (!doesSessionKeyExist($_REQUEST["publickey"])) {
 
             //Will create a new session id to map to a session
@@ -277,7 +277,6 @@ function saveSession($echo = true)
 }
 
 
-
 /**
  *
  * @return unknown_type
@@ -309,7 +308,7 @@ function echoSessionForm()
         }
     }
 
-    if ($_REQUEST["sessionid"] != "") {
+    if (isset($_REQUEST["sessionid"]) && $_REQUEST["sessionid"] != "") {
         $rowSessionMetric = getSessionMetrics($rowSessionData["versionid"]);
 
         $rowSessionStatus = getSessionStatus($rowSessionData["versionid"]);
@@ -369,9 +368,10 @@ function echoSessionForm()
     }
     else
     {
+
         $publickey = md5(rand());
     }
-//    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+    //    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
     echo "<form id=\"sessionform\" name=\"sessionform\" action=\"api/session/save/index.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
 
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";
@@ -419,7 +419,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td>Team: </td>\n";
         echo "                              <td>\n";
-        if ($_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
             echoTeamSelect($team);
         else
             echoTeamSelect($userSettings['default_team']);
@@ -430,7 +430,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Sprint: </td>\n";
         echo "                              <td>\n";
-        if ($_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
             echoSprintSelect($sprint);
         else
             echoSprintSelect($userSettings['default_sprint']);
@@ -441,7 +441,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Team sprint: </td>\n";
         echo "                              <td>\n";
-        if ($_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
             echoTeamSprintSelect($teamsprint);
         else
             echoTeamSprintSelect($userSettings['default_teamsprint']);
@@ -453,7 +453,7 @@ function echoSessionForm()
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Additional tester: </td>\n";
     echo "                              <td>\n";
-    if ($_REQUEST['sessionid'] != "")
+    if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
         echoAdditionalTesterSelect($additionalTesters);
     else
         echoAdditionalTesterSelect(null);
@@ -466,7 +466,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Area: </td>\n";
         echo "                              <td>\n";
-        if ($_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
             echoAreaSelect($area);
         else
             echoAreaSelect($userSettings['default_area']);
@@ -478,7 +478,13 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Testenvironment: </td>\n";
         echo "                              <td>\n";
-        echoTestEnvironmentSelect($testenvironment);
+        if (isset($testenvironment)) {
+            echoTestEnvironmentSelect($testenvironment);
+        }
+        else
+        {
+            echoTestEnvironmentSelect("");
+        }
         echo "                              </td>\n";
         echo "                        </tr>\n";
     }
@@ -486,6 +492,9 @@ function echoSessionForm()
     echo "                        <tr>\n";
     echo "                              <td valign=\"top\">Software under test: </td>\n";
     echo "                              <td>\n";
+    if (!isset($software)) {
+        $software = "";
+    }
     echo "                                  <textarea id=\"textareaswundertest\" name=\"textareaswundertest\" rows=\"20\" cols=\"50\" style=\"width:640px;height:50px;\">$software</textarea>\n";
     echoFetchVersionautomatically();
     /*    echo "                                  <p id='getsoftwarerunning'>\n";
@@ -498,7 +507,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     $selectCustomArray = array("custom1", "custom2", "custom3");
     foreach ($selectCustomArray as $oneSelectToEcho)
     {
-        if ($_REQUEST['sessionid'] != "") {
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "") {
             getMySqlConnection();
             $itemArray = getSessionCustomValues(getSessionVersionId($_REQUEST['sessionid']), $oneSelectToEcho);
         }
@@ -536,7 +545,15 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td><div id=\"requirementlist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">";
-    echo "                                " . echoRequirementsEdit($rowSessionData["versionid"]) . "</div></td>\n";
+    if (isset($rowSessionData)) {
+        echo "                                " . echoRequirementsEdit($rowSessionData["versionid"]) . "</div></td>\n";
+    }
+    else
+    {
+        echo "                               </div></td>\n";
+
+    }
+
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
@@ -566,7 +583,10 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td><div id=\"sessionlinklist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">";
-    echo "                                " . echoSessionlinkEdit($rowSessionData["versionid"]) . "</div></td>\n";
+    if (isset($rowSessionData)) {
+        echo "                                " . echoSessionlinkEdit($rowSessionData["versionid"]) . "";
+    }
+    echo "                        </div></td>\n";
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
@@ -619,7 +639,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                              <td valign=\"top\">Attachments:</td>\n";
     echo "                              <td>\n";
     if ($sessionid != null) {
-          getMySqlConnection();
+        getMySqlConnection();
         echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=" . $sessionid . "'>Manage attachments</a> Max file size: " . getMaxUploadSize() . " mb</p>";
         echoAttachments();
         mysql_close();
@@ -660,7 +680,10 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
     echo "                              <td><div id=\"buglist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">";
-    echo "                             " . echoBugsEdit($rowSessionData["versionid"]) . "</div></td>\n";
+    if (isset($rowSessionData)) {
+        echo "                             " . echoBugsEdit($rowSessionData["versionid"]);
+    }
+    echo "                        </div></td>\n";
     echo "                        </tr>\n";
 
     echo "                        <tr>\n";
@@ -678,31 +701,41 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                                                <td>Setup(%): </td>\n";
     echo "                                                <td>\n";
     echo "                                                      <select id=\"setuppercent\" class=\"metricoption\" name=\"setuppercent\">\n";
-    echoPercentSelection($rowSessionMetric["setup_percent"]);
+    if (isset($rowSessionMetric)) {
+        echoPercentSelection($rowSessionMetric["setup_percent"]);
+    }
     echo "                                                      </select>\n";
     echo "                                                </td>\n";
     echo "                                                <td>Test(%): </td>\n";
     echo "                                                <td>\n";
     echo "                                                      <select id=\"testpercent\" class=\"metricoption\" name=\"testpercent\">\n";
-    echoPercentSelection($rowSessionMetric["test_percent"]);
+    if (isset($rowSessionMetric)) {
+        echoPercentSelection($rowSessionMetric["test_percent"]);
+    }
     echo "                                                      </select>\n";
     echo "                                                </td>\n";
     echo "                                                <td>Bug(%): </td>\n";
     echo "                                                <td>\n";
     echo "                                                      <select id=\"bugpercent\" class=\"metricoption\" name=\"bugpercent\">\n";
-    echoPercentSelection($rowSessionMetric["bug_percent"]);
+    if (isset($rowSessionMetric)) {
+        echoPercentSelection($rowSessionMetric["bug_percent"]);
+    }
     echo "                                                      </select>\n";
     echo "                                                </td>\n";
     echo "                                                <td>Opportunity(%): </td>\n";
     echo "                                                <td>\n";
     echo "                                                      <select id=\"oppertunitypercent\" class=\"metricoption\" name=\"oppertunitypercent\">\n";
-    echoPercentSelection($rowSessionMetric["opportunity_percent"]);
+    if (isset($rowSessionMetric)) {
+        echoPercentSelection($rowSessionMetric["opportunity_percent"]);
+    }
     echo "                                                      </select>\n";
     echo "                                                </td>\n";
     echo "                                                <td>Session duration (min): </td>\n";
     echo "                                                <td>\n";
     echo "                                                      <select name=\"duration\">\n";
-    echoDurationSelection($rowSessionMetric["duration_time"]);
+    if (isset($rowSessionMetric)) {
+        echoDurationSelection($rowSessionMetric["duration_time"]);
+    }
     echo "                                                      </select>\n";
     echo "                                                </td>\n";
     echo "                                          </tr>\n";
@@ -711,8 +744,9 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                                          <tr>\n";
     echo "                                                <td>Session mood: </td>\n";
     echo "                                                <td>\n";
-
-    echoMoodSelection($rowSessionMetric["mood"]);
+    if (isset($rowSessionMetric)) {
+        echoMoodSelection($rowSessionMetric["mood"]);
+    }
     echo "                                          </tr>\n";
     echo "                        <tr>\n";
     echo "                              <td></td>\n";
@@ -729,7 +763,8 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        <tr>\n";
     echo "                              <td>Executed:</td>\n";
     echo "                              <td>\n";
-    if ($rowSessionStatus['executed'] == 1) {
+
+    if (isset($rowSessionStatus) && $rowSessionStatus['executed'] == 1) {
         echo "                                  <input type=\"checkbox\" name=\"executed\" checked=\"checked\" value=\"yes\" id=\"executed\">\n";
     }
     else

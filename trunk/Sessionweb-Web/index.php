@@ -8,7 +8,13 @@ if (!file_exists('config/db.php.inc')) {
     exit();
 }
 
-$logout = $_GET["logout"];
+if (isset($_GET["logout"])) {
+    $logout = $_GET["logout"];
+}
+else
+{
+    $logout=null;
+}
 //session_start();
 
 if ($logout == "yes") {
@@ -24,7 +30,7 @@ if ($logout == "yes") {
 }
 
 //if (!session_is_registered(myusername)) {
-if(!isset($_SESSION['username'])) {
+if (!isset($_SESSION['username'])) {
 
     echo "         <form name=\"loginform\" method=\"post\" action=\"checklogin.php\">\n";
     echo "             <table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" bgcolor=\"#FFFFFF\">\n";
@@ -46,7 +52,7 @@ if(!isset($_SESSION['username'])) {
     echo "                 </table>\n";
     echo "         </form>\n";
 
-    if (strcmp($_GET['login'], "failed") == 0) {
+    if (isset($_GET['login']) && strcmp($_GET['login'], "failed") == 0) {
         echo "Wrong user name or password.<br><br>";
     }
 }
@@ -62,12 +68,11 @@ else
 include("include/footer.php.inc");
 
 
-
 function printLast10SessionsTable()
 {
     echo "<div id='last10sessions'>";
     echo "<h2>10 sessions yet to completed</h2>";
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
 
     $user = $_SESSION['username'];
@@ -88,7 +93,7 @@ function printLast10SessionsTable()
 function printSessionsStatus()
 {
     echo "<div id='sessionstatus'>";
-    $con=getMySqlConnection();
+    $con = getMySqlConnection();
 
 
     $user = $_SESSION['username'];
@@ -124,7 +129,7 @@ function printSessionsStatus()
     {
         $debriefProcentage = (intval($debriefed) / intval($totalSessions)) * 100;
     }
-    $notDebriefedCount = intval($executed) - intval($debriefed)-intval($closed);
+    $notDebriefedCount = intval($executed) - intval($debriefed) - intval($closed);
     $debriefProcentage = sprintf("%02d", $debriefProcentage);
 
 
@@ -135,7 +140,7 @@ function printSessionsStatus()
     {
         $closedProcentage = (intval($closed) / intval($totalSessions)) * 100;
     }
-    $notClosedCount = intval($closed) - intval($debriefed)-intval($executed);
+    $notClosedCount = intval($closed) - intval($debriefed) - intval($executed);
     $closedProcentage = sprintf("%02d", $closedProcentage);
 
 

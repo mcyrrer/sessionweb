@@ -5,7 +5,7 @@ include_once ('../include/commonFunctions.php.inc');
 define("INSTALLATION_SCRIPT", "SessionwebDbLayout_19.sql");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Install Sessionweb</title>
@@ -17,10 +17,10 @@ define("INSTALLATION_SCRIPT", "SessionwebDbLayout_19.sql");
 <body>
 <div id="container">
     <div><H1>Installation of Sessionweb</H1></div>
-<?php
+    <?php
 
-    echo $sessionwebPath;
-    if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null || $_POST['dbsessionwebuser'] == null || $_POST['dbsessionwebpassword'] == null)
+    //echo $sessionwebPath;
+    if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['dbsessionwebuser']) || !isset($_POST['dbsessionwebpassword']))
         echoForm();
     else
     {
@@ -42,7 +42,7 @@ function install()
     $dbname = $_POST['dbname'];
     $dbcreateuser = $_POST['dbcreateuser'];
     $dbcreatedb = $_POST['dbcreatedb'];
-    if(strcmp($dbcreatedb,"true") === 0 )
+    if (strcmp($dbcreatedb, "true") === 0)
         $createDb = true;
     else
         $createDb = false;
@@ -58,13 +58,13 @@ function install()
         mysql_query("SET NAMES utf8");
         mysql_query("SET CHARACTER SET utf8");
         $mysqlExecuter = new MySqlExecuter();
-        $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT,$dbname,$createDb);
+        $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT, $dbname, $createDb);
 
         if (sizeof($resultOfSql) == 0) {
             echo "Database created and installed<br>";
-            createDbConfigFile($dbuser, $dbpassword,$dbname);
-            if(strcmp($dbcreateuser,"true") == 0 )
-                createDbUser($dbuser, $dbpassword,$dbname);
+            createDbConfigFile($dbuser, $dbpassword, $dbname);
+            if (strcmp($dbcreateuser, "true") == 0)
+                createDbUser($dbuser, $dbpassword, $dbname);
             else
             {
                 echo "User not created since checkbox was unchecked.<br>";
@@ -143,7 +143,7 @@ function createDbConfigFile($dbuser, $dbpassword, $dbname)
     $myFile = $sessionwebPath . "/config/db.php.inc";
     $fh = fopen($myFile, 'w');
     fwrite($fh,
-           $configfileString);
+        $configfileString);
     fclose($fh);
 }
 
@@ -172,17 +172,49 @@ function tryDbConnection($user, $password, $host = 'localhost')
 
 function echoForm()
 {
-    if (strstr($_GET['install'], "yes") != false) {
-        echo "<p>Some of the fields was empty, please fill all fields and try again.</p>";
+    if (isset($_GET['install'])) {
+        if (strstr($_GET['install'], "yes") != false) {
+            echo "<p>Some of the fields was empty, please fill all fields and try again.</p>";
+        }
     }
-    $adminuser = $_POST['dbadminuser'];
-    $adminpassword = $_POST['dbadminpassword'];
-    $dbuser = $_POST['dbsessionwebuser'];
-    $dbpassword = $_POST['dbsessionwebpassword'];
-    $dbname = $_POST['dbname'];
-    if($dbname==null)
+    if (isset($_POST['dbadminuser'])) {
+        $adminuser = $_POST['dbadminuser'];
+    }
+    else
     {
-        $dbname ="sessionwebos";
+        $adminuser = null;
+    }
+    if (isset($_POST['dbadminpassword'])) {
+        $adminpassword = $_POST['dbadminpassword'];
+    }
+    else
+    {
+        $adminpassword = null;
+    }
+    if (isset($_POST['dbsessionwebuser'])) {
+        $dbuser = $_POST['dbsessionwebuser'];
+    }
+    else
+    {
+        $dbuser = null;
+    }
+    if (isset($_POST['dbsessionwebpassword'])) {
+        $dbpassword = $_POST['dbsessionwebpassword'];
+    }
+    else
+    {
+        $dbpassword = null;
+    }
+    if (isset($_POST['dbname'])) {
+        $dbname = $_POST['dbname'];
+    }
+    else
+    {
+        $dbname = null;
+    }
+
+    if ($dbname == null) {
+        $dbname = "sessionwebos";
     }
 
 
@@ -265,8 +297,7 @@ function checkFoldersForRWDuringInstallation()
             $fh = fopen($ourFileName, 'w');
             fwrite($fh, "TestString\n");
             fclose($fh);
-            if (file_exists($ourFileName))
-            {
+            if (file_exists($ourFileName)) {
                 echo "folder $aFolder is RW => OK<br>";
                 unlink($ourFileName);
             }

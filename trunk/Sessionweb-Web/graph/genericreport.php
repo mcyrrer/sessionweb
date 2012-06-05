@@ -153,7 +153,7 @@ function getTeamOrApplicationStatistics($allSessions)
         //Lopar över alla sessioner i Appen $aApp
         foreach ($sessionsByArea[$aApp] as $sessionId => $aSession)
         {
-            echo $aApp;
+            //echo $aApp;
             $durationTimeTotal = $durationTimeTotal + $aSession['duration_time'];
             $areas = $aSession['areas'];
             //Loopar över alla Areas i en session som tillhör $aApp
@@ -302,7 +302,7 @@ function generateSessionObjects($sql)
 
 function generateSql()
 {
-    $sql = "SELECT sessionid FROM mission limit 0,10";
+    $sql = "SELECT sessionid FROM mission limit 0,100";
 
     return $sql;
 }
