@@ -70,12 +70,29 @@ require_once('include/session_common_functions.php.inc');
             if (isset($_REQUEST['searchstring'])) {
                 $textValue = $_REQUEST['searchstring'];
             }
+            else
+            {
+                $textValue = "";
+
+            }
             echo "Search: <input id='searchstring' type='text' size='50' value='" . $textValue . "' name='searchstring' style='width:500px;'>";
             ?>
             <span id="searchSessions">[Search]</span>
             <span id="clearSearchSessions">[Clear]</span>
             <img id="helpsearch" src="pictures/dialog-question.png" alt="">
 
+            <?php
+            if (isset($_REQUEST['searchstringref'])) {
+                $refissueValue = $_REQUEST['searchstringref'];
+            }
+            else
+            {
+                $refissueValue ="";
+            }
+            echo "Requirement/bug search: <input id='searchstringref' type='text' size='15' value='" . $refissueValue . "' name='searchstringref' style='width:100px;'>";
+            ?>
+            <span id="searchSessionsRef">[Search]</span>
+            <span id="clearSearchSessionsRef">[Clear]</span>
         </form>
     </form>
 
