@@ -173,7 +173,7 @@ class session
         $this->sessionData['linked_to_session'] = $tmpAreaArray;
 
         //mission mission_sessionsconnections
-        $sql = "SELECT executed,debriefed,masterdibriefed,executed_timestamp,debriefed_timestamp ";
+        $sql = "SELECT executed,debriefed,closed,masterdibriefed,executed_timestamp,debriefed_timestamp ";
         $sql .= "FROM   mission_status ";
         $sql .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sql);

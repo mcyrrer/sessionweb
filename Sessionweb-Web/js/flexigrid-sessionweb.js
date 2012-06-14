@@ -286,6 +286,11 @@ $(document).ready(function () {
         setPermSearchUrl();
     });
 
+    $('#searchSessionsRef').click(function () {
+        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        setPermSearchUrl();
+    });
+
     $("#searchstring").change( function() {
         $("#select_status_type").val(0);
         $("#select_status_type").attr('disabled', '');
@@ -293,6 +298,12 @@ $(document).ready(function () {
 
     $('#clearSearchSessions').click(function () {
         $('#searchstring').val('');
+        $("#select_status_type").removeAttr('disabled');
+        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+    });
+
+    $('#clearSearchSessionsRef').click(function () {
+        $('#searchstringref').val('');
         $("#select_status_type").removeAttr('disabled');
         $('#flexgrid1').flexOptions({newp:1}).flexReload();
     });
