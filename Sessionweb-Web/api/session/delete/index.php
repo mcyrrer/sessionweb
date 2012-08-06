@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting(0);
 require_once('../../../include/validatesession.inc');
 require_once ('../../../include/db.php');
 include_once('../../../config/db.php.inc');
