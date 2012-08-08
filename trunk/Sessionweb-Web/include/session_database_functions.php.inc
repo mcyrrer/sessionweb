@@ -11,9 +11,7 @@ function getSessionMetricsPieChartUrl($versionid)
 
     if (!$result) {
         echo "getSessionMetrics: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
 
         $setup_percent = $row["setup_percent"];
@@ -23,6 +21,7 @@ function getSessionMetricsPieChartUrl($versionid)
 
         return createPercentPieChart($setup_percent, $test_percent, $bug_percent, $opportunity_percent);
     }
+    return null;
 }
 
 function saveSession_CreateNewSessionId()
@@ -54,9 +53,7 @@ function saveSession_GetSessionIdForNewSession()
     if ($result) {
         $row = mysql_fetch_array($result);
         $sessionid = $row["sessionid"];
-    }
-    else
-    {
+    } else {
         echo "saveSession_GetSessionIdForNewSession: " . mysql_error() . "<br/>";
     }
 
@@ -66,19 +63,16 @@ function saveSession_GetSessionIdForNewSession()
 
 function saveSession_InsertSessionDataToDb($sessionid, $echo = true)
 {
-    if(isset($_REQUEST["publickey"]))
-    {
+    if (isset($_REQUEST["publickey"])) {
         $publickey = $_REQUEST["publickey"];
-    }
-    else
-    {
-       $publickey = md5(rand());
+    } else {
+        $publickey = md5(rand());
 
     }
 
     if ($_REQUEST["title"] == "") {
         $_REQUEST["title"] = "Unnamed Session";
-        if($echo)
+        if ($echo)
             echo "<b>Warning:</b> Session has no title, it will be named \"Unnamed Session\"<br/>\n";
     }
     $sqlInsert = "";
@@ -102,38 +96,28 @@ function saveSession_InsertSessionDataToDb($sessionid, $echo = true)
     $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
     if ($_REQUEST['sprint'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['sprint']) . "', ";
     }
     if ($_REQUEST['teamsprint'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
 
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['teamsprint']) . "', ";
     }
     if ($_REQUEST['testenv'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['testenv']) . "', ";
     }
     if ($_REQUEST['textareaswundertest'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['textareaswundertest']) . "', ";
     }
     if ($_REQUEST['team'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($_REQUEST['team']) . "', ";
     }
     $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
@@ -171,31 +155,23 @@ function copySession_InsertSessionDataToDb($sessionid, $sessionToCopy)
     $sqlInsert .= "             '" . mysql_real_escape_string($_SESSION['username']) . "', ";
     if ($sessionToCopy['sprintname'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['sprintname']) . "', ";
     }
     if ($sessionToCopy['teamsprintname'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
 
         $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['teamsprintname']) . "', ";
     }
     if ($sessionToCopy['testenvironment'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['testenvironment']) . "', ";
     }
     if ($sessionToCopy['teamname'] == "") {
         $sqlInsert .= "             null, ";
-    }
-    else
-    {
+    } else {
         $sqlInsert .= "             '" . mysql_real_escape_string($sessionToCopy['teamname']) . "', ";
     }
     $sqlInsert .= "             '" . mysql_real_escape_string($_SESSION['username']) . "', ";
@@ -226,43 +202,35 @@ function saveSession_UpdateSessionDataToDb($sessionid)
     $sqlUpdate .= "       `charter` = '" . mysql_real_escape_string($_REQUEST["charter"]) . "', ";
     $sqlUpdate .= "       `notes` = '" . mysql_real_escape_string($_REQUEST["notes"]) . "', ";
     $sqlUpdate .= "       `lastupdatedby` = '" . $_SESSION['username'] . "', ";
-    if ($_REQUEST['sprint'] == "") {
+    if (isset($_REQUEST['sprint']) && $_REQUEST['sprint'] != "") {
+        $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($_REQUEST['sprint']) . "', ";
+    } else {
         $sqlUpdate .= "       `sprintname` = null, ";
     }
-    else
-    {
-        $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($_REQUEST['sprint']) . "', ";
-    }
 
-    if ($_REQUEST['teamsprint'] == "") {
-        $sqlUpdate .= "       `teamsprintname` = null, ";
-    }
-    else
-    {
-        $sqlUpdate .= "       `teamsprintname` = '" . mysql_real_escape_string($_REQUEST['teamsprint']) . "', ";
-    }
+//    if ($_REQUEST['teamsprint'] == "") {
+//        $sqlUpdate .= "       `teamsprintname` = null, ";
+//    }
+//    else
+//    {
+//        $sqlUpdate .= "       `teamsprintname` = '" . mysql_real_escape_string($_REQUEST['teamsprint']) . "', ";
+//    }
 
     if ($_REQUEST['testenv'] == "") {
         $sqlUpdate .= "       `testenvironment` = null, ";
-    }
-    else
-    {
+    } else {
         $sqlUpdate .= "       `testenvironment` = '" . mysql_real_escape_string($_REQUEST['testenv']) . "', ";
     }
 
     if ($_REQUEST['textareaswundertest'] == "") {
         $sqlUpdate .= "       `software` = null, ";
-    }
-    else
-    {
+    } else {
         $sqlUpdate .= "       `software` = '" . mysql_real_escape_string($_REQUEST['textareaswundertest']) . "', ";
     }
 
     if ($_REQUEST['team'] == "") {
         $sqlUpdate .= "       `teamname` = null ";
-    }
-    else
-    {
+    } else {
         $sqlUpdate .= "       `teamname` = '" . mysql_real_escape_string($_REQUEST['team']) . "' ";
     }
     $sqlUpdate .= "WHERE sessionid='$sessionid'";
@@ -289,9 +257,7 @@ function saveSession_GetVersionIdForNewSession()
 
     if (!$result) {
         echo "saveSession_GetVersionIdForNewSession: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
         $versionid = $row["versionid"];
     }
@@ -311,13 +277,10 @@ function GetVersionidFromSessionid($sessionid)
 
     if (mysql_errno() == 1054) {
         echo "Session id provided is not an integer, will not add it.<br>";
-    }
-    elseif (!$result)
-    {
+    } elseif (!$result) {
         echo "GetVersionidFromSessionid: " . mysql_error() . "<br/>";
     }
-    else
-    {
+    else {
         $row = mysql_fetch_array($result);
         $versionid = $row["versionid"];
     }
@@ -338,13 +301,10 @@ function GetSessionIdFromVersionIdNoNewDbConnection($versionid)
 
     if (mysql_errno() == 1054) {
         echo "Session id provided is not an integer, will not add it.<br>";
-    }
-    elseif (!$result)
-    {
+    } elseif (!$result) {
         echo "GetSessionIdFromVersionId: " . mysql_error() . "<br/>";
     }
-    else
-    {
+    else {
         $row = mysql_fetch_array($result);
         $sessionid = $row["sessionid"];
     }
@@ -378,9 +338,7 @@ function GetSessionTitle($versionid)
 
     if (!$result) {
         echo "GetSessionTitle: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
         $title = $row["title"];
 
@@ -401,9 +359,7 @@ function GetSessionTitleFromSessionId($sessionid)
 
     if (!$result) {
         echo "GetSessionTitleFromSessionId: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
         $title = $row["title"];
 
@@ -445,7 +401,7 @@ function saveSession_UpdateSessionStatusToDb($versionid)
 {
     $executed = false;
 
-    if ($_REQUEST["executed"] != "") {
+    if (isset($_REQUEST["executed"]) && $_REQUEST["executed"] != "") {
         $executed = true;
     }
 
@@ -657,9 +613,7 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
                     if (!$result) {
                         echo "saveSession_InsertSessionSessionsLinksToDb: " . mysql_error() . "<br/>";
                     }
-                }
-                else
-                {
+                } else {
                     echo "Could not add a connection to session $aSessionLinkTo since it does not exist.<br>";
                 }
             }
@@ -706,7 +660,9 @@ function saveSession_UpdateSessionMetricsToDb($versionid)
     $sqlUpdate .= "       `test_percent` = '" . mysql_real_escape_string($_REQUEST["testpercent"]) . "', ";
     $sqlUpdate .= "       `bug_percent` = '" . mysql_real_escape_string($_REQUEST["bugpercent"]) . "', ";
     $sqlUpdate .= "       `opportunity_percent` = '" . mysql_real_escape_string($_REQUEST["oppertunitypercent"]) . "', ";
-    $sqlUpdate .= "       `mood` = '" . mysql_real_escape_string($_REQUEST["mood"]) . "', ";
+    if (isset($_REQUEST["mood"]))
+        $sqlUpdate .= "       `mood` = '" . mysql_real_escape_string($_REQUEST["mood"]) . "', ";
+
     $sqlUpdate .= "       `duration_time` = '" . mysql_real_escape_string($_REQUEST["duration"]) . "' ";
     $sqlUpdate .= "WHERE versionid='$versionid'";
 
@@ -832,7 +788,7 @@ function getSessionCustomValues($versionid, $fieldName)
     $result = mysql_query($sql);
     $toReturn = array();
     while ($row = mysql_fetch_array($result)) {
-       $toReturn[]= $row['itemname'];
+        $toReturn[] = $row['itemname'];
     }
     return $toReturn;
 
@@ -851,8 +807,7 @@ function saveSession_UpdateCustomFieldsToDb($versionid)
     }
 
     $arr = array("custom1", "custom2", "custom3");
-    foreach ($arr as $oneField)
-    {
+    foreach ($arr as $oneField) {
         if (isset($_REQUEST[$oneField]))
             saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
     }
@@ -934,28 +889,24 @@ function deleteSessionFromDatabase($sessionId)
 
 function doesSessionKeyExist($publickey)
 {
-    if($publickey==null)
-    {
+    if ($publickey == null) {
         return false;
     }
     $sqlSelect = "";
     $sqlSelect .= "SELECT publickey ";
     $sqlSelect .= "FROM   `mission` ";
     $sqlSelect .= "WHERE  publickey = '$publickey'";
-    echo $sqlSelect;
+    //echo $sqlSelect;
     $result = mysql_query($sqlSelect);
 
     if (!$result) {
         echo "doesSessionKeyExist: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+        return null;
+    } else {
         $num_rows = mysql_num_rows($result);
         if ($num_rows == 0) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }

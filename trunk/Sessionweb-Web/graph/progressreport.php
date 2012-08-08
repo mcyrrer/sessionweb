@@ -27,7 +27,7 @@ if (isset($_REQUEST['tester']) || isset($_REQUEST['team']) || isset($_REQUEST['s
 }
 else
 {
-    echo '<form method="post" action="'.$PHP_SELF.'">';
+    echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 
     echo "Tester:";
     if ($_SESSION['useradmin'] == 1) {
@@ -58,15 +58,15 @@ else
 function printChart()
 {
     $parameters = "";
-    if(strcmp($_REQUEST['tester'],'')!=0)
+    if(isset($_REQUEST['tester']) && strcmp($_REQUEST['tester'],'')!=0)
     {
       $parameters = "tester=".$_REQUEST['tester'];
     }
-    if(strcmp($_REQUEST['team'],'')!=0)
+    if(isset($_REQUEST['team']) && strcmp($_REQUEST['team'],'')!=0)
     {
         $parameters = $parameters."&team=".$_REQUEST['team'];
     }
-    if(strcmp($_REQUEST['sprint'],'')!=0)
+    if(isset($_REQUEST['sprint']) && strcmp($_REQUEST['sprint'],'')!=0)
     {
         $parameters = $parameters."&sprint=".$_REQUEST['sprint'];
     }

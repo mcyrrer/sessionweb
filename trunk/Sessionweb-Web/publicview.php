@@ -49,7 +49,7 @@ echo "     <script src=\"js/jquery-1.7.1.js\" type=\"text/javascript\"></script>
 echo "     <script src=\"js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";
 echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs-v19.js\"></script>\n";
-echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v19.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v20.js\"></script>\n";
 
 if ($_SESSION['settings']['analyticsid'] != "") {
     echo " <script type=\"text/javascript\">\n";

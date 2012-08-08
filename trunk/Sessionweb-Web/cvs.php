@@ -1,5 +1,5 @@
 <?php
-require_once ('include/loggedincheck.php');
+require_once ('include/validatesession.inc');
 require_once ('config/db.php.inc');
 require_once ('include/db.php');
 session_start();

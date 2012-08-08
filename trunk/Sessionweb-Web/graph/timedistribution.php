@@ -134,15 +134,25 @@ function pieTimeDistribution()
                     {
                         type:'pie',
                         name:'Browser share',
-                        data:[
+                        data:
+                            [{
+                            name: 'Setup',
+                            y:  <?php echo $setup;?>,
+                            color: '#0000FF'
+                            }, {
+                            name: 'Test',
+                            y: <?php echo $test;?>,
+                            color: '#00FF00'
+                            }, {
+                            name: 'Bug',
+                            y: <?php echo $bug;?>,
+                                color: '#FF0000'
+                            }, {
+                            name: 'Opportunity',
+                            y: <?php echo $opportunity;?>,
+                                color: '#000000'
+                            }
 
-                            <?php
-                            echo "['Setup',    $setup],\n";
-                            echo "['Test',    $test],\n";
-                            echo "['Bug',    $bug],\n";
-                            echo "['Opportunity',    $opportunity]\n";
-
-                            ?>
                         ]
                     }
                 ]

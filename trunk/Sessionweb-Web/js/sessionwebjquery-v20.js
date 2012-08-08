@@ -31,7 +31,16 @@ $(document).ready(function () {
     }
     catch (err) {
         var sessionid = "null";
+    }
 
+    try {
+        var versionid = $(document).getUrlParam("versionid");
+        if (versionid == null) {
+            versionid = $("#versionid").val();
+        }
+    }
+    catch (err) {
+        var versionid = "null";
     }
 
     var sPath = window.location.pathname;
@@ -137,7 +146,7 @@ $(document).ready(function () {
     $('#getsoftwarerunning').click(function () {
         //$('#getswmsg').text('');
         if ($('#select_testenv option:selected').text() != "") {
-            $.get("api/environments/setrunningversions", { env:$('#select_testenv option:selected').text(), sessionid:sessionid },
+            $.get("api/environments/setrunningversions/?", { env:$('#select_testenv option:selected').text(), sessionid:sessionid, versionid:versionid },
                 function (data) {
                     var linkInfo = jQuery.parseJSON(data);
                     if (data != "\"1\"" && data != "\"2\"") {

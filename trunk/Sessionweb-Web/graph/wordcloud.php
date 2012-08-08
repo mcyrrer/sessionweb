@@ -11,7 +11,7 @@ require_once('../include/db.php');
 
 $wordsCountArray = array();
 
-if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
+if (isset($_GET['word']) && $_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
     addWordToStopList($_GET['word']);
     exit();
 }
@@ -25,7 +25,7 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
     <title>Session word cloud</title>
     <link rel="stylesheet" href="../css/sessionwebcss.css">
     <script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
-    <script type="text/javascript" src="../js/sessionwebjquery-v19.js"></script>
+    <script type="text/javascript" src="../js/sessionwebjquery-v20.js"></script>
     <script type="text/javascript" src="../js/jquery.colorbox-min.js"></script>
 
 
@@ -36,7 +36,7 @@ if ($_GET['word'] != "" && $_SESSION['useradmin'] == 1) {
 <?php
 echo '<div id="wordcloudbg">';
 
-if ($_GET['sessionid'] != "")
+if (isset($_GET['sessionid']) && $_GET['sessionid'] != "")
     printCloud();
 elseif (isset($_REQUEST['tester']) || isset($_REQUEST['team']) || isset($_REQUEST['sprint'])) {
     //$con = getMySqlConnection();
@@ -82,7 +82,7 @@ function printCloud()
 {
     $con = getMySqlConnection();
 
-    if ($_GET['sessionid'] != "") {
+    if (isset($_GET['sessionid']) && $_GET['sessionid'] != "") {
         $sessionid = $_GET['sessionid'];
         $versionId = getSessionVersionId($_GET['sessionid']);
         $sessionData = getSessionData($sessionid);
@@ -109,17 +109,17 @@ function printCloud()
     if ($_GET['all'] != "") {
         $sql = "SELECT title, notes,charter FROM sessioninfo ";
         $sql .= "WHERE executed = 1  ";
-        if (strcmp($_REQUEST['tester'],'') != 0) {
+        if ($_REQUEST['tester'] && strcmp($_REQUEST['tester'],'') != 0) {
             if ($_SESSION['useradmin'] == 1) {
                 $sql .= "AND username = '" . urldecode($_REQUEST['tester']) . "' ";
             }
         }
-        if (strcmp($_REQUEST['team'],'') != 0) {
+        if (isset($_REQUEST['team']) && strcmp($_REQUEST['team'],'') != 0) {
             if ($_SESSION['useradmin'] == 1) {
                 $sql .= "AND teamname = '" . urldecode($_REQUEST['team']) . "' ";
             }
         }
-        if (strcmp($_REQUEST['sprint'],'') != 0) {
+        if (isset($_REQUEST['sprint']) && strcmp($_REQUEST['sprint'],'') != 0) {
             $sql .= "AND sprintname = '" . urldecode($_REQUEST['sprint']) . "' ";
         }
         //echo $sql;
@@ -241,7 +241,7 @@ function printTagCloud($tags, $maxItemToDisplay)
         $size = round($min_size + (($value - $min_qty) * $step));
 
         if (htmlspecialchars($key) != "&nbsp;") {
-            if ($_GET[edit] == "yes" && $_SESSION['useradmin'] == 1) {
+            if (isset($_GET['edit']) && $_GET['edit'] == "yes" && $_SESSION['useradmin'] == 1) {
                 echo "<p class='wordcloudword'/>$key</p>";
             }
             else

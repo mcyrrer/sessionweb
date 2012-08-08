@@ -12,8 +12,7 @@ function setupDatePicker() {
             var option = this.id == "from" ? "minDate" : "maxDate",
                 instance = $(this).data("datepicker"),
                 date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                        $.datepicker._defaults.dateFormat,
+                    'yy-mm-dd',
                     selectedDate, instance.settings);
             dates.not(this).datepicker("option", option, date);
         }

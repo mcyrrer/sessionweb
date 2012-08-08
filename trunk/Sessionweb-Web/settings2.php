@@ -375,7 +375,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 
     </div>
 
-    <a href="settings.php?command=listusers">User management</a>
+    <a href="settings.php?command=listusers">User management</a><br>
     <!--                <div>-->
     <!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->
     <!--                </div>-->
@@ -391,6 +391,10 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
     <!--                <div id='systemcheck'>-->
     <!--                    ----->
     <!--                </div>-->
+    <a href="log.php">View Sessionweb log file</a><br>
+    <a href="systemcheck.php">Sessionweb system check</a>
+
+
 </div>
 
 </td>

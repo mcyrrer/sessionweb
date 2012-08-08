@@ -35,24 +35,21 @@ if (strcmp($_REQUEST["command"], "edit") == 0) {
 
 
 if (strcmp($_REQUEST["command"], "new") == 0) {
-    echoSessionForm();
-}
-elseif (strcmp($_REQUEST["command"], "view") == 0)
-{
+    $sessionid = saveSession(false);
+    header("Location: session.php?command=edit&sessionid=$sessionid");
+    exit();
+} elseif (strcmp($_REQUEST["command"], "view") == 0) {
     echoSessionAction();
     echoViewSession();
 }
-elseif (strcmp($_REQUEST["command"], "edit") == 0)
-{
+elseif (strcmp($_REQUEST["command"], "edit") == 0) {
     echoSessionForm();
 }
-elseif (strcmp($_REQUEST["command"], "debrief") == 0)
-{
+elseif (strcmp($_REQUEST["command"], "debrief") == 0) {
     echoViewSession();
     echoDebriefSession();
 }
-elseif (strcmp($_REQUEST["command"], "debriefed") == 0)
-{
+elseif (strcmp($_REQUEST["command"], "debriefed") == 0) {
     saveDebriefedSession();
 }
 
@@ -92,9 +89,7 @@ function echoDebriefSession()
 
         if ($debriefInfo != null) {
             $debriefComments = "<p></p><br>_______________<br><b>Notes below made by: " . $debriefInfo['debriefedby'] . "</b><br>" . $debriefInfo['notes'];
-        }
-        else
-        {
+        } else {
             $debriefComments = "";
         }
         echo "                                   <div class='shortboldline'></div>";
@@ -115,9 +110,7 @@ function echoDebriefSession()
         echo "<input id='sessionid_input' type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
         echo "<p><input type=\"submit\" value=\"Continue\" id='cnt_button' /></p>\n";
         echo "</form>\n";
-    }
-    else
-    {
+    } else {
         echo "You do not have enough permisions to debrief sessions.";
     }
 }
@@ -137,13 +130,10 @@ function saveDebriefedSession()
             $debriefed = "true";
             if ($_SESSION['useradmin'] == 1) {
                 $masterdibriefed = "true";
-            }
-            else
-            {
+            } else {
                 $masterdibriefed = "false";
             }
-        }
-        elseif (strcmp($_REQUEST["debriefstatus"], "closed") == 0) {
+        } elseif (strcmp($_REQUEST["debriefstatus"], "closed") == 0) {
             $closed = "true";
             $debriefed = "false";
             $masterdibriefed = "false";
@@ -169,9 +159,7 @@ function saveDebriefedSession()
         saveSession_InsertSessionDebriefedNotesToDb($versionid, $_REQUEST["debriefnotes"]);
 
         echo "<h4>Debrief notes saved</h4>\n";
-    }
-    else
-    {
+    } else {
         echo "You can not save since you do not have the permissions to debrief\n";
     }
 
@@ -203,74 +191,61 @@ function saveSession($echo = true)
 
     $con = getMySqlConnection();
 
+    //Will create a new session id to map to a session
+    saveSession_CreateNewSessionId();
 
-    //New session
-    if (isset($_REQUEST["sessionid"]) && $_REQUEST["sessionid"] == "") {
-        if (!doesSessionKeyExist($_REQUEST["publickey"])) {
+    //Get the new session id for user x
+    $sessionid = saveSession_GetSessionIdForNewSession();
 
-            //Will create a new session id to map to a session
-            saveSession_CreateNewSessionId();
+    //Insert sessiondata to mission table
 
-            //Get the new session id for user x
-            $sessionid = saveSession_GetSessionIdForNewSession();
+    saveSession_InsertSessionDataToDb($sessionid, $echo);
 
-            //Insert sessiondata to mission table
+    //Get versionId from db
+    $versionid = saveSession_GetVersionIdForNewSession();
 
-            saveSession_InsertSessionDataToDb($sessionid, $echo);
-
-            //Get versionId from db
-            $versionid = saveSession_GetVersionIdForNewSession();
-
-            //Create missionstatus record in Db
-            $executed = false;
-            if ($_REQUEST["executed"] != "") {
-                $executed = true;
-            }
-            saveSession_InsertSessionStatusToDb($versionid, $executed);
-
-            //Create metrics record for session
-            $metrics = array();
-            $metrics["setuppercent"] = $_REQUEST["setuppercent"];
-            $metrics["testpercent"] = $_REQUEST["testpercent"];
-            $metrics["bugpercent"] = $_REQUEST["bugpercent"];
-            $metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
-            $metrics["duration"] = $_REQUEST["duration"];
-            $metrics["mood"] = $_REQUEST["mood"];
-            saveSession_InsertSessionMetricsToDb($versionid, $metrics);
-
-            //Create areas for session
-            $areas = $_REQUEST["area"];
-            saveSession_InsertSessionAreaToDb($versionid, $areas);
-
-            $additionalTester = $_REQUEST["additionalTester"];
-            saveSession_InsertSessionAdditionalTesterToDb($versionid, $additionalTester);
-
-            //Create bugs connected to session
-            saveSession_InsertSessionBugsToDb($versionid);
-
-            //Create requirements connected to mission
-            saveSession_InsertSessionRequirementsToDb($versionid);
-
-            //Create sessionLinks connected to mission
-            saveSession_InsertSessionSessionsLinksToDb($versionid);
-
-            //Save Custom fields to db
-            $arr = array("custom1", "custom2", "custom3");
-            foreach ($arr as $oneField)
-            {
-                if (isset($_REQUEST[$oneField]))
-                    saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
-            }
-
-            saveSession_InsertSessionSessionsLinksToDb($versionid);
-        }
-        else
-        {
-            echo "Session already saved.";
-            $alreadySaved = true;
-        }
-
+    //Create missionstatus record in Db
+    $executed = false;
+    if ($_REQUEST["executed"] != "") {
+        $executed = true;
     }
+    saveSession_InsertSessionStatusToDb($versionid, $executed);
+
+    //Create metrics record for session
+    $metrics = array();
+    $metrics["setuppercent"] = $_REQUEST["setuppercent"];
+    $metrics["testpercent"] = $_REQUEST["testpercent"];
+    $metrics["bugpercent"] = $_REQUEST["bugpercent"];
+    $metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
+    $metrics["duration"] = $_REQUEST["duration"];
+    $metrics["mood"] = $_REQUEST["mood"];
+    saveSession_InsertSessionMetricsToDb($versionid, $metrics);
+
+    //Create areas for session
+    $areas = $_REQUEST["area"];
+    saveSession_InsertSessionAreaToDb($versionid, $areas);
+
+    $additionalTester = $_REQUEST["additionalTester"];
+    saveSession_InsertSessionAdditionalTesterToDb($versionid, $additionalTester);
+
+    //Create bugs connected to session
+    saveSession_InsertSessionBugsToDb($versionid);
+
+    //Create requirements connected to mission
+    saveSession_InsertSessionRequirementsToDb($versionid);
+
+    //Create sessionLinks connected to mission
+    saveSession_InsertSessionSessionsLinksToDb($versionid);
+
+    //Save Custom fields to db
+    $arr = array("custom1", "custom2", "custom3");
+    foreach ($arr as $oneField) {
+        if (isset($_REQUEST[$oneField]))
+            saveSession_InsertSessionCustomFieldsToDb($versionid, $oneField, $_REQUEST[$oneField]);
+    }
+
+    saveSession_InsertSessionSessionsLinksToDb($versionid);
+
 
     mysql_close($con);
     return $sessionid;
@@ -316,10 +291,8 @@ function echoSessionForm()
         $rowSessionAreas = getSessionAreas($rowSessionData["versionid"]);
 
         $rowAdditionalTesters = getSessionAdditionalTester($rowSessionData["versionid"]);
-    }
-    else
-    {
-        //        //create new session...
+    } else {
+        //create new session...
         $sessionid = saveSession(false);
         //
         //        //Will create a new session id to map to a session
@@ -365,9 +338,7 @@ function echoSessionForm()
         charter = charter.replace(/\\+/g," ");
 
         </script>';
-    }
-    else
-    {
+    } else {
 
         $publickey = md5(rand());
     }
@@ -480,9 +451,7 @@ function echoSessionForm()
         echo "                              <td>\n";
         if (isset($testenvironment)) {
             echoTestEnvironmentSelect($testenvironment);
-        }
-        else
-        {
+        } else {
             echoTestEnvironmentSelect("");
         }
         echo "                              </td>\n";
@@ -505,14 +474,11 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                        </tr>\n";
 
     $selectCustomArray = array("custom1", "custom2", "custom3");
-    foreach ($selectCustomArray as $oneSelectToEcho)
-    {
+    foreach ($selectCustomArray as $oneSelectToEcho) {
         if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "") {
             getMySqlConnection();
             $itemArray = getSessionCustomValues(getSessionVersionId($_REQUEST['sessionid']), $oneSelectToEcho);
-        }
-        else
-        {
+        } else {
             $itemArray = array();
         }
         if ($_SESSION['settings'][$oneSelectToEcho] == 1) {
@@ -547,9 +513,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
     echo "                              <td><div id=\"requirementlist_visible\" style=\"width: 1024px; height: 100%; background-color: rgb(239, 239, 239);\">";
     if (isset($rowSessionData)) {
         echo "                                " . echoRequirementsEdit($rowSessionData["versionid"]) . "</div></td>\n";
-    }
-    else
-    {
+    } else {
         echo "                               </div></td>\n";
 
     }
@@ -643,9 +607,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
         echo "                                   <p><a class='uploadajax' href='include/filemanagement/index.php?sessionid=" . $sessionid . "'>Manage attachments</a> Max file size: " . getMaxUploadSize() . " mb</p>";
         echoAttachments();
         mysql_close();
-    }
-    else
-    {
+    } else {
         echo "                                   <p>To be able to upload attachment the session need to be saved once</p>";
 
     }
@@ -766,9 +728,7 @@ echo "                                  <div id='autoswdiv'></div>";*/
 
     if (isset($rowSessionStatus) && $rowSessionStatus['executed'] == 1) {
         echo "                                  <input type=\"checkbox\" name=\"executed\" checked=\"checked\" value=\"yes\" id=\"executed\">\n";
-    }
-    else
-    {
+    } else {
         echo "                                  <input type=\"checkbox\" name=\"executed\" value=\"yes\" id=\"executed\">\n";
     }
     echo "                              </td>\n";
@@ -805,9 +765,7 @@ function echoPercentSelection($selected)
     for ($index = 0; $index <= 100; $index = $index + 5) {
         if ($index == $selected) {
             echo "                                      <option selected=\"selected\">$index</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>$index</option>\n";
         }
     }
@@ -822,9 +780,7 @@ function echoDurationSelection($selected)
     for ($index = 15; $index <= 480; $index = $index + 15) {
         if ($index == $selected) {
             echo "                                      <option selected=\"selected\">$index</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>$index</option>\n";
         }
     }
@@ -936,8 +892,7 @@ function parseBBTestAssistantNotes($notes)
 
     $searchNode = $xmlDoc->getElementsByTagName("Note");
 
-    foreach ($searchNode as $searchNode)
-    {
+    foreach ($searchNode as $searchNode) {
         $valueTimestamp = $searchNode->getAttribute('timestamp');
         $valueNode = $searchNode->nodeValue;
 

@@ -36,7 +36,7 @@ else
 }
 
 $logger = Logger::getRootLogger();
-$logger->setLevel(LoggerLevel::DEBUG);
+$logger->setLevel(LoggerLevel::INFO);
 
 $appender = new LoggerAppenderFile("MyAppender");
 
