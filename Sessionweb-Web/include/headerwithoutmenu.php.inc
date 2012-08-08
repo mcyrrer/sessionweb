@@ -20,7 +20,7 @@ echo "     <script src=\"".$basepathcss."js/jquery.validate.js\" type=\"text/jav
 echo "     <script src=\"".$basepathcss."js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"".$basepathcss."js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";
 echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjs-v19.js\"></script>\n";
-echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjquery-v19.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjquery-v20.js\"></script>\n";
 if ($_SESSION['settings']['analyticsid'] != "") {
     echo " <script type=\"text/javascript\">\n";
 

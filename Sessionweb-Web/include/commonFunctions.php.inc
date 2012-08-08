@@ -28,7 +28,7 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     }
     echo "<br>Debug info:<br>";
     echo echoMaxUploadSizePhp();
-    echo "MySql max_allowed_packet:" . getSqlMaxAllowedPacketAsMb() . "<br>";
+    echo "MySql max_allowed_packet:" . getSqlMaxAllowedPacketAsMb() . "mb<br>";
 
 
 }
@@ -121,9 +121,9 @@ function getMaxUploadSize()
 
 function echoMaxUploadSizePhp()
 {
-    echo "PHP upload_max_filesize:" . (int)(ini_get('upload_max_filesize')) . "<br>";
-    echo "PHP post_max_size:" . $max_post = (int)(ini_get('post_max_size')) . "<br>";
-    echo "PHP memory_limit:" . (int)(ini_get('memory_limit')) . "<br>";
+    echo "PHP upload_max_filesize:" . (int)(ini_get('upload_max_filesize')) . "mb<br>";
+    echo "PHP post_max_size:" . $max_post = (int)(ini_get('post_max_size')) . "mb<br>";
+    echo "PHP memory_limit:" . (int)(ini_get('memory_limit')) . "mb<br>";
 }
 
 
@@ -154,7 +154,7 @@ function getSessionWebSettings()
         echo "getSessionWebSettings: " . mysql_error() . "<br/>";
         $logger->error(mysql_error());
         $logger->debug($sqlSelect());
-
+        return null;
     }
     else
     {
@@ -420,7 +420,10 @@ function getSessionsLinkedFrom($versionid)
         $resultFromReturn[] = $row["linked_from_versionid"];
     }
 
-    return $resultFromReturn;
+    if (isset($resultFromReturn)) {
+        return $resultFromReturn;
+    }
+    return null;
 }
 
 /**
@@ -1284,6 +1287,7 @@ function isSessionDebriefed($versionId)
     $missionStatus = getSessionStatus($versionId);
     if ($missionStatus['debriefed'] == 1)
         return true;
+    return null;
 }
 
 function isSessionClosed($versionId)
@@ -1291,6 +1295,7 @@ function isSessionClosed($versionId)
     $missionStatus = getSessionStatus($versionId);
     if ($missionStatus['closed'] == 1)
         return true;
+    return false;
 }
 
 function echoFetchVersionautomatically()
@@ -1370,8 +1375,36 @@ function str_endsWith($haystack, $needle)
         return true;
     }
 
-    $start  = $length * -1; //negative
+    $start = $length * -1; //negative
     return (substr($haystack, $start) === $needle);
 }
+
+function isAdmin()
+{
+    if ($_SESSION['useradmin'] == 1) {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function isSuperUser()
+{
+    if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function getUserName()
+{
+    return $_SESSION['username'];
+}
+
 
 ?>

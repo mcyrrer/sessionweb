@@ -13,7 +13,8 @@ echo "<h1>Statistics/Graphs</h1>";
 <table>
     <tr>
         <td width="600">
-            <p><span class="larger"> <a class="largepopup cboxElement" href="graph/sprintreport.php">Sprint report</a></span></p>
+            <p><span class="larger"> <a class="largepopup cboxElement" href="graph/sprintreport.php">Sprint report</a>
+            </span></p>
 
             <p><img src="pictures/sprintreport.png" alt=""></p>
         </td>
@@ -33,8 +34,14 @@ echo "<h1>Statistics/Graphs</h1>";
             <p><span class="larger"><a class="mediumpopup cboxElement" href="graph/progressreport.php">Progress over time</a></span></p>
             <p><img src="pictures/progressovertime.png" alt=""></p>
         <td>
-
-
+    </tr>
+    <tr>
+        <td width="600">
+            <p><span class="larger"> <a href="graph/applicationreport.php">Application report</a>
+            </span></p>
+            <p><img src="pictures/appreport.png" alt=""></p>
+        </td>
+        <td>
     </tr>
 
 

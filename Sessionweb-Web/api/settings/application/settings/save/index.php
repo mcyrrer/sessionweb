@@ -129,7 +129,7 @@ if ($_SESSION['useradmin'] == 1) {
     }
     else
     {
-        $logger->info($_SESSION['username'] . " Updated custom fields");
+        $logger->info($_SESSION['username'] . " Updated app settings");
         header("HTTP/1.0 201 Created");
         $response['code'] = ITEM_ADDED;
         $response['text'] = "ITEM_ADDED";

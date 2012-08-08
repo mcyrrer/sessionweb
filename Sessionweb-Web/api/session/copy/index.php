@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once('../../../include/validatesession.inc');
 require_once ('../../../include/db.php');
 include_once('../../../config/db.php.inc');
+require_once('../../../include/validatesession.inc');
 include_once ('../../../include/commonFunctions.php.inc');
 
 $con = getMySqlConnection();
@@ -31,18 +31,19 @@ $versionIdToCopy = getSessionVersionId($sessionIdToCopy);
 
 //Create missionstatus record in Db
 $executed = false;
-if ($_REQUEST["executed"] != "") {
+if (isset($_REQUEST["executed"]) && $_REQUEST["executed"] != "") {
     $executed = true;
 }
 saveSession_InsertSessionStatusToDb($versionid, $executed);
 
 //Create metrics record for session
 $metrics = array();
-$metrics["setuppercent"] = $_REQUEST["setuppercent"];
-$metrics["testpercent"] = $_REQUEST["testpercent"];
-$metrics["bugpercent"] = $_REQUEST["bugpercent"];
-$metrics["oppertunitypercent"] = $_REQUEST["oppertunitypercent"];
-$metrics["duration"] = $_REQUEST["duration"];
+$metrics["setuppercent"] = null;
+$metrics["testpercent"] = null;
+$metrics["bugpercent"] = null;
+$metrics["oppertunitypercent"] = null;
+$metrics["duration"] = null;
+$metrics["mood"] = null;
 saveSession_InsertSessionMetricsToDb($versionid, $metrics);
 
 

@@ -73,6 +73,7 @@ function printTeamStatistics($sprint)
     $resultTeam = mysql_query($sql);
     $totalCount = 0;
     $teamNumberOfSessionArray = array();
+    $totalTimeInSessions =0;
     echo '<table border=0><tbody>';
     while ($row = mysql_fetch_array($resultTeam))
     {
@@ -132,7 +133,7 @@ function printAreaStatistics($sprint)
         echo "<tr><td valign='top'>";
         echo '<table border=0><tbody>';
         echo "<tr valign='top'><td valign='baseline' width='200'>Area</td><td>Number of sessions</td></tr>";
-        $treeChartDivName = treechart_ . str_replace(" ", "", $teamname);
+        $treeChartDivName = "treechart_" . str_replace(" ", "", $teamname);
         if (!empty($areasArray)) {
             foreach ($areasArray as $key => $value)
             {
@@ -163,6 +164,7 @@ function printAreaStatistics($sprint)
             $norm_session_cnt = round((int)$totalTimeInSessions / (int)$normalizedSessionTime, 1);
         }
 
+        $hoursInsessions = round($hoursInsessions,2);
         echo "Number of sessions: $nbrOfSessions (normalized $norm_session_cnt) ($hoursInsessions h)";
 
         echo '<div class="shortthinline"></div>';
@@ -229,7 +231,7 @@ function getSprintSessionStatusPieWithChartUrl($teamname)
         $colors = array('ffff77', '99ff99', 'ffcccc');
         return createChartPie($valuesAndLables, "Execution status", 340, 130, $colors);
     }
-
+    return null;
 
 }
 
@@ -250,7 +252,7 @@ function getSprintMetricsPieWithChartUrl($teamname)
         $colors = array('0000FF', '00FF00', 'FF0000', '000000');
         return createChartPie($valuesAndLables, "Time distribution", 340, 130, $colors);
     }
-
+       return null;
 
 }
 

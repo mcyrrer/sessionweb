@@ -42,7 +42,7 @@ if (strstr($_SERVER['PHP_SELF'], "session.php") != false) {
 
 }
 echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs-v19.js\"></script>\n";
-echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v19.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v20.js\"></script>\n";
 
 
 echo "              <script type=\"text/javascript\">\n";
@@ -85,7 +85,7 @@ if (isset($_SESSION['user'] ) && $_SESSION['user'] != "") {
 //    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='include/notification.php'>";
 //}
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
-echo "      <a href=\"session.php?command=edit\" id=\"url_newsession\">New session</a> |";
+echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
 echo "      <a href=\"list2.php\" id=\"url_list\">List sessions</a> |";
 echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
@@ -109,6 +109,7 @@ function printDevelopmentVersionDebugText()
     if (file_exists("config/developmentversion.txt")) {
         return " DEVELOPMENT VERSION OF SW";
     }
+    return "";
 }
 
 function isThisDevlopmentVersion()
@@ -116,6 +117,7 @@ function isThisDevlopmentVersion()
     if (file_exists("config/developmentversion.txt")) {
         return "class='development'";
     }
+    return null;
 }
 
 ?>

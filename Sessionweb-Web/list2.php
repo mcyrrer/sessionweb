@@ -67,6 +67,7 @@ require_once('include/session_common_functions.php.inc');
         <form id="sform2" action="">
 
             <?php
+            $textValue="";
             if (isset($_REQUEST['searchstring'])) {
                 $textValue = $_REQUEST['searchstring'];
             }

@@ -354,7 +354,7 @@ class UploadHandler
                 //echo $sql;
             }
             else {
-                $logger->debug($name . ': File uploaded into database');
+                $logger->info($name . ': File uploaded into database');
 
             }
 
@@ -375,6 +375,7 @@ class UploadHandler
         catch (Exception $e) {
             $logger->error($name . ': ' . $e->getMessage());
         }
+        return null;
     }
 
 //    public function get()

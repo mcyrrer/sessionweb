@@ -42,6 +42,7 @@ class session
 
         //mission attachments
         $tmpAreaArray = array();
+        $tmpAreaArray2 = array();
         $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = $sessionid";
         $result = mysqli_query($con, $sql);
         while ($row = mysqli_fetch_array($result))
@@ -52,7 +53,7 @@ class session
                 if (!is_int($key)) {
                     $tmpAreaArray2[$key] = $value;
                 }
-                $tmpAreaArray[$tmpAreaArray2['id']] = $tmpAreaArray2;
+                $tmpAreaArray[$row['id']] = $tmpAreaArray2;
             }
         }
         $this->sessionData['attachments'] = $tmpAreaArray;
@@ -100,7 +101,7 @@ class session
                 if (!is_int($key)) {
                     $tmpAreaArray2[$key] = $value;
                 }
-                $tmpAreaArray[$tmpAreaArray2['id']] = $tmpAreaArray2;
+                $tmpAreaArray[$row['id']] = $tmpAreaArray2;
             }
         }
         $this->sessionData['custom_fields'] = $tmpAreaArray;
@@ -206,6 +207,9 @@ class session
 
         ksort($this->sessionData);
         mysqli_close($con);
+
+        //print_r($tmpArray);
+
     }
 
     public function getSession()
