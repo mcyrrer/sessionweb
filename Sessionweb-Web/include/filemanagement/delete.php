@@ -1,10 +1,13 @@
 <?php
-require_once('../../include/loggingsetup.php');
+error_reporting(0);
+
 session_start();
+
+require_once('../../include/loggingsetup.php');
 require_once('../../include/validatesession.inc');
 
-include "../../config/db.php.inc";
-require_once("../../include/db.php");
+//include "../../config/db.php.inc";
+//require_once("../../include/db.php");
 
 $con = getMySqlConnection();
 

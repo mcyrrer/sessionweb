@@ -7,7 +7,7 @@ define("GET_FILE_PATH", "get.php");
 define("DELETE_FILE_PATH", "delete.php");
 define("THUMB_FILE_PATH","thumbnails/");
 
-include "../../config/db.php.inc";
+//include "../../config/db.php.inc";
 
 $picture_mimetypes = array("jpg" => "image/jpeg","jpeg" => "image/jpeg","gif" => "image/gif","png" => "image/png");
 

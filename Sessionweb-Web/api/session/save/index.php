@@ -14,10 +14,8 @@ function saveSession($echo = true)
 //    print_r($_REQUEST);
 
     if ($_REQUEST["title"] != "") {
-        echo "HAS TITLTE<br>";
 
-
-        //insertAutomaticGoBackOnePage();
+       //insertAutomaticGoBackOnePage();
         checkSessionTitleNotToLong($echo);
 
         $sessionid = false;
@@ -92,15 +90,13 @@ function saveSession($echo = true)
 
 //        } //Update existing session
 //        else {
-        echo "Update existing session!!!<br>";
+
         if (isset($_REQUEST["sessionid"])) {
             $sessionid = $_REQUEST["sessionid"];
         } else {
             $sessionid = getSessionSessionId($_REQUEST["versionid"]);
         }
         $versionid = $_REQUEST["versionid"];
-
-        echo "SESSIONID: $sessionid, VERSIONID: $versionid";
 
         saveSession_UpdateSessionDataToDb($sessionid);
 
@@ -138,9 +134,9 @@ function saveSession($echo = true)
 //            }
         }
     } else {
-        echo "DOES NOT HAVE TITLE<br>";
+
     }
-    echo "sessionid:" . $sessionid;
+
     if ($_REQUEST["title"] != "") {
         echo '<h2 class="popup_save">Session saved</h2><p class="popup_save"><img src="pictures/document-save-5.png" alt=""></p>';
     } else {

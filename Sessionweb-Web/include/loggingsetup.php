@@ -47,5 +47,4 @@ $appender->activateOptions();
 
 $logger->removeAllAppenders();
 $logger->addAppender($appender);
-
 ?>

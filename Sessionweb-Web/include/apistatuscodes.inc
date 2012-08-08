@@ -14,9 +14,4 @@ define("ITEM_NOT_UPDATED", 11);
 define("ITEM_UPDATED", 12);
 define("CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST", 13);
 define("USER_ALREADY_EXIST", 14);
-
-
-
-
-
 ?>
