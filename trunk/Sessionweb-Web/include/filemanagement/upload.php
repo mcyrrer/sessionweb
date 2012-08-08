@@ -20,14 +20,15 @@
  * include\filemanagement\files
  * include\filemanagement\thumbnails
 */
+error_reporting(0);
 require_once('../../include/loggingsetup.php');
 session_start();
 require_once('../../include/validatesession.inc');
-include_once("../../config/db.php.inc");
+//include_once("../../config/db.php.inc");
 include_once("../../include/commonFunctions.php.inc");
-require_once("../../include/db.php");
+//require_once("../../include/db.php");
 
-//error_reporting(E_ALL | E_STRICT);
+
 
 class UploadHandler
 {
@@ -358,7 +359,7 @@ class UploadHandler
 
             }
 
-            $sqlFindLatestId = "SELECT mission_versionid FROM `mission_attachments` ORDER BY `mission_versionid` DESC LIMIT 0,1";
+            $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
 
             $logger->debug($name .": ".$sqlFindLatestId);
             $result2 = mysql_query($sqlFindLatestId);

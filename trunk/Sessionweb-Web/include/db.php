@@ -73,4 +73,3 @@ function changeCharsetAndCollation($db, $charset, $collation, $db_server, $db_us
 }
 
 ?>
-
