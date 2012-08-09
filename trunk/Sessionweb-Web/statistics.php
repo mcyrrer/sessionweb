@@ -41,7 +41,10 @@ echo "<h1>Statistics/Graphs</h1>";
             </span></p>
             <p><img src="pictures/appreport.png" alt=""></p>
         </td>
-        <td>
+        <td><p><span class="larger"> <a href="graph/areagridreport.php">Area grid report</a>
+            </span></p>
+            <p><img src="pictures/areagridreport.png" alt=""></p>
+        </td>
     </tr>
 
 
