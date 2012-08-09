@@ -1,6 +1,5 @@
 <?php
 $rootPath = checkIfRootFolder("");
-
 require_once ("$rootPath/include/db.php");
 require_once("$rootPath/config/db.php.inc");
 require_once ("$rootPath/include/apistatuscodes.inc");
@@ -40,11 +39,11 @@ function checkIfRootFolder($pathToRoot)
 {
     if (file_exists($pathToRoot . 'about.php')) {
         //echo "Found root at " . $pathToRoot . "about.php<br>";
-        return $pathToRoot;
+        return "./".$pathToRoot;
     }
     else
     {
-       // echo "Not Root<br>";
+        //echo "Not Root<br>";
         $pathToRoot .= "../";
         $pathToRoot = checkIfRootFolder($pathToRoot);
     }

@@ -83,7 +83,7 @@ function generateReport()
 <div id="tabs">
 	<ul>
 
-		<li><a href="#tabs-2">Grid report</a></li>
+		<li><a href="#tabs-2">Test Effort by Area</a></li>
 		';
 
     if (isset($_REQUEST['buglist']))
@@ -145,6 +145,11 @@ function getAreaStatisticIntoGridHtml($allSessions)
             }
             $areaCountArray[] = $area;
 
+            if (isset($sessionsByArea[$area]))
+                $sessionsByArea[$area] = array_merge($sessionsByArea[$area], $sessionId);
+            else
+                $sessionsByArea[$area] = array($sessionId);
+
             if (isset($bugsInOneArea[$area]))
                 $bugsInOneArea[$area] = array_merge($bugsInOneArea[$area], $aSession['bugs']);
             else
@@ -176,14 +181,21 @@ function getAreaStatisticIntoGridHtml($allSessions)
     <table class='gridtable'>
         <tr>
             <th>Area</th>
-            <th>Session count</th>
+            <th>Charter count</th>
+            <th>On Charter(%)</th>
+            <th>Setup(%)</th>
+            <th>Test(%)</th>
+            <th>Bug(%)</th>
+            <th>Opportunity(%)</th>
+            <th>Duration(h)</th>
             <th>Bug count</th>
             <th>Requirement count</th>
-            <th>Duration(h)</th>
         </tr>";
     ksort($areasToDisplay);
     foreach ($areasToDisplay as $areaName => $aArea) {
-
+        $sessionsThatBelongsToOneArea = $sessionsByArea[$aArea];
+        $metricsForOneArea = getMetricsForOneArea($sessionsThatBelongsToOneArea,$allSessions);
+        $metricsOnCharter =  100 - $metricsForOneArea['opp'];
         if (isset($sessionCountForOneArea[$aArea]))
             $nbrOfSessionsInOneArea = $sessionCountForOneArea[$aArea];
         else
@@ -209,10 +221,16 @@ function getAreaStatisticIntoGridHtml($allSessions)
         <tr>
             <td>$aArea</td>
             <td>$nbrOfSessionsInOneArea</td>
+            <td>$metricsOnCharter</td>
+            <td>".$metricsForOneArea['setup']."</td>
+            <td>".$metricsForOneArea['test']."</td>
+            <td>".$metricsForOneArea['bug']."</td>
+            <td>".$metricsForOneArea['opp']."</td>
+            <td>".$metricsForOneArea['durationInHours']."</td>
             <td>$bugCountForOneArea</td>
             <td>$reqCountForOneArea</td>
-            <td>$durationForOneArea</td>
         </tr>";
+
 
 //        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
     }
@@ -366,6 +384,7 @@ function generateBarChartForAreas($divName, $areasUsedInApp, $setupTime, $testTi
  */
 function getMetricsForOneArea($sessionsThatBelongsToArea, $allSessions)
 {
+
     $areaSetupTime = 0;
     $areaTestTime = 0;
     $areaBugTime = 0;
@@ -405,7 +424,7 @@ function getMetricsForOneArea($sessionsThatBelongsToArea, $allSessions)
     if ($areaDuration != 0)
         $areaMetrics['durationInHours'] = $areaDuration / 60;
     else
-        $areaDuration = 0;
+        $areaMetrics['durationInHours'] = 0;
     return $areaMetrics;
 }
 
