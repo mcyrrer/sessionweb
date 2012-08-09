@@ -40,29 +40,22 @@ if (isset($_REQUEST['sprint'])) {
 } else {
     echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '">';
 
-    echo "<h1>Application Report:</h1>";
-    echo "Report is based on on the area field and the application is filtred based on the prefix of the area.<br>";
-    echo "If the area is \"Firefox-javascript\" then the application will be Firefox and the area will be javascript in the graphs created";
-//    echo "<h2>What should the report output be based on</h2>";
-//    echo '<input type="radio" name="target" value="Application" checked/>Application*<br />';
-//    echo '<input type="radio" name="target" value="Team" />Team';
+    echo "<h1>Area Grid Report:</h1>";
+    echo "Report is based on on the area field.<br>";
+
     echo "<h2>Filter the result by choosing different values below:</h2>";
     echo "<div>Sprint: ";
     echoSprintSelect("", true);
     echo "</div>";
-    //    echo "<div>Application: ";
-    //    echoApplicationBasedOnAreasSelect("", false, "select_app");
-    //    echo "</div>";
     echo "And/or<br>";
-
     echo '<label for="from">From</label>';
     echo '<input type="text" id="from" name="from"/>';
     echo '<label for="to">to</label>';
     echo '<input type="text" id="to" name="to"/><br>';
 
-    echo "<h2>Include bug and requirement list</h2>";
-    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
-    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
+//    echo "<h2>Include bug and requirement list</h2>";
+//    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
+//    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
     echo '<br><input type="submit" name="Submit" value="Generate report">';
 
 }
@@ -83,14 +76,14 @@ function generateReport()
     mysql_close($con1);
 
     //    ($allSessions);
-    echo "<h1>Application Report</h1>";
+    echo "<h1>Area Grid Report:</h1>";
 
     echo '<div class="demo">
 
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Summary</a></li>
-		<li><a href="#tabs-2">Detailed</a></li>
+
+		<li><a href="#tabs-2">Grid report</a></li>
 		';
 
     if (isset($_REQUEST['buglist']))
@@ -99,11 +92,9 @@ function generateReport()
         echo '<li><a href="#tabs-4">Requirements tested</a></li>';
 
     echo '	</ul>
-	<div id="tabs-1">
-		<p>' . generateOverviewTabContent($allSessions, $sql) . '</p>
-	</div>
+
 	<div id="tabs-2">
-		<p>' . getTeamOrApplicationStatistics($allSessions) . '</p>
+		<p>' . getAreaStatisticIntoGridHtml($allSessions) . '</p>
 	</div>';
     if (isset($_REQUEST['buglist']))
         echo '
@@ -129,68 +120,104 @@ function generateReport()
 
 }
 
-function getTeamOrApplicationStatistics($allSessions)
+function getAreaStatisticIntoGridHtml($allSessions)
 {
     $settings = getSettings();
 
     $htmlReturn = "";
     $appsToDisplay = array();
+    $areasToDisplay = array();
+    $areaCountArray = array();
+    $bugsInOneArea = array();
+    $requirementsInOneArea = array();
+    $durationInOneArea = array();
+    $sessionCountForOneArea = array();
     $sessionsByArea = array();
     $areaSessionIdMap = array();
     $allApplicationsBasedOnAreaName = getApplicationsFromAreaNames();
 
-    //To get all "applications" into an array.
+
     foreach ($allSessions as $sessionId => $aSession) {
-        $areas = $aSession['areas'];
-        foreach ($areas as $area) {
-            $appName = getApplicationNameFromAreaName($area);
-            if (!in_array($appName, $appsToDisplay)) {
-                $appsToDisplay[$appName] = $appName;
-                $sessionsByArea[$appName] = array();
-                $sessionsByArea[$appName][$sessionId] = $aSession;
-                $areaSessionIdMap[$sessionId] = $area;
-            } else {
-                $sessionsByArea[$appName][$sessionId] = $aSession;
-                $areaSessionIdMap[$sessionId] = $area;
+        //print_r(array_keys($aSession));
+        foreach ($aSession['areas'] as $area) {
+            if (!in_array($area, $areasToDisplay)) {
+                $areasToDisplay[$area] = $area;
             }
+            $areaCountArray[] = $area;
+
+            if (isset($bugsInOneArea[$area]))
+                $bugsInOneArea[$area] = array_merge($bugsInOneArea[$area], $aSession['bugs']);
+            else
+                $bugsInOneArea[$area] = $aSession['bugs'];
+
+            if (isset($requirementsInOneArea[$area]))
+                $requirementsInOneArea[$area] = array_merge($requirementsInOneArea[$area], $aSession['requirements']);
+            else
+                $requirementsInOneArea[$area] = $aSession['requirements'];
+
+            if (isset($durationInOneArea[$area]))
+                $durationInOneArea[$area] = $durationInOneArea[$area] + $aSession['duration_time'];
+            else
+                $durationInOneArea[$area] = $aSession['duration_time'];
+
+            //echo count($aSession['bugs']) . " : $sessionId<br>";
         }
+
+
     }
+
+    $sessionCountForOneArea = array_count_values($areaCountArray);
+
     $con = getMySqlConnection();
     $allAreas = getAreas();
     mysql_close($con);
     //Print the result
-    foreach ($appsToDisplay as $appName => $aApp) {
-        $durationTimeTotal = 0;
-        $numberOfSessions = count($sessionsByArea[$aApp]);
-        $htmlReturn .= "<h2>$aApp</h2>";
-        $areasUsedInApp = array();
+    $htmlReturn .= "
+    <table class='gridtable'>
+        <tr>
+            <th>Area</th>
+            <th>Session count</th>
+            <th>Bug count</th>
+            <th>Requirement count</th>
+            <th>Duration(h)</th>
+        </tr>";
+    ksort($areasToDisplay);
+    foreach ($areasToDisplay as $areaName => $aArea) {
 
-        $setupTime = 0;
-        $testTime = 0;
-        $bugtime = 0;
-        $oppTime = 0;
+        if (isset($sessionCountForOneArea[$aArea]))
+            $nbrOfSessionsInOneArea = $sessionCountForOneArea[$aArea];
+        else
+            $nbrOfSessionsInOneArea = 0;
+
+        if (isset($bugsInOneArea[$aArea]))
+            $bugCountForOneArea = count(array_unique($bugsInOneArea[$aArea]));
+        else
+            $bugCountForOneArea = 0;
+
+        if (isset($requirementsInOneArea[$aArea]))
+            $reqCountForOneArea = count(array_unique($requirementsInOneArea[$aArea]));
+        else
+            $reqCountForOneArea = 0;
+
+        if (isset($requirementsInOneArea[$aArea]))
+            $durationForOneArea = round($durationInOneArea[$aArea]/60,2);
+        else
+            $durationForOneArea = 0;
 
 
-        iterateAllSessionsForOneApplication($sessionsByArea, $aApp, $setupTime, $testTime, $bugtime, $oppTime, $durationTimeTotal, $areasUsedInApp);
+        $htmlReturn .= "
+        <tr>
+            <td>$aArea</td>
+            <td>$nbrOfSessionsInOneArea</td>
+            <td>$bugCountForOneArea</td>
+            <td>$reqCountForOneArea</td>
+            <td>$durationForOneArea</td>
+        </tr>";
 
-        $areasUsedInApp = setAreasWithZeroSessionsToZero($allAreas, $aApp, $areasUsedInApp);
-
-        $durationTimeInHoursTotal = round($durationTimeTotal / 60, 1);
-        $timeInSessionsInHoursNormalized = round($durationTimeInHoursTotal / ($settings['normalized_session_time'] / 60), 1);
-
-        // print_r($areasUsedInApp);
-        //foreach ($areasUsedInApp as $area => $nbrOfTimes)
-        //{
-        //    $htmlReturn .= "$area($nbrOfTimes)<br>";
-        //}
-        $htmlReturn .= "Number of sessions: " . $numberOfSessions . "<br>";
-        $htmlReturn .= "Number of normalized sessions: " . $timeInSessionsInHoursNormalized . "<br>";
-        $htmlReturn .= "Time in sessions: " . $durationTimeInHoursTotal . "h<br>";
-
-
-        $htmlReturn .= generateBarChartForAreas("div_" . $appName, $areasUsedInApp, round($setupTime, 2), round($testTime, 2), round($bugtime, 2), round($oppTime, 2), $areaSessionIdMap, $allSessions);
-        $htmlReturn .= "<div id =\"div_" . $appName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
+//        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
     }
+    $htmlReturn .= "</table>";
+//    print_r($sessionCountForOneArea);
     return $htmlReturn;
 
 
@@ -576,12 +603,10 @@ function getTotalTimeInSessionInHours($allSessions)
     return round($duration / 60, 1);
 }
 
-
 function getNumberOfBugsFound($allSessions)
-{
-    $bugArray = array();
+{   $bugArray = array();
     foreach ($allSessions as $aSession) {
-        $bugArray = array_merge($bugArray, $aSession['bugs']);
+        $bugArray = array_merge($bugArray,$aSession['bugs']);
     }
     $bugArrayUnique = array_unique($bugArray);
     return count($bugArrayUnique);
@@ -636,81 +661,5 @@ function getNumberOfBugsFoundAsListWithLink($allSessions)
     return $html;
 }
 
-function generateOverviewTabContent($allSessions, $sql)
-{
-    $sql = explode("WHERE", $sql);
-    $sql = explode("LIMIT", $sql[1]);
-    $sql = urlencode($sql[0]);
-
-    $settings = getSettings();
-    $timeInSessionsInHours = getTotalTimeInSessionInHours($allSessions);
-    $timeInSessionsInHoursNormalized = round($timeInSessionsInHours / ($settings['normalized_session_time'] / 60), 1);
-    $htmlString = "<table border='0' width='100%'>";
-    $htmlString .= "<tr>";
-    $htmlString .= "<td valign='top'>";
-    $htmlString .= "<div>Number of sessions: " . count($allSessions) . "</div>";
-    $htmlString .= "<div>Number of normalized sessions: " . $timeInSessionsInHoursNormalized . " ( one normalized session = " . $settings['normalized_session_time'] . " min)    </div>";
-    $htmlString .= "</td>";
-    $htmlString .= "<td valign='top'>";
-    $htmlString .= "<div>Time in sessions: " . $timeInSessionsInHours . "h</div>";
-    $htmlString .= "<div>Requirements tested: " . getNumberOfRequirementsFound($allSessions) . "</div>";
-    $htmlString .= "<div>Bugs found: " . getNumberOfBugsFound($allSessions) . "</div>";
-    $htmlString .= "</td>";
-    $htmlString .= "</tr>";
-    $htmlString .= "<tr>";
-
-    $htmlString .= "<td valign='top' width=50%>";
-    $htmlString .= '<div id="containerProgress"></div>';
-
-
-    $htmlString .= "</td>";
-    $htmlString .= "<td valign='top'>";
-    $htmlString .= getPieCharTimeDistribution($allSessions, "timeDistcontainer");
-    $htmlString .= '<div id="timeDistcontainer"></div>';
-
-
-    $parameters = ""; //"sprint=Apr12";
-
-
-    $htmlString .= "<script type='text/javascript'>
-$(function() {
-    var params = '" . $parameters . "';
-
-	$.getJSON('../api/statistics/progress/index.php?'+params+'&callback=?&sql=$sql', function(data) {
-		// Create the chart
-		window.chart = new Highcharts.StockChart({
-			chart : {
-				renderTo : 'containerProgress'
-			},
-
-			rangeSelector : {
-				selected : 1
-			},
-
-			title : {
-				text : 'Progress over time'
-			},
-
-			series : [{
-				name : 'Total number of sessions',
-				data : data,
-				tooltip: {
-					valueDecimals: 2
-				}
-			}]
-		});
-	});
-
-});
-
-		</script>";
-
-
-    $htmlString .= "</td>";
-    $htmlString .= "</tr>";
-
-    $htmlString .= "</table>";
-    return $htmlString;
-}
 
 ?>
