@@ -94,10 +94,10 @@ function printCloud()
         $charterWordCount = countWords($sessionData['charter']);
 
         $wordCount = array_merge($notesWordCount, $charterWordCount);
-        if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
+        if ($_SESSION['useradmin'] == 1 && isset($_GET['edit']) && !$_GET['edit'] == "yes") {
             echo "<a href='?sessionid=$sessionid&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
         }
-        if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
+        if ($_SESSION['useradmin'] == 1 && isset($_GET['edit']) && $_GET['edit'] == "yes") {
             echo "<H2>Click on the word to add to black list.</H2><br>";
             echo "<div id='addedword'></div>";
         }
@@ -106,7 +106,7 @@ function printCloud()
             printTagCloud($wordCount, 30);
         }
     }
-    if ($_GET['all'] != "") {
+    if (isset($_GET['all']) && $_GET['all'] != "") {
         $sql = "SELECT title, notes,charter FROM sessioninfo ";
         $sql .= "WHERE executed = 1  ";
         if ($_REQUEST['tester'] && strcmp($_REQUEST['tester'],'') != 0) {
@@ -134,10 +134,10 @@ function printCloud()
             $wordCountArray = array_merge_recursive($wordCountArray, countWords($sessionCharter));
         }
 
-        if ($_SESSION['useradmin'] == 1 && !$_GET['edit'] == "yes") {
+        if ($_SESSION['useradmin'] == 1 && isset($_GET['edit']) && !$_GET['edit'] == "yes") {
             echo "<a href='?all=yes&edit=yes' style='font-size: 10px' TARGET='blank'>[Edit blocked words]</a><br>";
         }
-        if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes") {
+        if ($_SESSION['useradmin'] == 1 && isset($_GET['edit']) && $_GET['edit'] == "yes") {
             echo "<H2>Click on the word to add to black list.</H2><br>";
             echo "<div id='addedword' class='class'></div>";
         }
@@ -247,7 +247,7 @@ function printTagCloud($tags, $maxItemToDisplay)
             else
             {
                 //                echo '<a href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</a> ';
-                if ($_SESSION['useradmin'] == 1 && $_GET['edit'] == "yes")
+                if ($_SESSION['useradmin'] == 1 && isset($_GET['edit']) && $_GET['edit'] == "yes")
                     echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</span>';
                 else
                     echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '"><a href="../list2.php?searchstring=' . $key . '" target="_top">' . $key . '</a></span> ';
