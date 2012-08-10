@@ -146,7 +146,7 @@ function getAreaStatisticIntoGridHtml($allSessions)
             $areaCountArray[] = $area;
 
             if (isset($sessionsByArea[$area]))
-                $sessionsByArea[$area] = array_merge($sessionsByArea[$area], $sessionId);
+                $sessionsByArea[$area] = array_merge($sessionsByArea[$area], array($sessionId));
             else
                 $sessionsByArea[$area] = array($sessionId);
 
@@ -221,12 +221,12 @@ function getAreaStatisticIntoGridHtml($allSessions)
         <tr>
             <td>$aArea</td>
             <td>$nbrOfSessionsInOneArea</td>
-            <td>$metricsOnCharter</td>
-            <td>".$metricsForOneArea['setup']."</td>
-            <td>".$metricsForOneArea['test']."</td>
-            <td>".$metricsForOneArea['bug']."</td>
-            <td>".$metricsForOneArea['opp']."</td>
-            <td>".$metricsForOneArea['durationInHours']."</td>
+            <td>".round($metricsOnCharter,2)."</td>
+            <td>".round($metricsForOneArea['setup'],2)."</td>
+            <td>".round($metricsForOneArea['test'],2)."</td>
+            <td>".round($metricsForOneArea['bug'],2)."</td>
+            <td>".round($metricsForOneArea['opp'],2)."</td>
+            <td>".round($metricsForOneArea['durationInHours'],2)."</td>
             <td>$bugCountForOneArea</td>
             <td>$reqCountForOneArea</td>
         </tr>";
