@@ -45,7 +45,7 @@ if (isset($_REQUEST['listsettings'])) {
     else
         $sqlUpdate .= "       `default_area` =null , ";
 
-    if ($_REQUEST['autosave'] == 'checked')
+    if ($_REQUEST['autosave'] == 'true')
         $sqlUpdate .= "       `autosave` ='1' ";
     else
         $sqlUpdate .= "       `autosave` ='0' ";

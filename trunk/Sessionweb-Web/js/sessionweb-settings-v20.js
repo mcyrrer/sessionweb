@@ -194,7 +194,8 @@ function updatePersonalSettings() {
             data:"listsettings=" + $('#personal_changelistsettings_options').val()
                 + "&team=" + $('#personal_select_team').val()
                 + "&sprint=" + $('#personal_select_sprint').val()
-                + "&area=" + $('#personal_select_area').val(),
+                + "&area=" + $('#personal_select_area').val()
+                + "&autosave=" + $('#autosave').is(':checked'),
             url:'api/settings/user/personalsettings/update/index.php',
             complete:function (data) {
 
@@ -484,8 +485,9 @@ function applyUserSettingsToLayout(userSettings) {
         $("#sprint_menu").hide();
         $("#site_settings").hide();
         $("#team_menu").hide();
-
     }
+//    checkBoxHelper(userSettings, "autosave", "#autosave");
+
 //    else if (parseInt(userSettings['admin']) != 1) {
 ////        alert("is admin");
 ////        $("#testenvironments_menu").hide();

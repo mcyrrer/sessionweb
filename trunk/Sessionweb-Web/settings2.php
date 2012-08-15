@@ -71,6 +71,10 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
         $all = "selected";
     if ($usersettings['list_view'] == "mine")
         $mine = "selected";
+    if ($usersettings['autosave'] == 1)
+        $autosaveCheckedHtml = "checked=\"checked\"";
+    else
+        $autosaveCheckedHtml = "";
 
     ?>
     <select id="personal_changelistsettings_options" name="listsettings">
@@ -78,6 +82,9 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
         <option value="mine" <?php echo $mine;?>>My own sessions</option>
         <option value="team" <?php echo $team;?>>My teams sessions</option>
     </select>
+    <h3>Autosave when edit sessions</h3>
+
+    Enable: <input type="checkbox" id="autosave" <?php echo $autosaveCheckedHtml;?> value="checked">
 
     <h3>Settings for new session</h3><br>
     Select default team:
