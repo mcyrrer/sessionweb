@@ -3,6 +3,50 @@ Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 21==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_20-_21.sql
+to upgrade from 20->21
+
+===Release include (release 21) ===
+ID	Type	        Milestone	Summary
+89	Defect	        Release21	Remove all warnings when php.ini log error settins is error_reporting = E_ALL
+90	Defect	        Release21	Get software version automatically does not work when a session is edited the first time
+91	Defect	        Release21	Add support to search for requirements/bugs from list view
+92	Defect	        Release21	Add config check link again to setting page
+93	Enhancement	    Release21	Add support for basic auth
+94	Enhancement	    Release21	Add support for an admin to view the log file from a browser
+95	Defect	        Release21	Add statistics/graph for "applications" based on area name
+96	Defect	        Release21	Search in list2.php does not work.
+97	Enhancement	    Release21	Add report "area grid report"
+98	Defect	        Release21	Not possible to edit autosave setting from new setting page!
+
+
+==SessionWeb 20==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_19-_20.sql
+to upgrade from 19->20
+
+===Release include (release 20) ===
+ID	Type	        Milestone	Summary
+78	Defect	        Release20	Old version of jquery  used for counterstring
+79	Defect	        Release20	Wordcloud: Uncaught TypeError: Object [object Object] has no method 'validate'
+80	Defect	        Release20	Wordcloud: Can not add words to stoplist
+83	Enhancement	    Release20	Add new settings page with add and remove for all items and settings
+85	Enhancement	    Release20	Add support for  bulk close sessions in state executed
+86	Defect	        Release20	Session statistics on index pages count wrong number of session to debrief
+
+
 ==SessionWeb 19==
 Installation/Upgrade from any previous version:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
@@ -10,10 +54,10 @@ Go to your installation dir through a web browser (e.g http://localhost/sessionw
 Upgrade manually:
 If you can not upgrade please manually execute
 
-install/SessionwebDbLayoutDelta_1.7-_18.sql
-to upgrade from 1.7->18
+install/SessionwebDbLayoutDelta_18-_19.sql
+to upgrade from 18->19
 
-===Issue list for this release 19 ===
+===Release include (release 19) ===
 ID	Type	Milestone	Summary
 71	Defect	Release19	Change from google charts to highcharts
 72	Enhanc.	Release19	Add icon on list view for executed sessions where debrief comments exists
@@ -45,7 +89,7 @@ Content of file(Change user and password not host and db name):
         define('DB_NAME_SESSIONWEB', 'sessionwebos');
 ?>
 
-===Issue list for this release 18 ===
+===Release include (release 18) ===
 ID	Type		Milestone	Summary
 64	Enhancement	Release18	Add support for pair testing 
 65	Defect		Release18	Remove deprecated session_.... usage in php
@@ -79,7 +123,7 @@ Content of file(Change user and password not host and db name):
         define('DB_NAME_SESSIONWEB', 'sessionwebos');
 ?>
 
-===Issue list for this release 1.7 ===
+===Release include (release 1.7) ===
 ID	Type		Status		Milestone	Summary
 14	Enhancement	Implemented	Release1.7	Possibility to have a tag called release
 29	Defect		Implemented	Release1.7	Fix error in html footer when db is not setup correct or not at all
@@ -112,7 +156,7 @@ Content of file(Change user and password not host and db name):
         define('DB_NAME_SESSIONWEB', 'sessionwebos');
 ?>
 
-===Issue list for this release 1.5 ===
+===Release include (release 1.5) ===
 ID	Type		Status		Milestone	Summary
 42	Defect		Implemented	Release1.5	Attachments in db is not deleted when a session is deleted
 44	Defect		Implemented	Release1.5	Debriefed note saved when not debriefed
@@ -142,7 +186,7 @@ Content of file(Change user and password not host and db name):
         define('DB_NAME_SESSIONWEB', 'sessionwebos');
 ?>
 
-===Issue list for this release===
+===Release include (release 1.4)===
 Issue   Status	Milestone	Summary
 33	Fixed	Release1.4	Append debrief notes instead of overwrite them
 34	Fixed	Release1.4	Remove test file written when testing RW of FS
