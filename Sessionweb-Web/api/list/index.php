@@ -4,110 +4,195 @@ session_start();
 require_once('../../include/validatesession.inc');
 require_once('../../include/db.php');
 require_once('../../config/db.php.inc');
+require_once('../../classes/session.php');
+require_once('../../include/commonFunctions.php.inc');
 
 $con = getMySqlConnection();
 
 $whereSql = "";
 $StringSearchSql = null;
 
-if ($_REQUEST['searchstring'] != null) {
-    //    if(strpos($whereSql,"WHERE") === false) {
-    //        $whereSql = "WHERE ";
-    //    }
-    //    else
-    //    {
-    //        $whereSql = $whereSql ."AND ";
-    //    }
-    $searchstring = mysql_real_escape_string($_REQUEST['searchstring']);
-    $StringSearchSql = $whereSql . "MATCH(charter,notes, title,software) AGAINST ('$searchstring' IN BOOLEAN MODE) ";
-}
-
-if ($_REQUEST['tester'] != null) {
-    if (strpos($whereSql, "WHERE") === false) {
-        $whereSql = "WHERE ";
-    } else {
-        $whereSql = $whereSql . "AND ";
+if (isset($_REQUEST['searchstringref']) && $_REQUEST['searchstringref'] != "") {
+    $data = generateDataForIssueAndRequritementSearch();
+} else {
+    if ($_REQUEST['searchstring'] != null) {
+        //    if(strpos($whereSql,"WHERE") === false) {
+        //        $whereSql = "WHERE ";
+        //    }
+        //    else
+        //    {
+        //        $whereSql = $whereSql ."AND ";
+        //    }
+        $searchstring = mysql_real_escape_string($_REQUEST['searchstring']);
+        $StringSearchSql = $whereSql . "MATCH(charter,notes, title,software) AGAINST ('$searchstring' IN BOOLEAN MODE) ";
     }
-    $username = $_REQUEST['tester'];
-    $whereSql = $whereSql . "username='$username' ";
-}
 
-if ($_REQUEST['sprint'] != null) {
-    if (strpos($whereSql, "WHERE") === false) {
-        $whereSql = "WHERE ";
-    } else {
-        $whereSql = $whereSql . "AND ";
-    }
-    $sprint = $_REQUEST['sprint'];
-    $whereSql = $whereSql . "sprintname='$sprint' ";
-}
 
-if ($_REQUEST['team'] != null) {
-    if (strpos($whereSql, "WHERE") === false) {
-        $whereSql = "WHERE ";
-    } else {
-        $whereSql = $whereSql . "AND ";
-    }
-    $team = $_REQUEST['team'];
-    $whereSql = $whereSql . "teamname='$team' ";
-}
-
-if ($_REQUEST['area'] != null) {
-    if (strpos($whereSql, "WHERE") === false) {
-        $whereSql = "WHERE ";
-    } else {
-        $whereSql = $whereSql . "AND ";
-    }
-    $team = $_REQUEST['area'];
-    $whereSql = $whereSql . "areaname='$team' ";
-}
-
-if ($StringSearchSql == null) {
-    if ($_REQUEST['status'] != null) {
-        $status = $_REQUEST['status'];
-
+    if ($_REQUEST['tester'] != null) {
         if (strpos($whereSql, "WHERE") === false) {
             $whereSql = "WHERE ";
         } else {
             $whereSql = $whereSql . "AND ";
         }
-        if ($status == 1) {
-            $whereSql = $whereSql . "executed=0 AND notes LIKE  ''";
-        } elseif ($status == 2) {
-            $whereSql = $whereSql . "executed=0 AND closed=0 AND notes NOT LIKE  ''";
+        $username = $_REQUEST['tester'];
+        $whereSql = $whereSql . "username='$username' ";
+    }
+
+    if ($_REQUEST['sprint'] != null) {
+        if (strpos($whereSql, "WHERE") === false) {
+            $whereSql = "WHERE ";
+        } else {
+            $whereSql = $whereSql . "AND ";
         }
-        elseif ($status == 3) {
-            $whereSql = $whereSql . "executed=1 AND debriefed=0 AND closed=0 ";
+        $sprint = $_REQUEST['sprint'];
+        $whereSql = $whereSql . "sprintname='$sprint' ";
+    }
+
+    if ($_REQUEST['team'] != null) {
+        if (strpos($whereSql, "WHERE") === false) {
+            $whereSql = "WHERE ";
+        } else {
+            $whereSql = $whereSql . "AND ";
         }
-        elseif ($status == 4) {
-            $whereSql = $whereSql . "debriefed=1 ";
+        $team = $_REQUEST['team'];
+        $whereSql = $whereSql . "teamname='$team' ";
+    }
+
+    if ($_REQUEST['area'] != null) {
+        if (strpos($whereSql, "WHERE") === false) {
+            $whereSql = "WHERE ";
+        } else {
+            $whereSql = $whereSql . "AND ";
         }
-        elseif ($status == 5) {
-            $whereSql = $whereSql . "closed=1 ";
+        $team = $_REQUEST['area'];
+        $whereSql = $whereSql . "areaname='$team' ";
+    }
+
+    if ($StringSearchSql == null) {
+        if ($_REQUEST['status'] != null) {
+            $status = $_REQUEST['status'];
+
+            if (strpos($whereSql, "WHERE") === false) {
+                $whereSql = "WHERE ";
+            } else {
+                $whereSql = $whereSql . "AND ";
+            }
+            if ($status == 1) {
+                $whereSql = $whereSql . "executed=0 AND notes LIKE  ''";
+            } elseif ($status == 2) {
+                $whereSql = $whereSql . "executed=0 AND closed=0 AND notes NOT LIKE  ''";
+            }
+            elseif ($status == 3) {
+                $whereSql = $whereSql . "executed=1 AND debriefed=0 AND closed=0 ";
+            }
+            elseif ($status == 4) {
+                $whereSql = $whereSql . "debriefed=1 ";
+            }
+            elseif ($status == 5) {
+                $whereSql = $whereSql . "closed=1 ";
+            }
         }
     }
-}
 
-if ($whereSql != "") {
-    if ($StringSearchSql != null)
-        $StringSearchSql = " AND $StringSearchSql ";
-} else {
-    if ($StringSearchSql != null)
-        $StringSearchSql = " WHERE $StringSearchSql ";
-}
+    if ($whereSql != "") {
+        if ($StringSearchSql != null)
+            $StringSearchSql = " AND $StringSearchSql ";
+    } else {
+        if ($StringSearchSql != null)
+            $StringSearchSql = " WHERE $StringSearchSql ";
+    }
 
-$data = array();
-$data['page'] = (int)$_REQUEST['page'];
+    $data = array();
+    $data['page'] = (int)$_REQUEST['page'];
 //$data['total'] = 500;
 
-$data = getNumberOfSessions($data, $whereSql, $StringSearchSql);
+    $data = getNumberOfSessions($data, $whereSql, $StringSearchSql);
 
-$data = getSessions($data, $whereSql, $StringSearchSql);
+    $data = getSessions($data, $whereSql, $StringSearchSql);
 
+
+}
 echo json_encode($data);
 
 mysql_close($con);
 
+function generateDataForIssueAndRequritementSearch()
+{
+    $data = null;
+
+    $issueReference = $_REQUEST['searchstringref'];
+    $sqlReq = "SELECT * FROM `mission_requirements` WHERE `requirementsid` = '$issueReference'";
+    $sqlBugs = "SELECT * FROM `mission_bugs` WHERE `bugid` = '$issueReference'";
+
+    $issueList = getListofSessionsFromBugOrRequirementsSearch($sqlReq, $sqlBugs);
+    $sessionList = array();
+
+    foreach ($issueList as $aIssue) {
+        $sessionInfo = new session($aIssue);
+        $session = $sessionInfo->getSession();
+        //
+        //    $data['rows'][] = array('id' => "1", 'cell' => array(
+        $sessionid = $aIssue;
+
+        $status = "Not Executed";
+        if ($session['executed'] == 0 && $session['notes'] != null) {
+            $status = "In progress";
+            //echo "notes'".$notes."'";
+            //$status = "Executed";
+        }
+        if ($session['executed'] == 1) {
+            $status = "Executed";
+        }
+        if ($session['debriefed'] == 1) {
+            $status = "Debriefed";
+        }
+        if ($session['closed'] == 1) {
+            $status = "Closed";
+        }
+
+        $title = $session['title'];
+        $fullname = getTesterFullName($session['username']);
+        $sprintname = $session['sprintname'];
+        $teamname = $session['teamname'];
+        $areas = "";
+        foreach ($session['areas'] as $area) {
+            $areas .= " $area";
+        }
+        $updated = $session['updated'];
+        $executed_timestamp = $session['executed_timestamp'];
+        $data['page'] = 1;
+        $data['total'] = 1;
+        $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$title", "$fullname", "$sprintname", "$teamname", "$areas", "$updated", "$executed_timestamp"));
+    }
+
+    return $data;
+}
+
+function getListofSessionsFromBugOrRequirementsSearch($sqlReq, $sqlBugs)
+{
+    $issueList = array();
+
+    $result = mysql_query($sqlReq);
+
+    if (!$result) {
+        echo mysql_error() . "<br/>";
+    }
+
+    while ($row = mysql_fetch_array($result)) {
+        $issueList[] = getSessionSessionId($row['versionid']);
+    }
+
+    $result = mysql_query($sqlBugs);
+
+    if (!$result) {
+        echo mysql_error() . "<br/>";
+    }
+
+    while ($row = mysql_fetch_array($result)) {
+        $issueList[] = getSessionSessionId($row['versionid']);
+    }
+    return $issueList;
+}
 
 function getNumberOfSessions($data, $whereSql, $StringSearchSql)
 {
