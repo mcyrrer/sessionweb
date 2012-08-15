@@ -25,6 +25,7 @@ ID	Type	        Milestone	Summary
 96	Defect	        Release21	Search in list2.php does not work.
 97	Enhancement	    Release21	Add report "area grid report"
 98	Defect	        Release21	Not possible to edit autosave setting from new setting page!
+102 Defect          Release21   Requirement/bug search does not work
 
 
 ==SessionWeb 20==
