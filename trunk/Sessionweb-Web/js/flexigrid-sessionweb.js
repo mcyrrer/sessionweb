@@ -91,7 +91,6 @@ function viewSession_newtab() {
 }
 
 
-
 function editSession_newtab() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
@@ -239,14 +238,15 @@ function addFormData() {
 function stopRKey(evt) {
     var evt = (evt) ? evt : ((event) ? event : null);
     var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+    if ((evt.keyCode == 13) && (node.type == "text")) {
+        return false;
+    }
 }
 
 document.onkeypress = stopRKey;
 
 
 $(document).ready(function () {
-
 
 
     $("#searchbox").hide();
@@ -268,8 +268,7 @@ $(document).ready(function () {
         return false;
     });
 
-    function setPermSearchUrl()
-    {
+    function setPermSearchUrl() {
         var tester = $('#select_tester').val();
         var sprint = $('#select_sprint').val();
         var team = $('#select_team').val();
@@ -277,8 +276,8 @@ $(document).ready(function () {
         var status = $('#select_status_type').val();
 
         var searchstring = $('#searchstring').val();
-        var url = 'list2.php?tester='+tester+'&sprint='+sprint+'&team='+team+'&area='+area+'&status='+status+'&searchstring='+searchstring;
-        $('#urldiv').html('<a href="'+url+'">Perm link to filter/search</a>');
+        var url = 'list2.php?tester=' + tester + '&sprint=' + sprint + '&team=' + team + '&area=' + area + '&status=' + status + '&searchstring=' + searchstring;
+        $('#urldiv').html('<a href="' + url + '">Perm link to filter/search</a>');
     }
 
     $('#searchSessions').click(function () {
@@ -291,7 +290,7 @@ $(document).ready(function () {
         setPermSearchUrl();
     });
 
-    $("#searchstring").change( function() {
+    $("#searchstring").change(function () {
         $("#select_status_type").val(0);
         $("#select_status_type").attr('disabled', '');
     });
@@ -313,25 +312,44 @@ $(document).ready(function () {
          * Double click for product details
          ****************************************************************/
         $('#flexgrid1').dblclick(function (e) {
-            target = $(e.target);
-            while (target.get(0).tagName != "TR") {
-                target = target.parent();
+            var Browser = {
+                Version:function () {
+                    var version = 999; // we assume a sane browser
+                    if (navigator.appVersion.indexOf("MSIE") != -1)
+                    // bah, IE again, lets downgrade version number
+                        version = parseFloat(navigator.appVersion.split("MSIE")[1]);
+                    return version;
+                }
             }
-            var tmp = target.get(0);
-            var status = target.get(0).childNodes[1].textContent;
-            var id = target.get(0).firstChild.textContent;
-            var command = "view"
-            if (status == "Not Executed") {
-                command = "edit";
+            var browser_version =Browser.Version();
+            if (Browser.Version() > 8) {
+
+
+                target = $(e.target);
+                while (target.get(0).tagName != "TR") {
+                    target = target.parent();
+                }
+                var tmp = target.get(0);
+                var status = target.get(0).childNodes[1].textContent;
+                var id = target.get(0).firstChild.textContent;
+                var id_new = $('.trSelected td:nth-child(1) div').text();
+                var command = "view"
+                if (status == "Not Executed") {
+                    command = "edit";
+                }
+                if (status == "In progress") {
+                    command = "edit";
+                }
+                if (status == "Executed") {
+                    command = "debrief";
+                }
+                var url = "session.php?sessionid=" + id + "&command=" + command;
+                window.open(url, '_blank');
             }
-            if (status == "In progress") {
-                command = "edit";
+            else
+            {
+                alert("IE 6+7+8 does not suppport dubbleclick, please use navigation buttons above or upgrade to IE9, Firefox or Chrome.");
             }
-            if (status == "Executed") {
-                command = "debrief";
-            }
-            var url = "session.php?sessionid=" + id + "&command=" + command;
-            window.open(url, '_blank');
         });
     });
 });
