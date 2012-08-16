@@ -195,7 +195,7 @@ function echoSessionlinkEdit($versionid)
 				echo "            <table width=\"*\" border=\"0\">\n";
 				echo "                        <tr>\n";
 				echo "                              <td>\n";
-				echo "                                   #$sessionlink <a href=\"session.php?sessionid=$aSessionToLink&command=view\" class=\"sessionlinkurl\" target=\"_blank\"> $aSessionTitle</a>\n";
+				echo "                                   #$sessionlink <a href=\"session.php?sessionid=$sessionlink&command=view\" class=\"sessionlinkurl\" target=\"_blank\"> $aSessionTitle</a>\n";
 				echo "                              </td>\n";
 				echo "                              <td>\n";
 				echo "                                    <div id=\"sessionlink_$sessionlink\">\n";
