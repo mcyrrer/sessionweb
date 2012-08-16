@@ -19,8 +19,12 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
   <head>
           <meta http-equiv="Content-type" content="text/html;charset=latin-1">
       <title>Sessionweb</title>
+
            <link rel="stylesheet" type="text/css" href="../css/sprintreport.css">
            <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
+           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_page.css">
+           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_table.css">
+           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/TableTools.css">
 
            <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.8.20.custom.css">
            <script src="../js/jquery-1.7.1.js" type="text/javascript"></script>
@@ -28,7 +32,22 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
            <script type="text/javascript" src="../js/highcharts/highcharts.js"></script>
            <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>
            <script type="text/javascript" src="../js/highstock/highstock.js"></script>
+           <script type="text/javascript" src="../js/DataTables/js/jquery.dataTables.min.js"></script>
+           <script type="text/javascript" src="../js/DataTables/js/TableTools.min.js"></script>
+           <script type="text/javascript" src="../js/DataTables/js/ZeroClipboard.js"></script>
            <script src="../js/sessionweb-graph-generic-v20.js" type="text/javascript"></script>
+           <script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$("#areaTable").dataTable( {
+                    "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
+                    "iDisplayLength": -1,
+                    "sDom": "T<\"clear\">lfrtip",
+                    "sSwfPath": "../js/DataTables/swf/copy_csv_xls_pdf.swf"
+                } );
+
+} );
+
+		    </script>
 
   </head>
 <body>
@@ -178,7 +197,9 @@ function getAreaStatisticIntoGridHtml($allSessions)
     mysql_close($con);
     //Print the result
     $htmlReturn .= "
-    <table class='gridtable'>
+    <div id=\"save\">
+    <table class='display' id='areaTable'>
+     <thead>
         <tr>
             <th>Area</th>
             <th>Charter count</th>
@@ -190,12 +211,14 @@ function getAreaStatisticIntoGridHtml($allSessions)
             <th>Duration(h)</th>
             <th>Bug count</th>
             <th>Requirement count</th>
-        </tr>";
+        </tr>
+      </thead>
+      <tbody>";
     ksort($areasToDisplay);
     foreach ($areasToDisplay as $areaName => $aArea) {
         $sessionsThatBelongsToOneArea = $sessionsByArea[$aArea];
-        $metricsForOneArea = getMetricsForOneArea($sessionsThatBelongsToOneArea,$allSessions);
-        $metricsOnCharter =  100 - $metricsForOneArea['opp'];
+        $metricsForOneArea = getMetricsForOneArea($sessionsThatBelongsToOneArea, $allSessions);
+        $metricsOnCharter = 100 - $metricsForOneArea['opp'];
         if (isset($sessionCountForOneArea[$aArea]))
             $nbrOfSessionsInOneArea = $sessionCountForOneArea[$aArea];
         else
@@ -212,7 +235,7 @@ function getAreaStatisticIntoGridHtml($allSessions)
             $reqCountForOneArea = 0;
 
         if (isset($requirementsInOneArea[$aArea]))
-            $durationForOneArea = round($durationInOneArea[$aArea]/60,2);
+            $durationForOneArea = round($durationInOneArea[$aArea] / 60, 2);
         else
             $durationForOneArea = 0;
 
@@ -221,12 +244,12 @@ function getAreaStatisticIntoGridHtml($allSessions)
         <tr>
             <td>$aArea</td>
             <td>$nbrOfSessionsInOneArea</td>
-            <td>".round($metricsOnCharter,2)."</td>
-            <td>".round($metricsForOneArea['setup'],2)."</td>
-            <td>".round($metricsForOneArea['test'],2)."</td>
-            <td>".round($metricsForOneArea['bug'],2)."</td>
-            <td>".round($metricsForOneArea['opp'],2)."</td>
-            <td>".round($metricsForOneArea['durationInHours'],2)."</td>
+            <td>" . round($metricsOnCharter, 2) . "</td>
+            <td>" . round($metricsForOneArea['setup'], 2) . "</td>
+            <td>" . round($metricsForOneArea['test'], 2) . "</td>
+            <td>" . round($metricsForOneArea['bug'], 2) . "</td>
+            <td>" . round($metricsForOneArea['opp'], 2) . "</td>
+            <td>" . round($metricsForOneArea['durationInHours'], 2) . "</td>
             <td>$bugCountForOneArea</td>
             <td>$reqCountForOneArea</td>
         </tr>";
@@ -234,7 +257,10 @@ function getAreaStatisticIntoGridHtml($allSessions)
 
 //        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
     }
-    $htmlReturn .= "</table>";
+    $htmlReturn .= "
+    </tbody>
+    </table>
+    </div>";
 //    print_r($sessionCountForOneArea);
     return $htmlReturn;
 
@@ -623,9 +649,10 @@ function getTotalTimeInSessionInHours($allSessions)
 }
 
 function getNumberOfBugsFound($allSessions)
-{   $bugArray = array();
+{
+    $bugArray = array();
     foreach ($allSessions as $aSession) {
-        $bugArray = array_merge($bugArray,$aSession['bugs']);
+        $bugArray = array_merge($bugArray, $aSession['bugs']);
     }
     $bugArrayUnique = array_unique($bugArray);
     return count($bugArrayUnique);
