@@ -36,7 +36,7 @@ if (strcmp($_REQUEST["command"], "edit") == 0) {
 
 if (strcmp($_REQUEST["command"], "new") == 0) {
     $sessionid = saveSession(false);
-    header("Location: session.php?command=edit&sessionid=$sessionid");
+    header("Location: session.php?command=edit&sessionid=$sessionid&firsttime");
     exit();
 } elseif (strcmp($_REQUEST["command"], "view") == 0) {
     echoSessionAction();
@@ -390,7 +390,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td>Team: </td>\n";
         echo "                              <td>\n";
-        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "" && !isset($_REQUEST['firsttime']))
             echoTeamSelect($team);
         else
             echoTeamSelect($userSettings['default_team']);
@@ -401,7 +401,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Sprint: </td>\n";
         echo "                              <td>\n";
-        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "" && !isset($_REQUEST['firsttime']))
             echoSprintSelect($sprint);
         else
             echoSprintSelect($userSettings['default_sprint']);
@@ -437,7 +437,7 @@ function echoSessionForm()
         echo "                        <tr>\n";
         echo "                              <td valign=\"top\">Area: </td>\n";
         echo "                              <td>\n";
-        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "")
+        if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != "" && !isset($_REQUEST['firsttime']))
             echoAreaSelect($area);
         else
             echoAreaSelect($userSettings['default_area']);
