@@ -4,7 +4,7 @@ session_start();
 require_once('../../include/validatesession.inc');
 require_once('../../include/db.php');
 require_once('../../config/db.php.inc');
-require_once('../../classes/session.php');
+require_once('../../classes/sessionReadObject.php');
 require_once('../../include/commonFunctions.php.inc');
 
 $con = getMySqlConnection();
@@ -128,7 +128,7 @@ function generateDataForIssueAndRequritementSearch()
     $sessionList = array();
 
     foreach ($issueList as $aIssue) {
-        $sessionInfo = new session($aIssue);
+        $sessionInfo = new sessionReadObject($aIssue);
         $session = $sessionInfo->getSession();
         //
         //    $data['rows'][] = array('id' => "1", 'cell' => array(

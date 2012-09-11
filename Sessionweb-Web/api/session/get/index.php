@@ -8,7 +8,7 @@ error_reporting(0);
 require_once('../../../config/db.php.inc');
 require_once ('../../../include/db.php');
 require_once ('../../../include/apistatuscodes.inc');
-require_once ('../../../classes/session.php');
+require_once ('../../../classes/sessionReadObject.php');
 
 
 $response = array();
@@ -16,7 +16,7 @@ $response = array();
 
 if (isset($_REQUEST['sessionid'])) {
     $sessionid = mysql_real_escape_string($_REQUEST['sessionid']);
-    $session = new session(3676);
+    $session = new sessionReadObject(3676);
 
     $response = $session->getSession();
 
