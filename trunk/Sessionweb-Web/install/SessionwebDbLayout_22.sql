@@ -446,7 +446,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `lastupdatedby` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `charter` INT, `notes` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT, `project` INT);
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `lastupdatedby` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `charter` INT, `notes` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT, `projects` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessionview_with_areas`
@@ -481,7 +481,7 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         sm.bug_percent,
         sm.opportunity_percent,
         sm.duration_time,
-        m.project
+        m.projects
     from
         mission m,
         mission_status ms,
@@ -506,7 +506,7 @@ AS `title`, `mission`.`charter` AS `charter`, `mission`.`notes` AS `notes`,
 `teamsprintname`, `mission`.`depricated` AS `depricated`, `mission`.`updated` AS
 `updated`, `mission`.`publickey` AS `publickey`, `mission`.`testenvironment` AS
 `testenvironment`, `mission`.`software` AS `software`, `mission`.`lastupdatedby`
-AS `lastupdatedby`, `mission_areas`.`areaname` AS `areaname`, `mission`.`project` AS `project`FROM (`mission`
+AS `lastupdatedby`, `mission_areas`.`areaname` AS `areaname`, `mission`.`projects` AS `project`FROM (`mission`
 JOIN `mission_areas`) 
 WHERE (`mission`.`versionid` =
 `mission_areas`.`versionid`) ;
@@ -530,7 +530,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`, `wordcloud`, `custom1`, `custom1_name`, `custom1_multiselect`, `custom2`, `custom2_name`, `custom2_multiselect`, `custom3`, `custom3_name`, `custom3_multiselect`, `projects`) VALUES (NULL, 90, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`, `wordcloud`, `custom1`, `custom1_name`, `custom1_multiselect`, `custom2`, `custom2_name`, `custom2_multiselect`, `custom3`, `custom3_name`, `custom3_multiselect`, `projects`) VALUES (NULL, 90, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0');
 
 COMMIT;
 
@@ -539,7 +539,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`, `default_team`, `default_sprint`, `default_teamsprint`, `default_area`, `projects`) VALUES ('admin', NULL, 'all', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`, `default_team`, `default_sprint`, `default_teamsprint`, `default_area`, `projects`) VALUES ('admin', NULL, 'all', NULL, NULL, NULL, NULL, NULL, '0');
 
 COMMIT;
 

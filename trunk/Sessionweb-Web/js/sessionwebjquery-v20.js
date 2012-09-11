@@ -188,13 +188,13 @@ $(document).ready(function () {
     $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
 
 
-//**************FILE UPLOAD i session.php
+//**************FILE UPLOAD i sessionReadObject.php
     $(".uploadajax").colorbox({iframe:true, width:"80%", height:"80%"});
 
-//**************Large popup i session.php
+//**************Large popup i sessionReadObject.php
     $(".largepopup").colorbox({iframe:true, width:"90%", height:"95%"});
 
-//**************medium popup i session.php
+//**************medium popup i sessionReadObject.php
     $(".mediumpopup").colorbox({iframe:true, width:900, height:600});
 
 

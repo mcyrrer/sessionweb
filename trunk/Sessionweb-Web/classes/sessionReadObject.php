@@ -1,9 +1,16 @@
 <?php
 
-class session
+/**
+ * Class that gets all session data for one session
+ */
+class sessionReadObject
 {
     var $sessionData = array();
 
+    /**
+     * Constructor that create the sessionObject that can be returned by getSession()
+     * @param $sessionid sessionId for a session to create a object on
+     */
     function __construct($sessionid)
     {
         $con = getMySqliConnection();
@@ -212,6 +219,10 @@ class session
 
     }
 
+    /**
+     * Get all data for this object
+     * @return array Multidimension array containing all session data for one session
+     */
     public function getSession()
     {
         return $this->sessionData;

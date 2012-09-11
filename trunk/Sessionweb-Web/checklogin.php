@@ -61,6 +61,7 @@ if($count==1){
     $_SESSION['username'] = $myusername;
     $_SESSION['settings'] = getSessionWebSettings();
     $_SESSION['active'] = $row['active'];
+    $_SESSION['project'] = "0";
 
 
 
