@@ -16,7 +16,7 @@ $response = array();
 
 if (isset($_REQUEST['sessionid'])) {
     $sessionid = mysql_real_escape_string($_REQUEST['sessionid']);
-    $session = new sessionReadObject(3676);
+    $session = new sessionReadObject($_REQUEST['sessionid']);
 
     $response = $session->getSession();
 
