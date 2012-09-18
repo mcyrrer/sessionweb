@@ -184,7 +184,7 @@ $(function () {
         url:'api/list/',
         dataType:'json',
         colModel:[
-            {display:'ID', name:'id', width:25, sortable:true, align:'left'},
+            {display:'ID', name:'id', width:40, sortable:true, align:'left'},
 //            {display:'Notes', name:'notes', width:30, sortable:true, align:'left'},
             {display:'Status', name:'status', width:65, sortable:true, align:'left'},
             {display:'Title', name:'title', width:300, sortable:false, align:'left'},
@@ -243,6 +243,24 @@ function stopRKey(evt) {
     }
 }
 
+
+function quickView(sessionid) {
+    $.getJSON('api/session/get?sessionid='+sessionid, function (data) {
+
+        var html = "<H1>Quick view of session</H1>";
+
+        html = html+"<b>"+data['title']+"</b>";
+        html = html+"<H2>Charter</H2>"+data['charter'];
+        html = html + "<H2>Notes</H2>"+data['notes'];
+        $.fn.colorbox({
+            html:html,
+            open:true,
+            width:"80%",
+            height:"80%"
+        });
+    });
+
+}
 document.onkeypress = stopRKey;
 
 
@@ -259,8 +277,10 @@ $(document).ready(function () {
             iframe:true,
             width:500,
             height:500
+
         });
     });
+
 
     $("select").change(function () {
         $('#flexgrid1').flexOptions({newp:1}).flexReload();
@@ -321,7 +341,7 @@ $(document).ready(function () {
                     return version;
                 }
             }
-            var browser_version =Browser.Version();
+            var browser_version = Browser.Version();
             if (Browser.Version() > 8) {
 
 
@@ -346,8 +366,7 @@ $(document).ready(function () {
                 var url = "session.php?sessionid=" + id + "&command=" + command;
                 window.open(url, '_blank');
             }
-            else
-            {
+            else {
                 alert("IE 6+7+8 does not suppport dubbleclick, please use navigation buttons above or upgrade to IE9, Firefox or Chrome.");
             }
         });

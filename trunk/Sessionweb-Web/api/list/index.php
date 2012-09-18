@@ -346,6 +346,8 @@ function getSessions($data, $whereSql, $StringSearchSql)
             $debriefComments = "";
         }
 
+        $sessionid = "<img src='pictures/quickview.png' onclick='javascript: quickView($sessionid);' alt='Debrief comments exists'>".$sessionid;
+
 
         $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$debriefComments $title", "$fullname", "$sprintname", "$teamname", "$areas", "$updated", "$executed_timestamp"));
     }
