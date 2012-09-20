@@ -26,7 +26,6 @@ ID	Type	        Milestone	Summary
 97	Enhancement	    Release21	Add report "area grid report"
 98	Defect	        Release21	Not possible to edit autosave setting from new setting page!
 102 Defect          Release21   Requirement/bug search does not work
-108 Defect          Release21   predefined settings for new session does not work
 
 
 ==SessionWeb 20==

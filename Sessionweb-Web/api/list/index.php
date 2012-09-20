@@ -4,7 +4,7 @@ session_start();
 require_once('../../include/validatesession.inc');
 require_once('../../include/db.php');
 require_once('../../config/db.php.inc');
-require_once('../../classes/sessionReadObject.php');
+require_once('../../classes/session.php');
 require_once('../../include/commonFunctions.php.inc');
 
 $con = getMySqlConnection();
@@ -128,7 +128,7 @@ function generateDataForIssueAndRequritementSearch()
     $sessionList = array();
 
     foreach ($issueList as $aIssue) {
-        $sessionInfo = new sessionReadObject($aIssue);
+        $sessionInfo = new session($aIssue);
         $session = $sessionInfo->getSession();
         //
         //    $data['rows'][] = array('id' => "1", 'cell' => array(
@@ -345,8 +345,6 @@ function getSessions($data, $whereSql, $StringSearchSql)
         } else {
             $debriefComments = "";
         }
-
-        $sessionid = "<img src='pictures/quickview.png' onclick='javascript: quickView($sessionid);' alt='Debrief comments exists'>".$sessionid;
 
 
         $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$debriefComments $title", "$fullname", "$sprintname", "$teamname", "$areas", "$updated", "$executed_timestamp"));

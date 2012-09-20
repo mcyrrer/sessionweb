@@ -342,7 +342,7 @@ function echoSessionForm()
 
         $publickey = md5(rand());
     }
-    //    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"sessionReadObject.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
+    //    echo "<form id=\"sessionform\" name=\"sessionform\" action=\"session.php?command=save\" method=\"POST\" accept-charset=\"utf-8\" onsubmit=\"return validate_form(this)\">\n";
     echo "<form id=\"sessionform\" name=\"sessionform\" action=\"api/session/save/index.php\" method=\"POST\" accept-charset=\"utf-8\">\n";
 
     echo "<input type=\"hidden\" name=\"savesession\" value=\"true\">\n";

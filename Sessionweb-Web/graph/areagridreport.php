@@ -7,7 +7,7 @@ include_once ('../include/commonFunctions.php.inc');
 include_once ('../include/session_database_functions.php.inc');
 include_once ('../include/session_common_functions.php.inc');
 include_once ('../include/graphcommon.inc');
-include_once ('../classes/sessionReadObject.php');
+include_once ('../classes/session.php');
 if (file_exists('../include/customfunctions.php.inc')) {
     include_once ('../include/customfunctions.php.inc');
 
@@ -603,7 +603,7 @@ function generateSessionObjects($sql)
     $result = mysql_query($sql);
 
     while ($row = mysql_fetch_array($result)) {
-        $aSessionObject = new sessionReadObject($row['sessionid']);
+        $aSessionObject = new session($row['sessionid']);
         $allSessions[$row['sessionid']] = $aSessionObject->getSession();
     }
     return $allSessions;
