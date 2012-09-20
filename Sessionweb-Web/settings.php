@@ -25,57 +25,57 @@ function executeCommand()
 {
     //Administartor Commands
     if ($_SESSION['useradmin'] == 1) {
-        if (strcmp($_GET["command"], "listusers") == 0) {
+        if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "listusers") == 0) {
             echoAllUsersInfo();
         }
-        elseif (strcmp($_GET["command"], "adduser") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "adduser") == 0)
         {
             echoAddUser();
         }
-        elseif (strcmp($_REQUEST["command"], "insertusertodb") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertusertodb") == 0)
         {
             createNewUser();
         }
-        elseif (strcmp($_GET["command"], "addteam") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addteam") == 0)
         {
             echoAddTeamName();
         }
-        elseif (strcmp($_REQUEST["command"], "insertteamnametodb") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertteamnametodb") == 0)
         {
             insertTeamNameToDb($_REQUEST["teamtname"]);
         }
-        elseif (strcmp($_REQUEST["command"], "changeusersettings") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "changeusersettings") == 0)
         {
             updateUserSettings($_REQUEST["usernametoupdate"], $_REQUEST["active"], $_REQUEST["admin"], $_REQUEST["superuser"], $_REQUEST["team"]);
         }
-        elseif (strcmp($_GET["command"], "userinfo") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "userinfo") == 0)
         {
             echoChangeUserInfo($_GET["user"]);
         }
-        elseif (strcmp($_GET["command"], "config") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "config") == 0)
         {
             echoChangeConfig();
         }
-        elseif (strcmp($_REQUEST["command"], "updateconfig") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "updateconfig") == 0)
         {
             updateConfig();
         }
-        elseif (strcmp($_GET["command"], "addenv") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addenv") == 0)
         {
             echoAddEnvironment();
         }
-        elseif (strcmp($_REQUEST["command"], "insertenvname") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertenvname") == 0)
         {
             insertEnvironmentNameToDb();
         }
-        elseif (strcmp($_GET["command"], "addsprint") == 0) {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addsprint") == 0) {
             echoAddSprintName();
         }
-        elseif (strcmp($_REQUEST["command"], "insertsprintnametodb") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertsprintnametodb") == 0)
         {
             insertSprintNameToDb($_REQUEST["sprintname"]);
         }
-        elseif (strcmp($_REQUEST["command"], "systemcheck") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "systemcheck") == 0)
         {
             echo "<h1>System check</h1>";
             $con = getMySqlConnection();
@@ -86,15 +86,15 @@ function executeCommand()
             mysql_close();
             echo "<div><a href='include/phpinfo.php' >Get php info</a></div>";
         }
-        elseif (strcmp($_REQUEST["command"], "customfileds") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "customfileds") == 0)
         {
             echoManageCustomFileds();
         }
-        elseif (strcmp($_REQUEST["command"], "insertcustomfields") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertcustomfields") == 0)
         {
             insertCustomFieldsSettingsToDb();
         }
-        elseif (strcmp($_REQUEST["command"], "insertcustomfieldsadd") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertcustomfieldsadd") == 0)
         {
             insertCustomFieldNameToDb();
         }
@@ -103,23 +103,23 @@ function executeCommand()
     }
     //SuperUser Commands
     if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
-        if (strcmp($_GET["command"], "addteamsprint") == 0) {
+        if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addteamsprint") == 0) {
             echoAddTeamSprintName();
         }
-        elseif (strcmp($_REQUEST["command"], "insertareaname") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertareaname") == 0)
         {
             insertAreaNameToDb($_REQUEST["areaname"]);
         }
-        elseif (strcmp($_REQUEST["command"], "insertareaname") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertareaname") == 0)
         {
             insertAreaNameToDb($_REQUEST["areaname"]);
         }
-        elseif (strcmp($_GET["command"], "addarea") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addarea") == 0)
         {
             echoAddAreaName();
         }
 
-        elseif (strcmp($_REQUEST["command"], "insertteamsprintnametodb") == 0)
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertteamsprintnametodb") == 0)
         {
             insertTeamSprintNameToDb($_REQUEST["teamsprintname"]);
         }
@@ -131,15 +131,15 @@ function executeCommand()
     if (strcmp($_REQUEST["command"], "changepassword") == 0) {
         updateUserPassword($_REQUEST["usernametoupdate"], $_REQUEST["swpassword1"], $_REQUEST["swpassword2"]);
     }
-    if (strcmp($_GET["command"], "changepassword") == 0) {
+    if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "changepassword") == 0) {
 
         echoChangePassword($_SESSION['username']);
     }
-    if (strcmp($_GET["command"], "listsettings") == 0) {
+    if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "listsettings") == 0) {
 
         echoChangeListSettings();
     }
-    if (strcmp($_REQUEST["command"], "changelistsettings") == 0) {
+    if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "changelistsettings") == 0) {
         updateUserSettingsForLoginUser();
     }
 
