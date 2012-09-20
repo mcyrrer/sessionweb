@@ -43,9 +43,9 @@ if (isset($_REQUEST['sprint'])) {
     echo "<h1>Application Report:</h1>";
     echo "Report is based on on the area field and the application is filtred based on the prefix of the area.<br>";
     echo "If the area is \"Firefox-javascript\" then the application will be Firefox and the area will be javascript in the graphs created";
-//    echo "<h2>What should the report output be based on</h2>";
-//    echo '<input type="radio" name="target" value="Application" checked/>Application*<br />';
-//    echo '<input type="radio" name="target" value="Team" />Team';
+    //    echo "<h2>What should the report output be based on</h2>";
+    //    echo '<input type="radio" name="target" value="Application" checked/>Application*<br />';
+    //    echo '<input type="radio" name="target" value="Team" />Team';
     echo "<h2>Filter the result by choosing different values below:</h2>";
     echo "<div>Sprint: ";
     echoSprintSelect("", true);
@@ -251,7 +251,7 @@ function setAreasWithZeroSessionsToZero($allAreas, $aApp, $areasUsedInApp)
 
 function generateBarChartForAreas($divName, $areasUsedInApp, $setupTime, $testTime, $bugtime, $oppTime, $areaSessionIdMap, $allSessions)
 {
-//    print_r($areaSessionIdMap);
+    //    print_r($areaSessionIdMap);
     ksort($areasUsedInApp);
     $firstTime = true;
     $category = "";
@@ -550,15 +550,15 @@ function generateSql()
         $addWhere = false;
     }
     if (strcmp($_REQUEST['from'], "") != 0 && strcmp($_REQUEST['to'], "") != 0) {
-//        if ($addWhere) {
-//            $sql .= "WHERE ";
-//            $addWhere = false;
-//        }
-//        else
-//        {
+        //        if ($addWhere) {
+        //            $sql .= "WHERE ";
+        //            $addWhere = false;
+        //        }
+        //        else
+        //        {
         $sql .= " AND ";
 
-//        }
+        //        }
         $sql .= "`updated` > '" . $_REQUEST['from'] . " 00:00:00' AND `updated`  <  '" . $_REQUEST['to'] . " 00:00:00' ";
     }
     $sql .= " LIMIT 0,10000";
@@ -605,12 +605,14 @@ function getNumberOfRequirementsFoundAsListWithLink($allSessions)
     foreach ($allSessions as $aSession) {
         if (count($aSession['requirements']) != null) {
             foreach ($aSession['requirements'] as $aReq)
+            {
                 if (file_exists('../include/customfunctions.php.inc')) {
                     $title = getRequirementNameFromServer($aReq);
                 } else {
                     $title = $aReq;
                 }
-            $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
+                $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
+            }
         }
     }
     return $html;
@@ -623,14 +625,17 @@ function getNumberOfBugsFoundAsListWithLink($allSessions)
     $dmsUrl = $settings['url_to_dms'];
     $html = "";
     foreach ($allSessions as $aSession) {
+
         if (count($aSession['bugs']) != null) {
             foreach ($aSession['bugs'] as $aBug)
+            {
                 if (file_exists('../include/customfunctions.php.inc')) {
                     $title = getBugNameFromServer($aBug);
                 } else {
                     $title = $aBug;
                 }
-            $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
+                $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
+            }
         }
     }
     return $html;
