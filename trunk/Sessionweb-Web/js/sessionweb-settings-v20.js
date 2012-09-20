@@ -1034,7 +1034,7 @@ function changePersonalPassword() {
                                 $('#log').prepend('<div class="log_div">Error: parameters is not correct.</div>');
                             }
                             else if (data.status == '401') {
-                                $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                                $('#log').prepend('<div class="log_div">Error: Wrong password provided.</div>');
 
                             }
                             else if (data.status == '500') {

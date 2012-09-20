@@ -72,9 +72,9 @@ if (isset($_REQUEST['sprint'])) {
     echo '<label for="to">to</label>';
     echo '<input type="text" id="to" name="to"/><br>';
 
-//    echo "<h2>Include bug and requirement list</h2>";
-//    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
-//    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
+    //    echo "<h2>Include bug and requirement list</h2>";
+    //    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
+    //    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
     echo '<br><input type="submit" name="Submit" value="Generate report">';
 
 }
@@ -255,13 +255,13 @@ function getAreaStatisticIntoGridHtml($allSessions)
         </tr>";
 
 
-//        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
+        //        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
     }
     $htmlReturn .= "
     </tbody>
     </table>
     </div>";
-//    print_r($sessionCountForOneArea);
+    //    print_r($sessionCountForOneArea);
     return $htmlReturn;
 
 
@@ -322,7 +322,7 @@ function setAreasWithZeroSessionsToZero($allAreas, $aApp, $areasUsedInApp)
 
 function generateBarChartForAreas($divName, $areasUsedInApp, $setupTime, $testTime, $bugtime, $oppTime, $areaSessionIdMap, $allSessions)
 {
-//    print_r($areaSessionIdMap);
+    //    print_r($areaSessionIdMap);
     ksort($areasUsedInApp);
     $firstTime = true;
     $category = "";
@@ -622,15 +622,15 @@ function generateSql()
         $addWhere = false;
     }
     if (strcmp($_REQUEST['from'], "") != 0 && strcmp($_REQUEST['to'], "") != 0) {
-//        if ($addWhere) {
-//            $sql .= "WHERE ";
-//            $addWhere = false;
-//        }
-//        else
-//        {
+        //        if ($addWhere) {
+        //            $sql .= "WHERE ";
+        //            $addWhere = false;
+        //        }
+        //        else
+        //        {
         $sql .= " AND ";
 
-//        }
+        //        }
         $sql .= "`updated` > '" . $_REQUEST['from'] . " 00:00:00' AND `updated`  <  '" . $_REQUEST['to'] . " 00:00:00' ";
     }
     $sql .= " LIMIT 0,10000";
@@ -662,7 +662,7 @@ function getNumberOfRequirementsFound($allSessions)
 {
     $reqArray = array();
     foreach ($allSessions as $aSession) {
-        $reqArray = array_merge($reqArray, $aSession['bugs']);
+        $reqArray = array_merge($reqArray, $aSession['requirements']);
     }
     $reqArrayUnique = array_unique($reqArray);
     return count($reqArrayUnique);
@@ -676,12 +676,14 @@ function getNumberOfRequirementsFoundAsListWithLink($allSessions)
     foreach ($allSessions as $aSession) {
         if (count($aSession['requirements']) != null) {
             foreach ($aSession['requirements'] as $aReq)
+            {
                 if (file_exists('../include/customfunctions.php.inc')) {
                     $title = getRequirementNameFromServer($aReq);
                 } else {
                     $title = $aReq;
                 }
-            $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
+                $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
+            }
         }
     }
     return $html;
@@ -694,14 +696,17 @@ function getNumberOfBugsFoundAsListWithLink($allSessions)
     $dmsUrl = $settings['url_to_dms'];
     $html = "";
     foreach ($allSessions as $aSession) {
+
         if (count($aSession['bugs']) != null) {
             foreach ($aSession['bugs'] as $aBug)
+            {
                 if (file_exists('../include/customfunctions.php.inc')) {
                     $title = getBugNameFromServer($aBug);
                 } else {
                     $title = $aBug;
                 }
-            $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
+                $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
+            }
         }
     }
     return $html;
