@@ -3,6 +3,22 @@ Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 22==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_21-_22.sql
+to upgrade from 21->22
+
+===Release include (release 22) ===
+ID	Type	        Milestone	Summary
+113	Defect	        Release22	Errors adding member to a team
+114	Defect	        Release22	Error changing user password
+
+
 ==SessionWeb 21==
 Installation/Upgrade from any previous version:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
