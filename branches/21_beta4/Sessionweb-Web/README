@@ -17,6 +17,8 @@ to upgrade from 21->22
 ID	Type	        Milestone	Summary
 113	Defect	        Release22	Errors adding member to a team
 114	Defect	        Release22	Error changing user password
+116	Defect	        Release22   Application report doesn't show all entered bugs in 'Bugs found'
+117	Defect	        Release22   Application report 'Requirements tested' not accurate
 
 
 ==SessionWeb 21==
