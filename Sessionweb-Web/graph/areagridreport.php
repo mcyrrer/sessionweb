@@ -662,7 +662,7 @@ function getNumberOfRequirementsFound($allSessions)
 {
     $reqArray = array();
     foreach ($allSessions as $aSession) {
-        $reqArray = array_merge($reqArray, $aSession['bugs']);
+        $reqArray = array_merge($reqArray, $aSession['requirements']);
     }
     $reqArrayUnique = array_unique($reqArray);
     return count($reqArrayUnique);
