@@ -534,6 +534,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, 21);
+INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`) VALUES (NULL, 22);
 
 COMMIT;

@@ -18,6 +18,7 @@ if ($_SESSION['useradmin'] == 1) {
         isset($_REQUEST['pw1']) &&
         isset($_REQUEST['pw2'])
     ) {
+        $con = getMySqlConnection();
 
         $username = mysql_real_escape_string($_REQUEST["username"]);
         $fullname = mysql_real_escape_string($_REQUEST["fullname"]);
@@ -37,10 +38,7 @@ if ($_SESSION['useradmin'] == 1) {
         if (strcmp($_REQUEST["superuser"], "yes") == 0) {
             $superuser = 1;
         }
-
         if (strcmp($password1, $password2) == 0 && strlen($username) > 3) {
-
-            $con = getMySqlConnection();
 
             $sqlInsert = "";
             $sqlInsert .= "INSERT INTO `members` ";
@@ -117,7 +115,7 @@ if ($_SESSION['useradmin'] == 1) {
         else {
             header("HTTP/1.0 400 Bad Request");
             $response['code'] = CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST;
-            $response['text'] = "CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST";
+            $response['text'] = strlen($username)."CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST";
         }
     }
     else {

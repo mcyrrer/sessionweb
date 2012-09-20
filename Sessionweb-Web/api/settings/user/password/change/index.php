@@ -74,6 +74,7 @@ else
 
 echo json_encode($response);
 ob_end_flush();
+
 function validateUser($changepasswordold, $response)
 {
     $myusername = $_SESSION['username'];
