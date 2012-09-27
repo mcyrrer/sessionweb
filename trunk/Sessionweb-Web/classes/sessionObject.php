@@ -76,13 +76,17 @@ class sessionObject
     private function getSessionData($sessionid)
     {
 
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
 
         //mission data
         $sqlSelectSession = "SELECT * ";
         $sqlSelectSession .= "FROM   mission ";
         $sqlSelectSession .= "WHERE  sessionid = $sessionid";
+
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelectSession);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $data = mysqli_fetch_array($result);
 
         $this->setVersionid($data['versionid']);
@@ -109,7 +113,9 @@ class sessionObject
         $sqlSelectSessionStatus .= "FROM   mission_areas ";
         $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
 
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelectSessionStatus);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray[] = $row['areaname'];
         }
@@ -119,7 +125,9 @@ class sessionObject
         $tmpAreaArray = array();
         $tmpAreaArray2 = array();
         $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sql);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
 
             foreach ($row as $key => $value) {
@@ -137,7 +145,9 @@ class sessionObject
         $sqlSelect .= "SELECT * ";
         $sqlSelect .= "FROM   mission_bugs ";
         $sqlSelect .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['bugid']] = $row['bugid'];
@@ -151,7 +161,9 @@ class sessionObject
         $sqlSelect .= "SELECT * ";
         $sqlSelect .= "FROM   mission_requirements ";
         $sqlSelect .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray[$row['requirementsid']] = $row['requirementsid'];
         }
@@ -161,7 +173,9 @@ class sessionObject
         $tmpAreaArray = array();
         $tmpAreaArray2 = array();
         $sql = "select * from `mission_custom` WHERE versionid=$versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sql);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             foreach ($row as $key => $value) {
                 if (!is_int($key)) {
@@ -176,8 +190,10 @@ class sessionObject
         $sql = "SELECT notes as debrief_notes, debriefedby ";
         $sql .= "FROM   mission_debriefnotes ";
         $sql .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sql);
         if (mysqli_num_rows($result) > 0) {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $data = mysqli_fetch_array($result);
 
             $this->setDebrief_notes($data['notes']);
@@ -192,8 +208,10 @@ class sessionObject
         $sql = "SELECT setup_percent,test_percent,bug_percent,opportunity_percent,duration_time,mood ";
         $sql .= "FROM   mission_sessionmetrics ";
         $sql .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sql);
         if (mysqli_num_rows($result) > 0) {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $data = mysqli_fetch_array($result);
             $this->setSetup_percent($data['setup_percent']);
             $this->setTest_percent($data['test_percent']);
@@ -216,7 +234,9 @@ class sessionObject
         $sqlSelect .= "SELECT * ";
         $sqlSelect .= "FROM   softwareuseautofetched ";
         $sqlSelect .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray2[] = array();
             $tmpAreaArray2[] = $row['versions'];
@@ -233,7 +253,9 @@ class sessionObject
         $sqlSelect .= "SELECT * ";
         $sqlSelect .= "FROM   mission_sessionsconnections ";
         $sqlSelect .= "WHERE  linked_to_versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray[$row['linked_from_versionid']] = $row['linked_from_versionid'];
         }
@@ -244,7 +266,9 @@ class sessionObject
         $sqlSelect .= "SELECT * ";
         $sqlSelect .= "FROM   mission_sessionsconnections ";
         $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['linked_to_versionid']] = $row['linked_to_versionid'];
@@ -256,8 +280,10 @@ class sessionObject
         $sql = "SELECT executed,debriefed,closed,masterdibriefed,executed_timestamp,debriefed_timestamp ";
         $sql .= "FROM   mission_status ";
         $sql .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sql);
         if (mysqli_num_rows($result) > 0) {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $data = mysqli_fetch_array($result);
             $this->setExecuted($data['executed']);
             $this->setDebriefed($data['debriefed']);
@@ -280,7 +306,9 @@ class sessionObject
         $sqlSelect .= "SELECT id,versionid,tester ";
         $sqlSelect .= "FROM   mission_testers ";
         $sqlSelect .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             $tmpArray[$row['tester']] = $row['tester'];
         }
@@ -300,7 +328,9 @@ class sessionObject
         $sqlInsert .= "            (`createdby`) ";
         $sqlInsert .= "VALUES      ('" . $_SESSION['username'] . "') ";
 
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlInsert);
 
         if (!$result) {
@@ -316,9 +346,11 @@ class sessionObject
         $sqlSelect .= "ORDER  BY sessionid DESC ";
         $sqlSelect .= "LIMIT  1";
 
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
 
         if ($result) {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $row = mysqli_fetch_array($result);
             $sessionid = $row["sessionid"];
         } else {
