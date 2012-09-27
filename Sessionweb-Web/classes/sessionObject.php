@@ -1,51 +1,49 @@
-får dufår dfasdsdf<fdsaasd<?php
+<?php
 
-require_once 'sessionReadObject.php';
-require_once '../include/session_database_functions.php.inc';
 /**
- *
+ * Class to create/load sessions and to manipulate data.
  */
 class sessionObject
 {
-    //var $oSessionData = null;
-    var $additional_testers;        //Array
-    var $areas;                     //Array
-    var $attachments;               //Array
-    var $bug_percent;               //Boolean 0,1
-    var $bugs;                      //Array
-    var $charter;                   //Text
-    var $closed;                    //Boolean 0,1
-    var $custom_fields;             //Array
-    var $debrief_notes;             //Text
-    var $debriefed;                 //Boolean 0,1
-    var $debriefed_timestamp;       //Mysql TimeStamp
-    var $debriefedby;               ////Text
-    var $depricated;                //Boolean 0,1
-    var $duration_time;             //Int
-    var $executed;                  //Boolean 0,1
-    var $executed_timestamp;        //Mysql TimeStamp
-    var $lastupdatedby;             //Text
-    var $linked_from_session;       //Array
-    var $linked_to_session;         //Array
-    var $masterdibriefed;           //Boolean 0,1
-    var $mood;                      //Int 0-4
-    var $notes;                     //Text
-    var $opportunity_percent;       //Int
-    var $projects;                  //Text
-    var $publickey;                 //Text
-    var $requirements;              //Array
-    var $sessionid;                 //Int
-    var $setup_percent;             //Int
-    var $software;                  //Text
-    var $sprintname;                //Text
-    var $teamname;                  //Text
-    var $teamsprintname;            //Text
-    var $test_percent;              //Int
-    var $testenvironment;           //Text
-    var $title;                     //Text
-    var $updated;                   //Mysql TimeStamp
-    var $username;                  //Text
-    var $versionid;                 //Int
+    private $additional_testers; //Array
+    private $areas; //Array
+    private $attachments; //Array
+    private $bug_percent; //Boolean 0,1
+    private $bugs; //Array
+    private $charter; //Text
+    private $closed; //Boolean 0,1
+    private $custom_fields; //Array
+    private $debrief_notes; //Text
+    private $debriefed; //Boolean 0,1
+    private $debriefed_timestamp; //Mysql TimeStamp
+    private $debriefedby; //Text
+    private $depricated; //Boolean 0,1
+    private $duration_time; //Int
+    private $executed; //Boolean 0,1
+    private $executed_timestamp; //Mysql TimeStamp
+    private $lastupdatedby; //Text
+    private $linked_from_session; //Array
+    private $linked_to_session; //Array
+    private $masterdibriefed; //Boolean 0,1
+    private $mood; //Int 0-4
+    private $notes; //Text
+    private $opportunity_percent; //Int
+    private $projects; //Text
+    private $publickey; //Text
+    private $requirements; //Array
+    private $sessionid; //Int
+    private $setup_percent; //Int
+    private $software; //Text
+    private $softwareuseautofetched; //Array
+    private $sprintname; //Text
+    private $teamname; //Text
+    private $teamsprintname; //Text
+    private $test_percent; //Int
+    private $testenvironment; //Text
+    private $title; //Text
+    private $updated; //Mysql TimeStamp
+    private $username; //Text
+    private $versionid; //Int
 
     /**
      * @param null $sessionid sessionid to create a object of, if null then create a empty one.
@@ -53,26 +51,31 @@ class sessionObject
     function __construct($sessionid = null)
     {
         if ($sessionid == null) {
-            $this->oSessionData = $this->createEmptySessionObject();
+            $this->createEmptySessionObject();
         } else {
-
-            $this->oSessionData = new sessionReadObject($sessionid);
-
+            $this->getSessionData($sessionid);
         }
     }
 
     /**
-     * Create a sessionObject that is empty
+     * Create a new sessionObject that only have a valid sessionid and public key.
      */
-    function createEmptySessionObject()
+    private function createEmptySessionObject()
     {
+
 
         $this->generatePublickey();
         $this->generateSessionid();
+
     }
 
-    function getSessionData($sessionid)
+    /**
+     * Populate the sessionobject with data from db
+     * @param $sessionid
+     */
+    private function getSessionData($sessionid)
     {
+
         $con = getMySqliConnection();
 
         //mission data
@@ -97,6 +100,7 @@ class sessionObject
         $this->setSoftware($data['software']);
         $this->setLastupdatedby($data['lastupdatedby']);
 
+        $versionid = $this->getVersionid();
 
         //mission areas
         $tmpAreaArray = array();
@@ -104,9 +108,9 @@ class sessionObject
         $sqlSelectSessionStatus .= "SELECT areaname ";
         $sqlSelectSessionStatus .= "FROM   mission_areas ";
         $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
+
         $result = mysqli_query($con, $sqlSelectSessionStatus);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray[] = $row['areaname'];
         }
         $this->setAreas($tmpAreaArray);
@@ -114,12 +118,11 @@ class sessionObject
         //mission attachments
         $tmpAreaArray = array();
         $tmpAreaArray2 = array();
-        $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = $sessionid";
+        $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = $versionid";
         $result = mysqli_query($con, $sql);
-        while ($row = mysqli_fetch_array($result))         {
+        while ($row = mysqli_fetch_array($result)) {
 
-            foreach ($row as $key => $value)
-            {
+            foreach ($row as $key => $value) {
                 if (!is_int($key)) {
                     $tmpAreaArray2[$key] = $value;
                 }
@@ -135,7 +138,7 @@ class sessionObject
         $sqlSelect .= "FROM   mission_bugs ";
         $sqlSelect .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['bugid']] = $row['bugid'];
         }
@@ -149,8 +152,7 @@ class sessionObject
         $sqlSelect .= "FROM   mission_requirements ";
         $sqlSelect .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray[$row['requirementsid']] = $row['requirementsid'];
         }
         $this->setRequirements($tmpAreaArray);
@@ -160,10 +162,8 @@ class sessionObject
         $tmpAreaArray2 = array();
         $sql = "select * from `mission_custom` WHERE versionid=$versionid";
         $result = mysqli_query($con, $sql);
-        while ($row = mysqli_fetch_array($result))
-        {
-            foreach ($row as $key => $value)
-            {
+        while ($row = mysqli_fetch_array($result)) {
+            foreach ($row as $key => $value) {
                 if (!is_int($key)) {
                     $tmpAreaArray2[$key] = $value;
                 }
@@ -182,9 +182,7 @@ class sessionObject
 
             $this->setDebrief_notes($data['notes']);
             $this->setDebriefedby(($data['debriefedby']));
-        }
-        else
-        {
+        } else {
             $this->setDebrief_notes("");
             $this->setDebriefedby("");
 
@@ -203,9 +201,7 @@ class sessionObject
             $this->setOpportunity_percent($data['opportunity_percent']);
             $this->setDuration_time($data['duration_time']);
             $this->setMood($data['mood']);
-        }
-        else
-        {
+        } else {
             $this->setSetup_percent(0);
             $this->setTest_percent(0);
             $this->setBug_percent(0);
@@ -214,6 +210,23 @@ class sessionObject
             $this->setMood(0);
         }
 
+        //mission softwareuseautofetched
+        $tmpAreaArray = array();
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT * ";
+        $sqlSelect .= "FROM   softwareuseautofetched ";
+        $sqlSelect .= "WHERE  versionid = $versionid";
+        $result = mysqli_query($con, $sqlSelect);
+        while ($row = mysqli_fetch_array($result)) {
+            $tmpAreaArray2[] = array();
+            $tmpAreaArray2[] = $row['versions'];
+            $tmpAreaArray2[] = $row['updated'];
+            $tmpAreaArray2[] = $row['environment'];
+            $tmpAreaArray[] = $tmpAreaArray2;
+        }
+        $this->setSoftwareUseAutoFetched($tmpAreaArray);
+
+
         //mission mission_sessionsconnections
         $tmpAreaArray = array();
         $sqlSelect = "";
@@ -221,11 +234,8 @@ class sessionObject
         $sqlSelect .= "FROM   mission_sessionsconnections ";
         $sqlSelect .= "WHERE  linked_to_versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
-
+        while ($row = mysqli_fetch_array($result)) {
             $tmpAreaArray[$row['linked_from_versionid']] = $row['linked_from_versionid'];
-
         }
         $this->setLinked_from_session($tmpAreaArray);
 
@@ -235,8 +245,7 @@ class sessionObject
         $sqlSelect .= "FROM   mission_sessionsconnections ";
         $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['linked_to_versionid']] = $row['linked_to_versionid'];
 
@@ -256,9 +265,7 @@ class sessionObject
             $this->setMasterdibriefed($data['masterdibriefed']);
             $this->setExecuted_timestamp($data['executed_timestamp']);
             $this->setDebriefed_timestamp($data['debriefed_timestamp']);
-        }
-        else
-        {
+        } else {
             $this->setExecuted(0);
             $this->setDebriefed(0);
             $this->setClosed(0);
@@ -274,13 +281,53 @@ class sessionObject
         $sqlSelect .= "FROM   mission_testers ";
         $sqlSelect .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
             $tmpArray[$row['tester']] = $row['tester'];
         }
         $this->setAdditional_testers($tmpArray);
 
         mysqli_close($con);
+    }
+
+    /**
+     * Create a sessionid and return the value created
+     * @return mixed sessionid on success else null
+     */
+    private function swCreateNewSessionId()
+    {
+        $sqlInsert = "";
+        $sqlInsert .= "INSERT INTO sessionid ";
+        $sqlInsert .= "            (`createdby`) ";
+        $sqlInsert .= "VALUES      ('" . $_SESSION['username'] . "') ";
+
+        $con = getMySqliConnection();
+        $result = mysqli_query($con, $sqlInsert);
+
+        if (!$result) {
+            echo "DB Error: " . mysqli_error($con) . "<br/>";
+            debug_backtrace();
+            return null;
+        }
+
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT * ";
+        $sqlSelect .= "FROM   sessionid ";
+        $sqlSelect .= "WHERE  createdby = '" . $_SESSION['username'] . "' ";
+        $sqlSelect .= "ORDER  BY sessionid DESC ";
+        $sqlSelect .= "LIMIT  1";
+
+        $result = mysqli_query($con, $sqlSelect);
+
+        if ($result) {
+            $row = mysqli_fetch_array($result);
+            $sessionid = $row["sessionid"];
+        } else {
+            echo "DB Error: " . mysqli_error($con) . "<br/>";
+            debug_backtrace();
+            return null;
+        }
+        mysqli_close($con);
+        return $sessionid;
     }
 
     function getAdditional_testers()
@@ -428,6 +475,11 @@ class sessionObject
         return $this->software;
     }
 
+    function getSoftwareUseAutoFetched()
+    {
+        return $this->softwareuseautofetched;
+    }
+
     function getSprintname()
     {
         return $this->sprintname;
@@ -478,14 +530,29 @@ class sessionObject
         $this->additional_testers = $x;
     }
 
+    function addAdditional_testers($x)
+    {
+        $this->additional_testers[] = $x;
+    }
+
     function setAreas($x)
     {
         $this->areas = $x;
     }
 
+    function addAreas($x)
+    {
+        $this->areas[] = $x;
+    }
+
     function setAttachments($x)
     {
         $this->attachments = $x;
+    }
+
+    function addAttachments($x)
+    {
+        $this->attachments[] = $x;
     }
 
     function setBug_percent($x)
@@ -496,6 +563,11 @@ class sessionObject
     function setBugs($x)
     {
         $this->bugs = $x;
+    }
+
+    function addBug($x)
+    {
+        $this->bugs[] = $x;
     }
 
     function setCharter($x)
@@ -511,6 +583,11 @@ class sessionObject
     function setCustom_fields($x)
     {
         $this->custom_fields = $x;
+    }
+
+    function addCustom_fields($x)
+    {
+        $this->custom_fields[] = $x;
     }
 
     function setDebrief_notes($x)
@@ -563,9 +640,19 @@ class sessionObject
         $this->linked_from_session = $x;
     }
 
+    function addLinked_from_session($x)
+    {
+        $this->linked_from_session[] = $x;
+    }
+
     function setLinked_to_session($x)
     {
         $this->linked_to_session = $x;
+    }
+
+    function addLinked_to_session($x)
+    {
+        $this->linked_to_session[] = $x;
     }
 
     function setMasterdibriefed($x)
@@ -598,6 +685,11 @@ class sessionObject
         $this->requirements = $x;
     }
 
+    function addRequirements($x)
+    {
+        $this->requirements[] = $x;
+    }
+
     private function setPublickey($x)
     {
         $this->publickey = $x;
@@ -616,6 +708,16 @@ class sessionObject
     function setSoftware($x)
     {
         $this->software = $x;
+    }
+
+    function setSoftwareUseAutoFetched($x)
+    {
+        $this->softwareuseautofetched = $x;
+    }
+
+    function addSoftwareUseAutoFetched($x)
+    {
+        $this->softwareuseautofetched[] = $x;
     }
 
     function setSprintname($x)
@@ -665,7 +767,7 @@ class sessionObject
 
     private function generateSessionid()
     {
-        $this->sessionid = swCreateNewSessionId();
+        $this->sessionid = $this->swCreateNewSessionId();
     }
 
     private function generatePublickey()
@@ -673,5 +775,129 @@ class sessionObject
         $this->publickey = md5(rand());
     }
 
+    private function generateSessionDataArray()
+    {
+        $sessionDataAsArray = array();
+        $sessionDataAsArray['additional_testers'] = $this->additional_testers; //Array
+        $sessionDataAsArray['areas'] = $this->areas; //Array
+        $sessionDataAsArray['attachments'] = $this->attachments; //Array
+        $sessionDataAsArray['bug_percent'] = $this->bug_percent; //Boolean 0,1
+        $sessionDataAsArray['bugs'] = $this->bugs; //Array
+        $sessionDataAsArray['charter'] = $this->charter; //Text
+        $sessionDataAsArray['closed'] = $this->closed; //Boolean 0,1
+        $sessionDataAsArray['custom_fields'] = $this->custom_fields; //Array
+        $sessionDataAsArray['debrief_notes'] = $this->debrief_notes; //Text
+        $sessionDataAsArray['debriefed'] = $this->debriefed; //Boolean 0,1
+        $sessionDataAsArray['debriefed_timestamp'] = $this->debriefed_timestamp; //Mysql TimeStamp
+        $sessionDataAsArray['debriefedby'] = $this->debriefedby; //Text
+        $sessionDataAsArray['depricated'] = $this->depricated; //Boolean 0,1
+        $sessionDataAsArray['duration_time'] = $this->duration_time; //Int
+        $sessionDataAsArray['executed'] = $this->executed; //Boolean 0,1
+        $sessionDataAsArray['executed_timestamp'] = $this->executed_timestamp; //Mysql TimeStamp
+        $sessionDataAsArray['lastupdatedby'] = $this->lastupdatedby; //Text
+        $sessionDataAsArray['linked_from_session'] = $this->linked_from_session; //Array
+        $sessionDataAsArray['linked_to_session'] = $this->linked_to_session; //Array
+        $sessionDataAsArray['masterdibriefed'] = $this->masterdibriefed; //Boolean 0,1
+        $sessionDataAsArray['mood'] = $this->mood; //Int 0-4
+        $sessionDataAsArray['notes'] = $this->notes; //Text
+        $sessionDataAsArray['opportunity_percent'] = $this->opportunity_percent; //Int
+        $sessionDataAsArray['projects'] = $this->projects; //Text
+        $sessionDataAsArray['publickey'] = $this->publickey; //Text
+        $sessionDataAsArray['requirements'] = $this->requirements; //Array
+        $sessionDataAsArray['sessionid'] = $this->sessionid; //Int
+        $sessionDataAsArray['setup_percent'] = $this->setup_percent; //Int
+        $sessionDataAsArray['software'] = $this->software; //Text
+        $sessionDataAsArray['softwareuseautofetched'] = $this->softwareuseautofetched; //Text
+        $sessionDataAsArray['sprintname'] = $this->sprintname; //Text
+        $sessionDataAsArray['teamname'] = $this->teamname; //Text
+        $sessionDataAsArray['teamsprintname'] = $this->teamsprintname; //Text
+        $sessionDataAsArray['test_percent'] = $this->test_percent; //Int
+        $sessionDataAsArray['testenvironment'] = $this->testenvironment; //Text
+        $sessionDataAsArray['title'] = $this->title; //Text
+        $sessionDataAsArray['updated'] = $this->updated; //Mysql TimeStamp
+        $sessionDataAsArray['username'] = $this->username; //Text
+        $sessionDataAsArray['versionid'] = $this->versionid; //Int
+        return $sessionDataAsArray;
+    }
 
+    /**
+     * Export the object to a json representation
+     * @return string
+     */
+    public function toJson()
+    {
+        return json_encode($this->generateSessionDataArray());
+    }
+
+    /**
+     * Export the object to a XML representation
+     * @return string
+     */
+    public function toXML()
+    {
+        include 'ArrayToXML.php';
+        $xmlObj = new ArrayToXML();
+        return $xmlObj->toXml($this->generateSessionDataArray());
+    }
+
+    /**
+     * Print the session object to screen for debug purpose.
+     */
+    public function printObject()
+    {
+        echo "areas:";
+        print_r($this->areas);
+        echo "\n"; //Array
+        echo "attachments:";
+        print_r($this->attachments);
+        echo "\n"; //Array
+        echo "bug_percent:" . $this->bug_percent . "\n"; //Boolean 0,1
+        echo "bugs:";
+        print_r($this->bugs);
+        echo "\n"; //Array
+        echo "charter:" . $this->charter . "\n"; //Text
+        echo "closed:" . $this->closed . "\n"; //Boolean 0,1
+        echo "custom_fields:";
+        print_r($this->custom_fields);
+        echo "\n"; //Array
+        echo "debrief_notes:" . $this->debrief_notes . "\n"; //Text
+        echo "debriefed:" . $this->debriefed . "\n"; //Boolean 0,1
+        echo "debriefed_timestamp:" . $this->debriefed_timestamp . "\n"; //Mysql TimeStamp
+        echo "debriefedby:" . $this->debriefedby . "\n"; //Text
+        echo "depricated:" . $this->depricated . "\n"; //Boolean 0,1
+        echo "duration_time:" . $this->duration_time . "\n"; //Int
+        echo "executed:" . $this->executed . "\n"; //Boolean 0,1
+        echo "executed_timestamp:" . $this->executed_timestamp . "\n"; //Mysql TimeStamp
+        echo "lastupdatedby:" . $this->lastupdatedby . "\n"; //Text
+        echo "linked_from_session:";
+        print_r($this->linked_from_session);
+        echo "\n"; //Array
+        echo "linked_to_session:";
+        print_r($this->linked_to_session);
+        echo "\n"; //Array
+        echo "masterdibriefed:" . $this->masterdibriefed . "\n"; //Boolean 0,1
+        echo "mood:" . $this->mood . "\n"; //Int 0-4
+        echo "notes:" . $this->notes . "\n"; //Text
+        echo " opportunity_percent:" . $this->opportunity_percent . "\n"; //Int
+        echo "projects:" . $this->projects . "\n"; //Text
+        echo "publickey:" . $this->publickey . "\n"; //Text
+        echo "requirements:";
+        print_r($this->requirements);
+        echo "\n"; //Array
+        echo "sessionid:" . $this->sessionid . "\n"; //Int
+        echo "setup_percent:" . $this->setup_percent . "\n"; //Int
+        echo "software:" . $this->software . "\n"; //Text
+        echo "softwareuseautofetched:";
+        print_r($this->softwareuseautofetched);
+        echo "\n";
+        echo "sprintname:" . $this->sprintname . "\n"; //Text
+        echo "teamname:" . $this->teamname . "\n"; //Text
+        echo "teamsprintname:" . $this->teamsprintname . "\n"; //Text
+        echo "test_percent:" . $this->test_percent . "\n"; //Int
+        echo "testenvironment:" . $this->testenvironment . "\n"; //Text
+        echo "title:" . $this->title . "\n"; //Text
+        echo "updated:" . $this->updated . "\n"; //Mysql TimeStamp
+        echo "username:" . $this->username . "\n"; //Text
+        echo "versionid:" . $this->versionid . "\n"; //Int
+    }
 }
