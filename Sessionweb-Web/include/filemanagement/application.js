@@ -17,7 +17,7 @@ $(function () {
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
-        maxFileSize: 2097152
+        maxFileSize: 20971520
 
     });
 
