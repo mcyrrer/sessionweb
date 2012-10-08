@@ -6,7 +6,7 @@
  * AD/LDAP environments, you may have to adjust checklogin.php to have your ad setup to work with sessionweb.
  */
 
-define('LDAP_ENABLED', true); //enable (true) or disable (false) LDAP integration
+define('LDAP_ENABLED', false); //enable (true) or disable (false) LDAP integration
 define('LDAP_HOST', 'ldaphost.com'); //Your LDAP server DNS Name or IP Address
 define('LDAP_DN', 'OU=MY,DC=COMPANY,DC=COM'); //Put your Base DN here
 define('LDAP_USER_DOMAIN', '@COMPANY.COM'); //Needs the @, but not always the same as the LDAP server domain
