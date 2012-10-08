@@ -2,7 +2,7 @@
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 
-define("INSTALLATION_SCRIPT", "SessionwebDbLayout_19.sql");
+define("INSTALLATION_SCRIPT", "SessionwebDbLayout_23.sql");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

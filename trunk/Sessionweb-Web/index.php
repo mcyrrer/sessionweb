@@ -3,6 +3,8 @@ session_start();
 
 require_once('include/loggingsetup.php');
 include_once('include/db.php');
+include_once('config/auth.php.inc');
+
 if (!file_exists('config/db.php.inc')) {
     header("Location: install/install.php");
     exit();
@@ -39,7 +41,12 @@ if (!isset($_SESSION['username'])) {
     echo "                 </tr>\n";
     echo "                 <tr>\n";
     echo "                     <td width=\"78\">Username</td>\n";
-    echo "                     <td width=\"294\"><input name=\"myusername\" type=\"text\" id=\"myusername\"></td>\n";
+    echo "                     <td width=\"294\"><input name=\"myusername\" type=\"text\" id=\"myusername\">";
+    if(LDAP_ENABLED)
+    {
+        echo "AD or sessionweb user";
+    }
+    echo "</td>\n";
     echo "                 </tr>\n";
     echo "                 <tr>\n";
     echo "                     <td>Password</td>\n";
@@ -51,10 +58,10 @@ if (!isset($_SESSION['username'])) {
     echo "                 </tr>\n";
     echo "                 </table>\n";
     echo "         </form>\n";
-
     if (isset($_GET['login']) && strcmp($_GET['login'], "failed") == 0) {
         echo "Wrong user name or password.<br><br>";
     }
+
 }
 else
 {
