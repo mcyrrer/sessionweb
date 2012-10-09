@@ -14,15 +14,12 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     if ($updateJsFile) {
         if (updateOneLineInTextFile($sessionwebPath, "maxFileSize:", "        maxFileSize: $maxsizebytes"))
             echo "Was able to automatically update /include/filemanagement/application.js with correct attachment size value according to your php and mysql config paramateters";
-        else
-        {
+        else {
             echo "<b>Failed to update /include/filemanagement/application.js with correct value, please update it manually</b>";
             echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
             echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
         }
-    }
-    else
-    {
+    } else {
         echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
         echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
     }
@@ -50,9 +47,7 @@ function updateOneLineInTextFile($file, $needle, $replace)
         fwrite($fh, $fileContentToSave);
         fclose($fh);
         return true;
-    }
-    else
-    {
+    } else {
         if (!is_file($file)) {
             echo "Not a file ";
         }
@@ -70,10 +65,8 @@ function checkFoldersForRW()
     echo "<b>Check for Read Write access for certain folders.</b><br>";
     $foldersToCheckRW = array("config/", "include/filemanagement/files/", "include/filemanagement/thumbnails/", "log/");
     $foldersOk = true;
-    foreach ($foldersToCheckRW as $aFolder)
-    {
-        try
-        {
+    foreach ($foldersToCheckRW as $aFolder) {
+        try {
             $ourFileName = $aFolder . "testFile.txt";
 
             $fh = fopen($ourFileName, 'w');
@@ -82,14 +75,11 @@ function checkFoldersForRW()
             if (file_exists($ourFileName)) {
                 echo "folder $aFolder is RW => OK<br>";
                 unlink($ourFileName);
-            }
-            else
-            {
+            } else {
                 echo "folder $aFolder is RW => NOK (file could not be created)<br>";
                 $foldersOk = false;
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "folder $aFolder is RW => NOK<br>";
             //echo 'Error: ', $e->getMessage(), "\n";
             echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";
@@ -100,9 +90,7 @@ function checkFoldersForRW()
         echo "Pleas make sure that NOK folders above have read and write access for the WWW user";
         echo "In ubuntu/linux you can use the chown command to make the www user e.g. 'chown -R www-data:www-data include/filemanagement/files/' ";
         return false;
-    }
-    else
-    {
+    } else {
         echo "<br><br>";
         return true;
     }
@@ -155,9 +143,7 @@ function getSessionWebSettings()
         $logger->error(mysql_error());
         $logger->debug($sqlSelect());
         return null;
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
         return $row;
     }
@@ -294,9 +280,7 @@ function doesSessionNotesExist($versionid)
 
     if ($result != null) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -519,8 +503,7 @@ function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 
 {
     $barTitles = "";
     $barValues = "";
-    foreach ($valuesAndLables as $key => $value)
-    {
+    foreach ($valuesAndLables as $key => $value) {
         $barTitles = $barTitles . "|" . $key;
         $barValues = $barValues . "," . $value;
     }
@@ -532,9 +515,7 @@ function createChartPie($valuesAndLables, $title = null, $sizeX = 450, $sizeY = 
 
     if ($title != null) {
         $title = "chtt=$title";
-    }
-    else
-    {
+    } else {
         $title = "";
     }
 
@@ -554,8 +535,7 @@ function echoTeamSelect($team, $createConnection = true, $history = false, $id_n
         $sqlSelect .= "SELECT teamname ";
         $sqlSelect .= "FROM   teamnames ";
         $sqlSelect .= "ORDER  BY `teamname` ASC ";
-    }
-    else
+    } else
         $sqlSelect = "SELECT teamname FROM mission where teamname NOT LIKE 'null' group by teamname ASC ";
 
     $result = mysql_query($sqlSelect);
@@ -566,13 +546,10 @@ function echoTeamSelect($team, $createConnection = true, $history = false, $id_n
     echo "                                      <option></option>\n";
 
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (strcmp($team, $row['teamname']) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['teamname']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>" . htmlspecialchars($row['teamname']) . "</option>\n";
         }
     }
@@ -618,13 +595,10 @@ function echoTestEnvironmentSelect($testenvironment)
     echo "                                      <option></option>\n";
 
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (strcmp($testenvironment, $row['name']) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['name']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>" . htmlspecialchars($row['name']) . "</option>\n";
         }
     }
@@ -667,9 +641,7 @@ function echoAdditionalTesterSelect($testers)
     if (count($testers) == 0) {
 
         echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
-    }
-    else
-    {
+    } else {
         echo "                                      <option value=\"\"></option>\n";
     }
 
@@ -678,13 +650,10 @@ function echoAdditionalTesterSelect($testers)
         $testers = array();
         $testers[] = $oneTester;
     }
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (in_array($row['username'], $testers)) {
             echo "                                      <option selected=\"selected\" value=\"" . $row['username'] . "\">" . htmlspecialchars($row['fullname']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option value=\"" . $row['username'] . "\">" . htmlspecialchars($row['fullname']) . "</option>\n";
         }
     }
@@ -711,9 +680,7 @@ function echoAreaSelect($area)
     if (count($area) == 0) {
 
         echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
-    }
-    else
-    {
+    } else {
         echo "                                      <option value=\"\"></option>\n";
     }
 
@@ -722,13 +689,10 @@ function echoAreaSelect($area)
         $area = array();
         $area[] = $oneArea;
     }
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (in_array($row['areaname'], $area)) {
             echo "                                      <option selected=\"selected\" value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
         }
     }
@@ -752,9 +716,7 @@ function echoAreaSelectSingel($area, $history = false, $id_name = "select_area")
         $sqlSelect .= "SELECT areaname ";
         $sqlSelect .= "FROM   areas ";
         $sqlSelect .= "ORDER  BY `areaname` ASC ";
-    }
-    else
-    {
+    } else {
         $sqlSelect = "SELECT areaname FROM mission_areas where areaname not like 'null' group by areaname ASC;";
     }
 
@@ -766,26 +728,19 @@ function echoAreaSelectSingel($area, $history = false, $id_name = "select_area")
     if (count($area) == 0) {
 
         echo "                                      <option value=\"\" selected=\"selected\"></option>\n";
-    }
-    else
-    {
+    } else {
         echo "                                      <option value=\"\"></option>\n";
     }
 
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if ($area != null) {
             if (in_array($row['areaname'], $area)) {
                 echo "                                      <option selected=\"selected\" value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
-            }
-            else
-            {
+            } else {
                 echo "                                      <option value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
             }
-        }
-        else
-        {
+        } else {
             echo "                                      <option value=\"" . $row['areaname'] . "\">" . htmlspecialchars($row['areaname']) . "</option>\n";
         }
     }
@@ -814,48 +769,36 @@ function echoStatusTypes($statusToSelect)
 
     if (strcmp($statusToSelect, "") == 0) {
         echo "      <option selected=\"selected\"></option>\n";
-    }
-    else
-    {
+    } else {
         echo "      <option></option>\n";
     }
     if (strcmp($statusToSelect, "Not Executed") == 0 || strcmp($statusToSelect, "1") == 0) {
         echo "      <option value='1' selected=\"selected\">Not Executed</option>\n";
-    }
-    else
-    {
+    } else {
         echo "      <option value='1'>Not Executed</option>\n";
     }
 
     if (strcmp($statusToSelect, "In progress") == 0 || strcmp($statusToSelect, "2") == 0) {
         echo "      <option value='2' selected=\"selected\">In progress</option>\n";
-    }
-    else
-    {
+    } else {
         echo "      <option value='2'>In progress</option>\n";
     }
 
     if (strcmp($statusToSelect, "Executed") == 0 || strcmp($statusToSelect, "3") == 0) {
         echo "      <option value='3' selected=\"selected\">Executed</option>\n";
-    }
-    else
-    {
+    } else {
         echo "      <option value='3'>Executed</option>\n";
     }
 
     if (strcmp($statusToSelect, "Debriefed") == 0 || strcmp($statusToSelect, "4") == 0) {
         echo "      <option value='4' selected=\"selected\">Debriefed</option>\n";
-    }
-    else
-    {
+    } else {
         echo "      <option value='4'>Debriefed</option>\n";
     }
 
     if (strcmp($statusToSelect, "Closed") == 0 || strcmp($statusToSelect, "5") == 0) {
         echo "      <option value='5' selected=\"selected\">Closed</option>\n";
-    }
-    else
-    {
+    } else {
         echo "      <option value='5'>Closed</option>\n";
     }
     echo "</select>\n";
@@ -877,13 +820,10 @@ function echoTesterSelect($name)
     echo "                                  <select id=\"select_tester\" name=\"tester\">\n";
     echo "                                      <option></option>\n";
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (strcmp($name, $row['username']) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['username']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>" . htmlspecialchars($row['username']) . "</option>\n";
         }
     }
@@ -923,16 +863,13 @@ function echoTesterFullNameSelect($name, $removeInactiveUsers = false)
     echo "                                  <select id=\"select_tester\" name=\"tester\" class='formChanged'>\n";
     echo "                                      <option></option>\n";
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         $userName = $row['username'];
         $fullName = $row['fullname'];
 
         if (strcmp($name, $row['username']) == 0) {
             echo "                                      <option value='$userName' selected=\"selected\">$fullName</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option value='$userName'>$fullName</option>\n";
         }
     }
@@ -948,8 +885,7 @@ function getApplicationsFromAreaNames()
     $sql = "select areaname from `areas` GROUP BY areaname";
     $result = mysql_query($sql);
     $appNames = array();
-    while ($rowTeamAreas = mysql_fetch_array($result))
-    {
+    while ($rowTeamAreas = mysql_fetch_array($result)) {
         $areaName = $rowTeamAreas['areaname'];
         $areaName = explode('-', $areaName, 2);
         $areaName = str_replace(" ", "", $areaName[0]);
@@ -972,8 +908,7 @@ function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_n
     $sql = "select areaname from `areas` GROUP BY areaname";
     $result = mysql_query($sql);
     $appNames = array();
-    while ($rowTeamAreas = mysql_fetch_array($result))
-    {
+    while ($rowTeamAreas = mysql_fetch_array($result)) {
         $areaName = $rowTeamAreas['areaname'];
         $areaName = explode('-', $areaName, 2);
         $areaName = str_replace(" ", "", $areaName[0]);
@@ -986,13 +921,10 @@ function echoApplicationBasedOnAreasSelect($selectedapp, $history = false, $id_n
 
     echo "                                      <option></option>\n";
 
-    foreach ($appNames as $anApp)
-    {
+    foreach ($appNames as $anApp) {
         if (strcmp($selectedapp, $anApp) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($anApp) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>" . htmlspecialchars($anApp) . "</option>\n";
         }
     }
@@ -1010,9 +942,7 @@ function echoSprintSelect($sprint, $history = false, $id_name = "select_sprint")
         $sqlSelect .= "SELECT sprintname ";
         $sqlSelect .= "FROM   sprintnames ";
         $sqlSelect .= "ORDER  BY sprintname ASC";
-    }
-    else
-    {
+    } else {
         $sqlSelect = "SELECT sprintname FROM mission where sprintname NOT LIKE 'null' group by sprintname ASC";
     }
     $result = mysql_query($sqlSelect);
@@ -1022,13 +952,10 @@ function echoSprintSelect($sprint, $history = false, $id_name = "select_sprint")
 
     echo "                                      <option></option>\n";
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (strcmp($sprint, $row['sprintname']) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['sprintname']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>" . htmlspecialchars($row['sprintname']) . "</option>\n";
         }
     }
@@ -1046,20 +973,15 @@ function echoCustomSelect($customTableName, $customSelectedArray)
     if ($_SESSION['settings'][$customTableName . '_multiselect'] == 1) {
         echo "<select id='select_$customTableName' multiple='multiple' name='" . $customTableName . "[]'>\n";
 
-    }
-    else
-    {
+    } else {
         echo "<select id='select_$customTableName' name='$customTableName'>\n";
     }
     echo "<option value=\"\"></option>\n";
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (in_array($row['name'], $customSelectedArray)) {
             echo "<option selected=\"selected\" value=\"" . $row['name'] . "\">" . htmlspecialchars($row['name']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "<option value=\"" . $row['name'] . "\">" . htmlspecialchars($row['name']) . "</option>\n";
         }
     }
@@ -1085,13 +1007,10 @@ function echoTeamSprintSelect($teamsprint)
 
     echo "                                      <option></option>\n";
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         if (strcmp($teamsprint, $row['teamsprintname']) == 0) {
             echo "                                      <option selected=\"selected\">" . htmlspecialchars($row['teamsprintname']) . "</option>\n";
-        }
-        else
-        {
+        } else {
             echo "                                      <option>" . htmlspecialchars($row['teamsprintname']) . "</option>\n";
         }
     }
@@ -1115,9 +1034,7 @@ function GetSessionPublicKey($versionid)
         echo "GetSessionPublicKey: " . mysql_error() . "<br/>";
         $logger->error(mysql_error());
         $logger->debug($sqlSelect());
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
         $publickey = $row["publickey"];
     }
@@ -1242,13 +1159,30 @@ function doesUserHaveNotifications()
     if (strcmp($row[0], '0') == 0) {
         return false;
 
-    }
-    else
-    {
+    } else {
         return true;
 
     }
 }
+
+function doesUserExist($username, $mysqlConnect = false)
+{
+    if (mysqlConnect)
+        $con = getMySqlConnection();
+
+    $username = mysql_real_escape_string($username);
+    $sql = "SELECT * FROM members WHERE username LIKE  '$username'";
+
+    $result = mysql_query($sql);
+
+    if (mysql_numrows($result) == 1)
+        $result = true;
+    else
+        $result = false;
+    if (mysqlConnect)
+        mysql_close($con);
+}
+
 
 function getNotifications()
 {
@@ -1259,8 +1193,7 @@ function getNotifications()
     $result = mysql_query($sql);
 
 
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         $sessionid = getSessionSessionId($row['versionid']);
         echo " <p><a href='?sessionid=$sessionid&cmd=ack'><img src = '../pictures/dialog-cancel-3-small.png' id = 'ack_" . $row['versionid'] . "' class = 'acknowledge' alt = 'acknowledge'></a>\n";
 
@@ -1316,8 +1249,7 @@ function echoFetchVersionautomatically()
             $versionid = getSessionVersionId($_GET["sessionid"]);
             $sql = "SELECT * FROM softwareuseautofetched WHERE versionid = $versionid";
             $result = mysql_query($sql);
-            while ($row = mysql_fetch_array($result))
-            {
+            while ($row = mysql_fetch_array($result)) {
                 $id = $row['id'];
                 $date = $row['updated'];
                 $environment = $row['environment'];
@@ -1346,8 +1278,7 @@ function echoFetchVersionView()
             $versionid = getSessionVersionId($_GET["sessionid"]);
             $sql = "SELECT * FROM softwareuseautofetched WHERE versionid = $versionid";
             $result = mysql_query($sql);
-            while ($row = mysql_fetch_array($result))
-            {
+            while ($row = mysql_fetch_array($result)) {
                 $id = $row['id'];
                 $date = $row['updated'];
                 $environment = $row['environment'];
@@ -1383,9 +1314,7 @@ function isAdmin()
 {
     if ($_SESSION['useradmin'] == 1) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -1394,9 +1323,7 @@ function isSuperUser()
 {
     if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
