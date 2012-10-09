@@ -137,6 +137,15 @@ function generateReport()
     echo "<br>";
     echo "Report based on SQL <br>$sql";
 
+    $pageURLTmp = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+    $pageURLTmp = explode("?",$pageURLTmp);       //to remove params from URI
+    $pageURL = $pageURLTmp[0];
+    $sprint=$_REQUEST['sprint'];
+    $from=$_REQUEST['from'];
+    $to=$_REQUEST['to'];
+    $pageParams="?sprint=$sprint&from=$from&to=$to";
+    echo "<p>URL to this report:<a href='$pageURL$pageParams'>$pageURL$pageParams</a></p>";
+
 }
 
 function getAreaStatisticIntoGridHtml($allSessions)
