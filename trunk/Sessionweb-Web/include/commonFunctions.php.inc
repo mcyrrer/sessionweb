@@ -847,17 +847,20 @@ function getTesterFullName($username)
     return $row[0];
 }
 
-function echoTesterFullNameSelect($name, $removeInactiveUsers = false)
+function echoTesterFullNameSelect($name, $removeInactiveUsers = false, $onlyShowUserThatHaveLoggedASession = false)
 {
     $con = getMySqlConnection();
+    if ($onlyShowUserThatHaveLoggedASession==true) {
+        $sqlSelect = "SELECT DISTINCT mb.fullname, mb.username FROM sessionwebos.members as mb, sessionwebos.mission as m  WHERE mb.username LIKE m.username ORDER BY m.username ASC";
+    } else {
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT username,fullname ";
+        $sqlSelect .= "FROM   members ";
+        if ($removeInactiveUsers)
+            $sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
+        $sqlSelect .= "ORDER  BY fullname ASC";
+    }
 
-
-    $sqlSelect = "";
-    $sqlSelect .= "SELECT username,fullname ";
-    $sqlSelect .= "FROM   members ";
-    if ($removeInactiveUsers)
-        $sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
-    $sqlSelect .= "ORDER  BY fullname ASC";
     $result = mysql_query($sqlSelect);
 
     echo "                                  <select id=\"select_tester\" name=\"tester\" class='formChanged'>\n";
