@@ -20,6 +20,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`members` (
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   `password` VARCHAR(100) NOT NULL ,
   `adaccount` TINYINT(1) NULL DEFAULT false ,
+  `deleted` TINYINT(1) NULL DEFAULT false ,
   PRIMARY KEY (`username`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -522,7 +523,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`, `adaccount`) VALUES ('admin', 'Administrator', 1, 1, 1, NULL, '21232f297a57a5a743894a0e4a801fc3', NULL);
+INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`, `adaccount`, `deleted`) VALUES ('admin', 'Administrator', 1, 1, 1, NULL, '21232f297a57a5a743894a0e4a801fc3', 0, 0);
 
 COMMIT;
 

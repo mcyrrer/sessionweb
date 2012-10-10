@@ -16,15 +16,15 @@ require_once('include/session_common_functions.php.inc');
             $userSettings = getUserSettings();
             echo "Tester:";
             if (isset($_GET['tester'])) {
-                echoTesterFullNameSelect($_REQUEST['tester']);
+                echoTesterFullNameSelect($_REQUEST['tester'], false, true);
             }
             elseif ($userSettings['list_view'] == "mine") {
                 $tester = $_SESSION['username'];
-                echoTesterFullNameSelect($tester);
+                echoTesterFullNameSelect($tester, false, true);
             }
             else
             {
-                echoTesterFullNameSelect(null);
+                echoTesterFullNameSelect(null, false, true);
             }
             echo "Sprint:";
             if (isset($_GET['sprint'])) {

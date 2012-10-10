@@ -46,15 +46,10 @@ function removeUserFromDb($logger, $response)
 
     $con = getMySqlConnection();
 
-    $sqlDelete = "DELETE FROM members WHERE username='$username';";
+    $sqlDelete = "UPDATE members SET active=0, deleted=1 WHERE username='$username'";
     $result = mysql_query($sqlDelete);
-    $logger->debug($_SESSION['username'] . " deleted user $username from table members");
+    $logger->info($_SESSION['username'] . " marked user $username as deleted and inactive");
 
-    $sqlDelete = "DELETE FROM user_settings WHERE username='$username';";
-    $result = mysql_query($sqlDelete);
-    $logger->debug($_SESSION['username'] . " deleted user $username from table user_settings");
-
-    $logger->info($_SESSION['username'] . " deleted user $username from sessionweb");
     header("HTTP/1.0 200 OK");
 
     $response['code'] = USER_DELETED;
