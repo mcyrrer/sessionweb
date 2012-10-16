@@ -1,9 +1,13 @@
 <?php
+if (!isset($basePath)) {
+    $basePath="./";
+}
 
+include_once 'sessionObjectSave.php';
 /**
  * Class to create/load sessions and to manipulate data.
  */
-class sessionObject
+class sessionObject extends sessionObjectSave
 {
     private $additional_testers; //Array
     private $areas; //Array
@@ -28,7 +32,7 @@ class sessionObject
     private $mood; //Int 0-4
     private $notes; //Text
     private $opportunity_percent; //Int
-    private $projects; //Text
+    private $project; //Text
     private $publickey; //Text
     private $requirements; //Array
     private $sessionid; //Int
@@ -68,6 +72,7 @@ class sessionObject
         $this->generateSessionid();
 
     }
+
 
     /**
      * Populate the sessionobject with data from db
@@ -362,6 +367,29 @@ class sessionObject
         return $sessionid;
     }
 
+    public function saveObjectToDb()
+    {
+
+        $save = new sessionObjectSave();
+        $missionDataArray["title"] = $this->getTitle();
+        $missionDataArray["charter"] = $this->getCharter();
+        $missionDataArray["notes"] = $this->getNotes();
+        $missionDataArray['sprint'] = $this->getSprintname();
+        $missionDataArray['testenv'] = $this->getTestenvironment();
+        $missionDataArray['software'] = $this->getSoftware();
+        $missionDataArray['teamname'] = $this->getTeamname();
+        $missionDataArray['sessionid'] = $this->getSessionid();
+        $missionDataArray['testenvironment'] = $this->getTestenvironment();
+        $missionDataArray['publickey'] = $this->getPublickey();
+        $sessiondata = $this->generateSessionDataArray();
+
+        if(!$save->saveToMissionTable($sessiondata))
+        {
+            die("Could not save data to table mission");
+        }
+
+    }
+
     function getAdditional_testers()
     {
         return $this->additional_testers;
@@ -477,9 +505,9 @@ class sessionObject
         return $this->opportunity_percent;
     }
 
-    function getProjects()
+    function getProject()
     {
-        return $this->projects;
+        return $this->project;
     }
 
     function getPublickey()
@@ -707,9 +735,9 @@ class sessionObject
         $this->opportunity_percent = $x;
     }
 
-    function setProjects($x)
+    function setProject($x)
     {
-        $this->projects = $x;
+        $this->project1 = $x;
     }
 
     function setRequirements($x)
@@ -833,7 +861,7 @@ class sessionObject
         $sessionDataAsArray['mood'] = $this->mood; //Int 0-4
         $sessionDataAsArray['notes'] = $this->notes; //Text
         $sessionDataAsArray['opportunity_percent'] = $this->opportunity_percent; //Int
-        $sessionDataAsArray['projects'] = $this->projects; //Text
+        $sessionDataAsArray['projects'] = $this->project; //Text
         $sessionDataAsArray['publickey'] = $this->publickey; //Text
         $sessionDataAsArray['requirements'] = $this->requirements; //Array
         $sessionDataAsArray['sessionid'] = $this->sessionid; //Int
@@ -911,7 +939,7 @@ class sessionObject
         echo "mood:" . $this->mood . "\n"; //Int 0-4
         echo "notes:" . $this->notes . "\n"; //Text
         echo " opportunity_percent:" . $this->opportunity_percent . "\n"; //Int
-        echo "projects:" . $this->projects . "\n"; //Text
+        echo "projects:" . $this->project . "\n"; //Text
         echo "publickey:" . $this->publickey . "\n"; //Text
         echo "requirements:";
         print_r($this->requirements);

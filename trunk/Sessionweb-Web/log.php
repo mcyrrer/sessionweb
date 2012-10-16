@@ -12,7 +12,7 @@ if (isAdmin()) {
 
         foreach ($lines as $line_num => $line) {
             $re1 = '.*?'; # Non-greedy match on filler
-            $re2 = '(\\])'; # Any Single Character 1
+            $re2 = '';//'(\\] )'; # Any Single Character 1
             $re3 = '( )'; # White Space 1
             $re4 = '(DEBUG)'; # Word 1
             $re4b = '(ERROR)';
