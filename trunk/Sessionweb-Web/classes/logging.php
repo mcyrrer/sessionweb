@@ -55,54 +55,54 @@ class logging
 
     }
 
-    public function sql($logmessage, $filename = "")
+    public function sql($logmessage, $filename = "", $line="")
     {
         $loglevel = "SQL";
-        $this->writeSQLMessageToLog($loglevel, $logmessage, $filename);
+        $this->writeSQLMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 
-    public function debug($logmessage, $filename = "")
+    public function debug($logmessage, $filename = "",$line="")
     {
         $loglevel = "DEBUG";
-        $this->writeMessageToLog($loglevel, $logmessage, $filename);
+        $this->writeMessageToLog($loglevel, $logmessage, $filename,$line);
     }
 
-    public function warn($logmessage, $filename = "")
+    public function warn($logmessage, $filename = "",$line="")
     {
         $loglevel = "INFO";
-        $this->writeMessageToLog($loglevel, $logmessage, $filename);
+        $this->writeMessageToLog($loglevel, $logmessage, $filename,$line);
     }
 
-    public function warning($logmessage, $filename = "")
+    public function warning($logmessage, $filename = "",$line="")
     {
         $loglevel = "WARN";
-        $this->writeMessageToLog($loglevel, $logmessage, $filename);
+        $this->writeMessageToLog($loglevel, $logmessage, $filename,$line);
     }
 
-    public function error($logmessage, $filename = "")
+    public function error($logmessage, $filename = "",$line="")
     {
         $loglevel = "ERROR";
-        $this->writeMessageToLog($loglevel, $logmessage, $filename);
+        $this->writeMessageToLog($loglevel, $logmessage, $filename,$line);
     }
 
-    public function fatal($logmessage, $filename = "")
+    public function fatal($logmessage, $filename = "",$line="")
     {
         $loglevel = "FATAL";
-        $this->writeMessageToLog($loglevel, $logmessage, $filename);
+        $this->writeMessageToLog($loglevel, $logmessage, $filename,$line);
     }
 
-    public function writeMessageToLog($loglevel, $logmessage, $filename)
+    public function writeMessageToLog($loglevel, $logmessage, $filename,$line)
     {
         if (in_array($loglevel, $this->loglevel)) {
-            $messageToWriteTofile = $this->getDateTime() . " | " . $this->getFileName($filename) . ":" . __LINE__ . " | " . $loglevel . " | " . $logmessage . "\n";
+            $messageToWriteTofile = $this->getDateTime() . " | " . $this->getFileName($filename) . ":" . $line . " | " . $loglevel . " | " . $logmessage . "\n";
             file_put_contents($this->logpath, $messageToWriteTofile, FILE_APPEND | LOCK_EX);
         }
     }
 
-    public function writeSQLMessageToLog($loglevel, $logmessage, $filename)
+    public function writeSQLMessageToLog($loglevel, $logmessage, $filename,$line)
     {
         if (in_array($loglevel, $this->loglevel)) {
-            $messageToWriteTofile = $this->getDateTime() . " | " . $this->getFileName($filename) . ":" . __LINE__ . " | " . $loglevel . " | " . $logmessage . "\n";
+            $messageToWriteTofile = $this->getDateTime() . " | " . $this->getFileName($filename) . ":" . $line . " | " . $loglevel . " | " . $logmessage . "\n";
             file_put_contents($this->logpathsql, $messageToWriteTofile, FILE_APPEND | LOCK_EX);
         }
     }

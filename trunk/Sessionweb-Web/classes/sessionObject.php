@@ -1,6 +1,6 @@
 <?php
 if (!isset($basePath)) {
-    $basePath="./";
+    $basePath = "./";
 }
 
 include_once 'sessionObjectSave.php';
@@ -48,12 +48,14 @@ class sessionObject extends sessionObjectSave
     private $updated; //Mysql TimeStamp
     private $username; //Text
     private $versionid; //Int
+    private $logger;
 
     /**
      * @param null $sessionid sessionid to create a object of, if null then create a empty one.
      */
     function __construct($sessionid = null)
     {
+        $this->logger = new logging();
         if ($sessionid == null) {
             $this->createEmptySessionObject();
         } else {
@@ -371,23 +373,36 @@ class sessionObject extends sessionObjectSave
     {
 
         $save = new sessionObjectSave();
-        $missionDataArray["title"] = $this->getTitle();
-        $missionDataArray["charter"] = $this->getCharter();
-        $missionDataArray["notes"] = $this->getNotes();
-        $missionDataArray['sprint'] = $this->getSprintname();
-        $missionDataArray['testenv'] = $this->getTestenvironment();
-        $missionDataArray['software'] = $this->getSoftware();
-        $missionDataArray['teamname'] = $this->getTeamname();
-        $missionDataArray['sessionid'] = $this->getSessionid();
-        $missionDataArray['testenvironment'] = $this->getTestenvironment();
-        $missionDataArray['publickey'] = $this->getPublickey();
         $sessiondata = $this->generateSessionDataArray();
 
-        if(!$save->saveToMissionTable($sessiondata))
-        {
+        if (!$save->saveToMissionTable($sessiondata)) {
             die("Could not save data to table mission");
+        } else {
+            $this->validateVersionIdExistAndSetItIfNot($sessiondata);
+        }
+        if (!$save->saveToMissionStatusTable($sessiondata)) {
+            die("Could not save data to table mission_status");
         }
 
+    }
+
+    private function validateVersionIdExistAndSetItIfNot(&$sessiondata)
+    {
+        if ($this->getVersionid() == null || strcmp($this->getVersionid(), "") == 0) {
+            echo "VERSIONID DOES NOT EXIST";
+            $con = getMySqliConnection(); //TODO: get versionid and populate setVersionid
+            $sql = "SELECT versionid FROM mission WHERE username = '" . $this->getUsername() . "' ORDER BY versionid DESC LIMIT 0,1";
+            $this->logger->sql($sql, __FILE__, __LINE__);
+            $result = mysqli_query($con, $sql);
+            $row = mysqli_fetch_row($result);
+            foreach ($row as $oneRow) {
+                $this->setVersionid($oneRow);
+                echo $oneRow;
+            }
+            $sessiondata = $this->generateSessionDataArray();
+        } else {
+            echo "VERSIONID EXIST";
+        }
     }
 
     function getAdditional_testers()
@@ -737,7 +752,7 @@ class sessionObject extends sessionObjectSave
 
     function setProject($x)
     {
-        $this->project1 = $x;
+        $this->project = $x;
     }
 
     function setRequirements($x)
@@ -861,7 +876,7 @@ class sessionObject extends sessionObjectSave
         $sessionDataAsArray['mood'] = $this->mood; //Int 0-4
         $sessionDataAsArray['notes'] = $this->notes; //Text
         $sessionDataAsArray['opportunity_percent'] = $this->opportunity_percent; //Int
-        $sessionDataAsArray['projects'] = $this->project; //Text
+        $sessionDataAsArray['project'] = $this->project; //Text
         $sessionDataAsArray['publickey'] = $this->publickey; //Text
         $sessionDataAsArray['requirements'] = $this->requirements; //Array
         $sessionDataAsArray['sessionid'] = $this->sessionid; //Int
