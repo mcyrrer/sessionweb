@@ -23,6 +23,7 @@ class sessionObjectSave
     {
         $this->logger = new logging();
     }
+
     /**
      * Save data to table mission
      * @param $missionDataArray data to save in an array with key = mysql table column.
@@ -41,20 +42,13 @@ class sessionObjectSave
         }
 
         if ($createNewSession) {
-            echo "NEW SESSION";
-            $this->saveMissionTable_Insert($missionDataArray, $con);
+            $result = $this->saveMissionTable_Insert($missionDataArray, $con);
 
         } else {
-            echo "UPDATE SESSION";
-            $this->saveMissionTable_Update($missionDataArray, $con);
+            $result = $this->saveMissionTable_Update($missionDataArray, $con);
         }
         mysqli_close($con);
-        return true;
-    }
-
-    private function getLogMessagePrefix()
-    {
-        return "User:" . $_SESSION['username'] . " File:" . __FILE__ . ":" . __LINE__;
+        return $result;
     }
 
     private function saveMissionTable_Insert($missionDataArray, $con)
@@ -73,8 +67,9 @@ class sessionObjectSave
         $sqlInsert .= "             `software`, ";
         $sqlInsert .= "             `teamname`, ";
         $sqlInsert .= "             `lastupdatedby`, ";
+        $sqlInsert .= "             `projects`, ";
         $sqlInsert .= "             `publickey`) ";
-        $sqlInsert .= "VALUES      ('".$missionDataArray["sessionid"]."', ";
+        $sqlInsert .= "VALUES      ('" . $missionDataArray["sessionid"] . "', ";
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
@@ -105,20 +100,13 @@ class sessionObjectSave
         } else {
             $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['teamname']) . "', ";
         }
+        $sqlInsert .= "             '" . $missionDataArray['project'] . "', ";
         $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
         $sqlInsert .= "             '" . $missionDataArray["publickey"] . "' ";
         $sqlInsert .= ") ";
 
-        $this->logger->sql($sqlInsert,__FILE__);
-
-        $result = mysqli_query($con,$sqlInsert);
-
-        if (!$result) {
-            $this->logger->error("Could not insert new session data to mission table",__FILE__);
-            $this->logger->error(mysqli_error($result),__FILE__);
-        }
+        return $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
     }
-
 
     private function saveMissionTable_Update($missionDataArray, $con)
     {
@@ -132,6 +120,7 @@ class sessionObjectSave
         $sqlUpdate .= "SET    `title` = '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
         $sqlUpdate .= "       `charter` = '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
         $sqlUpdate .= "       `notes` = '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
+        $sqlUpdate .= "       `projects` = '" . mysql_real_escape_string($missionDataArray["project"]) . "', ";
         $sqlUpdate .= "       `lastupdatedby` = '" . $_SESSION['username'] . "', ";
         if (isset($missionDataArray['sprint']) && $missionDataArray['sprint'] != "") {
             $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($missionDataArray['sprint']) . "', ";
@@ -158,16 +147,118 @@ class sessionObjectSave
             $sqlUpdate .= "       `teamname` = '" . mysql_real_escape_string($missionDataArray['teamname']) . "' ";
         }
         $sqlUpdate .= "WHERE sessionid='" . $missionDataArray['sessionid'] . "'";
-        $this->logger->sql($sqlUpdate, __FILE__);
+
+        return $this->executeUpdate($sqlUpdate, $con, __FILE__, __LINE__);
+    }
+
+    /**
+     *  Save data to table misson_status
+     * @param $missionDataArray data to save in an array with key = mysql table column.
+     * @return bool true if success or false on failure
+     */
+    protected function saveToMissionStatusTable($missionDataArray)
+    {
+        $createNewSession = false;
+        $con = getMySqliConnection();
+        $sql = "SELECT versionid FROM mission_status WHERE versionid=" . $missionDataArray['versionid'];
+        if (strcmp($missionDataArray['versionid'], "") != 0) {
+            $resultSessionExist = mysqli_query($con, $sql);
+            if (mysqli_num_rows($resultSessionExist) == 0) {
+                $createNewSession = true;
+            } else {
+                $createNewSession = false;
+            }
+        } else {
+            $createNewSession = true;
+        }
+
+        if ($createNewSession) {
+            $this->saveToMissionStatusTable_Insert($missionDataArray, $con);
+            echo "new session status";
+        } else {
+            $this->saveToMissionStatusTable_Update($missionDataArray, $con);
+            echo "update session status";
+        }
+        mysqli_close($con);
+        return true;
+
+    }
+
+    private function  saveToMissionStatusTable_Insert($missionDataArray, $con)
+    {
+        $sqlInsert = "";
+        $sqlInsert .= "INSERT INTO mission_status ";
+        $sqlInsert .= "            (`versionid`, ";
+        $sqlInsert .= "             `executed`, ";
+        $sqlInsert .= "             `closed`, ";
+        $sqlInsert .= "             `debriefed`, ";
+        $sqlInsert .= "             `masterdibriefed`, ";
+        $sqlInsert .= "             `debriefed_timestamp`, ";
+        $sqlInsert .= "             `executed_timestamp` ) ";
+        $sqlInsert .= "VALUES      ('" . $missionDataArray['versionid'] . "', ";
+        $sqlInsert .= "             '" . $missionDataArray['executed'] . "', ";
+        $sqlInsert .= "             '" . $missionDataArray['closed'] . "', ";
+        $sqlInsert .= "             '" . $missionDataArray['debriefed'] . "', ";
+        $sqlInsert .= "             '" . $missionDataArray['masterdibriefed'] . "', ";
+        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()")==0)
+            $sqlInsert .= "             " . $missionDataArray['debriefed_timestamp'] . ", ";
+        else
+            $sqlInsert .= "             '" . $missionDataArray['debriefed_timestamp'] . "', ";
+        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()")==0)
+            $sqlInsert .= "             " . $missionDataArray['executed_timestamp'] . ")";
+        else
+            $sqlInsert .= "             '" . $missionDataArray['executed_timestamp'] . "')";
+
+        return $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+    }
+
+    private function saveToMissionStatusTable_Update($missionDataArray, $con)
+    {
+        $sqlUpdate = "";
+        $sqlUpdate .= "UPDATE mission_status ";
+        $sqlUpdate .= "SET    `executed` = '" . $missionDataArray['executed'] . "', ";
+        $sqlUpdate .= "       `debriefed` = '" . $missionDataArray['debriefed'] . "', ";
+        $sqlUpdate .= "       `closed` = '" . $missionDataArray['closed'] . "', ";
+        $sqlUpdate .= "       `masterdibriefed` = '" . $missionDataArray['masterdibriefed'] . "', ";
+        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()")==0)
+            $sqlUpdate .= "       `debriefed_timestamp` = " . $missionDataArray['debriefed_timestamp'] . " ";
+        else
+            $sqlUpdate .= "       `debriefed_timestamp` = '" . $missionDataArray['debriefed_timestamp'] . "' ";
+        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()")==0)
+            $sqlUpdate .= "       `executed_timestamp` = " . $missionDataArray['executed_timestamp'] . " ";
+        else
+            $sqlUpdate .= "       `executed_timestamp` = '" . $missionDataArray['executed_timestamp'] . "' ";
+        $sqlUpdate .= "WHERE versionid='" . $missionDataArray['versionid'] . "'";
+
+        return $this->executeUpdate($sqlUpdate, $con, __FILE__, __LINE__);
+    }
+
+    private
+    function executeInsert($sqlInsert, $con, $file, $line)
+    {
+        $this->logger->sql($sqlInsert, $file, $line);
+
+        $result = mysqli_query($con, $sqlInsert);
+
+        if (!$result) {
+            $this->logger->error(" Mysql Code:" . $sqlInsert, __FILE__, __LINE__);
+            $this->logger->error(mysqli_error($con), __FILE__, __LINE__);
+            return false;
+        } else
+            return true;
+    }
+
+    private
+    function executeUpdate($sqlUpdate, $con, $file, $line)
+    {
+        $this->logger->sql($sqlUpdate, $file, $line);
         $result = mysqli_query($con, $sqlUpdate);
 
         if (!$result) {
-            $this->logger->error($this->getLogMessagePrefix() . " Mysql Code:" . $sqlUpdate);
-            $this->logger->error($this->getLogMessagePrefix() . " Mysql error:" . mysqli_error($con));
-            mysqli_close($con);
+            $this->logger->error(" Mysql Code:" . $sqlUpdate, __FILE__, __LINE__);
+            $this->logger->error(" Mysql error:" . mysqli_error($con), __FILE__, __LINE__);
             return false;
-        }
+        } else
+            return true;
     }
-
-
 }
