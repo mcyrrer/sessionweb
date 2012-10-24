@@ -372,17 +372,17 @@ class sessionObject extends sessionObjectSave
     {
 //mission DONE
 //mission_areas  DONE
-//mission_attachments
-//mission_bugs
+//mission_bugs  DONE
 //mission_custom
 //mission_debriefnotes
-//mission_requirements
+//mission_requirements  DONE
 //mission_sessionmetrics
 //mission_sessionsconnections
 //mission_status DONE
 //mission_testers
+//mission_attachments
         $save = new sessionObjectSave();
-        $sessiondata = $this->generateSessionDataArray();
+        $sessiondata = $this->toArray();
 
         if (!$save->saveToMissionTable($sessiondata)) {
             die("Could not save data to table mission");
@@ -395,6 +395,13 @@ class sessionObject extends sessionObjectSave
         if (!$save->saveToMissionAreaTable($sessiondata)) {
             die("Could not save data to table mission_area");
         }
+        if (!$save->saveToMissionBugsTable($sessiondata)) {
+            die("Could not save data to table mission_bugs");
+        }
+        if (!$save->saveToMissionRequirementsTable($sessiondata)) {
+            die("Could not save data to table mission_requirements");
+        }
+        $this->logger->debug("Saved sessionid ".$this->getSessionid()." ",__FILE__,__LINE__);
 
     }
 
@@ -411,7 +418,7 @@ class sessionObject extends sessionObjectSave
                 $this->setVersionid($oneRow);
                 echo $oneRow;
             }
-            $sessiondata = $this->generateSessionDataArray();
+            $sessiondata = $this->toArray();
         } else {
             echo "VERSIONID EXIST";
         }
@@ -440,9 +447,16 @@ class sessionObject extends sessionObjectSave
         return $this->bug_percent;
     }
 
+    /**
+     * Get list of bugs
+     * @return array list of bugs, if none then a empty array will be returned.
+     */
     function getBugs()
     {
-        return $this->bugs;
+        if ($this->bugs != null) {
+            return $this->bugs;
+        } else
+            return array();
     }
 
     function getCharter()
@@ -545,9 +559,16 @@ class sessionObject extends sessionObjectSave
         return $this->publickey;
     }
 
+    /**
+     * get Requirements
+     * @return array Requirements as array
+     */
     function getRequirements()
     {
-        return $this->requirements;
+        if ($this->requirements != null) {
+            return $this->requirements;
+        } else
+            return array();
     }
 
     function getSessionid()
@@ -633,12 +654,6 @@ class sessionObject extends sessionObjectSave
             return true;
         }
         else false;
-
-    }
-
-    function addAreas($x)
-    {
-        $this->areas[] = $x;
     }
 
     function setAttachments($x)
@@ -656,15 +671,20 @@ class sessionObject extends sessionObjectSave
         $this->bug_percent = $x;
     }
 
+    /**
+     * Set bugs
+     * @param $x array of bugs
+     * @return bool true if ok, false on failure (eg. not an array)
+     */
     function setBugs($x)
     {
-        $this->bugs = $x;
+        if (is_array($x)) {
+            $this->bugs = $x;
+            return true;
+        }
+        else false;
     }
 
-    function addBug($x)
-    {
-        $this->bugs[] = $x;
-    }
 
     function setCharter($x)
     {
@@ -776,14 +796,18 @@ class sessionObject extends sessionObjectSave
         $this->project = $x;
     }
 
+    /**
+     * Set Requirements
+     * @param $x array of Requirements
+     * @return bool true if ok, false on failure (eg. not an array)
+     */
     function setRequirements($x)
     {
-        $this->requirements = $x;
-    }
-
-    function addRequirements($x)
-    {
-        $this->requirements[] = $x;
+        if (is_array($x)) {
+            $this->requirements = $x;
+            return true;
+        }
+        else false;
     }
 
     private function setPublickey($x)
@@ -866,7 +890,11 @@ class sessionObject extends sessionObjectSave
         $this->publickey = md5(rand());
     }
 
-    private function generateSessionDataArray()
+    /**
+     * Export the object to an array representation
+     * @return array
+     */
+    private function toArray()
     {
         $sessionDataAsArray = array();
         $sessionDataAsArray['additional_testers'] = $this->additional_testers; //Array
@@ -916,7 +944,7 @@ class sessionObject extends sessionObjectSave
      */
     public function toJson()
     {
-        return json_encode($this->generateSessionDataArray());
+        return json_encode($this->toArray());
     }
 
     /**
@@ -927,7 +955,7 @@ class sessionObject extends sessionObjectSave
     {
         include 'ArrayToXML.php';
         $xmlObj = new ArrayToXML();
-        return $xmlObj->toXml($this->generateSessionDataArray());
+        return $xmlObj->toXml($this->toArray());
     }
 
     /**
