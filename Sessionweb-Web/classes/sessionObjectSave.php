@@ -1,24 +1,31 @@
 <?php
 /**
  * Class to manage save of a sessionObject.
+ * $file and $line is the filename __FILE__ and the linenumber __LINE__ that the logger will use to create traceability
  * User: mcyrrer
  * Date: 2012-10-15
  * Time: 11:35
- * To change this template use File | Settings | File Templates.
  */
 if (!isset($basePath)) {
     $basePath = "./";
 }
 include_once 'sessionObject.php';
+/** @noinspection PhpIncludeInspection */
 include_once "config/db.php.inc";
+/** @noinspection PhpIncludeInspection */
 include_once "classes/logging.php";
+/** @noinspection PhpIncludeInspection */
 include_once "include/db.php";
 
 
+/** @noinspection PhpUndefinedClassInspection */
 class sessionObjectSave
 {
     private $logger;
 
+    /**
+     * @param null $sessionid
+     */
     function __construct($sessionid = null)
     {
         $this->logger = new logging();
@@ -32,9 +39,11 @@ class sessionObjectSave
     protected function saveToMissionTable($missionDataArray)
     {
         $createNewSession = false;
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
 
         $sql = "SELECT sessionid FROM mission WHERE sessionid=" . $missionDataArray['sessionid'];
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $resultSessionExist = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($resultSessionExist) == 0) {
@@ -51,6 +60,12 @@ class sessionObjectSave
         return $result;
     }
 
+    /**
+     * Create a new item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
     private function saveMissionTable_Insert($missionDataArray, $con)
     {
 
@@ -60,9 +75,8 @@ class sessionObjectSave
         $sqlInsert .= "             `title`, ";
         $sqlInsert .= "             `charter`, ";
         $sqlInsert .= "             `notes`, ";
-        $sqlInsert .= "             `username`, ";
+        $sqlInsert .= '             `username`, ';
         $sqlInsert .= "             `sprintname`, ";
-        //$sqlInsert .= "             `teamsprintname`, ";
         $sqlInsert .= "             `testenvironment`, ";
         $sqlInsert .= "             `software`, ";
         $sqlInsert .= "             `teamname`, ";
@@ -73,18 +87,12 @@ class sessionObjectSave
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
-        $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
+        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
         if ($missionDataArray['sprintname'] == "") {
             $sqlInsert .= "             null, ";
         } else {
             $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['sprintname']) . "', ";
         }
-//        if ($missionDataArray['teamsprint'] == "") {
-//            $sqlInsert .= "             null, ";
-//        } else {
-//
-//            $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['teamsprint']) . "', ";
-//        }
         if ($missionDataArray['testenvironment'] == "") {
             $sqlInsert .= "             null, ";
         } else {
@@ -101,13 +109,19 @@ class sessionObjectSave
             $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['teamname']) . "', ";
         }
         $sqlInsert .= "             '" . $missionDataArray['project'] . "', ";
-        $sqlInsert .= "             '" . $_SESSION['username'] . "', ";
+        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
         $sqlInsert .= "             '" . $missionDataArray["publickey"] . "' ";
         $sqlInsert .= ") ";
 
         return $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
     }
 
+    /**
+     * Update an item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
     private function saveMissionTable_Update($missionDataArray, $con)
     {
         if ($missionDataArray["title"] == "") {
@@ -121,9 +135,9 @@ class sessionObjectSave
         $sqlUpdate .= "       `charter` = '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
         $sqlUpdate .= "       `notes` = '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
         $sqlUpdate .= "       `projects` = '" . mysql_real_escape_string($missionDataArray["project"]) . "', ";
-        $sqlUpdate .= "       `lastupdatedby` = '" . $_SESSION['username'] . "', ";
-        if (isset($missionDataArray['sprint']) && $missionDataArray['sprint'] != "") {
-            $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($missionDataArray['sprint']) . "', ";
+        $sqlUpdate .= "       `lastupdatedby` = '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
+        if (isset($missionDataArray['sprintname']) && $missionDataArray['sprintname'] != "") {
+            $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($missionDataArray['sprintname']) . "', ";
         } else {
             $sqlUpdate .= "       `sprintname` = null, ";
         }
@@ -158,10 +172,11 @@ class sessionObjectSave
      */
     protected function saveToMissionStatusTable($missionDataArray)
     {
-        $createNewSession = false;
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
         $sql = "SELECT versionid FROM mission_status WHERE versionid=" . $missionDataArray['versionid'];
         if (strcmp($missionDataArray['versionid'], "") != 0) {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $resultSessionExist = mysqli_query($con, $sql);
             if (mysqli_num_rows($resultSessionExist) == 0) {
                 $createNewSession = true;
@@ -184,6 +199,12 @@ class sessionObjectSave
 
     }
 
+    /**
+     * Create a new item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
     private function  saveToMissionStatusTable_Insert($missionDataArray, $con)
     {
         $sqlInsert = "";
@@ -200,11 +221,11 @@ class sessionObjectSave
         $sqlInsert .= "             '" . $missionDataArray['closed'] . "', ";
         $sqlInsert .= "             '" . $missionDataArray['debriefed'] . "', ";
         $sqlInsert .= "             '" . $missionDataArray['masterdibriefed'] . "', ";
-        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()")==0)
+        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()") == 0)
             $sqlInsert .= "             " . $missionDataArray['debriefed_timestamp'] . ", ";
         else
             $sqlInsert .= "             '" . $missionDataArray['debriefed_timestamp'] . "', ";
-        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()")==0)
+        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()") == 0)
             $sqlInsert .= "             " . $missionDataArray['executed_timestamp'] . ")";
         else
             $sqlInsert .= "             '" . $missionDataArray['executed_timestamp'] . "')";
@@ -212,6 +233,12 @@ class sessionObjectSave
         return $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
     }
 
+    /**
+     * Update an item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
     private function saveToMissionStatusTable_Update($missionDataArray, $con)
     {
         $sqlUpdate = "";
@@ -220,11 +247,11 @@ class sessionObjectSave
         $sqlUpdate .= "       `debriefed` = '" . $missionDataArray['debriefed'] . "', ";
         $sqlUpdate .= "       `closed` = '" . $missionDataArray['closed'] . "', ";
         $sqlUpdate .= "       `masterdibriefed` = '" . $missionDataArray['masterdibriefed'] . "', ";
-        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()")==0)
-            $sqlUpdate .= "       `debriefed_timestamp` = " . $missionDataArray['debriefed_timestamp'] . " ";
+        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()") == 0)
+            $sqlUpdate .= "       `debriefed_timestamp` = " . $missionDataArray['debriefed_timestamp'] . ", ";
         else
-            $sqlUpdate .= "       `debriefed_timestamp` = '" . $missionDataArray['debriefed_timestamp'] . "' ";
-        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()")==0)
+            $sqlUpdate .= "       `debriefed_timestamp` = '" . $missionDataArray['debriefed_timestamp'] . "', ";
+        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()") == 0)
             $sqlUpdate .= "       `executed_timestamp` = " . $missionDataArray['executed_timestamp'] . " ";
         else
             $sqlUpdate .= "       `executed_timestamp` = '" . $missionDataArray['executed_timestamp'] . "' ";
@@ -233,32 +260,125 @@ class sessionObjectSave
         return $this->executeUpdate($sqlUpdate, $con, __FILE__, __LINE__);
     }
 
-    private
-    function executeInsert($sqlInsert, $con, $file, $line)
+
+    /**
+     *  Save data to table misson_area
+     * @param $missionDataArray data to save in an array with key = mysql table column.
+     * @return bool true if success or false on failure
+     */
+    protected function saveToMissionAreaTable($missionDataArray)
+    {
+        echo "<br>saveing areas<br>";
+
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $con = getMySqliConnection();
+
+        $result = $this->saveToMissionStatusTable_Execute($missionDataArray, $con );
+
+        mysqli_close($con);
+        return $result;
+
+    }
+
+    /**
+     * Update/Insert an item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
+    private function saveToMissionStatusTable_Execute($missionDataArray, $con)
+    {
+        $versionId = $missionDataArray['versionid'];
+
+        $sqlDelete = "DELETE FROM mission_areas WHERE mission_areas.versionid = $versionId";
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+
+        foreach($missionDataArray['areas'] as $area)
+        {
+            $sqlInsert = "INSERT INTO mission_areas (versionid, areaname) VALUES ('$versionId', '$area')";
+            $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+        }
+        return true;
+    }
+
+
+    /**
+     * Execute the insert to Database
+     * @param $sqlInsert
+     * @param $con
+     * @param $file
+     * @param $line
+     * @return bool True on success False on failure
+     */
+    private function executeInsert($sqlInsert, $con, $file, $line)
     {
         $this->logger->sql($sqlInsert, $file, $line);
 
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlInsert);
 
         if (!$result) {
             $this->logger->error(" Mysql Code:" . $sqlInsert, __FILE__, __LINE__);
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $this->logger->error(mysqli_error($con), __FILE__, __LINE__);
+            $this->dieAndPrintErrorMessage();
             return false;
         } else
             return true;
     }
 
-    private
-    function executeUpdate($sqlUpdate, $con, $file, $line)
+    /**
+     * @param $sqlUpdate
+     * @param $con
+     * @param $file
+     * @param $line
+     * @return bool True on success False on failure
+     */
+    private function executeUpdate($sqlUpdate, $con, $file, $line)
     {
         $this->logger->sql($sqlUpdate, $file, $line);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlUpdate);
 
         if (!$result) {
             $this->logger->error(" Mysql Code:" . $sqlUpdate, __FILE__, __LINE__);
             $this->logger->error(" Mysql error:" . mysqli_error($con), __FILE__, __LINE__);
+            $this->dieAndPrintErrorMessage();
             return false;
         } else
             return true;
+    }
+
+    /**
+     * Execute delete to Database
+     * @param $sqlDelete
+     * @param $con
+     * @param $file
+     * @param $line
+     * @return bool True on success False on failure
+     */
+    private function executeDelete($sqlDelete, $con, $file, $line)
+    {
+        $this->logger->sql($sqlDelete, $file, $line);
+
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $result = mysqli_query($con, $sqlDelete);
+
+        if (!$result) {
+            $this->logger->error(" Mysql Code:" . $sqlDelete, __FILE__, __LINE__);
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
+            $this->logger->error(mysqli_error($con), __FILE__, __LINE__);
+            $this->dieAndPrintErrorMessage();
+            return false;
+        } else
+            return true;
+    }
+
+    /**
+     * Print an error message to end user and then die
+     */
+    private function dieAndPrintErrorMessage()
+    {
+        die("SQL ERROR. Ask admin to check logfile for more information");
     }
 }

@@ -41,7 +41,6 @@ class sessionObject extends sessionObjectSave
     private $softwareuseautofetched; //Array
     private $sprintname; //Text
     private $teamname; //Text
-    private $teamsprintname; //Text
     private $test_percent; //Int
     private $testenvironment; //Text
     private $title; //Text
@@ -371,7 +370,17 @@ class sessionObject extends sessionObjectSave
 
     public function saveObjectToDb()
     {
-
+//mission DONE
+//mission_areas  DONE
+//mission_attachments
+//mission_bugs
+//mission_custom
+//mission_debriefnotes
+//mission_requirements
+//mission_sessionmetrics
+//mission_sessionsconnections
+//mission_status DONE
+//mission_testers
         $save = new sessionObjectSave();
         $sessiondata = $this->generateSessionDataArray();
 
@@ -383,6 +392,9 @@ class sessionObject extends sessionObjectSave
         if (!$save->saveToMissionStatusTable($sessiondata)) {
             die("Could not save data to table mission_status");
         }
+        if (!$save->saveToMissionAreaTable($sessiondata)) {
+            die("Could not save data to table mission_area");
+        }
 
     }
 
@@ -390,7 +402,7 @@ class sessionObject extends sessionObjectSave
     {
         if ($this->getVersionid() == null || strcmp($this->getVersionid(), "") == 0) {
             echo "VERSIONID DOES NOT EXIST";
-            $con = getMySqliConnection(); //TODO: get versionid and populate setVersionid
+            $con = getMySqliConnection();
             $sql = "SELECT versionid FROM mission WHERE username = '" . $this->getUsername() . "' ORDER BY versionid DESC LIMIT 0,1";
             $this->logger->sql($sql, __FILE__, __LINE__);
             $result = mysqli_query($con, $sql);
@@ -412,7 +424,10 @@ class sessionObject extends sessionObjectSave
 
     function getAreas()
     {
-        return $this->areas;
+        if ($this->areas != null) {
+            return $this->areas;
+        } else
+            return array();
     }
 
     function getAttachments()
@@ -565,11 +580,6 @@ class sessionObject extends sessionObjectSave
         return $this->teamname;
     }
 
-    function getTeamsprintname()
-    {
-        return $this->teamsprintname;
-    }
-
     function getTest_percent()
     {
         return $this->test_percent;
@@ -610,9 +620,20 @@ class sessionObject extends sessionObjectSave
         $this->additional_testers[] = $x;
     }
 
+    /**
+     * Sets areas
+     * @param $x areas to save as an array where the value will be stored.
+     * will always overwrite the old value
+     * @return bool true if success and false on failure (like not $x not an array)
+     */
     function setAreas($x)
     {
-        $this->areas = $x;
+        if (is_array($x)) {
+            $this->areas = $x;
+            return true;
+        }
+        else false;
+
     }
 
     function addAreas($x)
@@ -805,11 +826,6 @@ class sessionObject extends sessionObjectSave
         $this->teamname = $x;
     }
 
-    function setTeamsprintname($x)
-    {
-        $this->teamsprintname = $x;
-    }
-
     function setTest_percent($x)
     {
         $this->test_percent = $x;
@@ -885,7 +901,6 @@ class sessionObject extends sessionObjectSave
         $sessionDataAsArray['softwareuseautofetched'] = $this->softwareuseautofetched; //Text
         $sessionDataAsArray['sprintname'] = $this->sprintname; //Text
         $sessionDataAsArray['teamname'] = $this->teamname; //Text
-        $sessionDataAsArray['teamsprintname'] = $this->teamsprintname; //Text
         $sessionDataAsArray['test_percent'] = $this->test_percent; //Int
         $sessionDataAsArray['testenvironment'] = $this->testenvironment; //Text
         $sessionDataAsArray['title'] = $this->title; //Text
@@ -967,7 +982,6 @@ class sessionObject extends sessionObjectSave
         echo "\n";
         echo "sprintname:" . $this->sprintname . "\n"; //Text
         echo "teamname:" . $this->teamname . "\n"; //Text
-        echo "teamsprintname:" . $this->teamsprintname . "\n"; //Text
         echo "test_percent:" . $this->test_percent . "\n"; //Int
         echo "testenvironment:" . $this->testenvironment . "\n"; //Text
         echo "title:" . $this->title . "\n"; //Text

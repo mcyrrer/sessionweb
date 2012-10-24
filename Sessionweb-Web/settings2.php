@@ -399,6 +399,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
     <!--                    ----->
     <!--                </div>-->
     <a href="log.php">View Sessionweb log file</a><br>
+    <a href="logsql.php">View Sessionweb sql log file</a><br>
     <a href="systemcheck.php">Sessionweb system check</a>
 
 
