@@ -33,7 +33,7 @@ class sessionObjectSave
 
     /**
      * Save data to table mission
-     * @param $missionDataArray data to save in an array with key = mysql table column.
+     * @param $missionDataArray sessionobject data to save in an array with key = mysql table column.
      * @return bool true if success or false on failure
      */
     protected function saveToMissionTable($missionDataArray)
@@ -167,7 +167,7 @@ class sessionObjectSave
 
     /**
      *  Save data to table misson_status
-     * @param $missionDataArray data to save in an array with key = mysql table column.
+     * @param $missionDataArray sessionobject data to save in an array with key = mysql table column.
      * @return bool true if success or false on failure
      */
     protected function saveToMissionStatusTable($missionDataArray)
@@ -263,21 +263,16 @@ class sessionObjectSave
 
     /**
      *  Save data to table misson_area
-     * @param $missionDataArray data to save in an array with key = mysql table column.
+     * @param $missionDataArray sessionobject data to save in an array with key = mysql table column.
      * @return bool true if success or false on failure
      */
     protected function saveToMissionAreaTable($missionDataArray)
     {
-        echo "<br>saveing areas<br>";
-
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
-
         $result = $this->saveToMissionStatusTable_Execute($missionDataArray, $con );
-
         mysqli_close($con);
         return $result;
-
     }
 
     /**
@@ -300,6 +295,79 @@ class sessionObjectSave
         }
         return true;
     }
+
+
+    /**
+     *  Save data to table misson_bugs
+     * @param $missionDataArray sessionobject data to save in an array
+     * @return bool true if success or false on failure
+     */
+    protected function saveToMissionBugsTable($missionDataArray)
+    {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $con = getMySqliConnection();
+        $result = $this->saveToMissionBugsTable_Execute($missionDataArray, $con );
+        mysqli_close($con);
+        return $result;
+    }
+
+    /**
+     * Update/Insert an item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
+    private function saveToMissionBugsTable_Execute($missionDataArray, $con)
+    {
+        $versionId = $missionDataArray['versionid'];
+
+        $sqlDelete = "DELETE FROM mission_bugs WHERE mission_bugs.versionid = $versionId";
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+
+        foreach($missionDataArray['bugs'] as $bug)
+        {
+            $sqlInsert = "INSERT INTO mission_bugs (versionid, bugid) VALUES ('$versionId', '$bug')";
+            $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+        }
+        return true;
+    }
+
+    /**
+     *  Save data to table mission_requirements
+     * @param $missionDataArray sessionobject data to save in an array
+     * @return bool true if success or false on failure
+     */
+    protected function saveToMissionRequirementsTable($missionDataArray)
+    {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $con = getMySqliConnection();
+        $result = $this->saveToMissionRequirementsTable_Execute($missionDataArray, $con );
+        mysqli_close($con);
+        return $result;
+    }
+
+    /**
+     * Update/Insert an item in database
+     * @param $missionDataArray
+     * @param $con
+     * @return bool
+     */
+    private function saveToMissionRequirementsTable_Execute($missionDataArray, $con)
+    {
+        $versionId = $missionDataArray['versionid'];
+
+        $sqlDelete = "DELETE FROM mission_requirements WHERE mission_requirements.versionid = $versionId";
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+
+        foreach($missionDataArray['requirements'] as $req)
+        {
+            $sqlInsert = "INSERT INTO mission_requirements (versionid, requirementsid) VALUES ('$versionId', '$req')";
+            $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+        }
+        return true;
+    }
+
+
 
 
     /**
