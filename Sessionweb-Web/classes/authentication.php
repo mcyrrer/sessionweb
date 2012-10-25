@@ -1,10 +1,12 @@
 <?php
 
 require_once 'config/auth.php.inc';
+require_once 'classes/logging.php';
 class authentication
 {
     function getUserInfoThroughLdap($LDAPUser, $LDAPUserPassword)
     {
+        $logger = new logging();
         error_reporting(E_NOTICE); //Suppress some unnecessary messages
 
         $SearchFor = $LDAPUser;
@@ -16,6 +18,7 @@ class authentication
 
         //Check if password length = 0 , some LDAP/AD may bind if password is empty.
         if (strlen($LDAPUserPassword) == 0) {
+            $logger->debug("Empty AD password for user $LDAPUser", __FILE__, __LINE__);
             return "EMPTY_PASSWORD";
         }
 
@@ -26,9 +29,10 @@ class authentication
 
         $bindres = ldap_bind($ldapConnection, $LDAPUser . LDAP_USER_DOMAIN, $LDAPUserPassword);
 
-        if($bindres==false)
-        {
+        if ($bindres == false) {
+            $logger->warning("Could Not Bind To AD", __FILE__, __LINE__);
             return "COULD_NOT_BIND";
+
         }
 
         $filter = "(" . LDAP_SEARCH_FIELD . "=$SearchFor*)"; //Wildcard is * Remove it if you want an exact match
@@ -41,12 +45,13 @@ class authentication
             $nam = $info[$x]['cn'][0];
 
             if (stristr($sam, "$SearchFor")) {
-                $userInfo["name"]=$nam;
-                $userInfo["samaccountname"]=$sam;
+                $userInfo["name"] = $nam;
+                $userInfo["samaccountname"] = $sam;
                 return $userInfo;
             }
         }
         if ($x == 0) {
+            $logger->debug("User not found, username was $LDAPUser", __FILE__, __LINE__);
             return "USER_NOT_FOUND";
         }
 

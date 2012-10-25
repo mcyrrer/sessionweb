@@ -29,7 +29,7 @@ if (isAdmin()) {
                 echo '</FONT><br>';
             }
             elseif ($c = preg_match_all("/" . $re1 . $re2 . $re3 . $re4e. "/is", $line, $matches)) {
-                echo '<FONT style="BACKGROUND-COLOR: gray">';
+                echo '<FONT style="BACKGROUND-COLOR: #CCFF00">';
                 echo "$line";
                 echo '</FONT><br>';
             }
