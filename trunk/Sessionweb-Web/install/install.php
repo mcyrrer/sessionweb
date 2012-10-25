@@ -22,8 +22,7 @@ define("INSTALLATION_SCRIPT", "SessionwebDbLayout_23.sql");
     //echo $sessionwebPath;
     if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['dbsessionwebuser']) || !isset($_POST['dbsessionwebpassword']))
         echoForm();
-    else
-    {
+    else {
         install();
 
     }
@@ -65,8 +64,7 @@ function install()
             createDbConfigFile($dbuser, $dbpassword, $dbname);
             if (strcmp($dbcreateuser, "true") == 0)
                 createDbUser($dbuser, $dbpassword, $dbname);
-            else
-            {
+            else {
                 echo "User not created since checkbox was unchecked.<br>";
             }
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
@@ -75,11 +73,8 @@ function install()
             echo "<a href='../index.php'>Go to Sessionweb login page</a> ";
 
 
-        }
-        else
-        {
-            foreach ($resultOfSql as $oneError)
-            {
+        } else {
+            foreach ($resultOfSql as $oneError) {
                 echo "--------------ERROR--------------<br>";
                 echo $oneError . "<br>";
             }
@@ -99,7 +94,8 @@ function install()
             </fieldset>
 
         </form>';
-    mysql_close($con);
+    if (isset($con))
+        mysql_close($con);
 }
 
 function createDbUser($dbuser, $dbpassword, $dbname)
@@ -109,23 +105,17 @@ function createDbUser($dbuser, $dbpassword, $dbname)
     $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `$dbname` . * TO  '$dbuser'@'localhost'";
     if (mysql_query($sqlCreateUser) === false) {
         echo "failed to create $dbuser user<br>";
-    }
-    else
-    {
+    } else {
         echo "Created $dbuser user<br>";
     }
     if (mysql_query($sqlGrantUsage) === false) {
         echo "failed to grant usage for $dbuser user<br>";
-    }
-    else
-    {
+    } else {
         echo "Added grant usage for $dbuser user<br>";
     }
     if (mysql_query($sqlGrantSessionweb) === false) {
         echo "failed to grant usage for sessionweb for $dbuser user<br>";
-    }
-    else
-    {
+    } else {
         echo "Added grant usage for sessionwebos db for $dbuser user<br>";
     }
 }
@@ -149,22 +139,18 @@ function createDbConfigFile($dbuser, $dbpassword, $dbname)
 
 function tryDbConnection($user, $password, $host = 'localhost')
 {
-    try
-    {
+    try {
         $con = @ mysql_connect($host, $user, $password);
         mysql_query("SET NAMES utf8");
         mysql_query("SET CHARACTER SET utf8");
         if ($con) {
             mysql_close($con);
             return true;
-        }
-        else
-        {
+        } else {
             echo "Could not connect to MySql database, please check your user and password";
             return false;
         }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         echo "Could not connect to MySql database, please check your user and password";
         return false;
     }
@@ -179,37 +165,27 @@ function echoForm()
     }
     if (isset($_POST['dbadminuser'])) {
         $adminuser = $_POST['dbadminuser'];
-    }
-    else
-    {
+    } else {
         $adminuser = null;
     }
     if (isset($_POST['dbadminpassword'])) {
         $adminpassword = $_POST['dbadminpassword'];
-    }
-    else
-    {
+    } else {
         $adminpassword = null;
     }
     if (isset($_POST['dbsessionwebuser'])) {
         $dbuser = $_POST['dbsessionwebuser'];
-    }
-    else
-    {
+    } else {
         $dbuser = null;
     }
     if (isset($_POST['dbsessionwebpassword'])) {
         $dbpassword = $_POST['dbsessionwebpassword'];
-    }
-    else
-    {
+    } else {
         $dbpassword = null;
     }
     if (isset($_POST['dbname'])) {
         $dbname = $_POST['dbname'];
-    }
-    else
-    {
+    } else {
         $dbname = null;
     }
 
@@ -288,10 +264,8 @@ function checkFoldersForRWDuringInstallation()
     echo "<b>Check for Read Write access for certain folders.</b><br>";
     $foldersToCheckRW = array("../config/", "../include/filemanagement/files/", "../include/filemanagement/thumbnails/", "../log/");
     $foldersOk = true;
-    foreach ($foldersToCheckRW as $aFolder)
-    {
-        try
-        {
+    foreach ($foldersToCheckRW as $aFolder) {
+        try {
             $ourFileName = $aFolder . "testFile.txt";
 
             $fh = fopen($ourFileName, 'w');
@@ -300,14 +274,11 @@ function checkFoldersForRWDuringInstallation()
             if (file_exists($ourFileName)) {
                 echo "folder $aFolder is RW => OK<br>";
                 unlink($ourFileName);
-            }
-            else
-            {
+            } else {
                 echo "folder $aFolder is RW => NOK (file could not be created)<br>";
                 $foldersOk = false;
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "folder $aFolder is RW => NOK<br>";
             //echo 'Error: ', $e->getMessage(), "\n";
             echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";
@@ -318,9 +289,7 @@ function checkFoldersForRWDuringInstallation()
         echo "Pleas make sure that NOK folders above have read and write access for the WWW user";
         echo "In ubuntu/linux you can use the chown command to make the www user e.g. 'chown -R www-data:www-data include/filemanagement/files/' ";
         return false;
-    }
-    else
-    {
+    } else {
         echo "<br><br>";
         return true;
     }

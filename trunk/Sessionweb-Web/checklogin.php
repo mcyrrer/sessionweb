@@ -1,11 +1,13 @@
 <?php
 ob_start();
-//require_once('include/loggingsetup.php');
 include 'config/db.php.inc';
 include 'config/auth.php.inc';
 include 'classes/authentication.php';
 include_once 'include/commonFunctions.php.inc';
-//include_once 'include/db.php';
+require_once 'classes/logging.php';
+
+$logger = new logging();
+
 sleep(0.5); //brute force of password mitigation. It will take too long to brute force if we add a sleep. end user will not detect it.
 
 $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
@@ -13,7 +15,7 @@ mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 mysql_set_charset('utf8');
 
-$registred = validateUserAsLdapUser();
+$registred = validateUserAsLdapUser($con);
 
 if (!$registred) {
     validateUserAsSessionwebUser();
@@ -22,11 +24,14 @@ if (!$registred) {
 mysql_close($con);
 ob_end_flush();
 
-function validateUserAsLdapUser()
+function validateUserAsLdapUser($con)
 {
+    $logger = new logging();
     if (LDAP_ENABLED) {
+
         $ldap = new authentication();
         $resultLdap = $ldap->getUserInfoThroughLdap($_POST['myusername'], $_POST['mypassword']);
+
         if (is_array($resultLdap)) {
             $myusername = mysql_real_escape_string($_POST['myusername']);
 
@@ -41,7 +46,7 @@ function validateUserAsLdapUser()
                 $sql .= "FROM   members ";
                 $sql .= "WHERE  username = '$myusername' ";
                 $sql .= "       AND active = 1 ";
-
+                $logger->sql($sql,__FILE__,__LINE__);
                 $result = mysql_query($sql);
                 registrateSession($result, $myusername);
                 return true;
@@ -67,7 +72,13 @@ function validateUserAsLdapUser()
                 $sqlInsert .= "             '1', ";
                 $sqlInsert .= "             '0', ";
                 $sqlInsert .= "             '0')";
+                $logger->sql($sqlInsert,__FILE__,__LINE__);
                 $result = mysql_query($sqlInsert);
+                if(!$result)
+                {
+                    $logger->error(mysqli_error($con),__FILE__,__LINE__);
+                    $logger->error($sqlInsert,__FILE__,__LINE__);
+                }
 
                 $sqlInsert = "";
                 $sqlInsert .= "INSERT INTO `user_settings` ";
@@ -79,15 +90,39 @@ function validateUserAsLdapUser()
                 $sqlInsert .= "             '', ";
                 $sqlInsert .= "             '', ";
                 $sqlInsert .= "             'all')";
+                $logger->sql($sqlInsert,__FILE__,__LINE__);
                 $result = mysql_query($sqlInsert);
+
+
+                if(!$result)
+                {
+                    $logger->error(mysqli_error($con),__FILE__,__LINE__);
+                    $logger->error($sqlInsert,__FILE__,__LINE__);
+                }
 
                 $sql = "";
                 $sql .= "SELECT * ";
                 $sql .= "FROM   members ";
                 $sql .= "WHERE  username = '$myusername' ";
                 $sql .= "       AND active = 1 ";
-
+                $logger->sql($sql,__FILE__,__LINE__);
                 $result = mysql_query($sql);
+
+                if(!$result)
+                {
+                    $logger->error(mysqli_error($con),__FILE__,__LINE__);
+                    $logger->error($sql,__FILE__,__LINE__);
+                }
+
+                if(mysql_num_rows($result)==1)
+                {
+                    $logger->info("AD/LDAP user $myusername created",__FILE__,__LINE__);
+                }
+                else
+                {
+                    $logger->error("AD/LDAP user $myusername not created",__FILE__,__LINE__);
+                }
+
                 registrateSession($result, $myusername);
                 return true;
             }
@@ -97,25 +132,17 @@ function validateUserAsLdapUser()
 }
 
 function validateUserAsSessionwebUser()
-{ //
-//$con = getMySqlConnection();
-// Define $myusername and $mypassword
+{
+    $logger = new logging();
     $myusername = $_POST['myusername'];
     $mypassword = $_POST['mypassword'];
-// encrypt password
     $encrypted_mypassword = md5($mypassword);
-//echo   $encrypted_mypassword;
-// To protect MySQL injection (more detail about MySQL injection)
     $myusername = stripslashes($myusername);
     $mypassword = stripslashes($mypassword);
     $myusername = mysql_real_escape_string($myusername);
     $mypassword = mysql_real_escape_string($mypassword);
 
-//echo "Password:".$mypassword;
-
-//encrypt password
     $mypassword = md5($mypassword);
-//echo "[".$mypassword."]<br>";
 
     $sql = "";
     $sql .= "SELECT * ";
@@ -123,6 +150,7 @@ function validateUserAsSessionwebUser()
     $sql .= "WHERE  username = '$myusername' ";
     $sql .= "       AND PASSWORD = '$mypassword' ";
     $sql .= "       AND active = 1 ";
+    $logger->sql($sql,__FILE__,__LINE__);
 
 
     $result = mysql_query($sql);
@@ -133,22 +161,18 @@ function validateUserAsSessionwebUser()
 
 // If result matched $myusername and $mypassword, table row must be 1 row
 
-
     if ($count == 1) {
-        //$logger->info("Loggin for $myusername passed");
-        // Register $myusername, $mypassword and redirect to file "index.php"
         registrateSession($result, $myusername);
     } else {
-        //$logger->info("Loggin for $myusername failed");
-        //ob_clean();
-        //echo "failed!!";
         header("location:index.php?login=failed");
-        //echo "Wrong Username or Password";
+        $logger->debug("$myusername failed to log in (wrong password or non-existing user)",__FILE__,__LINE__);
     }
 }
 
 function registrateSession($result, $myusername)
 {
+    $logger = new logging();
+
     session_start();
     $row = mysql_fetch_array($result);
 
@@ -160,11 +184,8 @@ function registrateSession($result, $myusername)
     $_SESSION['active'] = $row['active'];
     $_SESSION['project'] = "0";
 
+    $logger->debug("User logged in",__FILE__,__LINE__);
 
-    //session_register("myusername");
-    //session_register("mypassword");
-    //ob_clean();
-    //echo "User OK!";
     header("location:index.php");
 }
 

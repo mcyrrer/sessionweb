@@ -67,15 +67,21 @@ class logging
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 
-    public function warn($logmessage, $filename = "", $line = "")
+    public function info($logmessage, $filename = "", $line = "")
     {
         $loglevel = "INFO";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 
+    public function warn($logmessage, $filename = "", $line = "")
+    {
+        $loglevel = "WARNING";
+        $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
+    }
+
     public function warning($logmessage, $filename = "", $line = "")
     {
-        $loglevel = "WARN";
+        $loglevel = "WARNING";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 

@@ -4,6 +4,9 @@ session_start();
 require_once('include/loggingsetup.php');
 include_once('include/db.php');
 include_once('config/auth.php.inc');
+require_once('classes/logging.php');
+
+$logger = new logging();
 
 if (!file_exists('config/db.php.inc')) {
     header("Location: install/install.php");
@@ -21,6 +24,7 @@ else
 
 if ($logout == "yes") {
     session_destroy();
+    $logger->debug("User logged out",__FILE__,__LINE__);
     unset($_SESSION);
 }
 include_once('config/db.php.inc');
