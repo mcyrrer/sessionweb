@@ -1,7 +1,9 @@
 <?php
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
+require_once ('../classes/logging.php');
 
+$logger=new logging();
 define("INSTALLATION_SCRIPT", "SessionwebDbLayout_23.sql");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -34,6 +36,7 @@ define("INSTALLATION_SCRIPT", "SessionwebDbLayout_23.sql");
 
 function install()
 {
+    $logger = new logging();
     $adminuser = $_POST['dbadminuser'];
     $adminpassword = $_POST['dbadminpassword'];
     $dbuser = $_POST['dbsessionwebuser'];
@@ -57,15 +60,18 @@ function install()
         mysql_query("SET NAMES utf8");
         mysql_query("SET CHARACTER SET utf8");
         $mysqlExecuter = new MySqlExecuter();
+        $logger->debug("Will install sessionweb with file ". INSTALLATION_SCRIPT,__FILE__,__LINE__);
         $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT, $dbname, $createDb);
 
         if (sizeof($resultOfSql) == 0) {
             echo "Database created and installed<br>";
+            $logger->info("INSTALLATION: Database created");
             createDbConfigFile($dbuser, $dbpassword, $dbname);
             if (strcmp($dbcreateuser, "true") == 0)
                 createDbUser($dbuser, $dbpassword, $dbname);
             else {
                 echo "User not created since checkbox was unchecked.<br>";
+                $logger->info("Database user not created since checkbox was unchecked");
             }
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
             echo "Use username <b>admin</b> and password <b>admin</b> to login.<br>";
@@ -74,8 +80,10 @@ function install()
 
 
         } else {
+            $logger->error("INSTALLATION: Error during installation",__FILE__,__LINE__);
             foreach ($resultOfSql as $oneError) {
                 echo "--------------ERROR--------------<br>";
+                $logger->error($oneError);
                 echo $oneError . "<br>";
             }
         }
@@ -100,21 +108,32 @@ function install()
 
 function createDbUser($dbuser, $dbpassword, $dbname)
 {
+    $logger=new logging();
     $sqlCreateUser = "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword'";
     $sqlGrantUsage = "GRANT USAGE ON * . * TO  '$dbuser'@'localhost' IDENTIFIED BY  '$dbpassword' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
     $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `$dbname` . * TO  '$dbuser'@'localhost'";
     if (mysql_query($sqlCreateUser) === false) {
         echo "failed to create $dbuser user<br>";
+        $logger->error("Failed to create user $dbuser.Does it already exist? ",__FILE__,__LINE__);
+        $logger->sql($sqlCreateUser,__FILE__,__LINE__);
     } else {
         echo "Created $dbuser user<br>";
     }
     if (mysql_query($sqlGrantUsage) === false) {
         echo "failed to grant usage for $dbuser user<br>";
+        $logger->error("Failed to grant usage for $dbuser",__FILE__,__LINE__);
+        $logger->sql($sqlGrantUsage,__FILE__,__LINE__);
+
+
     } else {
         echo "Added grant usage for $dbuser user<br>";
     }
     if (mysql_query($sqlGrantSessionweb) === false) {
         echo "failed to grant usage for sessionweb for $dbuser user<br>";
+        $logger->error("Failed to usage for sessionweb for $dbuser",__FILE__,__LINE__);
+        $logger->sql($sqlGrantSessionweb,__FILE__,__LINE__);
+
+
     } else {
         echo "Added grant usage for sessionwebos db for $dbuser user<br>";
     }
@@ -261,6 +280,7 @@ function echoForm()
 
 function checkFoldersForRWDuringInstallation()
 {
+    $logger =new logging();
     echo "<b>Check for Read Write access for certain folders.</b><br>";
     $foldersToCheckRW = array("../config/", "../include/filemanagement/files/", "../include/filemanagement/thumbnails/", "../log/");
     $foldersOk = true;
@@ -279,6 +299,9 @@ function checkFoldersForRWDuringInstallation()
                 $foldersOk = false;
             }
         } catch (Exception $e) {
+            $logger->error("folder $aFolder is RW => NOK");
+            $logger->info("Please change folder $aFolder to allow read write for the www user (chmod 664)");
+
             echo "folder $aFolder is RW => NOK<br>";
             //echo 'Error: ', $e->getMessage(), "\n";
             echo "Please change folder $aFolder to allow read write for the www user (chmod 664)<br>";

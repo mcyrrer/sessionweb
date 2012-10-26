@@ -1,11 +1,15 @@
 <?php
 session_start();
 //require_once('../include/validatesession.inc');
+require_once('../classes/logging.php');
 require_once('../include/db.php');
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 include_once ('../config/db.php.inc');
+$logger=new logging();
+
 if ($_SESSION['useradmin'] != 1) {
+    $logger->info('Access of upgrade page not granted! User does not have admin priviliges.',__FILE__,__LINE__);
     echo "Admin privilege needed to be able to update sessionweb. Please login using a user that have admin rights.";
     exit();
 }
@@ -46,7 +50,7 @@ if ($_SESSION['useradmin'] != 1) {
 
 function upgrade()
 {
-
+    $logger = new logging();
     $adminuser = $_POST['dbadminuser'];
     $adminpassword = $_POST['dbadminpassword'];
 
@@ -83,6 +87,7 @@ function upgrade()
             mysql_query("SET CHARACTER SET utf8");
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
+            $logger->info('Upgrade from $currentVersion stared.',__FILE__,__LINE__);
 
             $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion], DB_NAME_SESSIONWEB);
             mysql_close($con);
@@ -90,6 +95,8 @@ function upgrade()
             if (sizeof($resultOfSql) == 0) {
                 $versionAfterUpgrade = getSessionWebVersion();
                 echo "Upgraded to version <b>$versionAfterUpgrade</b><br>";
+                $logger->info('Upgraded to $versionAfterUpgrade done.',__FILE__,__LINE__);
+
                 if (array_key_exists($currentVersion, $messages)) {
                     echo "<h3>" . $messages[$currentVersion] . "</h3>";
                 }
@@ -101,10 +108,14 @@ function upgrade()
             }
             else
             {
+                $logger->error("Error during upgrade from $currentVersion",__FILE__,__LINE__);
+                $logger->error("File executed ". $versions[$currentVersion],__FILE__,__LINE__);
+
                 foreach ($resultOfSql as $oneError)
                 {
                     echo "--------------ERROR--------------<br>";
                     echo $oneError . "<br>";
+                    $logger->error("$oneError",__FILE__,__LINE__);
                 }
             }
             echo "<div><a href='../index.php'>Back to sessionweb</a></div>";
@@ -114,17 +125,20 @@ function upgrade()
 
         elseif (tryDbConnection($adminuser, $adminpassword)) {
             echo "Sql file does not exist " . $versions[$currentVersion] . "<br>";
+            $logger->error("File ". $versions[$currentVersion]." does not exist",__FILE__,__LINE__);
+
         }
         else
         {
             echo "Could not connect to MySql database, please check your user and password";
-
+            $logger->error("UPGRADE: Could not connect to MySql database, please check your user and password",__FILE__,__LINE__);
         }
 
     }
     else
     {
         echo "You already have the latest version.";
+        $logger->info("UPGRADE: Upgrade aborted since the latest version is already installed",__FILE__,__LINE__);
     }
 
 }
