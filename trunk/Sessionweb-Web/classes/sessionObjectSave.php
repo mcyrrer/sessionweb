@@ -284,10 +284,8 @@ class sessionObjectSave
     private function saveToMissionStatusTable_Execute($missionDataArray, $con)
     {
         $versionId = $missionDataArray['versionid'];
-
         $sqlDelete = "DELETE FROM mission_areas WHERE mission_areas.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-
         foreach($missionDataArray['areas'] as $area)
         {
             $sqlInsert = "INSERT INTO mission_areas (versionid, areaname) VALUES ('$versionId', '$area')";
@@ -320,10 +318,8 @@ class sessionObjectSave
     private function saveToMissionBugsTable_Execute($missionDataArray, $con)
     {
         $versionId = $missionDataArray['versionid'];
-
         $sqlDelete = "DELETE FROM mission_bugs WHERE mission_bugs.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-
         foreach($missionDataArray['bugs'] as $bug)
         {
             $sqlInsert = "INSERT INTO mission_bugs (versionid, bugid) VALUES ('$versionId', '$bug')";
@@ -355,10 +351,8 @@ class sessionObjectSave
     private function saveToMissionRequirementsTable_Execute($missionDataArray, $con)
     {
         $versionId = $missionDataArray['versionid'];
-
         $sqlDelete = "DELETE FROM mission_requirements WHERE mission_requirements.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-
         foreach($missionDataArray['requirements'] as $req)
         {
             $sqlInsert = "INSERT INTO mission_requirements (versionid, requirementsid) VALUES ('$versionId', '$req')";
@@ -381,10 +375,8 @@ class sessionObjectSave
     private function executeInsert($sqlInsert, $con, $file, $line)
     {
         $this->logger->sql($sqlInsert, $file, $line);
-
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlInsert);
-
         if (!$result) {
             $this->logger->error(" Mysql Code:" . $sqlInsert, __FILE__, __LINE__);
             /** @noinspection PhpVoidFunctionResultUsedInspection */
@@ -407,7 +399,6 @@ class sessionObjectSave
         $this->logger->sql($sqlUpdate, $file, $line);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlUpdate);
-
         if (!$result) {
             $this->logger->error(" Mysql Code:" . $sqlUpdate, __FILE__, __LINE__);
             $this->logger->error(" Mysql error:" . mysqli_error($con), __FILE__, __LINE__);
@@ -428,10 +419,8 @@ class sessionObjectSave
     private function executeDelete($sqlDelete, $con, $file, $line)
     {
         $this->logger->sql($sqlDelete, $file, $line);
-
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlDelete);
-
         if (!$result) {
             $this->logger->error(" Mysql Code:" . $sqlDelete, __FILE__, __LINE__);
             /** @noinspection PhpVoidFunctionResultUsedInspection */
