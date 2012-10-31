@@ -24,7 +24,7 @@ else
 
 if ($logout == "yes") {
     session_destroy();
-    $logger->debug("User logged out",__FILE__,__LINE__);
+    $logger->info("User logged out",__FILE__,__LINE__);
     unset($_SESSION);
 }
 include_once('config/db.php.inc');

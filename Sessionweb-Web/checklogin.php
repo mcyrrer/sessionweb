@@ -25,14 +25,10 @@ if ($userStatus == 1 || $userStatus == 2) {
     $registred = validateUserAsLdapUser($con);
     if (!$registred) {
         validateUserAsSessionwebUser();
+    } else {
+        $logger->debug("user logged in as a AD user", __FILE__, __LINE__);
     }
-    else
-    {
-        $logger->debug("user logged in as a AD user",__FILE__,__LINE__);
-    }
-}
-else
-{
+} else {
     validateUserAsSessionwebUser();
 }
 
@@ -62,8 +58,22 @@ function validateUserAsLdapUser($con)
                 $sql .= "WHERE  username = '$myusername' ";
                 $sql .= "       AND active = 1 ";
                 $logger->sql($sql, __FILE__, __LINE__);
+
                 $result = mysql_query($sql);
-                registrateSession($result, $myusername);
+
+                $row = mysql_fetch_array($result);
+
+                $active = $row['active'];
+                $deleted = $row['deleted'];
+                if (!$active || $deleted) {
+                    if (!$active)
+                        $logger->debug("User $myusername is marked as inactive and/or deleted in database and is not allowed to log in", __FILE__, __LINE__);
+                    else
+                        $logger->error("Should not end up here!!!!", __FILE__, __LINE__);
+                    return false;
+                } else {
+                    registrateSession($result, $myusername, $row);
+                }
                 return true;
 
             } else {
@@ -182,12 +192,19 @@ function validateUserAsSessionwebUser()
     }
 }
 
-function registrateSession($result, $myusername)
+function registrateSession($result, $myusername, $rowAlreadyClaimed=false)
 {
     $logger = new logging();
 
     session_start();
-    $row = mysql_fetch_array($result);
+    if(!$rowAlreadyClaimed)
+    {
+        $row = mysql_fetch_array($result);
+    }
+    else
+    {
+        $row = $rowAlreadyClaimed;
+    }
 
     $_SESSION['user'] = $row['fullname'];
     $_SESSION['superuser'] = $row['superuser'];
@@ -197,7 +214,7 @@ function registrateSession($result, $myusername)
     $_SESSION['active'] = $row['active'];
     $_SESSION['project'] = "0";
 
-    $logger->debug("User logged in", __FILE__, __LINE__);
+    $logger->info("User logged in", __FILE__, __LINE__);
 
     header("location:index.php");
 }
