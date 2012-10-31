@@ -14,10 +14,25 @@ $con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB)
 mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
 
 mysql_set_charset('utf8');
+$authHelper = new authentication();
 
-$registred = validateUserAsLdapUser($con);
+$myusername = $_POST['myusername'];
+$myusername = stripslashes($myusername);
+$myusername = mysql_real_escape_string($myusername);
+$userStatus = $authHelper->isUserLdapUser($myusername, $con);
 
-if (!$registred) {
+if ($userStatus == 1 || $userStatus == 2) {
+    $registred = validateUserAsLdapUser($con);
+    if (!$registred) {
+        validateUserAsSessionwebUser();
+    }
+    else
+    {
+        $logger->debug("user logged in as a AD user",__FILE__,__LINE__);
+    }
+}
+else
+{
     validateUserAsSessionwebUser();
 }
 
@@ -46,7 +61,7 @@ function validateUserAsLdapUser($con)
                 $sql .= "FROM   members ";
                 $sql .= "WHERE  username = '$myusername' ";
                 $sql .= "       AND active = 1 ";
-                $logger->sql($sql,__FILE__,__LINE__);
+                $logger->sql($sql, __FILE__, __LINE__);
                 $result = mysql_query($sql);
                 registrateSession($result, $myusername);
                 return true;
@@ -72,12 +87,12 @@ function validateUserAsLdapUser($con)
                 $sqlInsert .= "             '1', ";
                 $sqlInsert .= "             '0', ";
                 $sqlInsert .= "             '0')";
-                $logger->sql($sqlInsert,__FILE__,__LINE__);
+                $logger->sql($sqlInsert, __FILE__, __LINE__);
                 $result = mysql_query($sqlInsert);
-                if(!$result)
-                {
-                    $logger->error(mysqli_error($con),__FILE__,__LINE__);
-                    $logger->error($sqlInsert,__FILE__,__LINE__);
+                if (!$result) {
+                    $logger->error(mysqli_error($con), __FILE__, __LINE__);
+                    $logger->error($sqlInsert, __FILE__, __LINE__);
+                    die("AD/LDAP user $myusername not created, check log");
                 }
 
                 $sqlInsert = "";
@@ -90,14 +105,14 @@ function validateUserAsLdapUser($con)
                 $sqlInsert .= "             '', ";
                 $sqlInsert .= "             '', ";
                 $sqlInsert .= "             'all')";
-                $logger->sql($sqlInsert,__FILE__,__LINE__);
+                $logger->sql($sqlInsert, __FILE__, __LINE__);
                 $result = mysql_query($sqlInsert);
 
 
-                if(!$result)
-                {
-                    $logger->error(mysqli_error($con),__FILE__,__LINE__);
-                    $logger->error($sqlInsert,__FILE__,__LINE__);
+                if (!$result) {
+                    $logger->error(mysqli_error($con), __FILE__, __LINE__);
+                    $logger->error($sqlInsert, __FILE__, __LINE__);
+                    die("AD/LDAP user $myusername not created");
                 }
 
                 $sql = "";
@@ -105,22 +120,20 @@ function validateUserAsLdapUser($con)
                 $sql .= "FROM   members ";
                 $sql .= "WHERE  username = '$myusername' ";
                 $sql .= "       AND active = 1 ";
-                $logger->sql($sql,__FILE__,__LINE__);
+                $logger->sql($sql, __FILE__, __LINE__);
                 $result = mysql_query($sql);
 
-                if(!$result)
-                {
-                    $logger->error(mysqli_error($con),__FILE__,__LINE__);
-                    $logger->error($sql,__FILE__,__LINE__);
+                if (!$result) {
+                    $logger->error(mysqli_error($con), __FILE__, __LINE__);
+                    $logger->error($sql, __FILE__, __LINE__);
                 }
 
-                if(mysql_num_rows($result)==1)
-                {
-                    $logger->info("AD/LDAP user $myusername created",__FILE__,__LINE__);
-                }
-                else
-                {
-                    $logger->error("AD/LDAP user $myusername not created",__FILE__,__LINE__);
+                if (mysql_num_rows($result) == 1) {
+                    $logger->info("AD/LDAP user $myusername created", __FILE__, __LINE__);
+                } else {
+                    $logger->error("AD/LDAP user $myusername not created", __FILE__, __LINE__);
+
+                    die("AD/LDAP user $myusername not created");
                 }
 
                 registrateSession($result, $myusername);
@@ -150,7 +163,7 @@ function validateUserAsSessionwebUser()
     $sql .= "WHERE  username = '$myusername' ";
     $sql .= "       AND PASSWORD = '$mypassword' ";
     $sql .= "       AND active = 1 ";
-    $logger->sql($sql,__FILE__,__LINE__);
+    $logger->sql($sql, __FILE__, __LINE__);
 
 
     $result = mysql_query($sql);
@@ -165,7 +178,7 @@ function validateUserAsSessionwebUser()
         registrateSession($result, $myusername);
     } else {
         header("location:index.php?login=failed");
-        $logger->debug("$myusername failed to log in (wrong password or non-existing user)",__FILE__,__LINE__);
+        $logger->debug("$myusername failed to log in (wrong password or non-existing user)", __FILE__, __LINE__);
     }
 }
 
@@ -184,7 +197,7 @@ function registrateSession($result, $myusername)
     $_SESSION['active'] = $row['active'];
     $_SESSION['project'] = "0";
 
-    $logger->debug("User logged in",__FILE__,__LINE__);
+    $logger->debug("User logged in", __FILE__, __LINE__);
 
     header("location:index.php");
 }

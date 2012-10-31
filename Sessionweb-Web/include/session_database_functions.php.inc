@@ -607,7 +607,6 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
                     $sqlInsert .= "             `linked_to_versionid`) ";
                     $sqlInsert .= "VALUES      ('$linked_from_versionid', ";
                     $sqlInsert .= "             '$linked_to_versionid')";
-
                     $result = mysql_query($sqlInsert);
 
                     if (!$result) {
@@ -617,10 +616,6 @@ function saveSession_InsertSessionSessionsLinksToDb($linked_from_versionid)
                     echo "Could not add a connection to session $aSessionLinkTo since it does not exist.<br>";
                 }
             }
-            //            else
-            //            {
-            //                echo "Session ID is empty<br>";
-            //            }
         }
     }
 }
@@ -768,14 +763,18 @@ function saveSession_UpdateSessionRequirementsToDb($versionid)
 
 function saveSession_UpdateSessionLinkedToDb($versionid)
 {
+    $logger = new logging();
     $sqlDelete = "";
     $sqlDelete .= "DELETE FROM mission_sessionsconnections ";
     $sqlDelete .= "WHERE  `linked_from_versionid` = '$versionid'";
+    $logger->sql($sqlDelete,__FILE__,__LINE__);
 
     $result = mysql_query($sqlDelete);
 
     if (!$result) {
         echo "saveSession_UpdateSessionLinkedToDb: " . mysql_error() . "<br/>";
+        $logger->error(mysql_errno());
+        $logger->error($sqlDelete);
     }
 
     saveSession_InsertSessionSessionsLinksToDb($versionid);

@@ -8,6 +8,7 @@ include_once ('../include/session_database_functions.php.inc');
 include_once ('../include/session_common_functions.php.inc');
 include_once ('../include/graphcommon.inc');
 include_once ('../classes/sessionReadObject.php');
+include_once ('../classes/statistics.php');
 if (file_exists('../include/customfunctions.php.inc')) {
     include_once ('../include/customfunctions.php.inc');
 
@@ -76,6 +77,7 @@ echo '</body>
 function generateReport()
 {
     $con1 = getMySqlConnection();
+    $statHelper = new statistics();
 
     $start = time();
     $sql = generateSql();
@@ -100,7 +102,7 @@ function generateReport()
 
     echo '	</ul>
 	<div id="tabs-1">
-		<p>' . generateOverviewTabContent($allSessions, $sql) . '</p>
+		<p>' . $statHelper->generateOverviewTabContent($allSessions, $sql) . '</p>
 	</div>
 	<div id="tabs-2">
 		<p>' . getTeamOrApplicationStatistics($allSessions) . '</p>
@@ -108,12 +110,12 @@ function generateReport()
     if (isset($_REQUEST['buglist']))
         echo '
 	<div id="tabs-3">
-		<p>' . getNumberOfBugsFoundAsListWithLink($allSessions) . '</p>
+		<p>' . $statHelper->getNumberOfBugsFoundAsListWithLink($allSessions) . '</p>
 	</div>';
     if (isset($_REQUEST['reqlist']))
         echo '
     <div id="tabs-4">
-		<p>' . getNumberOfRequirementsFoundAsListWithLink($allSessions) . '</p>
+		<p>' . $statHelper->getNumberOfRequirementsFoundAsListWithLink($allSessions) . '</p>
 	</div>';
     echo '</div>
 
@@ -639,83 +641,6 @@ function getNumberOfBugsFoundAsListWithLink($allSessions)
         }
     }
     return $html;
-}
-
-function generateOverviewTabContent($allSessions, $sql)
-{
-    $sql = explode("WHERE", $sql);
-    $sql = explode("LIMIT", $sql[1]);
-    $sql = urlencode($sql[0]);
-
-    $settings = getSettings();
-    $timeInSessionsInHours = getTotalTimeInSessionInHours($allSessions);
-    $timeInSessionsInHoursNormalized = round($timeInSessionsInHours / ($settings['normalized_session_time'] / 60), 1);
-    $htmlString = "<table border='0' width='100%'>";
-    $htmlString .= "<tr>";
-    $htmlString .= "<td valign='top'>";
-    $htmlString .= "<div>Number of sessions: " . count($allSessions) . "</div>";
-    $htmlString .= "<div>Number of normalized sessions: " . $timeInSessionsInHoursNormalized . " ( one normalized session = " . $settings['normalized_session_time'] . " min)    </div>";
-    $htmlString .= "</td>";
-    $htmlString .= "<td valign='top'>";
-    $htmlString .= "<div>Time in sessions: " . $timeInSessionsInHours . "h</div>";
-    $htmlString .= "<div>Requirements tested: " . getNumberOfRequirementsFound($allSessions) . "</div>";
-    $htmlString .= "<div>Bugs found: " . getNumberOfBugsFound($allSessions) . "</div>";
-    $htmlString .= "</td>";
-    $htmlString .= "</tr>";
-    $htmlString .= "<tr>";
-
-    $htmlString .= "<td valign='top' width=50%>";
-    $htmlString .= '<div id="containerProgress"></div>';
-
-
-    $htmlString .= "</td>";
-    $htmlString .= "<td valign='top'>";
-    $htmlString .= getPieCharTimeDistribution($allSessions, "timeDistcontainer");
-    $htmlString .= '<div id="timeDistcontainer"></div>';
-
-
-    $parameters = ""; //"sprint=Apr12";
-
-
-    $htmlString .= "<script type='text/javascript'>
-$(function() {
-    var params = '" . $parameters . "';
-
-	$.getJSON('../api/statistics/progress/index.php?'+params+'&callback=?&sql=$sql', function(data) {
-		// Create the chart
-		window.chart = new Highcharts.StockChart({
-			chart : {
-				renderTo : 'containerProgress'
-			},
-
-			rangeSelector : {
-				selected : 1
-			},
-
-			title : {
-				text : 'Progress over time'
-			},
-
-			series : [{
-				name : 'Total number of sessions',
-				data : data,
-				tooltip: {
-					valueDecimals: 2
-				}
-			}]
-		});
-	});
-
-});
-
-		</script>";
-
-
-    $htmlString .= "</td>";
-    $htmlString .= "</tr>";
-
-    $htmlString .= "</table>";
-    return $htmlString;
 }
 
 ?>

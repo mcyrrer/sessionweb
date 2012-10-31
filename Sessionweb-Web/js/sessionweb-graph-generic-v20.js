@@ -21,7 +21,7 @@ function setupDatePicker() {
     $("#to").datepicker("option", "dateFormat", "yy-mm-dd");
 
     $("#tabs").tabs({
-        event:"mouseover"
+//        event:"mouseover"
     });
 
 }

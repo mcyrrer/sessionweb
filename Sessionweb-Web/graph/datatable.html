@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Demo of issue with export plugin</title>
+    <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_page.css" />
+    <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_table.css" />
+    <link rel="stylesheet" type="text/css" href="../js/DataTables/css/TableTools.css" />
+    <link rel="stylesheet" type="text/css" href=
+            "../js/jqueryui/jquery-ui-1.8.20.custom.css" />
+    <script src="../js/jquery-1.7.1.js" type="text/javascript">
+    </script>
+    <script src="../js/jqueryui/jquery-ui-1.8.20.custom.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript" src="../js/DataTables/js/jquery.dataTables.min.js">
+    </script>
+    <script type="text/javascript" src="../js/DataTables/js/TableTools.min.js">
+    </script>
+    <script type="text/javascript" src="../js/DataTables/js/ZeroClipboard.js">
+    </script>
+    <script src="../js/sessionweb-graph-generic-v20.js" type="text/javascript">
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        //<![CDATA[
+        $(document).ready(function() {
+            TableTools.DEFAULTS.sSwfPath = "../js/DataTables/swf/copy_csv_xls_pdf.swf";
+            $("#tabs").tabs( {
+                "show": function(event, ui) {
+                    var jqTable = $('table.display', ui.panel);
+                    if ( jqTable.length > 0 ) {
+                        var oTableTools = TableTools.fnGetInstance( jqTable[0] );
+                        if ( oTableTools != null && oTableTools.fnResizeRequired() )
+                        {
+                            /* A resize of TableTools' buttons and DataTables' columns is only required on the
+                             * first visible draw of the table
+                             */
+                            jqTable.dataTable().fnAdjustColumnSizing();
+                            oTableTools.fnResizeButtons();
+                        }
+                    }
+                }
+            } );
+
+            $('#areaTable').dataTable( {
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"Tfr>t<"F"ip>'
+            } );
+
+            $('#areaTable2').dataTable( {
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"Tfr>t<"F"ip>'
+            } );
+        } );
+        //]]>
+    </script>
+</head>
+
+<body>
+
+<h1>jQuery UI with datatables plugin export issue </h1>
+
+<div class="demo">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Tab1</a></li>
+            <li><a href="#tabs-2">Tab2</a></li>
+        </ul>
+
+        <div id="tabs-1" class='displa'>
+            <table class='display' id='areaTable'>
+                <thead>
+                <tr>
+                    <th>col 1</th>
+                    <th>col 2</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>a1</td>
+                    <td>1</td>
+                </tr>
+
+                <tr>
+                    <td>a2</td>
+                    <td>1</td>
+                </tr>
+
+                <tr>
+                    <td>a3</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tabs-2">
+            <div id="save">
+                <table class='display' id='areaTable2'>
+                    <thead>
+                    <tr>
+                        <th>col 1</th>
+                        <th>col 2</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>a1</td>
+                        <td>1</td>
+                    </tr>
+
+                    <tr>
+                        <td>a2</td>
+                        <td>1</td>
+                    </tr>
+
+                    <tr>
+                        <td>a3</td>
+                        <td>1</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

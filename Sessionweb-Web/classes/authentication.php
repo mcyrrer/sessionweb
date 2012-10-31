@@ -2,6 +2,7 @@
 
 require_once 'config/auth.php.inc';
 require_once 'classes/logging.php';
+
 class authentication
 {
     function getUserInfoThroughLdap($LDAPUser, $LDAPUserPassword)
@@ -57,4 +58,35 @@ class authentication
 
     }
 
+    /**
+     * Function to get information if a user is a AD user of a local sessionweb user based on the information
+     * in the db table members
+     * @param $username
+     * @param $mysqlCon
+     * @return int 1 if ad account, 0 if not, 2 if user does not exist in sessionweb db
+     */
+    function isUserLdapUser($username, $mysqlCon)
+    {
+        $logger = new logging();
+
+        $sql = "SELECT * FROM members WHERE username = '$username'";
+        $logger->sql($sql, __FILE__, __LINE__);
+        $result = mysql_query($sql);
+        if (mysql_num_rows($result) == 1) {
+
+            $row = mysql_fetch_array($result);
+            if ($row['adaccount'] == false) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } elseif (mysql_num_rows($result) == 0) {
+
+            return 2;
+        }
+        else {
+            $logger->warning("More then one user have username $username", __FILE__, __LINE__);
+            return 3;
+        }
+    }
 }
