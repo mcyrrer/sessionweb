@@ -87,7 +87,7 @@ function upgrade()
             mysql_query("SET CHARACTER SET utf8");
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
-            $logger->info('Upgrade from $currentVersion stared.',__FILE__,__LINE__);
+            $logger->info('Upgrade from '.$currentVersion.' started.',__FILE__,__LINE__);
 
             $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion], DB_NAME_SESSIONWEB);
             mysql_close($con);
@@ -95,7 +95,7 @@ function upgrade()
             if (sizeof($resultOfSql) == 0) {
                 $versionAfterUpgrade = getSessionWebVersion();
                 echo "Upgraded to version <b>$versionAfterUpgrade</b><br>";
-                $logger->info('Upgraded to $versionAfterUpgrade done.',__FILE__,__LINE__);
+                $logger->info('Upgraded to '.$versionAfterUpgrade.' done.',__FILE__,__LINE__);
 
                 if (array_key_exists($currentVersion, $messages)) {
                     echo "<h3>" . $messages[$currentVersion] . "</h3>";

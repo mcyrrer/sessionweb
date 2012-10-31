@@ -22,8 +22,7 @@ class sessionReadObject
         $result = mysqli_query($con, $sqlSelectSession);
         $data = mysqli_fetch_array($result);
 
-        foreach ($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             if (!is_int($key)) {
                 $this->sessionData[$key] = $value;
 
@@ -39,8 +38,7 @@ class sessionReadObject
         $sqlSelectSessionStatus .= "FROM   mission_areas ";
         $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelectSessionStatus);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[] = $row['areaname'];
 
@@ -52,15 +50,15 @@ class sessionReadObject
         $tmpAreaArray2 = array();
         $sql = "SELECT id,mission_versionid, filename, size, mimetype FROM `mission_attachments` WHERE `mission_versionid` = $sessionid";
         $result = mysqli_query($con, $sql);
-        while ($row = mysqli_fetch_array($result))
-        {
+        if ($result != null) {
+            while ($row = mysqli_fetch_array($result)) {
 
-            foreach ($row as $key => $value)
-            {
-                if (!is_int($key)) {
-                    $tmpAreaArray2[$key] = $value;
+                foreach ($row as $key => $value) {
+                    if (!is_int($key)) {
+                        $tmpAreaArray2[$key] = $value;
+                    }
+                    $tmpAreaArray[$row['id']] = $tmpAreaArray2;
                 }
-                $tmpAreaArray[$row['id']] = $tmpAreaArray2;
             }
         }
         $this->sessionData['attachments'] = $tmpAreaArray;
@@ -72,8 +70,7 @@ class sessionReadObject
         $sqlSelect .= "FROM   mission_bugs ";
         $sqlSelect .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['bugid']] = $row['bugid'];
 
@@ -88,8 +85,7 @@ class sessionReadObject
         $sqlSelect .= "FROM   mission_requirements ";
         $sqlSelect .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['requirementsid']] = $row['requirementsid'];
 
@@ -101,10 +97,8 @@ class sessionReadObject
         $tmpAreaArray2 = array();
         $sql = "select * from `mission_custom` WHERE versionid=$versionid";
         $result = mysqli_query($con, $sql);
-        while ($row = mysqli_fetch_array($result))
-        {
-            foreach ($row as $key => $value)
-            {
+        while ($row = mysqli_fetch_array($result)) {
+            foreach ($row as $key => $value) {
                 if (!is_int($key)) {
                     $tmpAreaArray2[$key] = $value;
                 }
@@ -121,15 +115,12 @@ class sessionReadObject
         if (mysqli_num_rows($result) > 0) {
             $data = mysqli_fetch_array($result);
 
-            foreach ($data as $key => $value)
-            {
+            foreach ($data as $key => $value) {
                 if (!is_int($key)) {
                     $this->sessionData[$key] = $value;
                 }
             }
-        }
-        else
-        {
+        } else {
             $this->sessionData['debrief_notes'] = null;
             $this->sessionData['debriefedby'] = null;
 
@@ -143,8 +134,7 @@ class sessionReadObject
         if (mysqli_num_rows($result) > 0) {
             $data = mysqli_fetch_array($result);
 
-            foreach ($data as $key => $value)
-            {
+            foreach ($data as $key => $value) {
                 if (!is_int($key)) {
                     $this->sessionData[$key] = $value;
                 }
@@ -158,8 +148,7 @@ class sessionReadObject
         $sqlSelect .= "FROM   mission_sessionsconnections ";
         $sqlSelect .= "WHERE  linked_to_versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['linked_from_versionid']] = $row['linked_from_versionid'];
 
@@ -172,8 +161,7 @@ class sessionReadObject
         $sqlSelect .= "FROM   mission_sessionsconnections ";
         $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpAreaArray[$row['linked_to_versionid']] = $row['linked_to_versionid'];
 
@@ -188,8 +176,7 @@ class sessionReadObject
         if (mysqli_num_rows($result) > 0) {
             $data = mysqli_fetch_array($result);
 
-            foreach ($data as $key => $value)
-            {
+            foreach ($data as $key => $value) {
                 if (!is_int($key)) {
                     $this->sessionData[$key] = $value;
                 }
@@ -203,8 +190,7 @@ class sessionReadObject
         $sqlSelect .= "FROM   mission_testers ";
         $sqlSelect .= "WHERE  versionid = $versionid";
         $result = mysqli_query($con, $sqlSelect);
-        while ($row = mysqli_fetch_array($result))
-        {
+        while ($row = mysqli_fetch_array($result)) {
 
             $tmpArray[$row['tester']] = $row['tester'];
 

@@ -355,34 +355,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
 
     </div>
 
-    <div>
-        <a href="#" id='adduser_menu'>Add user</a>
-    </div>
-    <div id='adduser'>
-        <div class='divider_settings'></div>
-        <p>Add a new user to sessionweb<br>
-        <span id='usermessages'></span></p><br>
 
-        <form id="adduserForm">
-        Full name:<input id="user_fullname"type="text" size="40" value="" name="fullname"><span class="italic">Minimum length is 4 chars</span><br>
-        User name:<input id="user_username" type="text" size="40" value="" name="username"><span class="italic">Minimum length is 4 chars</span><br>
-        Password:<input id="user_pw1" type="password" size="40" value="" name="pw1"> <span class="italic">Minimum length is 6 chars</span> <br>
-        Retype password:<input id="user_pw2" type="password" size="40" value="" name="pw2"><br>
-        <?php
-            if ($_SESSION['settings']['team'] == 1) {
-                echo "Team:";
-                echoTeamSelect("");
-                echo "<br>";
-            }
-            ?>
-        Admin: <input type="checkbox" name="admin" value="yes">
-        Superuser: <input type="checkbox" name="superuser" value="yes"><br>
-        <span class='settings_submit' id='adduser_add'>ADD</span>
-        </form>
-
-    </div>
-
-    <a href="settings.php?command=listusers">User management</a><br>
     <!--                <div>-->
     <!--                    <a href="#" id='configuration_menu'>Manage Custom Fields</a>-->
     <!--                </div>-->
@@ -402,6 +375,56 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
     <a href="logsql.php">View Sessionweb sql log file</a><br>
     <a href="systemcheck.php">Sessionweb system check</a>
 
+    <h3 id="user_management">User Management</h3>
+    <div>
+        <a href="#" id='adduser_menu'>Add user</a>
+    </div>
+    <div id='adduser'>
+        <div class='divider_settings'></div>
+        <p>Add a new user to sessionweb<br>
+            <span id='usermessages'></span></p><br>
+
+        <form id="adduserForm">
+            Full name:<input id="user_fullname"type="text" size="40" value="" name="fullname"><span class="italic">Minimum length is 4 chars</span><br>
+            User name:<input id="user_username" type="text" size="40" value="" name="username"><span class="italic">Minimum length is 4 chars</span><br>
+            Password:<input id="user_pw1" type="password" size="40" value="" name="pw1"> <span class="italic">Minimum length is 6 chars</span> <br>
+            Retype password:<input id="user_pw2" type="password" size="40" value="" name="pw2"><br>
+            <?php
+            if ($_SESSION['settings']['team'] == 1) {
+                echo "Team:";
+                echoTeamSelect("");
+                echo "<br>";
+            }
+            ?>
+            Admin: <input type="checkbox" name="admin" value="yes">
+            Superuser: <input type="checkbox" name="superuser" value="yes"><br>
+            <span class='settings_submit' id='adduser_add'>ADD</span>
+        </form>
+    </div>
+
+    <div>
+        <a href="#" id='deleteuser_menu'>Delete user</a>
+    </div>
+    <div id='deleteuser'>
+        <div class='divider_settings'></div>
+        <p>Remove a user from sessionweb.<br>
+            Please be aware that the user account will still be in the database but it is
+            not visible and you can not create a new user with the same username (you may enable the account direct through the
+            database if neede). Reason for this is to keep the sessionweb history for that user.<br>
+            <span id='usermessagesdelete'></span></p><br>
+
+        <form id="deleteuserForm">
+            <?php
+            echo "User:";
+            echoTesterFullNameSelect(null,true);
+            echo "<br>";
+            ?>
+            <span class='settings_submit' id='deleteuser_delete'>Delete user</span>
+        </form>
+
+    </div>
+
+    <a href="settings.php?command=listusers">User management</a><br>
 
 </div>
 

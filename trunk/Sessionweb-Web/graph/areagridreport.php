@@ -8,6 +8,7 @@ include_once ('../include/session_database_functions.php.inc');
 include_once ('../include/session_common_functions.php.inc');
 include_once ('../include/graphcommon.inc');
 include_once ('../classes/sessionReadObject.php');
+include_once ('../classes/statistics.php');
 if (file_exists('../include/customfunctions.php.inc')) {
     include_once ('../include/customfunctions.php.inc');
 
@@ -37,16 +38,57 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
            <script type="text/javascript" src="../js/DataTables/js/ZeroClipboard.js"></script>
            <script src="../js/sessionweb-graph-generic-v20.js" type="text/javascript"></script>
            <script type="text/javascript" charset="utf-8">
-			$(document).ready(function() {
-				$("#areaTable").dataTable( {
-                    "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
-                    "iDisplayLength": -1,
-                    "sDom": "T<\"clear\">lfrtip",
-                    "sSwfPath": "../js/DataTables/swf/copy_csv_xls_pdf.swf"
-                } );
+        $(document).ready(function() {
+            TableTools.DEFAULTS.sSwfPath = "../js/DataTables/swf/copy_csv_xls_pdf.swf";
+            $("#tabs").tabs({
+                "show": function (event, ui) {
+                    var jqTable = $("table.display", ui.panel);
+                    if (jqTable.length > 0) {
+                        var oTableTools = TableTools.fnGetInstance(jqTable[0]);
+                        if (oTableTools != null && oTableTools.fnResizeRequired()) {
+                            /* A resize of TableTools" buttons and DataTables" columns is only required on the
+                             * first visible draw of the table
+                             */
+                            jqTable.dataTable().fnAdjustColumnSizing();
+                            oTableTools.fnResizeButtons();
+                        }
+                    }
+                }
+            });
 
-} );
+            $("#areaTable").dataTable({
+                "bJQueryUI": true,
+                 "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
+                 "iDisplayLength": 50,
+                "sPaginationType": "full_numbers",
+                "sDom": "T<\"clear\">lfrtip"
+            });
 
+            $("#bugTable").dataTable({
+                "bJQueryUI": true,
+                 "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
+                 "iDisplayLength": 50,
+                "sPaginationType": "full_numbers",
+                "sDom": "T<\"clear\">lfrtip"
+            });
+
+            $("#reqTable").dataTable({
+                "bJQueryUI": true,
+                 "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
+                 "iDisplayLength": 50,
+                "sPaginationType": "full_numbers",
+                "sDom": "T<\"clear\">lfrtip"
+            });
+
+            $("#charterTable").dataTable({
+                "bJQueryUI": true,
+                 "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
+                 "iDisplayLength": 50,
+                "sPaginationType": "full_numbers",
+                "sDom": "T<\"clear\">lfrtip"
+            });
+
+            });
 		    </script>
 
   </head>
@@ -72,9 +114,9 @@ if (isset($_REQUEST['sprint'])) {
     echo '<label for="to">to</label>';
     echo '<input type="text" id="to" name="to"/><br>';
 
-    //    echo "<h2>Include bug and requirement list</h2>";
-    //    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
-    //    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
+//    echo "<h2>Include bug and requirement list</h2>";
+//    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
+//    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
     echo '<br><input type="submit" name="Submit" value="Generate report">';
 
 }
@@ -88,7 +130,7 @@ echo '</body>
 function generateReport()
 {
     $con1 = getMySqlConnection();
-
+    $statHelper = new statistics();
     $start = time();
     $sql = generateSql();
     $allSessions = generateSessionObjects($sql);
@@ -101,30 +143,37 @@ function generateReport()
 
 <div id="tabs">
 	<ul>
+        <li><a href="#tabs-1">Summary</a></li>
 
 		<li><a href="#tabs-2">Test Effort by Area</a></li>
 		';
 
-    if (isset($_REQUEST['buglist']))
-        echo '<li><a href="#tabs-3">Bugs found</a></li>';
-    if (isset($_REQUEST['reqlist']))
-        echo '<li><a href="#tabs-4">Requirements tested</a></li>';
+
+    echo '<li><a href="#tabs-3">Bugs found</a></li>';
+    echo '<li><a href="#tabs-4">Requirements tested</a></li>';
+    echo '<li><a href="#tabs-5">Charters</a></li>';
 
     echo '	</ul>
-
+    <div id="tabs-1">
+		<p>'.$statHelper->generateOverviewTabContent($allSessions, $sql).'</p>
+	</div>
 	<div id="tabs-2">
 		<p>' . getAreaStatisticIntoGridHtml($allSessions) . '</p>
 	</div>';
-    if (isset($_REQUEST['buglist']))
-        echo '
+    echo '
 	<div id="tabs-3">
-		<p>' . getNumberOfBugsFoundAsListWithLink($allSessions) . '</p>
+		<p>' . $statHelper->getNumberOfBugsFoundAsListWithLink($allSessions) . '</p>
 	</div>';
-    if (isset($_REQUEST['reqlist']))
-        echo '
+    echo '
     <div id="tabs-4">
-		<p>' . getNumberOfRequirementsFoundAsListWithLink($allSessions) . '</p>
-	</div>';
+		<p>' . $statHelper->getNumberOfRequirementsFoundAsListWithLink($allSessions) . '</p>
+	</div>
+
+	    <div id="tabs-5">
+		<p>' . $statHelper->getChartersIntoGridHtml($allSessions) . '</p>
+	</div>
+
+	';
     echo '</div>
 
 </div>
@@ -136,15 +185,6 @@ function generateReport()
     echo "Report generated in $delta sec";
     echo "<br>";
     echo "Report based on SQL <br>$sql";
-
-    $pageURLTmp = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-    $pageURLTmp = explode("?",$pageURLTmp);       //to remove params from URI
-    $pageURL = $pageURLTmp[0];
-    $sprint=$_REQUEST['sprint'];
-    $from=$_REQUEST['from'];
-    $to=$_REQUEST['to'];
-    $pageParams="?sprint=$sprint&from=$from&to=$to";
-    echo "<p>URL to this report:<a href='$pageURL$pageParams'>$pageURL$pageParams</a></p>";
 
 }
 
@@ -264,13 +304,13 @@ function getAreaStatisticIntoGridHtml($allSessions)
         </tr>";
 
 
-        //        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
+//        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
     }
     $htmlReturn .= "
     </tbody>
     </table>
     </div>";
-    //    print_r($sessionCountForOneArea);
+//    print_r($sessionCountForOneArea);
     return $htmlReturn;
 
 
@@ -331,7 +371,7 @@ function setAreasWithZeroSessionsToZero($allAreas, $aApp, $areasUsedInApp)
 
 function generateBarChartForAreas($divName, $areasUsedInApp, $setupTime, $testTime, $bugtime, $oppTime, $areaSessionIdMap, $allSessions)
 {
-    //    print_r($areaSessionIdMap);
+//    print_r($areaSessionIdMap);
     ksort($areasUsedInApp);
     $firstTime = true;
     $category = "";
@@ -631,15 +671,15 @@ function generateSql()
         $addWhere = false;
     }
     if (strcmp($_REQUEST['from'], "") != 0 && strcmp($_REQUEST['to'], "") != 0) {
-        //        if ($addWhere) {
-        //            $sql .= "WHERE ";
-        //            $addWhere = false;
-        //        }
-        //        else
-        //        {
+//        if ($addWhere) {
+//            $sql .= "WHERE ";
+//            $addWhere = false;
+//        }
+//        else
+//        {
         $sql .= " AND ";
 
-        //        }
+//        }
         $sql .= "`updated` > '" . $_REQUEST['from'] . " 00:00:00' AND `updated`  <  '" . $_REQUEST['to'] . " 00:00:00' ";
     }
     $sql .= " LIMIT 0,10000";
@@ -671,7 +711,7 @@ function getNumberOfRequirementsFound($allSessions)
 {
     $reqArray = array();
     foreach ($allSessions as $aSession) {
-        $reqArray = array_merge($reqArray, $aSession['requirements']);
+        $reqArray = array_merge($reqArray, $aSession['bugs']);
     }
     $reqArrayUnique = array_unique($reqArray);
     return count($reqArrayUnique);
@@ -685,14 +725,12 @@ function getNumberOfRequirementsFoundAsListWithLink($allSessions)
     foreach ($allSessions as $aSession) {
         if (count($aSession['requirements']) != null) {
             foreach ($aSession['requirements'] as $aReq)
-            {
                 if (file_exists('../include/customfunctions.php.inc')) {
                     $title = getRequirementNameFromServer($aReq);
                 } else {
                     $title = $aReq;
                 }
-                $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
-            }
+            $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
         }
     }
     return $html;
@@ -705,17 +743,14 @@ function getNumberOfBugsFoundAsListWithLink($allSessions)
     $dmsUrl = $settings['url_to_dms'];
     $html = "";
     foreach ($allSessions as $aSession) {
-
         if (count($aSession['bugs']) != null) {
             foreach ($aSession['bugs'] as $aBug)
-            {
                 if (file_exists('../include/customfunctions.php.inc')) {
                     $title = getBugNameFromServer($aBug);
                 } else {
                     $title = $aBug;
                 }
-                $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
-            }
+            $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
         }
     }
     return $html;

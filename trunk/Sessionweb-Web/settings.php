@@ -26,27 +26,21 @@ function executeCommand()
     //Administartor Commands
     if ($_SESSION['useradmin'] == 1) {
         if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "listusers") == 0) {
-            echoAllUsersInfo();
-        }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "adduser") == 0)
-        {
+            echoAllUsersInfo(true);
+        } elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "adduser") == 0) {
             echoAddUser();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertusertodb") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertusertodb") == 0) {
             createNewUser();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addteam") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addteam") == 0) {
             echoAddTeamName();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertteamnametodb") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertteamnametodb") == 0) {
             insertTeamNameToDb($_REQUEST["teamtname"]);
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "changeusersettings") == 0)
-        {
-           print_r($_REQUEST);
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "changeusersettings") == 0) {
+            print_r($_REQUEST);
             if (!isset($_REQUEST["usernametoupdate"])) {
                 $_REQUEST["usernametoupdate"] = "";
             }
@@ -68,35 +62,28 @@ function executeCommand()
             updateUserSettings($_REQUEST["usernametoupdate"], $_REQUEST["active"], $_REQUEST["admin"], $_REQUEST["superuser"], $_REQUEST["team"]);
 
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "userinfo") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "userinfo") == 0) {
             echoChangeUserInfo($_GET["user"]);
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "config") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "config") == 0) {
             echoChangeConfig();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "updateconfig") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "updateconfig") == 0) {
             updateConfig();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addenv") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addenv") == 0) {
             echoAddEnvironment();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertenvname") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertenvname") == 0) {
             insertEnvironmentNameToDb();
         }
         elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addsprint") == 0) {
             echoAddSprintName();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertsprintnametodb") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertsprintnametodb") == 0) {
             insertSprintNameToDb($_REQUEST["sprintname"]);
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "systemcheck") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "systemcheck") == 0) {
             echo "<h1>System check</h1>";
             $con = getMySqlConnection();
 
@@ -106,16 +93,13 @@ function executeCommand()
             mysql_close();
             echo "<div><a href='include/phpinfo.php' >Get php info</a></div>";
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "customfileds") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "customfileds") == 0) {
             echoManageCustomFileds();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertcustomfields") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertcustomfields") == 0) {
             insertCustomFieldsSettingsToDb();
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertcustomfieldsadd") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertcustomfieldsadd") == 0) {
             insertCustomFieldNameToDb();
         }
 
@@ -125,22 +109,17 @@ function executeCommand()
     if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
         if (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addteamsprint") == 0) {
             echoAddTeamSprintName();
-        }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertareaname") == 0)
-        {
+        } elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertareaname") == 0) {
             insertAreaNameToDb($_REQUEST["areaname"]);
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertareaname") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertareaname") == 0) {
             insertAreaNameToDb($_REQUEST["areaname"]);
         }
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addarea") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "addarea") == 0) {
             echoAddAreaName();
         }
 
-        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertteamsprintnametodb") == 0)
-        {
+        elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "insertteamsprintnametodb") == 0) {
             insertTeamSprintNameToDb($_REQUEST["teamsprintname"]);
         }
 
@@ -342,9 +321,7 @@ function echoChangeConfig()
 
     if (!$result) {
         echo "echoChangeConfig: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         $row = mysql_fetch_array($result);
         echo "<h4>Change Application Configuration</h4>\n";
         echo "<form name=\"teamname\" action=\"settings.php\" method=\"POST\">\n";
@@ -385,9 +362,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[team] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"team\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"team\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -397,9 +372,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[sprint] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"sprint\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"sprint\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -409,9 +382,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[teamsprint] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"teamsprint\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"teamsprint\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -421,9 +392,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[area] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"area\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"area\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -433,9 +402,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[testenvironment] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"env\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"env\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -445,9 +412,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[publicview] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"publicview\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"publicview\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -458,9 +423,7 @@ function echoChangeConfig()
         echo "        </td>\n";
         if ($row[wordcloud] == 1) {
             echo "        <td> <input type=\"checkbox\" name=\"wordcloud\" checked=\"checked\" value=\"checked\" >\n";
-        }
-        else
-        {
+        } else {
             echo "        <td> <input type=\"checkbox\" name=\"wordcloud\" value=\"checked\" >\n";
         }
         echo "        </td>\n";
@@ -543,9 +506,7 @@ function insertTeamNameToDb($teamName)
 
     if (!$result) {
         echo "InsertTeamNameToDb: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         echo "<p>Team name $teamName added to database</p>\n";
     }
 
@@ -581,15 +542,11 @@ function insertEnvironmentNameToDb()
     if (!$result) {
         if (mysql_errno() == 1062) {
             echo "<p>Test environment $envName not added since it already exists in database.</p>";
-        }
-        else
-        {
+        } else {
             echo "insertEnvironmentNameToDb: " . mysql_error() . "<br>";
             echo "Mysql error no: " . mysql_errno() . "<br>";
         }
-    }
-    else
-    {
+    } else {
         echo "<p>Test environment $envName added to database</p>\n";
     }
 
@@ -614,15 +571,11 @@ function insertAreaNameToDb($areaName)
     if (!$result) {
         if (mysql_errno() == 1062) {
             echo "<p>Area $areaName not added since it already exists in database.</p>";
-        }
-        else
-        {
+        } else {
             echo "insertAreaNameToDb: " . mysql_error() . "<br>";
             echo "Mysql error no: " . mysql_errno() . "<br>";
         }
-    }
-    else
-    {
+    } else {
         echo "<p>Area name $areaName added to database</p>\n";
     }
 
@@ -707,9 +660,7 @@ function insertSprintNameToDb($sprintName)
 
     if (!$result) {
         echo "InsertSprintNameToDb: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         echo "<p>Sprint name $sprintName added to database</p>\n";
     }
 
@@ -732,9 +683,7 @@ function insertTeamSprintNameToDb($teamsprintName)
 
     if (!$result) {
         echo "insertTeamSprintNameToDb: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         echo "<p>Team sprint name $teamsprintName added to database</p>\n";
     }
 
@@ -761,13 +710,11 @@ function echoChangeListSettings()
         echo "<option value=\"all\" >All sessions</option>\n";
         echo "<option value=\"mine\" selected>My own sessions</option>\n";
         echo "<option value=\"team\">My teams sessions</option>\n";
-    }
-    elseif ($usersettings['list_view'] == "team") {
+    } elseif ($usersettings['list_view'] == "team") {
         echo "<option value=\"all\" >All sessions</option>\n";
         echo "<option value=\"mine\">My own sessions</option>\n";
         echo "<option value=\"team\" selected>My teams sessions</option>\n";
-    } else
-    {
+    } else {
         echo "<option value=\"all\" selected>All sessions</option>\n";
         echo "<option value=\"mine\">My own sessions</option>\n";
         echo "<option value=\"team\">My teams sessions</option>\n";
@@ -807,9 +754,7 @@ function echoChangeListSettings()
     echo "<div>Enable autosave when edit a session:";
     if ($usersettings['autosave'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"autosave\" value=\"checked\" checked=\"checked\"></td>";
-    }
-    else
-    {
+    } else {
         echo "<td><input type=\"checkbox\" name=\"autosave\" value=\"checked\"></td>";
     }
     //echo "<option value=\"team\">All sessions</option>\n";
@@ -859,23 +804,17 @@ function echoChangeUserInfo($username)
     echo "</td>";
     if ($row['active'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"active\" value=\"checked\" checked=\"checked\"></td>";
-    }
-    else
-    {
+    } else {
         echo "<td><input type=\"checkbox\" name=\"active\" value=\"checked\"></td>";
     }
     if ($row['admin'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"admin\" value=\"checked\" checked=\"checked\"></td>";
-    }
-    else
-    {
+    } else {
         echo "<td><input type=\"checkbox\" name=\"admin\" value=\"checked\"></td>";
     }
     if ($row['superuser'] == "1") {
         echo "<td><input type=\"checkbox\" name=\"superuser\" value=\"checked\" checked=\"checked\"></td>";
-    }
-    else
-    {
+    } else {
         echo "<td><input type=\"checkbox\" name=\"superuser\" value=\"checked\"></td>";
     }
     echo "</tr>";
@@ -889,7 +828,7 @@ function echoChangeUserInfo($username)
 }
 
 
-function echoAllUsersInfo()
+function echoAllUsersInfo($removeDeletedUsers = false)
 {
     $con = getMySqlConnection();
 
@@ -897,6 +836,8 @@ function echoAllUsersInfo()
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";
     $sqlSelect .= "FROM   `members` ";
+    if ($removeDeletedUsers)
+        $sqlSelect .= "WHERE deleted = false ";
     $sqlSelect .= "ORDER  BY `fullname` ASC ";
 
 
@@ -912,8 +853,7 @@ function echoAllUsersInfo()
     echo "<td><b>Admin</b></td>";
     echo "<td><b>Superuser</b></td>";
     echo "</tr>";
-    while ($row = mysql_fetch_array($result))
-    {
+    while ($row = mysql_fetch_array($result)) {
         echo "<tr>";
         echo "<td><a href=\"settings.php?user=" . urlencode($row['username']) . "&command=userinfo\">" . $row['fullname'] . "</a></td>";
         echo "<td>" . urldecode($row['username']) . "</td>";
@@ -999,72 +939,56 @@ function updateConfig()
 
     if (is_int((int)$_REQUEST["normlizedsessiontime"]) && (int)$_REQUEST["normlizedsessiontime"] != 0) {
         $normlizedsessiontime = $_REQUEST["normlizedsessiontime"];
-    }
-    else
-    {
+    } else {
         echo "Normalized Sessions time is equal to 0 or not an integer, will use default value 90 min.<br>\n";
     }
 
     $team = 0;
     if (strcmp($_REQUEST["team"], "checked") == 0) {
         $team = 1;
-    }
-    else
-    {
+    } else {
         $team = 0;
     }
 
     $sprint = 0;
     if (strcmp($_REQUEST["sprint"], "checked") == 0) {
         $sprint = 1;
-    }
-    else
-    {
+    } else {
         $sprint = 0;
     }
 
     $teamsprint = 0;
     if (strcmp($_REQUEST["teamsprint"], "checked") == 0) {
         $teamsprint = 1;
-    }
-    else
-    {
+    } else {
         $teamsprint = 0;
     }
 
     $area = 0;
     if (strcmp($_REQUEST["area"], "checked") == 0) {
         $area = 1;
-    }
-    else
-    {
+    } else {
         $area = 0;
     }
 
     $env = 0;
     if (strcmp($_REQUEST["env"], "checked") == 0) {
         $env = 1;
-    }
-    else
-    {
+    } else {
         $env = 0;
     }
 
     $publicview = 0;
     if (strcmp($_REQUEST["publicview"], "checked") == 0) {
         $publicview = 1;
-    }
-    else
-    {
+    } else {
         $publicview = 0;
     }
 
     $wordcloud = 0;
     if (strcmp($_REQUEST["wordcloud"], "checked") == 0) {
         $wordcloud = 1;
-    }
-    else
-    {
+    } else {
         $wordcloud = 0;
     }
 
@@ -1090,9 +1014,7 @@ function updateConfig()
 
     if (!$result) {
         echo "updateConfig: " . mysql_error() . "<br/>";
-    }
-    else
-    {
+    } else {
         echo "<br>Configuration changed.<br>\n";
     }
 
@@ -1125,15 +1047,11 @@ function updateUserPassword($username, $password1, $password2)
 
             if ($result) {
                 echo "Password changed\n";
-            }
-            else
-            {
+            } else {
                 echo mysql_error();
             }
             mysql_close($con);
-        }
-        else
-        {
+        } else {
             echo  "Passwords does not match, please try again.\n";
         }
     }
@@ -1179,9 +1097,7 @@ function updateUserSettingsForLoginUser()
 
     if ($result) {
         echo "User settings changed\n";
-    }
-    else
-    {
+    } else {
         echo mysql_error();
     }
     mysql_close($con);
@@ -1252,9 +1168,7 @@ function createNewUser()
 
         if ($result) {
             echo "<div>User added</div>\n";
-        }
-        else
-        {
+        } else {
             echo mysql_error();
         }
 
@@ -1269,16 +1183,12 @@ function createNewUser()
 
         if ($result) {
             echo "<div>User settings added</div>\n";
-        }
-        else
-        {
+        } else {
             echo mysql_error();
         }
 
         mysql_close($con);
-    }
-    else
-    {
+    } else {
         echo "Please try again, username and password is mandatory\n";
     }
 }
@@ -1319,21 +1229,17 @@ function updateUserSettings($userToChange, $active, $admin, $superuser, $team)
 
     if ($result) {
         echo "User settings changed\n";
-    }
-    else
-    {
+    } else {
         echo mysql_error();
     }
 
     $sqlUpdate = "UPDATE user_settings SET teamname='$team' WHERE username='$userToChange'";
-  echo $sqlUpdate;
+    echo $sqlUpdate;
     $result = mysql_query($sqlUpdate);
 
     if ($result) {
 
-    }
-    else
-    {
+    } else {
         echo mysql_error();
     }
 

@@ -833,8 +833,10 @@ function echoTesterSelect($name)
     mysql_close($con);
 }
 
-function getTesterFullName($username)
+function getTesterFullName($username,$createMysqlCon=false)
 {
+    if($createMysqlCon)
+        $con = getMySqlConnection();
     $sqlSelect = "";
     $sqlSelect .= "SELECT fullname ";
     $sqlSelect .= "FROM   members ";
@@ -844,13 +846,16 @@ function getTesterFullName($username)
     $result = mysql_query($sqlSelect);
 
     $row = mysql_fetch_row($result);
-    return $row[0];
+    if($createMysqlCon)
+        mysql_close($con);
+
+        return $row[0];
 }
 
 function echoTesterFullNameSelect($name, $removeInactiveUsers = false, $onlyShowUserThatHaveLoggedASession = false)
 {
     $con = getMySqlConnection();
-    if ($onlyShowUserThatHaveLoggedASession==true) {
+    if ($onlyShowUserThatHaveLoggedASession == true) {
         $sqlSelect = "SELECT DISTINCT mb.fullname, mb.username FROM sessionwebos.members as mb, sessionwebos.mission as m  WHERE mb.username LIKE m.username ORDER BY m.username ASC";
     } else {
         $sqlSelect = "";
@@ -1170,20 +1175,28 @@ function doesUserHaveNotifications()
 
 function doesUserExist($username, $mysqlConnect = false)
 {
+    $logger = new logging();
     if (mysqlConnect)
         $con = getMySqlConnection();
 
     $username = mysql_real_escape_string($username);
     $sql = "SELECT * FROM members WHERE username LIKE  '$username'";
-
+    $logger->sql($sql, __FILE__, __LINE__);
     $result = mysql_query($sql);
 
     if (mysql_numrows($result) == 1)
+    {
         $result = true;
-    else
+        $logger->debug("$username does exist in member table",__FILE__,__LINE__);
+
+    }
+    else {
+        $logger->debug("$username does not exist in member table",__FILE__,__LINE__);
         $result = false;
+    }
     if (mysqlConnect)
         mysql_close($con);
+    return $result;
 }
 
 

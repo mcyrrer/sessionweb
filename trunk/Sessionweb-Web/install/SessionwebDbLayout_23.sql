@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS `sessionwebos`.`sprintnames` ;
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`sprintnames` (
   `sprintname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`sprintname`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -48,7 +48,7 @@ DROP TABLE IF EXISTS `sessionwebos`.`teamnames` ;
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`teamnames` (
   `teamname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`teamname`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `sessionwebos`.`teamsprintnames` ;
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`teamsprintnames` (
   `teamsprintname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`teamsprintname`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -78,7 +78,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`sessionid` (
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   `createdby` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`sessionid`, `createdby`) ,
-  INDEX `fk_sessionid_members1` (`createdby` ASC) )
+  INDEX `fk_sessionid_members1_idx` (`createdby` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
@@ -93,7 +93,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`testenvironment` (
   `url` VARCHAR(500) NULL ,
   `username` VARCHAR(100) NULL ,
   `password` VARCHAR(100) NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`name`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -120,15 +120,15 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   `testenvironment` VARCHAR(45) NULL ,
   `software` VARCHAR(1024) NULL ,
   `lastupdatedby` VARCHAR(45) NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
-  INDEX `fk_mission_members` (`username` ASC) ,
-  INDEX `fk_mission_sprintnames` (`sprintname` ASC) ,
-  INDEX `fk_mission_teamnames` (`teamname` ASC) ,
-  INDEX `fk_mission_teamsprintnames1` (`teamsprintname` ASC) ,
+  `project` VARCHAR(45)  NULL ,
+  INDEX `fk_mission_members_idx` (`username` ASC) ,
+  INDEX `fk_mission_sprintnames_idx` (`sprintname` ASC) ,
+  INDEX `fk_mission_teamnames_idx` (`teamname` ASC) ,
+  INDEX `fk_mission_teamsprintnames1_idx` (`teamsprintname` ASC) ,
   UNIQUE INDEX `sessionid_UNIQUE` (`sessionid` ASC) ,
   UNIQUE INDEX `versionid_UNIQUE` (`versionid` ASC) ,
   PRIMARY KEY (`versionid`) ,
-  INDEX `fk_mission_testenvironment1` (`testenvironment` ASC) )
+  INDEX `fk_mission_testenvironment1_idx` (`testenvironment` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
@@ -146,7 +146,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_status` (
   `executed_timestamp` TIMESTAMP NULL ,
   `debriefed_timestamp` TIMESTAMP NULL ,
   `closed` TINYINT(1) NOT NULL DEFAULT false ,
-  `projects` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`versionid`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -165,7 +164,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionmetrics` (
   `opportunity_percent` INT NULL ,
   `duration_time` INT NULL ,
   `mood` INT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`versionid`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -180,10 +178,9 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_debriefnotes` (
   `versionid` INT NOT NULL ,
   `notes` TEXT NULL ,
   `debriefedby` VARCHAR(45) NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`versionid`) ,
-  INDEX `fk_debriefnotes_users1` (`debriefedby` ASC) ,
-  INDEX `fk_debriefnotes_mission1` (`versionid` ASC) )
+  INDEX `fk_debriefnotes_users1_idx` (`debriefedby` ASC) ,
+  INDEX `fk_debriefnotes_mission1_idx` (`versionid` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
@@ -215,7 +212,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `custom3` TINYINT(1) NULL ,
   `custom3_name` VARCHAR(100) NULL ,
   `custom3_multiselect` TINYINT(1) NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -229,7 +226,7 @@ DROP TABLE IF EXISTS `sessionwebos`.`areas` ;
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`areas` (
   `areaname` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`areaname`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -244,9 +241,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_areas` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `areaname` VARCHAR(100) NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
-  INDEX `fk_mission_debriefnotes_copy1_areas1` (`areaname` ASC) ,
+  INDEX `fk_mission_debriefnotes_copy1_areas1_idx` (`areaname` ASC) ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -261,7 +257,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_bugs` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `bugid` VARCHAR(45) NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
@@ -277,7 +272,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_requirements` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `requirementsid` VARCHAR(45) NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   INDEX `fk_missionreq_mission1` (`versionid` ASC) ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
@@ -293,9 +287,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionsconnections` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `linked_from_versionid` INT NOT NULL ,
   `linked_to_versionid` INT NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_mission_sessionsconnections_mission1` (`linked_from_versionid` ASC) )
+  INDEX `fk_mission_sessionsconnections_mission1_idx` (`linked_from_versionid` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
@@ -314,10 +307,10 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_settings` (
   `default_sprint` VARCHAR(100) NULL ,
   `default_teamsprint` VARCHAR(100) NULL ,
   `default_area` VARCHAR(100) NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`username`) ,
-  INDEX `fk_user_settings_members1` (`username` ASC) ,
-  INDEX `fk_user_settings_teamnames1` (`teamname` ASC) )
+  INDEX `fk_user_settings_members1_idx` (`username` ASC) ,
+  INDEX `fk_user_settings_teamnames1_idx` (`teamname` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
 
@@ -347,8 +340,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_attachments` (
   `mimetype` VARCHAR(45) NOT NULL ,
   `size` INT NOT NULL ,
   `data` MEDIUMBLOB NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
-  INDEX `fk_attach_mission1` (`mission_versionid` ASC) ,
+  INDEX `fk_attach_mission1_idx` (`mission_versionid` ASC) ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8
@@ -367,10 +359,10 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_sessionsnotification` (
   `emailnotification` TINYINT(1) NULL ,
   `emailsent` TINYINT(1) NULL DEFAULT false ,
   `acknowledge` TINYINT(1) NULL DEFAULT false ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_user_sessionsnotification_mission1` (`versionid` ASC) ,
-  INDEX `fk_user_sessionsnotification_members1` (`username` ASC) ,
+  INDEX `fk_user_sessionsnotification_mission1_idx` (`versionid` ASC) ,
+  INDEX `fk_user_sessionsnotification_members1_idx` (`username` ASC) ,
   UNIQUE INDEX `versionid_UNIQUE` (`versionid` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8
@@ -389,7 +381,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`softwareuseautofetched` (
   `missionstatus` VARCHAR(100) NULL ,
   `updated` TIMESTAMP NULL DEFAULT NOW() ,
   `environment` VARCHAR(100) NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -404,9 +395,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_custom` (
   `versionid` INT NOT NULL ,
   `customtablename` VARCHAR(100) NOT NULL ,
   `itemname` VARCHAR(100) NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
-  INDEX `fk_mission_debriefnotes_copy1_areas1` (`customtablename` ASC) ,
+  INDEX `fk_mission_debriefnotes_copy1_areas1_idx` (`customtablename` ASC) ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -422,7 +412,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom_items` (
   `tablename` VARCHAR(100) NOT NULL ,
   `name` VARCHAR(100) NOT NULL ,
   `updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-  `projects` VARCHAR(45) NOT NULL ,
+  `project` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -437,9 +427,8 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_testers` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `tester` VARCHAR(100) NOT NULL ,
-  `projects` VARCHAR(45) NOT NULL ,
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
-  INDEX `fk_mission_debriefnotes_copy1_areas1` (`tester` ASC) ,
+  INDEX `fk_mission_debriefnotes_copy1_areas1_idx` (`tester` ASC) ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8;
@@ -448,7 +437,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessioninfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `lastupdatedby` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `charter` INT, `notes` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT, `projects` INT);
+CREATE TABLE IF NOT EXISTS `sessionwebos`.`sessioninfo` (`sessionid` INT, `versionid` INT, `title` INT, `username` INT, `lastupdatedby` INT, `executed` INT, `debriefed` INT, `closed` INT, `publickey` INT, `updated` INT, `teamname` INT, `sprintname` INT, `charter` INT, `notes` INT, `executed_timestamp` INT, `debriefed_timestamp` INT, `setup_percent` INT, `test_percent` INT, `bug_percent` INT, `opportunity_percent` INT, `duration_time` INT, `project` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `sessionwebos`.`sessionview_with_areas`
@@ -483,7 +472,7 @@ CREATE  OR REPLACE VIEW `sessionwebos`.`sessioninfo` AS SELECT
         sm.bug_percent,
         sm.opportunity_percent,
         sm.duration_time,
-        m.projects
+        m.project
     from
         mission m,
         mission_status ms,
@@ -508,7 +497,7 @@ AS `title`, `mission`.`charter` AS `charter`, `mission`.`notes` AS `notes`,
 `teamsprintname`, `mission`.`depricated` AS `depricated`, `mission`.`updated` AS
 `updated`, `mission`.`publickey` AS `publickey`, `mission`.`testenvironment` AS
 `testenvironment`, `mission`.`software` AS `software`, `mission`.`lastupdatedby`
-AS `lastupdatedby`, `mission_areas`.`areaname` AS `areaname`, `mission`.`projects` AS `project`FROM (`mission`
+AS `lastupdatedby`, `mission_areas`.`areaname` AS `areaname`, `mission`.`project` AS `project`FROM (`mission`
 JOIN `mission_areas`) 
 WHERE (`mission`.`versionid` =
 `mission_areas`.`versionid`) ;
@@ -532,7 +521,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`, `wordcloud`, `custom1`, `custom1_name`, `custom1_multiselect`, `custom2`, `custom2_name`, `custom2_multiselect`, `custom3`, `custom3_name`, `custom3_multiselect`, `projects`) VALUES (NULL, 90, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, `sprint`, `teamsprint`, `area`, `testenvironment`, `publicview`, `analyticsid`, `url_to_dms`, `url_to_rms`, `wordcloud`, `custom1`, `custom1_name`, `custom1_multiselect`, `custom2`, `custom2_name`, `custom2_multiselect`, `custom3`, `custom3_name`, `custom3_multiselect`, `project`) VALUES (NULL, 90, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0');
 
 COMMIT;
 
@@ -541,7 +530,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`, `default_team`, `default_sprint`, `default_teamsprint`, `default_area`, `projects`) VALUES ('admin', NULL, 'all', NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`, `default_team`, `default_sprint`, `default_teamsprint`, `default_area`, `project`) VALUES ('admin', NULL, 'all', NULL, NULL, NULL, NULL, NULL, '0');
 
 COMMIT;
 
