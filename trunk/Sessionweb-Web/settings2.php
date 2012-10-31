@@ -416,7 +416,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
         <form id="deleteuserForm">
             <?php
             echo "User:";
-            echoTesterFullNameSelect(null,true);
+            echoTesterFullNameSelect(null,false,false,true);
             echo "<br>";
             ?>
             <span class='settings_submit' id='deleteuser_delete'>Delete user</span>

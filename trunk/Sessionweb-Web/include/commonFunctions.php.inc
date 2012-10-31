@@ -852,17 +852,18 @@ function getTesterFullName($username,$createMysqlCon=false)
         return $row[0];
 }
 
-function echoTesterFullNameSelect($name, $removeInactiveUsers = false, $onlyShowUserThatHaveLoggedASession = false)
+function echoTesterFullNameSelect($name, $removeInactiveUsers = false, $onlyShowUserThatHaveLoggedASession = false, $addUserName = false)
 {
     $con = getMySqlConnection();
     if ($onlyShowUserThatHaveLoggedASession == true) {
-        $sqlSelect = "SELECT DISTINCT mb.fullname, mb.username FROM sessionwebos.members as mb, sessionwebos.mission as m  WHERE mb.username LIKE m.username ORDER BY m.username ASC";
+        $sqlSelect = "SELECT DISTINCT mb.fullname, mb.username FROM sessionwebos.members as mb, sessionwebos.mission as m  WHERE mb.deleted = false AND mb.username LIKE m.username ORDER BY m.username ASC";
     } else {
         $sqlSelect = "";
         $sqlSelect .= "SELECT username,fullname ";
         $sqlSelect .= "FROM   members ";
+        $sqlSelect .= "WHERE deleted = FALSE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
         if ($removeInactiveUsers)
-            $sqlSelect .= "WHERE active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
+            $sqlSelect .= "AND active = TRUE "; // fix for ISSUE 15 user not visible in list.php when the user is inactivated
         $sqlSelect .= "ORDER  BY fullname ASC";
     }
 
@@ -875,10 +876,18 @@ function echoTesterFullNameSelect($name, $removeInactiveUsers = false, $onlyShow
         $userName = $row['username'];
         $fullName = $row['fullname'];
 
+        if($addUserName)
+        {
+            $nameToDisplay = $fullName."(".$userName.")";
+        }
+        else
+        {
+          $nameToDisplay = $fullName;
+        }
         if (strcmp($name, $row['username']) == 0) {
-            echo "                                      <option value='$userName' selected=\"selected\">$fullName</option>\n";
+            echo "                                      <option value='$userName' selected=\"selected\">$nameToDisplay</option>\n";
         } else {
-            echo "                                      <option value='$userName'>$fullName</option>\n";
+            echo "                                      <option value='$userName'>$nameToDisplay</option>\n";
         }
     }
 

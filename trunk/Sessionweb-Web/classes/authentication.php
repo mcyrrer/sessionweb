@@ -23,7 +23,7 @@ class authentication
             return "EMPTY_PASSWORD";
         }
 
-        $ldapConnection = ldap_connect("ldaphost.com") or die("Can not connect to ldap server");
+        $ldapConnection = ldap_connect(LDAP_HOST) or die("Can not connect to ldap server");
 
         ldap_set_option($ldapConnection, LDAP_OPT_PROTOCOL_VERSION, 3); //Set the LDAP Protocol used by your AD service
         ldap_set_option($ldapConnection, LDAP_OPT_REFERRALS, 0); //This was necessary for my AD to do anything
