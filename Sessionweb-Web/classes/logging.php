@@ -75,14 +75,13 @@ class logging
 
     public function warn($logmessage, $filename = "", $line = "")
     {
-        $loglevel = "WARNING";
+        $loglevel = "WARN";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 
     public function warning($logmessage, $filename = "", $line = "")
     {
-        $loglevel = "WARNING";
-        $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
+        $this->warn($logmessage, $filename = "", $line = "");
     }
 
     public function error($logmessage, $filename = "", $line = "")
@@ -97,7 +96,7 @@ class logging
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 
-    public function writeMessageToLog($loglevel, $logmessage, $filename, $line)
+    private function writeMessageToLog($loglevel, $logmessage, $filename, $line)
     {
         if (isset($_SESSION['username']))
             $username = $_SESSION['username'];
@@ -110,7 +109,7 @@ class logging
         }
     }
 
-    public function writeSQLMessageToLog($loglevel, $logmessage, $filename, $line)
+    private function writeSQLMessageToLog($loglevel, $logmessage, $filename, $line)
     {
         if (isset($_SESSION['username']))
             $username = $_SESSION['username'];
@@ -133,6 +132,6 @@ class logging
 
     private function getDateTime()
     {
-        return date('Ymd H:m:s', time());
+        return date('Ymd H:i:s', time());
     }
 }

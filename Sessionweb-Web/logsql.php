@@ -17,8 +17,9 @@ if (isAdmin()) {
             $re4 = '(DEBUG)'; # Word 1
             $re4b = '(ERROR)';
             $re4c = '(INFO)';
-            $re4d = '(WARNING)';
+            $re4d = '(WARN)';
             $re4e = '(SQL)';
+            $re4f = '(FATAL)';
 
 
 
@@ -45,6 +46,11 @@ if (isAdmin()) {
             }
             elseif ($c = preg_match_all("/" . $re1 . $re2 . $re3 . $re4d . "/is", $line, $matches)) {
                 echo '<FONT style="BACKGROUND-COLOR: yellow">';
+                echo "$line";
+                echo '</FONT><br>';
+            }
+            elseif ($c = preg_match_all("/" . $re1 . $re2 . $re3 . $re4f . "/is", $line, $matches)) {
+                echo '<FONT style="BACKGROUND-COLOR: #ff3c00">';
                 echo "$line";
                 echo '</FONT><br>';
             }

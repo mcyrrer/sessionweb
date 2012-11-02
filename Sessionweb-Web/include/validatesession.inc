@@ -8,9 +8,11 @@ require_once ("$rootPath/include/apistatuscodes.inc");
 if (strstr($_SERVER['PHP_SELF'], "api/") == false) {
     if (!isset($_SESSION['username'])) {
         $rootPath = checkIfRootFolder("");
+        $uri=$_SERVER["REQUEST_URI"];
+        $redirectToPage="redir=".urlencode($uri);
+        header("Location:" . $rootPath . "index.php?$redirectToPage");
 
-        header("Location:" . $rootPath . "index.php");
-        echo "Location:" . $rootPath . "index.php";
+        echo "Location:" . $rootPath . "index.php?$redirectToPage";
         echo "You are not logged in!";
         die();
     }

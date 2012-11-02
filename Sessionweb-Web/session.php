@@ -11,9 +11,13 @@ require_once ('include/session_edit_functions.php.inc');
 require_once ('include/session_view_functions.php.inc');
 require_once ('include/session_database_functions.php.inc');
 require_once ('include/session_common_functions.php.inc');
+require_once ('classes/pagetimer.php');
 if (is_file("include/customfunctions.php.inc")) {
     include "include/customfunctions.php.inc";
 }
+
+$pageTimer = new pagetimer();
+$pageTimer->startMeasurePageLoadTime();
 
 if (strcmp($_REQUEST["command"], "edit") == 0) {
     if (isset($_REQUEST["sessionid"])) {
@@ -73,7 +77,8 @@ elseif (strstr(substr($_REQUEST["notes"], 0, 43), "xml version") != false)
 //}
 
 include("include/footer.php.inc");
-
+$pageTimer->stopMeasurePageLoadTime();
+$pageTimer->echoTime();
 ob_end_flush();
 
 

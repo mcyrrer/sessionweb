@@ -6,6 +6,10 @@ require_once('include/header.php.inc');
 require_once('include/db.php');
 require_once('include/commonFunctions.php.inc');
 require_once('include/session_common_functions.php.inc');
+require_once('classes/logging.php');
+require_once('classes/pagetimer.php');
+$pageTimer = new pagetimer();
+$pageTimer->startMeasurePageLoadTime();
 ?>
 
 <div id="content">
@@ -116,4 +120,5 @@ require_once('include/session_common_functions.php.inc');
 
 <?php
 require_once('include/footer.php.inc');
+$pageTimer->stopMeasurePageLoadTime();
 ?>
