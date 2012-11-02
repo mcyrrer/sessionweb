@@ -1,6 +1,15 @@
 <?php
+
+require_once 'logging.php';
 class statistics
 {
+       private $logger;
+
+    function __construct($sessionid = null)
+    {
+        $this->logger = new logging();
+    }
+
     /**
      * Create HTML links to each unique bug in the sessionReadObject array provided
      * @param $allSessions a array of sessionReadObjects
@@ -21,21 +30,24 @@ class statistics
         </tr>
       </thead>
       <tbody>";
+        $buglist = array();
         foreach ($allSessions as $aSession) {
-
             if (count($aSession['bugs']) != null) {
                 foreach ($aSession['bugs'] as $aBug) {
-                    if (file_exists('../include/customfunctions.php.inc')) {
-                        $title = getBugNameFromServer($aBug);
-                    } else {
-                        $title = $aBug;
-                    }
-                    $htmlReturn .= "
+                    if (!in_array($aBug, $buglist)) {
+                        $buglist[$aBug] = $aBug;
+                        if (file_exists('../include/customfunctions.php.inc')) {
+                            $title = getBugNameFromServer($aBug);
+                        } else {
+                            $title = $aBug;
+                        }
+                        $htmlReturn .= "
                     <tr>
-                        <td>$aBug<a></td>
-                        <td><a href='$dmsUrl$aBug'>$title<a></td>
+                        <td><a href='$dmsUrl$aBug'>$aBug</a></td>
+                        <td>$title</td>
 
                     </tr>";
+                    }
                 }
             }
         }
@@ -66,21 +78,23 @@ class statistics
         </tr>
       </thead>
       <tbody>";
+        $reqlist = array();
         foreach ($allSessions as $aSession) {
-
             if (count($aSession['requirements']) != null) {
                 foreach ($aSession['requirements'] as $aReq) {
-                    if (file_exists('../include/customfunctions.php.inc')) {
-                        $title = getRequirementNameFromServer($aReq);
-                    } else {
-                        $title = $aReq;
-                    }
-                    $htmlReturn .= "
+                    if (!in_array($aReq, $reqlist)) {
+                        $reqlist[$aReq] = $aReq;
+                        if (file_exists('../include/customfunctions.php.inc')) {
+                            $title = getRequirementNameFromServer($aReq);
+                        } else {
+                            $title = $aReq;
+                        }
+                        $htmlReturn .= "
                     <tr>
-                        <td>$aReq</td>
-                        <td><a href='$dmsRms$aReq'>$title<a></td>
-
+                        <td><a href='$dmsRms$aReq'>$aReq<a></td>
+                        <td>".htmlspecialchars($title)."</td>
                     </tr>";
+                    }
                 }
             }
         }
@@ -99,7 +113,7 @@ class statistics
         $sql = urlencode($sql[0]);
 
         $settings = getSettings();
-        $timeInSessionsInHours = getTotalTimeInSessionInHours($allSessions);
+        $timeInSessionsInHours = $this->getTotalTimeInSessionInHours($allSessions);
         $timeInSessionsInHoursNormalized = round($timeInSessionsInHours / ($settings['normalized_session_time'] / 60), 1);
         $htmlString = "<table border='0' width='100%'>";
         $htmlString .= "<tr>";
@@ -109,8 +123,8 @@ class statistics
         $htmlString .= "</td>";
         $htmlString .= "<td valign='top'>";
         $htmlString .= "<div>Time in sessions: " . $timeInSessionsInHours . "h</div>";
-        $htmlString .= "<div>Requirements tested: " . getNumberOfRequirementsFound($allSessions) . "</div>";
-        $htmlString .= "<div>Bugs found: " . getNumberOfBugsFound($allSessions) . "</div>";
+        $htmlString .= "<div>Requirements tested: " . $this->getNumberOfRequirementsFound($allSessions) . "</div>";
+        $htmlString .= "<div>Bugs found: " . $this->getNumberOfBugsFound($allSessions) . "</div>";
         $htmlString .= "</td>";
         $htmlString .= "</tr>";
         $htmlString .= "<tr>";
@@ -121,7 +135,7 @@ class statistics
 
         $htmlString .= "</td>";
         $htmlString .= "<td valign='top'>";
-        $htmlString .= getPieCharTimeDistribution($allSessions, "timeDistcontainer");
+        $htmlString .= $this->getPieCharTimeDistribution($allSessions, "timeDistcontainer");
         $htmlString .= '<div id="timeDistcontainer"></div>';
 
 
@@ -171,33 +185,16 @@ $(function() {
 
     function getChartersIntoGridHtml($allSessions)
     {
-        $settings = getSettings();
-
         $htmlReturn = "";
         $chartersToDisplay = array();
-        $appsToDisplay = array();
-        $areasToDisplay = array();
         $areaCountArray = array();
-        $bugsInOneArea = array();
-        $requirementsInOneArea = array();
-        $durationInOneArea = array();
-        $sessionCountForOneArea = array();
-        $sessionsByArea = array();
-        $areaSessionIdMap = array();
         $testerArray = array();
-
-
-        $allApplicationsBasedOnAreaName = getApplicationsFromAreaNames();
-
 
         foreach ($allSessions as $sessionId => $aSession) {
             $chartersToDisplay[$sessionId] = $aSession['title'];
             $testerArray[$sessionId] = $aSession['username'];
         }
-        $sessionCountForOneArea = array_count_values($areaCountArray);
-
         $con = getMySqlConnection();
-        $allAreas = getAreas();
         mysql_close($con);
         //Print the result
         $htmlReturn .= "
@@ -232,4 +229,128 @@ $(function() {
         return $htmlReturn;
     }
 
+
+    public function getNumberOfBugsFound($allSessions)
+    {
+        $bugArray = array();
+        foreach ($allSessions as $aSession) {
+            $bugArray = array_merge($bugArray, $aSession['bugs']);
+        }
+        $bugArrayUnique = array_unique($bugArray);
+        return count($bugArrayUnique);
+    }
+
+    public function getNumberOfRequirementsFound($allSessions)
+    {
+        $reqArray = array();
+        foreach ($allSessions as $aSession) {
+            $reqArray = array_merge($reqArray, $aSession['requirements']);
+        }
+        $reqArrayUnique = array_unique($reqArray);
+        return count($reqArrayUnique);
+    }
+
+    public function getTotalTimeInSessionInHours($allSessions)
+    {
+        $duration = 0;
+        foreach ($allSessions as $aSessions) {
+            $duration = $duration + $aSessions['duration_time'];
+        }
+        return round($duration / 60, 1);
+    }
+
+    public function getPieCharTimeDistribution($allSessions, $divId, $title = "Time distribution")
+    {
+        $setup = 0;
+        $test = 0;
+        $bug = 0;
+        $opp = 0;
+        $duration = 0;
+
+        foreach ($allSessions as $sessionid => $sessionObject) {
+            $setup = $setup + $sessionObject['setup_percent'];
+            $test = $test + $sessionObject['test_percent'];
+            $bug = $bug + $sessionObject['bug_percent'];
+            $opp = $opp + $sessionObject['opportunity_percent'];
+            $duration = $duration + $sessionObject['duration_time'];
+        }
+        if ($allSessions != 0 && $setup != 0)
+            $setup = $setup / count($allSessions);
+        if ($allSessions != 0 && $test != 0)
+            $test = $test / count($allSessions);
+        if ($allSessions != 0 && $bug != 0)
+            $bug = $bug / count($allSessions);
+        if ($allSessions != 0 && $opp != 0)
+            $opp = $opp / count($allSessions);
+
+        $setupTime = round($setup * $duration / 100, 2);
+        $testTime = round($test * $duration / 100, 2);
+        $bugTime = round($bug * $duration / 100, 2);
+        $oppTime = round($opp * $duration / 100, 2);
+
+        $htmlString = '
+<script type="text/javascript">
+    var chart;
+    $(document).ready(function () {
+        chart = new Highcharts.Chart({
+            chart:{
+                renderTo:\'' . $divId . '\',
+                plotBackgroundColor:null,
+                plotBorderWidth:null,
+                plotShadow:false
+            },
+            title:{
+                text:\'' . $title . '\'
+            },
+            tooltip:{
+                formatter:function () {
+                    return \'<b>\' + this.point.name + \'</b>: \' + this.percentage.toFixed(1) + \' %\';
+                }
+            },
+            plotOptions:{
+                pie:{
+                    allowPointSelect:true,
+                    cursor:\'pointer\',
+                    dataLabels:{
+                        enabled:true,
+                        color:\'#000000\',
+                        connectorColor:\'#000000\',
+                        formatter:function () {
+                            return \'<b>\' + this.point.name + \'</b>: \' + this.percentage.toFixed(1) + \' %\';
+                        }
+                    }
+                }
+            },
+            series:[
+                    {
+                        type:\'pie\',
+                        name:\'Browser share\',
+                        data:
+                        [{
+                        name: \'Setup (' . $setupTime . 'h)\',
+                        y:  ' . $setup . ',
+                        color: \'#0000FF\'
+                    }, {
+                        name: \'Test (' . $testTime . 'h)\',
+                        y: ' . $test . ',
+                        color: \'#00FF00\'
+                    }, {
+                        name: \'Bug (' . $bugTime . 'h)\',
+                        y: ' . $bug . ',
+                        color: \'#FF0000\'
+                    }, {
+                        name: \'opportunity (' . $oppTime . 'h)\',
+                        y: ' . $opp . ',
+                        color: \'#000000\'
+                    }
+                ]
+                }
+            ]
+        });
+    });
+
+</script>';
+        return $htmlString;
+
+    }
 }

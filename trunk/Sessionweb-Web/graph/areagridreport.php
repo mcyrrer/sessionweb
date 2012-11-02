@@ -9,11 +9,13 @@ include_once ('../include/session_common_functions.php.inc');
 include_once ('../include/graphcommon.inc');
 include_once ('../classes/sessionReadObject.php');
 include_once ('../classes/statistics.php');
+include_once ('../classes/pagetimer.php');
 if (file_exists('../include/customfunctions.php.inc')) {
     include_once ('../include/customfunctions.php.inc');
 
 }
-
+$pageTimer = new pagetimer();
+$pageTimer->startMeasurePageLoadTime();
 
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -120,7 +122,8 @@ if (isset($_REQUEST['sprint'])) {
     echo '<br><input type="submit" name="Submit" value="Generate report">';
 
 }
-
+$pageTimer->stopMeasurePageLoadTime();
+$pageTimer->echoTime();
 echo '</body>
 </html>';
 
@@ -131,7 +134,7 @@ function generateReport()
 {
     $con1 = getMySqlConnection();
     $statHelper = new statistics();
-    $start = time();
+
     $sql = generateSql();
     $allSessions = generateSessionObjects($sql);
     mysql_close($con1);
@@ -179,12 +182,10 @@ function generateReport()
 </div>
 
 ';
-    $end = time();
-    $delta = $end - $start;
 
-    echo "Report generated in $delta sec";
-    echo "<br>";
     echo "Report based on SQL <br>$sql";
+
+
 
 }
 

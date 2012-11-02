@@ -61,6 +61,7 @@ if (!isset($_SESSION['username'])) {
     echo "                     <td><input type=\"submit\" name=\"Submit\" value=\"Login\"></td>\n";
     echo "                 </tr>\n";
     echo "                 </table>\n";
+    echo '                 <input type="hidden" name="ref" value="'.$_SERVER["REQUEST_URI"].'">';
     echo "         </form>\n";
     if (isset($_GET['login']) && strcmp($_GET['login'], "failed") == 0) {
         echo "Wrong user name or password.<br><br>";
@@ -103,6 +104,7 @@ function printLast10SessionsTable()
 
 function printSessionsStatus()
 {
+    $logger = new logging();
     echo "<div id='sessionstatus'>";
     $con = getMySqlConnection();
 
@@ -110,7 +112,14 @@ function printSessionsStatus()
     $user = $_SESSION['username'];
 
     $sqlClosed = "SELECT COUNT(closed) AS closed FROM `sessioninfo` WHERE username = '$user' and closed = 1;";
+    $logger->sql($sqlClosed,__FILE__,__LINE__);
     $resultSession = mysql_query($sqlClosed);
+//    if ($resultSession!=false)
+//    {
+//        $logger->error(mysql_error($con),__FILE__,__LINE__);
+//        $logger->error($sqlClosed,__FILE__,__LINE__);
+//
+//    }
     $closedResultArray = mysql_fetch_array($resultSession);
     $closed = $closedResultArray['closed'];
 

@@ -192,17 +192,14 @@ function validateUserAsSessionwebUser()
     }
 }
 
-function registrateSession($result, $myusername, $rowAlreadyClaimed=false)
+function registrateSession($result, $myusername, $rowAlreadyClaimed = false)
 {
     $logger = new logging();
 
     session_start();
-    if(!$rowAlreadyClaimed)
-    {
+    if (!$rowAlreadyClaimed) {
         $row = mysql_fetch_array($result);
-    }
-    else
-    {
+    } else {
         $row = $rowAlreadyClaimed;
     }
 
@@ -216,7 +213,24 @@ function registrateSession($result, $myusername, $rowAlreadyClaimed=false)
 
     $logger->info("User logged in", __FILE__, __LINE__);
 
-    header("location:index.php");
+    if (isset($_REQUEST["ref"]) && strstr($_REQUEST["ref"], "redir") != false) {
+        $ref = $_REQUEST["ref"];
+        $refUri = explode("?", $ref);
+
+        if (count($refUri) > 1) {
+            $purifiedUri = explode("=", $refUri[1]);
+            $subUri = urldecode($purifiedUri[1]);
+            $baseUri = $_SERVER["HTTP_ORIGIN"];
+            $uri = $baseUri . $subUri;
+            $logger->debug("Will redirect to $uri",__FILE__,__LINE__);
+            header("location:$uri");
+
+        } else {
+            header("location:index.php");
+        }
+    } else {
+        header("location:index.php");
+    }
 }
 
 ?>
