@@ -73,7 +73,7 @@ else
 
     echo "         Welcome to sessionweb " . $_SESSION['user'] . "<br> \n";
     printSessionsStatus();
-    printLast10SessionsTable();
+    //printLast10SessionsTable();
 }
 
 

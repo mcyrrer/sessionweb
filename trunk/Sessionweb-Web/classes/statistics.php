@@ -114,7 +114,7 @@ class statistics
 
         $settings = getSettings();
         $timeInSessionsInHours = $this->getTotalTimeInSessionInHours($allSessions);
-        $timeInSessionsInHoursNormalized = round($timeInSessionsInHours / ($settings['normalized_session_time'] / 60), 1);
+        $timeInSessionsInHoursNormalized = round($timeInSessionsInHours / ($settings['normalized_session_time'] / 60), 2);
         $htmlString = "<table border='0' width='100%'>";
         $htmlString .= "<tr>";
         $htmlString .= "<td valign='top'>";

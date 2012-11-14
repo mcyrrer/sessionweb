@@ -9,6 +9,7 @@ include_once ('../include/session_common_functions.php.inc');
 include_once ('../include/graphcommon.inc');
 include_once ('../classes/sessionReadObject.php');
 include_once ('../classes/statistics.php');
+include_once ('../classes/logging.php');
 include_once ('../classes/pagetimer.php');
 if (file_exists('../include/customfunctions.php.inc')) {
     include_once ('../include/customfunctions.php.inc');
@@ -104,7 +105,8 @@ if (isset($_REQUEST['sprint'])) {
     echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '">';
 
     echo "<h1>Area Grid Report:</h1>";
-    echo "Report is based on on the area field.<br>";
+    echo "Report is based on on the area field. <br>
+    It contains data from the database that have an area and is in state executed/closed/debriefed.<br>";
 
     echo "<h2>Filter the result by choosing different values below:</h2>";
     echo "<div>Sprint: ";
@@ -154,11 +156,11 @@ function generateReport()
 
     echo '<li><a href="#tabs-3">Bugs found</a></li>';
     echo '<li><a href="#tabs-4">Requirements tested</a></li>';
-    echo '<li><a href="#tabs-5">Charters</a></li>';
+    echo '<li><a href="#tabs-5">Sessions</a></li>';
 
     echo '	</ul>
     <div id="tabs-1">
-		<p>'.$statHelper->generateOverviewTabContent($allSessions, $sql).'</p>
+		<p>' . $statHelper->generateOverviewTabContent($allSessions, $sql) . '</p>
 	</div>
 	<div id="tabs-2">
 		<p>' . getAreaStatisticIntoGridHtml($allSessions) . '</p>
@@ -186,11 +188,11 @@ function generateReport()
     echo "Report based on SQL <br>$sql";
 
 
-
 }
 
 function getAreaStatisticIntoGridHtml($allSessions)
 {
+    $logger = new logging();
     $settings = getSettings();
 
     $htmlReturn = "";
@@ -208,7 +210,43 @@ function getAreaStatisticIntoGridHtml($allSessions)
 
     foreach ($allSessions as $sessionId => $aSession) {
         //print_r(array_keys($aSession));
-        foreach ($aSession['areas'] as $area) {
+        if ($aSession['areas'] == null) {
+            $logger->error("Has no Areas:" . $sessionId, __FILE__, __LINE__);
+        } else {
+            $logger->info("Has Areas:" . $sessionId, __FILE__, __LINE__);
+        }
+
+        if (count($aSession['areas']) != 0) {
+            foreach ($aSession['areas'] as $area) {
+                if (!in_array($area, $areasToDisplay)) {
+                    $areasToDisplay[$area] = $area;
+                }
+                $areaCountArray[] = $area;
+
+                if (isset($sessionsByArea[$area]))
+                    $sessionsByArea[$area] = array_merge($sessionsByArea[$area], array($sessionId));
+                else
+                    $sessionsByArea[$area] = array($sessionId);
+
+                if (isset($bugsInOneArea[$area]))
+                    $bugsInOneArea[$area] = array_merge($bugsInOneArea[$area], $aSession['bugs']);
+                else
+                    $bugsInOneArea[$area] = $aSession['bugs'];
+
+                if (isset($requirementsInOneArea[$area]))
+                    $requirementsInOneArea[$area] = array_merge($requirementsInOneArea[$area], $aSession['requirements']);
+                else
+                    $requirementsInOneArea[$area] = $aSession['requirements'];
+
+                if (isset($durationInOneArea[$area]))
+                    $durationInOneArea[$area] = $durationInOneArea[$area] + $aSession['duration_time'];
+                else
+                    $durationInOneArea[$area] = $aSession['duration_time'];
+            }
+        }
+        else
+        {
+            $area = "Areas not specified";
             if (!in_array($area, $areasToDisplay)) {
                 $areasToDisplay[$area] = $area;
             }
@@ -233,8 +271,6 @@ function getAreaStatisticIntoGridHtml($allSessions)
                 $durationInOneArea[$area] = $durationInOneArea[$area] + $aSession['duration_time'];
             else
                 $durationInOneArea[$area] = $aSession['duration_time'];
-
-            //echo count($aSession['bugs']) . " : $sessionId<br>";
         }
 
 
