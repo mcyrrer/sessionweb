@@ -40,7 +40,6 @@ function executeCommand()
             insertTeamNameToDb($_REQUEST["teamtname"]);
         }
         elseif (isset($_REQUEST["command"]) && strcmp($_REQUEST["command"], "changeusersettings") == 0) {
-            print_r($_REQUEST);
             if (!isset($_REQUEST["usernametoupdate"])) {
                 $_REQUEST["usernametoupdate"] = "";
             }
@@ -57,7 +56,6 @@ function executeCommand()
                 $_REQUEST["team"] = "";
             }
             echo "<br>";
-            print_r($_REQUEST);
 
             updateUserSettings($_REQUEST["usernametoupdate"], $_REQUEST["active"], $_REQUEST["admin"], $_REQUEST["superuser"], $_REQUEST["team"]);
 
@@ -1234,7 +1232,7 @@ function updateUserSettings($userToChange, $active, $admin, $superuser, $team)
     }
 
     $sqlUpdate = "UPDATE user_settings SET teamname='$team' WHERE username='$userToChange'";
-    echo $sqlUpdate;
+    //echo $sqlUpdate;
     $result = mysql_query($sqlUpdate);
 
     if ($result) {

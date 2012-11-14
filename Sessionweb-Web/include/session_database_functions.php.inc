@@ -216,10 +216,18 @@ function saveSession_UpdateSessionDataToDb($sessionid)
 //        $sqlUpdate .= "       `teamsprintname` = '" . mysql_real_escape_string($_REQUEST['teamsprint']) . "', ";
 //    }
 
-    if ($_REQUEST['testenv'] == "") {
+    if(isset($_REQUEST['testenv']) )
+    {
+        $testenv = $_REQUEST['testenv'];
+    }
+    else
+    {
+        $testenv="";
+    }
+    if ($testenv == "") {
         $sqlUpdate .= "       `testenvironment` = null, ";
     } else {
-        $sqlUpdate .= "       `testenvironment` = '" . mysql_real_escape_string($_REQUEST['testenv']) . "', ";
+        $sqlUpdate .= "       `testenvironment` = '" . mysql_real_escape_string($testenv) . "', ";
     }
 
     if ($_REQUEST['textareaswundertest'] == "") {
@@ -228,10 +236,18 @@ function saveSession_UpdateSessionDataToDb($sessionid)
         $sqlUpdate .= "       `software` = '" . mysql_real_escape_string($_REQUEST['textareaswundertest']) . "', ";
     }
 
-    if ($_REQUEST['team'] == "") {
+    if(isset($_REQUEST['team']))
+    {
+        $team=$_REQUEST['team'];
+    }
+    else
+    {
+       $team="";
+    }
+    if ($team == "") {
         $sqlUpdate .= "       `teamname` = null ";
     } else {
-        $sqlUpdate .= "       `teamname` = '" . mysql_real_escape_string($_REQUEST['team']) . "' ";
+        $sqlUpdate .= "       `teamname` = '" . mysql_real_escape_string($team) . "' ";
     }
     $sqlUpdate .= "WHERE sessionid='$sessionid'";
 
