@@ -30,7 +30,7 @@ class pagetimer
      * Stop to measure load time. Should be called at the bottom of the page just before the toString function.
      * Also add it to the log if debug level is at debug of if load time is > 5 sec log it as warn
      */
-    public function stopMeasurePageLoadTime()
+    public function stopMeasurePageLoadTime($comment="",$file="",$line="")
     {
         $time = microtime();
         $time = explode(' ', $time);
@@ -40,9 +40,9 @@ class pagetimer
         $this->loadTime = round(($finish - $this->start), 4);
 
         if ($this->loadTime > 5) {
-            $this->logger->warning("Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", __FILE__, __LINE__);
+            $this->logger->warning("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
         } else {
-            $this->logger->debug("Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", __FILE__, __LINE__);
+            $this->logger->debug("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
         }
     }
 

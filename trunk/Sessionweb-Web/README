@@ -3,6 +3,28 @@ Sessionweb require PHP5 and MYSQL to work.
 If you do not know how to install/configure it please use XAMPP Server 
 (http://www.apachefriends.org/en/xampp.html)
 
+==SessionWeb 23==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_22-_23.sql
+to upgrade from 22->23
+
+===Release include (release 23) ===
+ID	Type	        Milestone	Summary
+111	Enhancement	    Release23	Add direct link to Area report created at the bottom of the area report page
+119	Enhancement	    Release23	Add remove user functionality
+120	Enhancement	    Release23	Add support for Ad authentication
+122	Defect	        Release23	Only list user that have a created sessions in drop down in list2.php
+123	Enhancement	    Release23	Extend Area grid report with overview; bug; req and charter tables
+125	Defect	        Release23	Sessions with no area is not visible in area report.
+126	Defect	        Release23	warnings when test environment is disabled
+127	Defect	        Release23	Area grid report have rounding issues
+
+
 ==SessionWeb 22==
 Installation/Upgrade from any previous version:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
