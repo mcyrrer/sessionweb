@@ -147,6 +147,9 @@ JOIN `mission_areas`)
 WHERE (`mission`.`versionid` =
 `mission_areas`.`versionid`) ;
 
+
+
+
 UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '23' WHERE  `version`.`id` =1;
 
 

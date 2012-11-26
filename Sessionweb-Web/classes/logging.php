@@ -81,7 +81,7 @@ class logging
 
     public function warning($logmessage, $filename = "", $line = "")
     {
-        $this->warn($logmessage, $filename = "", $line = "");
+        $this->warn($logmessage, $filename, $line);
     }
 
     public function error($logmessage, $filename = "", $line = "")
