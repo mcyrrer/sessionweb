@@ -453,7 +453,7 @@ function getAreas()
 
     $result = array();
     while ($row = mysql_fetch_array($resultSessionAreas)) {
-        $result[] = $row["areaname"];
+        $result[$row["areaname"]] = $row["areaname"];
     }
 
     return $result;

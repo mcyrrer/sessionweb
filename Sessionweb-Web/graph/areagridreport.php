@@ -11,6 +11,7 @@ include_once ('../classes/sessionReadObject.php');
 include_once ('../classes/statistics.php');
 include_once ('../classes/logging.php');
 include_once ('../classes/pagetimer.php');
+include_once ('../classes/dbHelper.php');
 if (file_exists('../include/customfunctions.php.inc')) {
     include_once ('../include/customfunctions.php.inc');
 
@@ -119,7 +120,7 @@ if (isset($_REQUEST['sprint'])) {
     echo '<input type="text" id="to" name="to"/><br>';
 
 //    echo "<h2>Include bug and requirement list</h2>";
-//    echo '<input type="radio" name="buglist" value="yes" />List all bugs found<br />';
+    echo '<input type="checkbox" name="all" value="true" />List areas that have 0 sessions<br />';
 //    echo '<input type="radio" name="reqlist" value="yes" />List all requirement tested';
     echo '<br><input type="submit" name="Submit" value="Generate report">';
 
@@ -197,7 +198,7 @@ function getAreaStatisticIntoGridHtml($allSessions)
 
     $htmlReturn = "";
     $appsToDisplay = array();
-    $areasToDisplay = array();
+    $areasWithOneOrMoreSessions = array();
     $areaCountArray = array();
     $bugsInOneArea = array();
     $requirementsInOneArea = array();
@@ -208,14 +209,72 @@ function getAreaStatisticIntoGridHtml($allSessions)
     $allApplicationsBasedOnAreaName = getApplicationsFromAreaNames();
 
 
-    foreach ($allSessions as $sessionId => $aSession) {
-        //print_r(array_keys($aSession));
-        if ($aSession['areas'] == null) {
-            $logger->error("Has no Areas:" . $sessionId, __FILE__, __LINE__);
-        } else {
-            $logger->info("Has Areas:" . $sessionId, __FILE__, __LINE__);
-        }
+    list($areasWithOneOrMoreSessions, $areaCountArray, $sessionsByArea, $bugsInOneArea, $requirementsInOneArea, $durationInOneArea) = getAllAreasWithOneOrMoreSessions($allSessions, $areasWithOneOrMoreSessions, $areaCountArray, $sessionsByArea, $bugsInOneArea, $requirementsInOneArea, $durationInOneArea);
 
+    $sessionCountForOneArea = array_count_values($areaCountArray);
+
+    $con = getMySqlConnection();
+    $allAreas = getAreas();
+    mysql_close($con);
+    //Print the result
+    $htmlReturn .= "
+    <div id=\"save\">
+    <table class='display' id='areaTable'>
+     <thead>
+        <tr>
+            <th>Area</th>
+            <th>Charter count</th>
+            <th>On Charter(%)</th>
+            <th>Setup(%)</th>
+            <th>Test(%)</th>
+            <th>Bug(%)</th>
+            <th>Opportunity(%)</th>
+            <th>Duration(h)</th>
+            <th>Bug count</th>
+            <th>Requirement count</th>
+        </tr>
+      </thead>
+      <tbody>";
+
+    $areasToLoop = getArrayToLoop($allAreas, $areasWithOneOrMoreSessions);
+
+    ksort($areasToLoop);
+
+
+    foreach ($areasToLoop as $areaName => $aArea) {
+        list($metricsOnCharter, $nbrOfSessionsInOneArea, $bugCountForOneArea, $reqCountForOneArea, $setup, $test, $bug, $opp, $durationInHours) = getValuesToPopulateHtmlGrid($areaName, $sessionsByArea, $aArea, $allSessions, $sessionCountForOneArea, $bugsInOneArea, $requirementsInOneArea, $durationInOneArea);
+
+
+        $htmlReturn .= "
+        <tr>
+            <td>$aArea</td>
+            <td>$nbrOfSessionsInOneArea</td>
+            <td>" . round($metricsOnCharter, 2) . "</td>
+            <td>$setup</td>
+            <td>$test</td>
+            <td>$bug</td>
+            <td>$opp</td>
+            <td>$durationInHours</td>
+            <td>$bugCountForOneArea</td>
+            <td>$reqCountForOneArea</td>
+        </tr>";
+
+
+//        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
+    }
+    $htmlReturn .= "
+    </tbody>
+    </table>
+    </div>";
+//    print_r($sessionCountForOneArea);
+    return $htmlReturn;
+
+
+}
+
+function getAllAreasWithOneOrMoreSessions($allSessions, $areasToDisplay, $areaCountArray, $sessionsByArea, $bugsInOneArea, $requirementsInOneArea, $durationInOneArea)
+{
+    foreach ($allSessions as $sessionId => $aSession) {
         if (count($aSession['areas']) != 0) {
             foreach ($aSession['areas'] as $area) {
                 if (!in_array($area, $areasToDisplay)) {
@@ -243,9 +302,7 @@ function getAreaStatisticIntoGridHtml($allSessions)
                 else
                     $durationInOneArea[$area] = $aSession['duration_time'];
             }
-        }
-        else
-        {
+        } else {
             $area = "Areas not specified";
             if (!in_array($area, $areasToDisplay)) {
                 $areasToDisplay[$area] = $area;
@@ -272,36 +329,13 @@ function getAreaStatisticIntoGridHtml($allSessions)
             else
                 $durationInOneArea[$area] = $aSession['duration_time'];
         }
-
-
     }
+    return array($areasToDisplay, $areaCountArray, $sessionsByArea, $bugsInOneArea, $requirementsInOneArea, $durationInOneArea);
+}
 
-    $sessionCountForOneArea = array_count_values($areaCountArray);
-
-    $con = getMySqlConnection();
-    $allAreas = getAreas();
-    mysql_close($con);
-    //Print the result
-    $htmlReturn .= "
-    <div id=\"save\">
-    <table class='display' id='areaTable'>
-     <thead>
-        <tr>
-            <th>Area</th>
-            <th>Charter count</th>
-            <th>On Charter(%)</th>
-            <th>Setup(%)</th>
-            <th>Test(%)</th>
-            <th>Bug(%)</th>
-            <th>Opportunity(%)</th>
-            <th>Duration(h)</th>
-            <th>Bug count</th>
-            <th>Requirement count</th>
-        </tr>
-      </thead>
-      <tbody>";
-    ksort($areasToDisplay);
-    foreach ($areasToDisplay as $areaName => $aArea) {
+function getValuesToPopulateHtmlGrid($areaName, $sessionsByArea, $aArea, $allSessions, $sessionCountForOneArea, $bugsInOneArea, $requirementsInOneArea, $durationInOneArea)
+{
+    if (array_key_exists($areaName, $sessionsByArea)) {
         $sessionsThatBelongsToOneArea = $sessionsByArea[$aArea];
         $metricsForOneArea = getMetricsForOneArea($sessionsThatBelongsToOneArea, $allSessions);
         $metricsOnCharter = 100 - $metricsForOneArea['opp'];
@@ -324,33 +358,46 @@ function getAreaStatisticIntoGridHtml($allSessions)
             $durationForOneArea = round($durationInOneArea[$aArea] / 60, 2);
         else
             $durationForOneArea = 0;
-
-
-        $htmlReturn .= "
-        <tr>
-            <td>$aArea</td>
-            <td>$nbrOfSessionsInOneArea</td>
-            <td>" . round($metricsOnCharter, 2) . "</td>
-            <td>" . round($metricsForOneArea['setup'], 2) . "</td>
-            <td>" . round($metricsForOneArea['test'], 2) . "</td>
-            <td>" . round($metricsForOneArea['bug'], 2) . "</td>
-            <td>" . round($metricsForOneArea['opp'], 2) . "</td>
-            <td>" . round($metricsForOneArea['durationInHours'], 2) . "</td>
-            <td>$bugCountForOneArea</td>
-            <td>$reqCountForOneArea</td>
-        </tr>";
-
-
-//        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
+        $setup = round($metricsForOneArea['setup'], 2);
+        $test = round($metricsForOneArea['test'], 2);
+        $bug = round($metricsForOneArea['bug'], 2);
+        $opp = round($metricsForOneArea['opp'], 2);
+        $durationInHours = round($metricsForOneArea['durationInHours'], 2);
+        return array($metricsOnCharter, $nbrOfSessionsInOneArea, $bugCountForOneArea, $reqCountForOneArea, $setup, $test, $bug, $opp, $durationInHours);
+    } else {
+        $sessionsThatBelongsToOneArea = 0;
+        $metricsOnCharter = 0;
+        $nbrOfSessionsInOneArea = 0;
+        $bugCountForOneArea = 0;
+        $reqCountForOneArea = 0;
+        $durationForOneArea = 0;
+        $setup = 0;
+        $test = 0;
+        $bug = 0;
+        $opp = 0;
+        $durationInHours = 0;
+        return array($metricsOnCharter, $nbrOfSessionsInOneArea, $bugCountForOneArea, $reqCountForOneArea, $setup, $test, $bug, $opp, $durationInHours);
     }
-    $htmlReturn .= "
-    </tbody>
-    </table>
-    </div>";
-//    print_r($sessionCountForOneArea);
-    return $htmlReturn;
+}
 
-
+function getArrayToLoop($allAreas, $areasThatHaveSessions)
+{
+    if (isset($_REQUEST['all'])) {
+        if (strstr($_REQUEST['all'], "true") != false) {
+            $areasToLoop = $allAreas;
+            if (array_key_exists("Areas not specified", $areasThatHaveSessions)) {
+                $areasToLoop["Areas not specified"] = "Areas not specified";
+                return $areasToLoop;
+            }
+            return $areasToLoop;
+        } else {
+            $areasToLoop = $areasThatHaveSessions;
+            return $areasToLoop;
+        }
+    } else {
+        $areasToLoop = $areasThatHaveSessions;
+        return $areasToLoop;
+    }
 }
 
 function iterateAllSessionsForOneApplication($sessionsByArea, $aApp, &$setupTime, &$testTime, &$bugtime, &$oppTime, &$durationTimeTotal, &$areasUsedInApp)
@@ -686,7 +733,8 @@ function generateSessionObjects($sql)
 {
 
     $allSessions = array();
-    $result = mysql_query($sql);
+    $result = dbHelper::sw_mysql_execute($sql, __FILE__, __LINE__);
+    //$result = mysql_query($sql);
 
     while ($row = mysql_fetch_array($result)) {
         $aSessionObject = new sessionReadObject($row['sessionid']);
@@ -723,75 +771,5 @@ function generateSql()
 
     return $sql;
 }
-
-
-function getTotalTimeInSessionInHours($allSessions)
-{
-    $duration = 0;
-    foreach ($allSessions as $aSessions) {
-        $duration = $duration + $aSessions['duration_time'];
-    }
-    return round($duration / 60, 1);
-}
-
-function getNumberOfBugsFound($allSessions)
-{
-    $bugArray = array();
-    foreach ($allSessions as $aSession) {
-        $bugArray = array_merge($bugArray, $aSession['bugs']);
-    }
-    $bugArrayUnique = array_unique($bugArray);
-    return count($bugArrayUnique);
-}
-
-function getNumberOfRequirementsFound($allSessions)
-{
-    $reqArray = array();
-    foreach ($allSessions as $aSession) {
-        $reqArray = array_merge($reqArray, $aSession['bugs']);
-    }
-    $reqArrayUnique = array_unique($reqArray);
-    return count($reqArrayUnique);
-}
-
-function getNumberOfRequirementsFoundAsListWithLink($allSessions)
-{
-    $settings = getSettings();
-    $dmsRms = $settings['url_to_rms'];
-    $html = "";
-    foreach ($allSessions as $aSession) {
-        if (count($aSession['requirements']) != null) {
-            foreach ($aSession['requirements'] as $aReq)
-                if (file_exists('../include/customfunctions.php.inc')) {
-                    $title = getRequirementNameFromServer($aReq);
-                } else {
-                    $title = $aReq;
-                }
-            $html .= "<a href='$dmsRms$aReq'>$aReq - $title<a><br>";
-        }
-    }
-    return $html;
-}
-
-
-function getNumberOfBugsFoundAsListWithLink($allSessions)
-{
-    $settings = getSettings();
-    $dmsUrl = $settings['url_to_dms'];
-    $html = "";
-    foreach ($allSessions as $aSession) {
-        if (count($aSession['bugs']) != null) {
-            foreach ($aSession['bugs'] as $aBug)
-                if (file_exists('../include/customfunctions.php.inc')) {
-                    $title = getBugNameFromServer($aBug);
-                } else {
-                    $title = $aBug;
-                }
-            $html .= "<a href='$dmsUrl$aBug'>$aBug - $title<a><br>";
-        }
-    }
-    return $html;
-}
-
 
 ?>

@@ -44,6 +44,7 @@ class pagetimer
         } else {
             $this->logger->debug("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
         }
+
     }
 
     /**
@@ -52,6 +53,11 @@ class pagetimer
     public function echoTime()
     {
         echo '<p>Page generated in ' . $this->loadTime . ' seconds.</p';
+    }
+
+    public function getTime()
+    {
+        return $this->loadTime;
     }
 
     private function getUrl()
