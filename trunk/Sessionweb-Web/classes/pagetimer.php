@@ -44,7 +44,20 @@ class pagetimer
         } else {
             $this->logger->debug("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
         }
+    }
 
+    /**
+     * Stop to measure load time. Should be called at the bottom of the page just before the toString function.
+     * Also add it to the log if debug level is at debug of if load time is > 5 sec log it as warn
+     */
+    public function stopMeasurePageLoadTimeWithoutLog($comment="",$file="",$line="")
+    {
+        $time = microtime();
+        $time = explode(' ', $time);
+        $time = $time[1] + $time[0];
+        $finish = $time;
+
+        $this->loadTime = round(($finish - $this->start), 4);
     }
 
     /**

@@ -4,6 +4,7 @@ if (!isset($basePath)) {
 }
 
 include_once 'sessionObjectSave.php';
+require_once 'dbHelper.php';
 /**
  * Class to create/load sessions and to manipulate data.
  */
@@ -48,6 +49,7 @@ class sessionObject extends sessionObjectSave
     private $username; //Text
     private $versionid; //Int
     private $logger;
+    private $sessionExist;  //Validate if a session exists or not. should be checked for true before accessing any get..
 
     /**
      * @param null $sessionid sessionid to create a object of, if null then create a empty one.
@@ -58,7 +60,14 @@ class sessionObject extends sessionObjectSave
         if ($sessionid == null) {
             $this->createEmptySessionObject();
         } else {
-            $this->getSessionData($sessionid);
+            if ($this->doesSessionExist($sessionid)) {
+                $this->setSessionExist(true);
+                $this->getSessionData($sessionid);
+            }
+            else
+            {
+                $this->setSessionExist(false);
+            }
         }
     }
 
@@ -74,6 +83,30 @@ class sessionObject extends sessionObjectSave
 
     }
 
+    private function doesSessionExist($sessionid)
+    {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $con = getMySqliConnection();
+
+        //mission data
+        $sqlSelectSession = "SELECT sessionid ";
+        $sqlSelectSession .= "FROM   mission ";
+        $sqlSelectSession .= "WHERE  sessionid = $sessionid";
+
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $result = mysqli_query($con, $sqlSelectSession);
+        if (mysqli_num_rows($result) == 0) {
+            $this->logger->warn("Session id $sessionid does not exist");
+            mysqli_close($con);
+            return false;
+        }
+        else
+        {
+            mysqli_close($con);
+            return true;
+        }
+
+    }
 
     /**
      * Populate the sessionobject with data from db
@@ -81,6 +114,7 @@ class sessionObject extends sessionObjectSave
      */
     private function getSessionData($sessionid)
     {
+
 
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
@@ -92,6 +126,9 @@ class sessionObject extends sessionObjectSave
 
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelectSession);
+        if (mysqli_num_rows($result) == 0) {
+            die("no session exist with sessionid $sessionid");
+        }
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $data = mysqli_fetch_array($result);
 
@@ -201,8 +238,7 @@ class sessionObject extends sessionObjectSave
         if (mysqli_num_rows($result) > 0) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
             $data = mysqli_fetch_array($result);
-
-            $this->setDebrief_notes($data['notes']);
+            $this->setDebrief_notes($data['debrief_notes']);
             $this->setDebriefedby(($data['debriefedby']));
         } else {
             $this->setDebrief_notes("");
@@ -374,13 +410,15 @@ class sessionObject extends sessionObjectSave
 //mission_areas  DONE
 //mission_bugs  DONE
 //mission_custom
-//mission_debriefnotes
+//mission_debriefnotes  DONE
 //mission_requirements  DONE
 //mission_sessionmetrics
 //mission_sessionsconnections
 //mission_status DONE
 //mission_testers
 //mission_attachments
+        if($this->getSessionExist())
+        {
         $save = new sessionObjectSave();
         $sessiondata = $this->toArray();
 
@@ -401,7 +439,16 @@ class sessionObject extends sessionObjectSave
         if (!$save->saveToMissionRequirementsTable($sessiondata)) {
             die("Could not save data to table mission_requirements");
         }
-        $this->logger->debug("Saved sessionid ".$this->getSessionid()." ",__FILE__,__LINE__);
+        if (!$save->saveToMissionDebriefNotesTable($sessiondata)) {
+            die("Could not save data to table mission_requirements");
+        }
+        $this->logger->debug("Saved sessionid " . $this->getSessionid() . " ", __FILE__, __LINE__);
+        }
+        else
+        {
+            $this->logger->error("Tried to save a session that does not exist", __FILE__, __LINE__);
+
+        }
 
     }
 
@@ -419,9 +466,10 @@ class sessionObject extends sessionObjectSave
                 echo $oneRow;
             }
             $sessiondata = $this->toArray();
-        } else {
-            echo "VERSIONID EXIST";
         }
+//        else {
+//            echo "VERSIONID EXIST";
+//        }
     }
 
     function getAdditional_testers()
@@ -652,8 +700,7 @@ class sessionObject extends sessionObjectSave
         if (is_array($x)) {
             $this->areas = $x;
             return true;
-        }
-        else false;
+        } else false;
     }
 
     function setAttachments($x)
@@ -681,8 +728,7 @@ class sessionObject extends sessionObjectSave
         if (is_array($x)) {
             $this->bugs = $x;
             return true;
-        }
-        else false;
+        } else false;
     }
 
 
@@ -806,8 +852,7 @@ class sessionObject extends sessionObjectSave
         if (is_array($x)) {
             $this->requirements = $x;
             return true;
-        }
-        else false;
+        } else false;
     }
 
     private function setPublickey($x)
@@ -1016,5 +1061,15 @@ class sessionObject extends sessionObjectSave
         echo "updated:" . $this->updated . "\n"; //Mysql TimeStamp
         echo "username:" . $this->username . "\n"; //Text
         echo "versionid:" . $this->versionid . "\n"; //Int
+    }
+
+    private function setSessionExist($sessionExist)
+    {
+        $this->sessionExist = $sessionExist;
+    }
+
+    public function getSessionExist()
+    {
+        return $this->sessionExist;
     }
 }

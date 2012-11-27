@@ -1,4 +1,6 @@
 <?php
+require_once 'dbHelper.php';
+
 /**
  * Class to manage save of a sessionObject.
  * $file and $line is the filename __FILE__ and the linenumber __LINE__ that the logger will use to create traceability
@@ -15,6 +17,8 @@ include_once "config/db.php.inc";
 /** @noinspection PhpIncludeInspection */
 include_once "classes/logging.php";
 /** @noinspection PhpIncludeInspection */
+include_once "classes/dbHelper.php";
+/** @noinspection PhpIncludeInspection */
 include_once "include/db.php";
 
 
@@ -22,6 +26,7 @@ include_once "include/db.php";
 class sessionObjectSave
 {
     private $logger;
+    private $dbHelper;
 
     /**
      * @param null $sessionid
@@ -29,6 +34,7 @@ class sessionObjectSave
     function __construct($sessionid = null)
     {
         $this->logger = new logging();
+        $this->dbHelper = new dbHelper();
     }
 
     /**
@@ -81,7 +87,7 @@ class sessionObjectSave
         $sqlInsert .= "             `software`, ";
         $sqlInsert .= "             `teamname`, ";
         $sqlInsert .= "             `lastupdatedby`, ";
-        $sqlInsert .= "             `projects`, ";
+        $sqlInsert .= "             `project`, ";
         $sqlInsert .= "             `publickey`) ";
         $sqlInsert .= "VALUES      ('" . $missionDataArray["sessionid"] . "', ";
         $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
@@ -134,7 +140,7 @@ class sessionObjectSave
         $sqlUpdate .= "SET    `title` = '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
         $sqlUpdate .= "       `charter` = '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
         $sqlUpdate .= "       `notes` = '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
-        $sqlUpdate .= "       `projects` = '" . mysql_real_escape_string($missionDataArray["project"]) . "', ";
+        $sqlUpdate .= "       `project` = '" . mysql_real_escape_string($missionDataArray["project"]) . "', ";
         $sqlUpdate .= "       `lastupdatedby` = '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
         if (isset($missionDataArray['sprintname']) && $missionDataArray['sprintname'] != "") {
             $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($missionDataArray['sprintname']) . "', ";
@@ -270,7 +276,7 @@ class sessionObjectSave
     {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
-        $result = $this->saveToMissionStatusTable_Execute($missionDataArray, $con );
+        $result = $this->saveToMissionStatusTable_Execute($missionDataArray, $con);
         mysqli_close($con);
         return $result;
     }
@@ -286,8 +292,7 @@ class sessionObjectSave
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_areas WHERE mission_areas.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-        foreach($missionDataArray['areas'] as $area)
-        {
+        foreach ($missionDataArray['areas'] as $area) {
             $sqlInsert = "INSERT INTO mission_areas (versionid, areaname) VALUES ('$versionId', '$area')";
             $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
         }
@@ -304,7 +309,7 @@ class sessionObjectSave
     {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
-        $result = $this->saveToMissionBugsTable_Execute($missionDataArray, $con );
+        $result = $this->saveToMissionBugsTable_Execute($missionDataArray, $con);
         mysqli_close($con);
         return $result;
     }
@@ -320,8 +325,7 @@ class sessionObjectSave
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_bugs WHERE mission_bugs.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-        foreach($missionDataArray['bugs'] as $bug)
-        {
+        foreach ($missionDataArray['bugs'] as $bug) {
             $sqlInsert = "INSERT INTO mission_bugs (versionid, bugid) VALUES ('$versionId', '$bug')";
             $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
         }
@@ -337,7 +341,7 @@ class sessionObjectSave
     {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
-        $result = $this->saveToMissionRequirementsTable_Execute($missionDataArray, $con );
+        $result = $this->saveToMissionRequirementsTable_Execute($missionDataArray, $con);
         mysqli_close($con);
         return $result;
     }
@@ -353,15 +357,36 @@ class sessionObjectSave
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_requirements WHERE mission_requirements.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-        foreach($missionDataArray['requirements'] as $req)
-        {
+        foreach ($missionDataArray['requirements'] as $req) {
             $sqlInsert = "INSERT INTO mission_requirements (versionid, requirementsid) VALUES ('$versionId', '$req')";
             $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
         }
         return true;
     }
 
+    protected function saveToMissionDebriefNotesTable($missionDataArray)
+    {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $con = getMySqliConnection();
+        $result = $this->saveToMissionDebriefNotesTable_Execute($missionDataArray, $con);
+        mysqli_close($con);
+        return $result;
+    }
 
+    protected function saveToMissionDebriefNotesTable_Execute($missionDataArray, $con)
+    {
+        $versionId = $missionDataArray['versionid'];
+        $sqlDelete = "DELETE FROM mission_debriefnotes WHERE mission_debriefnotes.versionid = $versionId";
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+
+        $notes = $missionDataArray['notes'];
+        $debriefedBy = $missionDataArray['debriefedby'];
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+        $sqlInsert = "INSERT INTO mission_debriefnotes (versionid, notes, debriefedby) VALUES ('$versionId', '$notes', '$debriefedBy')";
+        $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+
+        return true;
+    }
 
 
     /**
@@ -376,11 +401,12 @@ class sessionObjectSave
     {
         $this->logger->sql($sqlInsert, $file, $line);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        $result = mysqli_query($con, $sqlInsert);
+        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, $file, $line);
+        //$result = mysqli_query($con, $sqlInsert);
         if (!$result) {
-            $this->logger->error(" Mysql Code:" . $sqlInsert, __FILE__, __LINE__);
+            $this->logger->error(" Mysql Code:" . $sqlInsert, $file, $line);
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $this->logger->error(mysqli_error($con), __FILE__, __LINE__);
+            $this->logger->error(mysqli_error($con), $file, $line);
             $this->dieAndPrintErrorMessage();
             return false;
         } else
@@ -398,10 +424,11 @@ class sessionObjectSave
     {
         $this->logger->sql($sqlUpdate, $file, $line);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        $result = mysqli_query($con, $sqlUpdate);
+        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlUpdate, $file, $line);
+//        $result = mysqli_query($con, $sqlUpdate);
         if (!$result) {
-            $this->logger->error(" Mysql Code:" . $sqlUpdate, __FILE__, __LINE__);
-            $this->logger->error(" Mysql error:" . mysqli_error($con), __FILE__, __LINE__);
+            $this->logger->error(" Mysql Code:" . $sqlUpdate, $file, $line);
+            $this->logger->error(" Mysql error:" . mysqli_error($con), $file, $line);
             $this->dieAndPrintErrorMessage();
             return false;
         } else
@@ -420,11 +447,12 @@ class sessionObjectSave
     {
         $this->logger->sql($sqlDelete, $file, $line);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        $result = mysqli_query($con, $sqlDelete);
+        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlDelete, $file, $line);
+        //$result = mysqli_query($con, $sqlDelete);
         if (!$result) {
-            $this->logger->error(" Mysql Code:" . $sqlDelete, __FILE__, __LINE__);
+            $this->logger->error(" Mysql Code:" . $sqlDelete, $file, $line);
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $this->logger->error(mysqli_error($con), __FILE__, __LINE__);
+            $this->logger->error(mysqli_error($con), $file, $line);
             $this->dieAndPrintErrorMessage();
             return false;
         } else

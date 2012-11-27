@@ -28,6 +28,7 @@ class dbHelper
             $queryToLog = $query . ". Execution time: ".$pageTimer->getTime();
         }
         $logger->timer($queryToLog, $file, $line);
+        $logger->sql($query, $file, $line);
         return $result;
     }
 
@@ -37,7 +38,7 @@ class dbHelper
         $pageTimer = new pagetimer();
         $pageTimer->startMeasurePageLoadTime();
         $result = mysqli_query($con, $query);
-        $pageTimer->stopMeasurePageLoadTime();
+        $pageTimer->stopMeasurePageLoadTimeWithoutLog();
 
         if (strlen($query) > 100) {
             $queryToLog = substr($query,0, 99) . ".... Execution time: ".$pageTimer->getTime();
@@ -45,6 +46,7 @@ class dbHelper
             $queryToLog = $query . ". Execution time: ".$pageTimer->getTime();
         }
         $logger->timer($queryToLog, $file, $line);
+        $logger->sql($query, $file, $line);
         return $result;
     }
 }
