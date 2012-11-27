@@ -214,7 +214,7 @@ function getAreaStatisticIntoGridHtml($allSessions)
     $sessionCountForOneArea = array_count_values($areaCountArray);
 
     $con = getMySqlConnection();
-    $allAreas = getAreas();
+    $allAreas = getAreasFromAreaTable();
     mysql_close($con);
     //Print the result
     $htmlReturn .= "

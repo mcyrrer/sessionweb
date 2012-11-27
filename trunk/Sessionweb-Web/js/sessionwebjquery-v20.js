@@ -273,6 +273,32 @@ $(document).ready(function () {
     });
 
 
+//Area select box resize
+    $('#collapseAreas').hide();
+    $('#expandAreas').click(function () {
+        $('#select_area').attr('size', 20 );
+        $('#collapseAreas').show();
+        $('#expandAreas').hide();
+    });
+    $('#collapseAreas').click(function () {
+        $('#select_area').attr('size', 4 );
+        $('#collapseAreas').hide();
+        $('#expandAreas').show();
+    });
+
+//Tester select box resize
+    $('#collapseTesters').hide();
+    $('#expandTesters').click(function () {
+        $('#additionalTester').attr('size', 20 );
+        $('#collapseTesters').show();
+        $('#expandTesters').hide();
+    });
+    $('#collapseTesters').click(function () {
+        $('#additionalTester').attr('size', 4 );
+        $('#collapseTesters').hide();
+        $('#expandTesters').show();
+    });
+
 //***************Metrics calculation***************
     $("[class=metricoption]").change(function () {
         var setup = $("#setuppercent").val();

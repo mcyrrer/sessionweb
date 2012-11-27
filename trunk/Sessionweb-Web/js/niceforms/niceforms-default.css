@@ -51,20 +51,7 @@ dl {
     clear: both;
 }
 
-dt {
-    float: left;
-    text-align: right;
-    width: 90px;
-    line-height: 25px;
-    margin: 0 10px 10px 0;
-}
 
-dd {
-    float: left;
-    width: 475px;
-    line-height: 25px;
-    margin: 0 0 10px 0;
-}
 
 #footer {
     font-size: 11px;

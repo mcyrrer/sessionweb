@@ -19,11 +19,10 @@ define("INSTALLATION_SCRIPT", "SessionwebDbLayout_1.7.sql");
     <div><H1>Set language(collation) to support in Mysql</H1></div>
     <?php
 
-    echo $sessionwebPath;
-    if ($_POST['dbadminuser'] == null || $_POST['dbadminpassword'] == null || $_POST['collation'] == null)
+    //echo $sessionwebPath;
+    if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['collation']))
         echoForm();
-    else
-    {
+    else {
         update();
 
     }
@@ -44,12 +43,12 @@ function update()
 
     echo '
             <fieldset>
-                <legend>Upate of MySql collation to '.$collation.'</legend>
+                <legend>Upate of MySql collation to ' . $collation . '</legend>
                 <dl>
                     <dd>';
 
     if (tryDbConnection($adminuser, $adminpassword)) {
-        changeCharsetAndCollation('sessionwebos','utf8',$collation,'localhost', $adminuser, $adminpassword);
+        changeCharsetAndCollation('sessionwebos', 'utf8', $collation, 'localhost', $adminuser, $adminpassword);
     }
     echo'         </dd>
                 </dl>
@@ -58,22 +57,18 @@ function update()
 
 function tryDbConnection($user, $password, $host = 'localhost')
 {
-    try
-    {
+    try {
         $con = @ mysql_connect($host, $user, $password);
         mysql_query("SET NAMES utf8");
         mysql_query("SET CHARACTER SET utf8");
         if ($con) {
             mysql_close($con);
             return true;
-        }
-        else
-        {
+        } else {
             echo "Could not connect to MySql database, please check your user and password";
             return false;
         }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         echo "Could not connect to MySql database, please check your user and password";
         return false;
     }
@@ -81,15 +76,24 @@ function tryDbConnection($user, $password, $host = 'localhost')
 
 function echoForm()
 {
-    if (strstr($_GET['install'], "yes") != false) {
+    if (isset($_GET['install']) && strstr($_GET['install'], "yes") != false) {
         echo "<p>Some of the fields was empty, please fill all fields and try again.</p>";
     }
-    $adminuser = $_POST['dbadminuser'];
-    $adminpassword = $_POST['dbadminpassword'];
-    $dbuser = $_POST['dbsessionwebuser'];
-    $dbpassword = $_POST['dbsessionwebpassword'];
-    $dbname = $_POST['dbname'];
-    if ($dbname == null) {
+    if (isset($_POST['dbadminuser']))
+        $adminuser = $_POST['dbadminuser'];
+    else
+        $adminuser="";
+    if (isset($_POST['dbadminpassword']))
+        $adminpassword = $_POST['dbadminpassword'];
+    else
+        $adminpassword="";
+    if (isset($_POST['dbsessionwebuser']))
+        $dbuser = $_POST['dbsessionwebuser'];
+    if (isset($_POST['dbsessionwebpassword']))
+        $dbpassword = $_POST['dbsessionwebpassword'];
+    if (isset($_POST['dbname']))
+        $dbname = $_POST['dbname'];
+    if (!isset($dbname)) {
         $dbname = "sessionwebos";
     }
 
