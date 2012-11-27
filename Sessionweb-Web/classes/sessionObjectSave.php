@@ -364,6 +364,52 @@ class sessionObjectSave
         return true;
     }
 
+    protected function saveToMissionMetricsTable($missionDataArray)
+    {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $con = getMySqliConnection();
+        $result = $this->saveToMissionMetricsTable_Execute($missionDataArray, $con);
+        mysqli_close($con);
+        return $result;
+    }
+
+    private function saveToMissionMetricsTable_Execute($missionDataArray, $con)
+    {
+        $versionId = $missionDataArray['versionid'];
+        $sqlDelete = "DELETE FROM mission_sessionmetrics WHERE mission_sessionmetrics.versionid = $versionId";
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+
+        $setup = $missionDataArray['setup_percent'];
+        $test = $missionDataArray['test_percent'];
+        $bug = $missionDataArray['bug_percent'];
+        $opp = $missionDataArray['opportunity_percent'];
+        $duration = $missionDataArray['duration_time'];
+        $mood = $missionDataArray['mood'];
+
+        $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
+
+        $sqlInsert = "";
+        $sqlInsert .= "INSERT INTO mission_sessionmetrics ";
+        $sqlInsert .= "            (versionid, ";
+        $sqlInsert .= "             setup_percent, ";
+        $sqlInsert .= "             test_percent, ";
+        $sqlInsert .= "             bug_percent, ";
+        $sqlInsert .= "             opportunity_percent, ";
+        $sqlInsert .= "             duration_time, ";
+        $sqlInsert .= "             mood) ";
+        $sqlInsert .= "VALUES      ('$versionId', ";
+        $sqlInsert .= "             '$setup', ";
+        $sqlInsert .= "             '$test', ";
+        $sqlInsert .= "             '$bug', ";
+        $sqlInsert .= "             '$opp', ";
+        $sqlInsert .= "             '$duration', ";
+        $sqlInsert .= "             '$mood')";
+
+        $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+
+        return true;
+    }
+
     protected function saveToMissionDebriefNotesTable($missionDataArray)
     {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
@@ -373,7 +419,7 @@ class sessionObjectSave
         return $result;
     }
 
-    protected function saveToMissionDebriefNotesTable_Execute($missionDataArray, $con)
+    private function saveToMissionDebriefNotesTable_Execute($missionDataArray, $con)
     {
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_debriefnotes WHERE mission_debriefnotes.versionid = $versionId";

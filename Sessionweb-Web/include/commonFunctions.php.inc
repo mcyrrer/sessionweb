@@ -437,6 +437,10 @@ function getSessionAreas($versionid)
     return $result;
 }
 
+/**
+ * Get array of areas on mission_areas
+ * @return array
+ */
 function getAreas()
 {
     $sqlSelectSessionStatus = "";
@@ -447,6 +451,33 @@ function getAreas()
 
     if (!$resultSessionAreas) {
         echo "getSessionAreas: " . mysql_error() . "<br/>";
+        $logger->error(mysql_error());
+        $logger->debug($sqlSelectSessionStatus());
+    }
+
+    $result = array();
+    while ($row = mysql_fetch_array($resultSessionAreas)) {
+        $result[$row["areaname"]] = $row["areaname"];
+    }
+
+    return $result;
+}
+
+
+/**
+ * Get an array of all areas in areas table
+ * @return array
+ */
+function getAreasFromAreaTable()
+{
+    $sqlSelectSessionStatus = "";
+    $sqlSelectSessionStatus .= "SELECT areaname ";
+    $sqlSelectSessionStatus .= "FROM areas";
+
+    $resultSessionAreas = mysql_query($sqlSelectSessionStatus);
+
+    if (!$resultSessionAreas) {
+        echo "getAreas: " . mysql_error() . "<br/>";
         $logger->error(mysql_error());
         $logger->debug($sqlSelectSessionStatus());
     }

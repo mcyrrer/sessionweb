@@ -435,7 +435,7 @@ function echoSessionForm()
         echoAdditionalTesterSelect(null);
 
 
-    echo "                              </td>\n";
+    echo "                              <span id='expandTesters'>[Expand]</span><span id='collapseTesters'>[Collapse]</span></td>\n";
     echo "                        </tr>\n";
 
     if ($_SESSION['settings']['area'] == 1) {
@@ -446,7 +446,7 @@ function echoSessionForm()
             echoAreaSelect($area);
         else
             echoAreaSelect($userSettings['default_area']);
-        echo "                              </td>\n";
+        echo "                              <span id='expandAreas'>[Expand]</span><span id='collapseAreas'>[Collapse]</span></td>\n";
         echo "                        </tr>\n";
     }
 
