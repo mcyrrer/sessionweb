@@ -1,31 +1,39 @@
 <?php
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
+include ('headerinstall.php');
+require_once('../classes/logging.php');
+session_start();
 
-define("INSTALLATION_SCRIPT", "SessionwebDbLayout_1.7.sql");
+
+
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Install Sessionweb</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script language="javascript" type="text/javascript" src="../js/niceforms/niceforms.js"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="../js/niceforms/niceforms-default.css"/>
-</head>
 
-<body>
 <div id="container">
-    <div><H1>Set language(collation) to support in Mysql</H1></div>
+    <div><H1>Set/change language(collation) support in Mysql</H1></div>
     <?php
 
-    //echo $sessionwebPath;
-    if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['collation']))
-        echoForm();
-    else {
-        update();
+    $logger = new logging();
 
+if (isset($_SESSION['useradmin'])) {
+    if ($_SESSION['useradmin'] != 1) {
+        $logger->info('Access of mysql collation page not granted! User does not have admin priviliges.', __FILE__, __LINE__);
+        echo "<br><br><br>Admin privilege needed to be able to change database collation. Please login using a user that have admin rights.<br><br><br><br>";
+
+    } else {
+        if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['collation']))
+            echoForm();
+        else {
+            update();
+
+        }
     }
+} else {
+    $logger->info('Access of mysql collation page not granted! User is not logged in.', __FILE__, __LINE__);
+    echo "<br><br><br>Admin privilege needed to be able to change database collation. Please login using a user that have admin rights.<br><br><br><br>";
+
+}
+
     ?>
 </div>
 </body>
@@ -36,10 +44,23 @@ require_once('../include/db.php');
 
 function update()
 {
-    $adminuser = $_POST['dbadminuser'];
-    $adminpassword = $_POST['dbadminpassword'];
-    $collation = $_POST['collation'];
+    $logger = new logging();
+    if (isset($_POST['dbadminuser'])) {
+        $adminuser = $_POST['dbadminuser'];
+    } else {
+        $adminuser = "";
+    }
+    if (isset($_POST['dbadminpassword'])) {
+        $adminpassword = $_POST['dbadminpassword'];
+    } else {
+        $adminpassword = "";
+    }
 
+    if (isset($_POST['collation'])) {
+        $collation = $_POST['collation'];
+    } else {
+        $collation = "";
+    }
 
     echo '
             <fieldset>
@@ -48,7 +69,10 @@ function update()
                     <dd>';
 
     if (tryDbConnection($adminuser, $adminpassword)) {
+        $logger->info("Will try to change mysql collation to $collation",__FILE__,__LINE__);
         changeCharsetAndCollation('sessionwebos', 'utf8', $collation, 'localhost', $adminuser, $adminpassword);
+        $logger->info("Changed mysql collation to $collation",__FILE__,__LINE__);
+
     }
     echo'         </dd>
                 </dl>
@@ -76,23 +100,24 @@ function tryDbConnection($user, $password, $host = 'localhost')
 
 function echoForm()
 {
-    if (isset($_GET['install']) && strstr($_GET['install'], "yes") != false) {
+
+    if (isset($_REQUEST['install']) && strstr($_REQUEST['install'], "yes") != false) {
         echo "<p>Some of the fields was empty, please fill all fields and try again.</p>";
     }
-    if (isset($_POST['dbadminuser']))
-        $adminuser = $_POST['dbadminuser'];
+    if (isset($_REQUEST['dbadminuser']))
+        $adminuser = $_REQUEST['dbadminuser'];
     else
         $adminuser="";
-    if (isset($_POST['dbadminpassword']))
-        $adminpassword = $_POST['dbadminpassword'];
+    if (isset($_REQUEST['dbadminpassword']))
+        $adminpassword = $_REQUEST['dbadminpassword'];
     else
         $adminpassword="";
-    if (isset($_POST['dbsessionwebuser']))
-        $dbuser = $_POST['dbsessionwebuser'];
-    if (isset($_POST['dbsessionwebpassword']))
-        $dbpassword = $_POST['dbsessionwebpassword'];
-    if (isset($_POST['dbname']))
-        $dbname = $_POST['dbname'];
+    if (isset($_REQUEST['dbsessionwebuser']))
+        $dbuser = $_REQUEST['dbsessionwebuser'];
+    if (isset($_REQUEST['dbsessionwebpassword']))
+        $dbpassword = $_REQUEST['dbsessionwebpassword'];
+    if (isset($_REQUEST['dbname']))
+        $dbname = $_REQUEST['dbname'];
     if (!isset($dbname)) {
         $dbname = "sessionwebos";
     }
@@ -156,5 +181,5 @@ function echoForm()
         </form>';
 
 }
-
+include ('footerinstall.php');
 ?>
