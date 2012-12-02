@@ -1,4 +1,6 @@
 <?php
+include ('headerinstall.php');
+
 session_start();
 //require_once('../include/validatesession.inc');
 require_once('../classes/logging.php');
@@ -6,32 +8,30 @@ require_once('../include/db.php');
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 include_once ('../config/db.php.inc');
-$logger=new logging();
+$logger = new logging();
+echo '<div id="container">
+    <div><H1>Upgrade of Sessionweb</H1></div>';
+if (isset($_SESSION['useradmin'])) {
+    if ($_SESSION['useradmin'] != 1) {
+        $logger->info('Access of upgrade page not granted! User does not have admin priviliges.', __FILE__, __LINE__);
+        echo "<br><br><br>Admin privilege needed to be able to update sessionweb. Please login using a user that have admin rights.<br><br><br><br>";
 
-if ($_SESSION['useradmin'] != 1) {
-    $logger->info('Access of upgrade page not granted! User does not have admin priviliges.',__FILE__,__LINE__);
-    echo "Admin privilege needed to be able to update sessionweb. Please login using a user that have admin rights.";
-    exit();
+    } else {
+        showUpgradeForm();
+    }
+} else {
+    $logger->info('Access of upgrade page not granted! User is not logged in.', __FILE__, __LINE__);
+    echo "<br><br><br>Admin privilege needed to be able to update sessionweb. Please login using a user that have admin rights.<br><br><br><br>";
 }
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Install Sessionweb</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script language="javascript" type="text/javascript" src="../js/niceforms/niceforms.js"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="../js/niceforms/niceforms-default.css"/>
-</head>
 
-<body>
-<div id="container">
-    <div><H1>Upgrade of Sessionweb</H1></div>
-    <?php
+
+function  showUpgradeForm()
+{
+
+
     if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']))
         echoForm();
-    else
-    {
+    else {
         echo '                <fieldset>
                 <legend>Upgrading to latest sessionweb</legend>
                 <dl>
@@ -41,12 +41,11 @@ if ($_SESSION['useradmin'] != 1) {
                 </dl>
             </fieldset>';
     }
-    ?>
-</div>
-</body>
-</html>
-<?php
 
+    echo '</div>';
+    echo '</body>';
+    echo '</html>';
+}
 
 function upgrade()
 {
@@ -88,7 +87,7 @@ function upgrade()
             mysql_query("SET CHARACTER SET utf8");
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
-            $logger->info('Upgrade from '.$currentVersion.' started.',__FILE__,__LINE__);
+            $logger->info('Upgrade from ' . $currentVersion . ' started.', __FILE__, __LINE__);
 
             $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion], DB_NAME_SESSIONWEB);
             mysql_close($con);
@@ -96,7 +95,7 @@ function upgrade()
             if (sizeof($resultOfSql) == 0) {
                 $versionAfterUpgrade = getSessionWebVersion();
                 echo "Upgraded to version <b>$versionAfterUpgrade</b><br>";
-                $logger->info('Upgraded to '.$versionAfterUpgrade.' done.',__FILE__,__LINE__);
+                $logger->info('Upgraded to ' . $versionAfterUpgrade . ' done.', __FILE__, __LINE__);
 
                 if (array_key_exists($currentVersion, $messages)) {
                     echo "<h3>" . $messages[$currentVersion] . "</h3>";
@@ -106,61 +105,49 @@ function upgrade()
                     upgrade();
                 }
 
-            }
-            else
-            {
-                $logger->error("Error during upgrade from $currentVersion",__FILE__,__LINE__);
-                $logger->error("File executed ". $versions[$currentVersion],__FILE__,__LINE__);
+            } else {
+                $logger->error("Error during upgrade from $currentVersion", __FILE__, __LINE__);
+                $logger->error("File executed " . $versions[$currentVersion], __FILE__, __LINE__);
 
-                foreach ($resultOfSql as $oneError)
-                {
+                foreach ($resultOfSql as $oneError) {
                     echo "--------------ERROR--------------<br>";
                     echo $oneError . "<br>";
-                    $logger->error("$oneError",__FILE__,__LINE__);
+                    $logger->error("$oneError", __FILE__, __LINE__);
                 }
             }
             echo "<div><a href='../index.php'>Back to sessionweb</a></div>";
 
 
-        }
-
-        elseif (tryDbConnection($adminuser, $adminpassword)) {
+        } elseif (tryDbConnection($adminuser, $adminpassword)) {
             echo "Sql file does not exist " . $versions[$currentVersion] . "<br>";
-            $logger->error("File ". $versions[$currentVersion]." does not exist",__FILE__,__LINE__);
+            $logger->error("File " . $versions[$currentVersion] . " does not exist", __FILE__, __LINE__);
 
         }
-        else
-        {
+        else {
             echo "Could not connect to MySql database, please check your user and password";
-            $logger->error("UPGRADE: Could not connect to MySql database, please check your user and password",__FILE__,__LINE__);
+            $logger->error("UPGRADE: Could not connect to MySql database, please check your user and password", __FILE__, __LINE__);
         }
 
-    }
-    else
-    {
+    } else {
         echo "You already have the latest version.";
-        $logger->info("UPGRADE: Upgrade aborted since the latest version is already installed",__FILE__,__LINE__);
+        $logger->info("UPGRADE: Upgrade aborted since the latest version is already installed", __FILE__, __LINE__);
     }
 
 }
 
 function tryDbConnection($user, $password, $host = 'localhost')
 {
-    try
-    {
+    try {
         $con = @ mysql_connect($host, $user, $password);
         mysql_query("SET NAMES utf8");
         mysql_query("SET CHARACTER SET utf8");
         if ($con) {
             mysql_close($con);
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         echo "Could not connect to MySql database, please check your user and password";
         return false;
     }
@@ -173,16 +160,12 @@ function echoForm()
     }
     if (isset($_POST['dbadminuser'])) {
         $adminuser = $_POST['dbadminuser'];
-    }
-    else
-    {
+    } else {
         $adminuser = "";
     }
     if (isset($_POST['dbadminpassword'])) {
         $adminpassword = $_POST['dbadminpassword'];
-    }
-    else
-    {
+    } else {
         $adminpassword = "";
     }
 
@@ -225,4 +208,6 @@ function echoForm()
         </form>';
 }
 
+
+include ('footerinstall.php');
 ?>

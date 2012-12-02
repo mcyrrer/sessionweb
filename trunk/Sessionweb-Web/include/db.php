@@ -56,13 +56,12 @@ function changeCharsetAndCollation($db, $charset, $collation, $db_server, $db_us
     //Iterating databases
     foreach ($dblist as $dbname) {
         $sql = "SELECT CONCAT('ALTER TABLE `', t.`TABLE_SCHEMA`, '`.`', t.`TABLE_NAME`, '` CONVERT TO CHARACTER SET $charset COLLATE $collation;') as FRST FROM `information_schema`.`TABLES` t WHERE t.`TABLE_SCHEMA` = '$dbname' ORDER BY 1";
-        //echo $sql.'<br>';
+         //echo $sql.'<br>';
         $result = mysql_query($sql) or die(mysql_error());
         while ($row = mysql_fetch_assoc($result)) {
-
-
             if (!$printonly) {
-                if (strstr($row["FRST"], 'sessioninfo') == false) {
+
+                if (stristr($row["FRST"], 'sessioninfo') == false && stristr($row["FRST"], 'sessionview_with_areas') == false) {
                     echo $row["FRST"] . "\r\n";
                     echo "\n\n<br><br>";
                     mysql_query($row["FRST"]) or die(mysql_error());
@@ -70,6 +69,7 @@ function changeCharsetAndCollation($db, $charset, $collation, $db_server, $db_us
             }
         }
     }
+    echo "<p>Done</p>";
 }
 
 ?>

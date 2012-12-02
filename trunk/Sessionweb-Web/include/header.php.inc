@@ -47,9 +47,24 @@ echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v20.js\"><
 
 echo "              <script type=\"text/javascript\">\n";
 echo "              var mySessionlinks = \"\";\n";
-echo "              var url_to_dms = \"" . $_SESSION['settings']['url_to_dms'] . "\";\n";
-echo "              var url_to_rms = \"" . $_SESSION['settings']['url_to_rms'] . "\";\n";
+if(isset($_SESSION['settings']['url_to_dms']))
+{
+    echo "              var url_to_dms = \"" . $_SESSION['settings']['url_to_dms'] . "\";\n";
+}
+else
+{
+    echo "              var url_to_dms = \"\";\n";
 
+}
+if(isset($_SESSION['settings']['url_to_rms']))
+{
+echo "              var url_to_rms = \"" . $_SESSION['settings']['url_to_rms'] . "\";\n";
+}
+else
+{
+    echo "              var url_to_rms = \"\";\n";
+
+}
 echo "              </script>\n";
 
 if (isset($_SESSION['settings'])) {

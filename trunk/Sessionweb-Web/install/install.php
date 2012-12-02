@@ -1,32 +1,44 @@
 <?php
+session_start();
+
 include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 require_once ('../classes/logging.php');
+include ('headerinstall.php');
+$logger = new logging();
 
-$logger=new logging();
 define("INSTALLATION_SCRIPT", "SessionwebDbLayout_24.sql");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Install Sessionweb</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script language="javascript" type="text/javascript" src="../js/niceforms/niceforms.js"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="../js/niceforms/niceforms-default.css"/>
-</head>
-
-<body>
 <div id="container">
     <div><H1>Installation of Sessionweb</H1></div>
     <?php
+    if (file_exists('../config/db.php.inc')) {
+        if (isset($_SESSION['useradmin']) && $_SESSION['useradmin'] != 1) {
+            $logger->info('Access of installation page not granted! User does not have admin priviliges.', __FILE__, __LINE__);
+            echo "<br><br><br>Admin privilege needed to be able to reinstall sessionweb. Please login using a user that have admin rights.<br>";
+            echo "To avoid this message you can delete include/db.php. This will allow you to do a clean install.<br><br><br><br>";
+        } elseif (isset($_SESSION['useradmin']) && $_SESSION['useradmin'] == 1) {
+            if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['dbsessionwebuser']) || !isset($_POST['dbsessionwebpassword'])) {
+                echo "<p>WARNING: sessionweb is already installed, by installing it again you will loose your database content!!!</p>";
+                echoForm();
 
-    //echo $sessionwebPath;
-    if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['dbsessionwebuser']) || !isset($_POST['dbsessionwebpassword']))
-        echoForm();
-    else {
-        install();
+            } else {
+                install();
+            }
+        }
+        else {
+            $logger->info('Access of installation page not granted! User not logged in.', __FILE__, __LINE__);
+            echo "<br><br><br>Admin privilege needed to be able to reinstall sessionweb. Please login using a user that have admin rights.<br><br><br><br>";
+        }
 
+    } else {
+
+        //echo $sessionwebPath;
+        if (!isset($_POST['dbadminuser']) || !isset($_POST['dbadminpassword']) || !isset($_POST['dbsessionwebuser']) || !isset($_POST['dbsessionwebpassword']))
+            echoForm();
+        else {
+            install();
+        }
     }
     ?>
 </div>
@@ -60,7 +72,7 @@ function install()
         mysql_query("SET NAMES utf8");
         mysql_query("SET CHARACTER SET utf8");
         $mysqlExecuter = new MySqlExecuter();
-        $logger->debug("Will install sessionweb with file ". INSTALLATION_SCRIPT,__FILE__,__LINE__);
+        $logger->debug("Will install sessionweb with file " . INSTALLATION_SCRIPT, __FILE__, __LINE__);
         $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT, $dbname, $createDb);
 
         if (sizeof($resultOfSql) == 0) {
@@ -80,7 +92,7 @@ function install()
 
 
         } else {
-            $logger->error("INSTALLATION: Error during installation",__FILE__,__LINE__);
+            $logger->error("INSTALLATION: Error during installation", __FILE__, __LINE__);
             foreach ($resultOfSql as $oneError) {
                 echo "--------------ERROR--------------<br>";
                 $logger->error($oneError);
@@ -108,21 +120,21 @@ function install()
 
 function createDbUser($dbuser, $dbpassword, $dbname)
 {
-    $logger=new logging();
+    $logger = new logging();
     $sqlCreateUser = "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword'";
     $sqlGrantUsage = "GRANT USAGE ON * . * TO  '$dbuser'@'localhost' IDENTIFIED BY  '$dbpassword' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
     $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `$dbname` . * TO  '$dbuser'@'localhost'";
     if (mysql_query($sqlCreateUser) === false) {
         echo "failed to create $dbuser user<br>";
-        $logger->error("Failed to create user $dbuser.Does it already exist? ",__FILE__,__LINE__);
-        $logger->sql($sqlCreateUser,__FILE__,__LINE__);
+        $logger->error("Failed to create user $dbuser.Does it already exist? ", __FILE__, __LINE__);
+        $logger->sql($sqlCreateUser, __FILE__, __LINE__);
     } else {
         echo "Created $dbuser user<br>";
     }
     if (mysql_query($sqlGrantUsage) === false) {
         echo "failed to grant usage for $dbuser user<br>";
-        $logger->error("Failed to grant usage for $dbuser",__FILE__,__LINE__);
-        $logger->sql($sqlGrantUsage,__FILE__,__LINE__);
+        $logger->error("Failed to grant usage for $dbuser", __FILE__, __LINE__);
+        $logger->sql($sqlGrantUsage, __FILE__, __LINE__);
 
 
     } else {
@@ -130,8 +142,8 @@ function createDbUser($dbuser, $dbpassword, $dbname)
     }
     if (mysql_query($sqlGrantSessionweb) === false) {
         echo "failed to grant usage for sessionweb for $dbuser user<br>";
-        $logger->error("Failed to usage for sessionweb for $dbuser",__FILE__,__LINE__);
-        $logger->sql($sqlGrantSessionweb,__FILE__,__LINE__);
+        $logger->error("Failed to usage for sessionweb for $dbuser", __FILE__, __LINE__);
+        $logger->sql($sqlGrantSessionweb, __FILE__, __LINE__);
 
 
     } else {
@@ -280,7 +292,7 @@ function echoForm()
 
 function checkFoldersForRWDuringInstallation()
 {
-    $logger =new logging();
+    $logger = new logging();
     echo "<b>Check for Read Write access for certain folders.</b><br>";
     $foldersToCheckRW = array("../config/", "../include/filemanagement/files/", "../include/filemanagement/thumbnails/", "../log/");
     $foldersOk = true;
@@ -318,4 +330,7 @@ function checkFoldersForRWDuringInstallation()
     }
 }
 
+?>
+<?php
+include ('footerinstall.php');
 ?>

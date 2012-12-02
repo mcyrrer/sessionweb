@@ -127,6 +127,39 @@ if (isset($_REQUEST['sprint'])) {
 }
 $pageTimer->stopMeasurePageLoadTime();
 $pageTimer->echoTime();
+
+if (isset($_REQUEST['sprint'])) {
+    $pageURLTmp = "http://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+    $pageURLTmp = explode("?", $pageURLTmp); //to remove params from URI
+    $pageURL = $pageURLTmp[0];
+    if (isset($_REQUEST['sprint'])) {
+        $sprint = "sprint=" . $_REQUEST['sprint'];
+    } else {
+        $sprint = "";
+    }
+
+    if (isset($_REQUEST['from'])) {
+        $from = "from=" . $_REQUEST['from'];
+    } else {
+        $from = "";
+    }
+
+    if (isset($_REQUEST['to'])) {
+        $to = "to=" . $_REQUEST['to'];
+    } else {
+        $to = "";
+    }
+
+    if (isset($_REQUEST['all'])) {
+        $all = "all=true";
+    } else {
+        $all = "";
+    }
+    $pageParams = "?$sprint&$from&$to&$all";
+    echo "<br><p>URL to this report:<a href='$pageURL$pageParams'>$pageURL$pageParams</a></p>";
+}
+
+
 echo '</body>
 </html>';
 
