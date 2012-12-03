@@ -3,6 +3,11 @@ include_once ('MySqlExecuter.php');
 include_once ('../include/commonFunctions.php.inc');
 include ('headerinstall.php');
 require_once('../classes/logging.php');
+if (file_exists('../config/db.php.inc')) {
+    include_once ('../config/db.php.inc');
+}
+require_once('../include/db.php');
+
 session_start();
 
 
@@ -15,6 +20,7 @@ session_start();
 
     $logger = new logging();
 
+    if (file_exists('../config/db.php.inc')) {
 if (isset($_SESSION['useradmin'])) {
     if ($_SESSION['useradmin'] != 1) {
         $logger->info('Access of mysql collation page not granted! User does not have admin priviliges.', __FILE__, __LINE__);
@@ -33,14 +39,16 @@ if (isset($_SESSION['useradmin'])) {
     echo "<br><br><br>Admin privilege needed to be able to change database collation. Please login using a user that have admin rights.<br><br><br><br>";
 
 }
+    }
+    else {
+        echo "Can not change mysql collation until it is installed.";
+    }
 
     ?>
 </div>
 </body>
 </html>
 <?php
-require_once('../config/db.php.inc');
-require_once('../include/db.php');
 
 function update()
 {
