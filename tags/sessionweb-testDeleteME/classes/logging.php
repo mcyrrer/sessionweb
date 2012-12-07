@@ -16,7 +16,7 @@ class logging
     function __construct()
     {
         //Populate with the levels you need to have in file, "TIMER","SQL","DEBUG","INFO","WARN","ERROR","FATAL"
-        $this->loglevel = array("TIMER","SQL", "DEBUG", "INFO", "WARN", "ERROR", "FATAL");
+        $this->loglevel = array("INFO", "WARN", "ERROR", "FATAL");
 
         $this->logpath = '';
         if (file_exists('log')) {
