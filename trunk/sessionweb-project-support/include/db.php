@@ -21,6 +21,8 @@ function getMySqliConnection()
     return $con;
 }
 
+
+
 function changeCharsetAndCollation($db, $charset, $collation, $db_server, $db_user, $db_password)
 {
     // Script written by Vladislav "FractalizeR" Rastrusny

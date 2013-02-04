@@ -89,6 +89,7 @@ class sessionObject extends sessionObjectSave
     {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
+        $sessionid = mysqli_real_escape_string($con,$sessionid);
 
         //mission data
         $sqlSelectSession = "SELECT sessionid ";
@@ -99,7 +100,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelectSession, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelectSession);
         if (mysqli_num_rows($result) == 0) {
-            $this->logger->warn("Session id $sessionid does not exist");
+            $this->logger->error("Session id $sessionid does not exist",__FILE__,__LINE__);
             mysqli_close($con);
             return false;
         } else {
@@ -119,6 +120,8 @@ class sessionObject extends sessionObjectSave
 
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
+
+        $sessionid = dbHelper::escape($con,$sessionid);
 
         //mission data
         $sqlSelectSession = "SELECT * ";
@@ -141,7 +144,7 @@ class sessionObject extends sessionObjectSave
         $this->setNotes($data['notes']);
         $this->setUsername($data['username']);
         $this->setTeamname($data['teamname']);
-        $this->logger->debug($data['teamname'],__FILE__,__LINE__);
+        //$this->logger->debug($data['teamname'],__FILE__,__LINE__);
         $this->setSprintname($data['sprintname']);
         $this->setDepricated($data['depricated']);
         $this->setUpdated($data['updated']);

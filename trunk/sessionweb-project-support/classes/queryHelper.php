@@ -120,7 +120,6 @@ class queryHelper
         return $toReturn;
     }
 
-
     public function getAdditionalTester()
     {
         $project = $_SESSION['project'];

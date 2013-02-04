@@ -58,6 +58,11 @@ class dbHelper
         $logger->sql($query, $file, $line);
         return $result;
     }
+
+    static function escape($con,$toEscape)
+    {
+        return mysqli_real_escape_string($con,$toEscape);
+    }
 }
 
 ?>

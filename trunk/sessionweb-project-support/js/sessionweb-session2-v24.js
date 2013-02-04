@@ -29,60 +29,46 @@ $(document).ready(function () {
         }
     });
 
-    $( "#slider-setup" ).slider({
-        range: "max",
-        min: 0,
-        max: 100,
-        value: 0,
-        slide: function( event, ui ) {
-            $( "#amount" ).val( ui.value );
-        }
-    });
-    $( "#amount" ).val( $( "#slider-setup" ).slider( "value" ) );
 
-    $( "#slider-test" ).slider({
-        range: "max",
-        min: 0,
-        max: 100,
-        value: 0,
-        slide: function( event, ui ) {
-            $( "#amount" ).val( ui.value );
-        }
-    });
-    $( "#amount" ).val( $( "#slider-test" ).slider( "value" ) );
+    AddRequirementManager();
 
-    $( "#slider-bug" ).slider({
-        range: "max",
-        min: 0,
-        max: 100,
-        value: 0,
-        slide: function( event, ui ) {
-            $( "#amount" ).val( ui.value );
-        }
-    });
-    $( "#amount" ).val( $( "#slider-bug" ).slider( "value" ) );
-
-    $( "#slider-opp" ).slider({
-        range: "max",
-        min: 0,
-        max: 100,
-        value: 0,
-        slide: function( event, ui ) {
-            $( "#amount" ).val( ui.value );
-        }
-    });
-    $( "#amount" ).val( $( "#slider-opp" ).slider( "value" ) );
 });
 
-//    Manage input and text for #title
-//    $('#input_title').focusout(function () {
-//    alert("hi");
-//    });
-//
-//    $('#divTitleSpan').click(function () {
-//        $('#divTitle').show();
-//        $('#divTitleSpan').hide();
-//    });
+function AddRequirementManager() {
+    $('#new_requirement').hide();
+    $('#addReq').click(function () {
+        $('#new_requirement').show();
+        $('#new_requirement').focus();
+    });
+    $("#new_requirement").keypress(function () {
+        if (event.which == 13) {
+            AddSingleRequirement(this.value);
+            $('#new_requirement').val("");
+        }
+    });
+    $("#new_requirement").focusout(function () {
+        $('#new_requirement').hide();
+        $('#new_requirement').val("");
+    });
+}
+
+function AddRequirementManager() {
+    $('#new_sessionlink').hide();
+    $('#addSessionLink').click(function () {
+        $('#new_sessionlink').show();
+        $('#new_sessionlink').focus();
+    });
+    $("#new_sessionlink").keypress(function () {
+        if (event.which == 13) {
+            AddSingleSessionLink(this.value);
+            $('#new_sessionlink').val("");
+        }
+    });
+    $("#new_sessionlink").focusout(function () {
+        $('#new_sessionlink').hide();
+        $('#new_sessionlink').val("");
+    });
+}
 
 /**
  * Set all data in the form to the stored values from DB
@@ -129,11 +115,13 @@ function setSessionData(jsonResponseContent) {
     setTimeout(function () {
         SetContentsNotes(jsonResponseContent['notes']);
     }, 100);
+
+    $(".colorPopUp").colorbox({iframe: true, width: "80%", height: "80%"});
 }
 
 function PopulateAutofetchedSoftware(softwareids) {
     softwareids.forEach(function (aId) {
-        $('#autoSoftwareVersions').append("<a class=\"colorPopUp cboxElement\" id=\"swauto_"+aId+"\" href=\"api/environments/getrunningversions/index.php?id="+aId+"\">api/environments/getrunningversions/index.php?id="+aId+"</a>");
+        $('#autoSoftwareVersions').append("<a class=\"colorPopUp cboxElement\" id=\"swauto_" + aId + "\" href=\"api/environments/getrunningversions/index.php?id=" + aId + "\">api/environments/getrunningversions/index.php?id=" + aId + "</a>");
         //alert("<p id='swauto_"+aId+">api/environments/getrunningversions/index.php?id="+aId+"</p>");
     });
 }
@@ -141,28 +129,52 @@ function PopulateAutofetchedSoftware(softwareids) {
 function PopulateRequirements(req) {
 
     req.forEach(function (aReq) {
-        $('#testReqId').append('<p id="'+aReq+'REQ">'+aReq+': Loading title</p>' );
-        $.ajax({
-            type: "GET",
-            data: { reqId: aReq},
-
-            url: 'api/titles/requirement/get/index.php',
-            complete: function (data) {
-
-                if (data.status == '200') {
-                    var title = data.responseText;
-                    $('#'+aReq+'REQ').html(+aReq+': '+title+'');
-                }
-            }
-        });
+        AddSingleRequirement(aReq)
     });
 
 }
 
+function AddSingleRequirement(aReq)
+{
+    $('#testReqId').append('<p id="' + aReq + 'REQ">' + aReq + ': Loading title</p>');
+    $.ajax({
+        type: "GET",
+        data: { reqId: aReq},
+
+        url: 'api/titles/requirement/get/index.php',
+        complete: function (data) {
+
+            if (data.status == '200') {
+                var title = data.responseText;
+                $('#' + aReq + 'REQ').html(+aReq + ': ' + title + '');
+            }
+        }
+    });
+}
+
+function AddSingleSessionLink(aLink)
+{
+    $('#linkToOtherSessions').append('<p id="' + aLink + 'SessionLink">' + aLink + ': Loading title</p>');
+//    $.ajax({
+//        type: "GET",
+//        data: { reqId: aLink},
+//
+//        url: 'api/titles/requirement/get/index.php',
+//        complete: function (data) {
+//
+//            if (data.status == '200') {
+//                var title = data.responseText;
+//                $('#' + aLink + 'SessionLink').html(+aLink + ': ' + title + '');
+//            }
+//        }
+//    });
+}
+
+
 function PopulateLinksToOtherSessions(linksToOtherSessions) {
 
     linksToOtherSessions.forEach(function (aLink) {
-        $('#linkToOtherSessions').append('<p id="'+aLink+'REQ">'+aLink+': Loading title</p>' );
+        $('#linkToOtherSessions').append('<p id="' + aLink + 'REQ">' + aLink + ': Loading title</p>');
         $.ajax({
             type: "GET",
             data: { sessionid: aLink},
@@ -171,7 +183,7 @@ function PopulateLinksToOtherSessions(linksToOtherSessions) {
             complete: function (data) {
                 if (data.status == '200') {
                     var title = data.responseText;
-                    $('#'+aLink+'REQ').html(+aLink+': '+title+'');
+                    $('#' + aLink + 'REQ').html(+aLink + ': ' + title + '');
                 }
             }
         });
@@ -199,4 +211,3 @@ function GetContentsNotes() {
     return editor.getData();
 }
 
-$(".colorPopUp").colorbox({iframe:true, width:"80%", height:"80%"});

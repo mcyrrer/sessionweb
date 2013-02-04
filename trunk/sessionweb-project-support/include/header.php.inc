@@ -15,9 +15,10 @@ echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
-echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery-ui-1.8.20.custom.css\">\n";
-echo "     <script src=\"js/jquery-1.7.1.js\" type=\"text/javascript\"></script>\n";
-echo "     <script src=\"js/jqueryui/jquery-ui-1.8.20.custom.min.js\" type=\"text/javascript\"></script>\n";
+echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery-ui-1.10.0.custom.css\">\n";
+echo "     <script src=\"js/jquery-1.9.0.min.js\" type=\"text/javascript\"></script>\n";
+echo '     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>';
+echo "     <script src=\"js/jqueryui/jquery-ui-1.10.0.custom.min.js\" type=\"text/javascript\"></script>\n";
 
 if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
@@ -40,6 +41,8 @@ if (strstr($_SERVER['PHP_SELF'], "session.php") != false) {
     echo "     <script type=\"text/javascript\" src=\"editor/adapters/jquery.js\"></script>\n";
 }
 if (strstr($_SERVER['PHP_SELF'], "session2.php") != false) {
+    echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionweb2.css\">\n";
+
     echo "     <script type=\"text/javascript\" src=\"js/sessionweb-session2-v24.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/config.js\"></script>\n";
