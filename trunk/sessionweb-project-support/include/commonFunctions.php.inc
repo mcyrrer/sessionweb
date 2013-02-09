@@ -642,7 +642,7 @@ function echoTestEnvironmentSelect($testenvironment)
 function getTestEnvironmentInformation($testenvironment)
 {
     $con = getMySqlConnection();
-
+    $testenvironment=mysql_real_escape_string($testenvironment);
 
     $sqlSelect = "";
     $sqlSelect .= "SELECT * ";

@@ -25,8 +25,4 @@ header("HTTP/1.0 500 Internal Server Error");
 $responseArray['code'] = SQL_ERROR;
 $responseArray['text'] = "SQL_ERROR";
 echo json_encode($responseArray);
-
-
-
-
 ?>

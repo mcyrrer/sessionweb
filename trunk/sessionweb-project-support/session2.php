@@ -64,25 +64,27 @@ class session2
           </ul>
           <div id="tabs-1">';
         echo '<table class="sTable"><tr><td>';
-        echo "<h3>Sprint:</h3>  <p>" . $this->formHelper->getSprintSelect() . "</p>";
-        echo "<h3>Team:</h3><p>" . $this->formHelper->getTeamSelect() . "</p>";
-        echo "<h3>Additional tester:</h3><p>" . $this->formHelper->AdditionalTester() . "</p>";
+        echo "<span class='sH3'>Sprint:</span>  <p>" . $this->formHelper->getSprintSelect() . "<span class='minmax' id='minimizeSprint'>[&uarr;]</span><span class='minmax' id='maximizeSprint'>[&darr;]</span></p>";
+        echo "<span class='sH3'>Team:</span><p>" . $this->formHelper->getTeamSelect() . "<span class='minmax' id='minimizeTeam'>[&uarr;]</span><span class='minmax' id='maximizeTeam'>[&darr;]</span></p>";
+        echo "<span class='sH3'>Additional tester:</span><p>" . $this->formHelper->AdditionalTester() . "<span class='minmax' id='minimizeAddTest'>[&uarr;]</span><span class='minmax' id='maximizeAddTest'>[&darr;]</span></p>";
 
-        echo "<h3>Area:</h3><p>" . $this->formHelper->getAreaSelect() . "</p>";
+        echo '<span class="sH3">Area:</span><span id="addNewArea">[+]</span><input type="text" class="newAreaInput" id="addNewAreaInput" size="10" ><p>' . $this->formHelper->getAreaSelect() . "<span class='minmax' id='minimizeArea'>[&uarr;]</span><span class='minmax' id='maximizeArea'>[&darr;]</span></p>";
 
-        echo "<h3>Testenvironment:</h3><p>" . $this->formHelper->getEnvironmentSelect() . "</p>";
 
-        echo "<h3>Software under test:</h3>";
-        echo "<textarea rows='4' cols='50' id='idSoftwareUnderTest' name='nameSoftwareUnderTest'></textarea>";
+        echo "<span class='sH3'>Testenvironment:</span><p>" . $this->formHelper->getEnvironmentSelect() . "<span class='minmax' id='minimizeTestenv'>[&uarr;]</span><span class='minmax' id='maximizeTestenv'>[&darr;]</span></p>";
+
+        echo "<span class='sH3'>Software under test:</span><br>";
+        echo "<textarea rows='4' cols='50' id='idSoftwareUnderTest' name='nameSoftwareUnderTest' class='fixedWidth'></textarea>";
         echo '</td><td>';
 
         echo '<span class="sH3">Test requirements:</span>';
-        echo '<img id="addReq"  src="pictures/add.png" alt=""><input type="text" class="sInput" id="new_requirement" size="10" ><br>';
+        echo '<span id="addReq">[+]</span><input type="text" class="sInput" id="new_requirement" size="10" ><br>';
         echo "<span id='testReqId'></span></p>";
-        echo '<span class="sH3">Link to other sessions::</span>';
-        echo '<img id="addSessionLink"  src="pictures/add.png" alt=""><input type="text" class="sInput" id="new_sessionlink" size="10" ><br>';
+        echo '<span class="sH3">Link to other sessions:</span>';
+        echo '<span id="addSessionLink">[+]</span><input type="text" class="sInput" id="new_sessionlink" size="10" ><br>';
         echo "<span id='linkToOtherSessions'></span></p>";
-        echo "<h3>Automatically fetched software versions:</h3>";
+        echo "<span class='sH3'>Automatically fetched software versions:</span>";
+        echo '<span id="addAutoFetchedSw">[+]</span><br>';
         echo "<span id='autoSoftwareVersions'></span></p>";
         echo '</td></tr></table>';
         echo '</div>

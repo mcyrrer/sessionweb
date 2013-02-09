@@ -17,7 +17,7 @@ echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery-ui-1.10.0.custom.css\">\n";
 echo "     <script src=\"js/jquery-1.9.0.min.js\" type=\"text/javascript\"></script>\n";
-echo '     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>';
+//echo '     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>';
 echo "     <script src=\"js/jqueryui/jquery-ui-1.10.0.custom.min.js\" type=\"text/javascript\"></script>\n";
 
 if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
@@ -32,7 +32,7 @@ if (strstr($_SERVER['PHP_SELF'], "settings2.php") != false) {
     echo "     <script src=\"js/sessionweb-settings-v20.js\" type=\"text/javascript\"></script>\n";
 }
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
-echo "     <script src=\"js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
+//echo "     <script src=\"js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
 
 echo "     <script src=\"js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";

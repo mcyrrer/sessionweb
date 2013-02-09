@@ -11,15 +11,16 @@ require_once 'dbHelper.php';
 if (!isset($basePath)) {
     $basePath = "./";
 }
+$rootPath = checkIfRootFolder("");
 include_once 'sessionObject.php';
 /** @noinspection PhpIncludeInspection */
-include_once "config/db.php.inc";
+include_once $rootPath."/config/db.php.inc";
 /** @noinspection PhpIncludeInspection */
-include_once "classes/logging.php";
+include_once $rootPath."/classes/logging.php";
 /** @noinspection PhpIncludeInspection */
-include_once "classes/dbHelper.php";
+include_once $rootPath."/classes/dbHelper.php";
 /** @noinspection PhpIncludeInspection */
-include_once "include/db.php";
+include_once $rootPath."/include/db.php";
 
 
 /** @noinspection PhpUndefinedClassInspection */
@@ -512,4 +513,5 @@ class sessionObjectSave
     {
         die("SQL ERROR. Ask admin to check logfile for more information");
     }
+
 }

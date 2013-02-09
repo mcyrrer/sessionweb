@@ -64,7 +64,7 @@ function editSession() {
 //    alert('hi');
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session.php?sessionid=' + id + '&command=edit', '_self', false);
+        window.open('session2.php?sessionid=' + id , '_self', false);
     else {
         displaySelectSessionMsg();
     }

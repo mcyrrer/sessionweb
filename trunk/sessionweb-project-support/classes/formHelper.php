@@ -97,31 +97,31 @@ class formHelper
     public function getTeamSelect($selectedName = "")
     {
         $teamArray = $this->queryHelper->getTeamNamesActive();
-        return $this->formSelectListSingle($teamArray, $selectedName, true, "idTeam", "nameTeam");
+        return $this->formSelectListSingle($teamArray, $selectedName, true, "idTeam", "nameTeam", 'class="fixedWidth"');
     }
 
     public function getAreaSelect($selectedName = array())
     {
         $teamArray = $this->queryHelper->getAreasActive();
-        return $this->formSelectListMultiple($teamArray, $selectedName, true, "idArea", "nameArea");
+        return $this->formSelectListMultiple($teamArray, $selectedName, true, "idArea", "nameArea", 'class="fixedWidth"');
     }
 
     public function AdditionalTester($selectedNames = array())
     {
         $teamArray = $this->queryHelper->getAdditionalTester();
-        return $this->formSelectListMultiple($teamArray, $selectedNames, true, "idAdditionalTester", "nameAdditionalTester");
+        return $this->formSelectListMultiple($teamArray, $selectedNames, true, "idAdditionalTester", "nameAdditionalTester", 'class="fixedWidth"');
     }
 
     public function getSprintSelect($selectedName = "")
     {
         $sprintArray = $this->queryHelper->getSprintNamesActive();
-        return $this->formSelectListSingle($sprintArray, $selectedName, true, "idSprint", "nameSprint");
+        return $this->formSelectListSingle($sprintArray, $selectedName, true, "idSprint", "nameSprint", 'class="fixedWidth"');
     }
 
     public function getEnvironmentSelect($selectedName = "")
     {
         $environmentArray = $this->queryHelper->getEnvironmentsNames();
-        return $this->formSelectListSingle($environmentArray, $selectedName, true, "idEnvironment", "nameEnvironment");
+        return $this->formSelectListSingle($environmentArray, $selectedName, true, "idEnvironment", "nameEnvironment", 'class="fixedWidth"');
     }
 
     private function checkIfRootFolder($pathToRoot)

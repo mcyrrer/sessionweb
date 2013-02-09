@@ -15,8 +15,11 @@ getTitle();
 
 function getTitle()
 {
+
     $logger = new logging();
     $sessionId = $_REQUEST["sessionid"];
+
+
     if ($sessionId == null || strcmp($sessionId, "") == 0) {
         header("HTTP/1.0 400 Bad Request");
         $responseArray['code'] = PARAMETER_NOT_PROVIDED_IN_REQUEST;
@@ -24,8 +27,12 @@ function getTitle()
         echo json_encode($responseArray);
     } else {
         $con = getMySqliConnection();
-        $sql = "SELECT title FROM mission WHERE sessionid=" . $sessionId;
-        $result = $con->query($sql);
+        $sessionId = dbHelper::escape($con,$sessionId);
+
+        $sql = "SELECT title FROM mission WHERE sessionid=" . $sessionId . " AND project=".$_SESSION['project'] ."";
+
+        $result =dbHelper::sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
+
         if (!$result) {
             $logger->error("Sql error", __FILE__, __LINE__);
             $logger->sql($sql, __FILE__, __LINE__);

@@ -35,8 +35,11 @@ class dbHelper
         if (strlen($query) > 100) {
             $queryToLog = substr($query,0, 99) . ".... Execution time: ".$pageTimer->getTime();
         } else {
-            $queryToLog = $query . ". Execution time: ".$pageTimer->getTime();
+
+            echo $query;
+           $queryToLog = $query . ". Execution time: ".$pageTimer->getTime();
         }
+
         $logger->timer($queryToLog, $file, $line);
         $logger->sql($query, $file, $line);
         return $result;

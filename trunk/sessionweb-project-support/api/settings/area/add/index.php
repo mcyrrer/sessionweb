@@ -25,8 +25,8 @@ if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
 
         $sqlInsert = "";
         $sqlInsert .= "INSERT INTO areas ";
-        $sqlInsert .= "            (`areaname`) ";
-        $sqlInsert .= "VALUES      ('$areaName')";
+        $sqlInsert .= "            (`areaname`,`project`) ";
+        $sqlInsert .= "VALUES      ('$areaName','".$_SESSION['project']."')";
 
 
         $result = mysql_query($sqlInsert);

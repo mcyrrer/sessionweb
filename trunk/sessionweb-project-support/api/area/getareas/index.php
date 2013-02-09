@@ -15,7 +15,7 @@ $con = getMySqlConnection();
 
 $areaName = mysql_real_escape_string($areaName);
 
-$sql = "SELECT areaname FROM areas ORDER BY areaname ASC;";
+$sql = "SELECT areaname FROM areas WHERE project = ".$_SESSION['project']." ORDER BY areaname ASC;";
 
 $result = mysql_query($sql);
 

@@ -295,7 +295,10 @@ class sessionObject extends sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
 
-            $tmpAreaArray[] = $row['id'];;
+            $tmp["id"]= $row['id'];
+            $tmp["environment"]= $row['environment'];
+            $tmp["updated"]= $row['updated'];
+            $tmpAreaArray[$tmp["id"]] = $tmp;
         }
         //print_r($tmpAreaArray);
 

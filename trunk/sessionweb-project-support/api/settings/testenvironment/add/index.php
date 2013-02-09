@@ -29,11 +29,13 @@ if ($_SESSION['useradmin'] == 1) {
         $sqlInsert .= "            (name, ";
         $sqlInsert .= "             url, ";
         $sqlInsert .= "             username, ";
-        $sqlInsert .= "             PASSWORD) ";
+        $sqlInsert .= "             PASSWORD,  ";
+        $sqlInsert .= "             project) ";
         $sqlInsert .= "VALUES      ('$envName', ";
         $sqlInsert .= "             '$envautofetchurl', ";
         $sqlInsert .= "             '$envusername', ";
-        $sqlInsert .= "             '$envpassword') ";
+        $sqlInsert .= "             '$envpassword', ";
+        $sqlInsert .= "             '".$_SESSION['project']."') ";
 
 
         $result = mysql_query($sqlInsert);
