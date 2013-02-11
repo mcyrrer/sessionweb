@@ -6,6 +6,8 @@ if (!isset($basePath)) {
 include_once 'sessionObjectSave.php';
 require_once 'dbHelper.php';
 require_once 'logging.php';
+
+
 /**
  * Class to create/load sessions and to manipulate data.
  */
@@ -307,31 +309,52 @@ class sessionObject extends sessionObjectSave
 
         //mission mission_sessionsconnections
         $tmpAreaArray = array();
+
         $sqlSelect = "";
-        $sqlSelect .= "SELECT * ";
-        $sqlSelect .= "FROM   mission_sessionsconnections ";
-        $sqlSelect .= "WHERE  linked_to_versionid = $versionid";
+        $sqlSelect .= "SELECT ms.id, ";
+        $sqlSelect .= "       ms.linked_from_versionid, ";
+        $sqlSelect .= "       ms.linked_to_versionid, ";
+        $sqlSelect .= "       m.sessionid ";
+        $sqlSelect .= "FROM   mission_sessionsconnections AS ms, ";
+        $sqlSelect .= "       mission AS m ";
+        $sqlSelect .= "WHERE  ms.linked_to_versionid = m.versionid ";
+        $sqlSelect .= "       AND ms.linked_to_versionid = $versionid;" ;
+
+
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
-            $tmpAreaArray[] = $row['linked_from_versionid'];
+            $tmpAreaArray[] = $row['sessionid'];
         }
         $this->setLinked_from_session($tmpAreaArray);
 
         $tmpAreaArray = array();
+//        $sqlSelect = "";
+//        $sqlSelect .= "SELECT * ";
+//        $sqlSelect .= "FROM   mission_sessionsconnections ";
+//        $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
+
         $sqlSelect = "";
-        $sqlSelect .= "SELECT * ";
-        $sqlSelect .= "FROM   mission_sessionsconnections ";
-        $sqlSelect .= "WHERE  linked_from_versionid = $versionid";
+        $sqlSelect .= "SELECT ms.id, ";
+        $sqlSelect .= "       ms.linked_from_versionid, ";
+        $sqlSelect .= "       ms.linked_to_versionid, ";
+        $sqlSelect .= "       m.sessionid ";
+        $sqlSelect .= "FROM   mission_sessionsconnections AS ms, ";
+        $sqlSelect .= "       mission AS m ";
+        $sqlSelect .= "WHERE  ms.linked_to_versionid = m.versionid ";
+        $sqlSelect .= "       AND ms.linked_from_versionid = $versionid" ;
+
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
+          //  print_r($row);
 
-            $tmpAreaArray[] = $row['linked_to_versionid'];
+
+            $tmpAreaArray[] = $row['sessionid'];
 
         }
         $this->setLinked_to_session($tmpAreaArray);
@@ -1013,6 +1036,7 @@ class sessionObject extends sessionObjectSave
      */
     public function toJson()
     {
+        //return json_encode(jsonPrettifyer::indent($this->toArray()));
         return json_encode($this->toArray());
     }
 

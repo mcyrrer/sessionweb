@@ -2,6 +2,7 @@
 session_start();
 
 require_once('../../../../include/validatesession.inc');
+require_once('../../../../include/apistatuscodes.inc');
 require_once('../../../../classes/dbHelper.php');
 require_once('../../../../classes/logging.php');
 
@@ -27,19 +28,28 @@ function getTitle()
         echo json_encode($responseArray);
     } else {
         $con = getMySqliConnection();
-        $sessionId = dbHelper::escape($con,$sessionId);
+        $sessionId = dbHelper::escape($con, $sessionId);
 
-        $sql = "SELECT title FROM mission WHERE sessionid=" . $sessionId . " AND project=".$_SESSION['project'] ."";
+        $sql = "SELECT title FROM mission WHERE sessionid=" . $sessionId . " AND project=" . $_SESSION['project'] . "";
 
-        $result =dbHelper::sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
+        $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
 
         if (!$result) {
             $logger->error("Sql error", __FILE__, __LINE__);
             $logger->sql($sql, __FILE__, __LINE__);
             die('SQL ERROR');
         } else {
-            $row = $result->fetch_row();
-            echo $row[0];
+            if (mysqli_num_rows($result) == 1) {
+                $row = $result->fetch_row();
+                echo $row[0];
+            }
+            else
+                {
+                    $logger->debug("Session title not found (sessionid:".$sessionId.")", __FILE__, __LINE__);
+                    header("HTTP/1.0 404 Not found");
+                    $responseArray['code'] = ITEM_DOES_NOT_EXIST;
+                    $responseArray['text'] = "ITEM_DOES_NOT_EXIST";
+                }
         }
     }
 

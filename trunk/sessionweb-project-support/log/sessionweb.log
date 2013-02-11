@@ -1,42 +1,76 @@
-20130209 21:10:14 | ofetched\delete\index.php:26 | DEBUG | admin | admin removed autofetched sw record with id ,1634
-20130209 21:11:27 | ofetched\delete\index.php:27 | DEBUG | admin | admin removed autofetched sw record with id ,1635
-20130209 21:11:30 | ofetched\delete\index.php:27 | DEBUG | admin | admin removed autofetched sw record with id ,1635
-20130209 21:13:02 | ofetched\delete\index.php:28 | DEBUG | admin | admin removed autofetched sw record with id ,1635
-20130209 21:21:42 | ofetched\delete\index.php:28 | DEBUG | admin | admin removed autofetched sw record with id ,1635
-20130209 21:23:17 | ofetched\delete\index.php:28 | DEBUG | admin | admin removed autofetched sw record with id ,1635
-20130209 21:24:08 | ofetched\delete\index.php:28 | DEBUG | admin | admin removed autofetched sw record with id ,1635
-20130209 21:30:30 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1599
-20130209 21:51:46 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:51:47 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:51:48 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:52:49 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:52:53 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:53:46 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:53:48 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:54:09 | : | ERROR | admin | Could not fetch sessionstatus for versionid 
-20130209 21:58:06 | : | DEBUG | admin |  Load time for http://localhost/sessionweb/list2.php 0.3061 seconds
-20130209 22:08:49 | : | DEBUG | admin |  Load time for http://localhost/sessionweb/list2.php 0.131 seconds
-20130209 22:10:35 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1661
-20130209 22:10:41 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1633
-20130209 22:10:48 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1634
-20130209 22:10:50 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1662
-20130209 22:10:50 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1660
-20130209 22:10:50 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1659
-20130209 22:10:51 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1663
-20130209 22:10:51 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1664
-20130209 22:10:51 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1665
-20130209 22:10:52 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1666
-20130209 22:10:52 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1667
-20130209 22:10:53 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1668
-20130209 22:10:54 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1654
-20130209 22:10:54 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1655
-20130209 22:10:55 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1656
-20130209 22:10:56 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1657
-20130209 22:10:56 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1658
-20130209 22:13:38 | : | DEBUG | admin |  Load time for http://localhost/sessionweb/list2.php 0.157 seconds
-20130209 22:14:05 | : | DEBUG | admin |  Load time for http://localhost/sessionweb/session.php?sessionid=110&command=view 4.7828 seconds
-20130209 22:14:55 | : | DEBUG | admin |  Load time for http://localhost/sessionweb/session.php?sessionid=110&command=view 1.5645 seconds
-20130209 22:15:52 | : | DEBUG | admin |  Load time for http://localhost/sessionweb/session.php?sessionid=110&command=view 1.484 seconds
-20130209 22:16:04 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1653
-20130209 22:16:05 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1669
-20130209 22:16:05 | ofetched\delete\index.php:29 | DEBUG | admin | admin removed autofetched sw record with id ,1670
+20130211 14:25:52 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 5562->143 (versionid: 5543->143)
+20130211 14:26:34 | ERROR | classes\sessionObject.php:105 | admin | Session id 144 does not exist
+20130211 14:26:34 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 5562->144 but one of the session does not exist
+20130211 14:26:37 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 5562->145 (versionid: 5543->145)
+20130211 14:26:39 | ERROR | classes\sessionObject.php:105 | admin | Session id 146 does not exist
+20130211 14:26:39 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 5562->146 but one of the session does not exist
+20130211 14:26:41 | ERROR | classes\sessionObject.php:105 | admin | Session id 147 does not exist
+20130211 14:26:41 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 5562->147 but one of the session does not exist
+20130211 14:26:43 | ERROR | classes\sessionObject.php:105 | admin | Session id 148 does not exist
+20130211 14:26:43 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 5562->148 but one of the session does not exist
+20130211 14:26:45 | ERROR | classes\sessionObject.php:105 | admin | Session id 149 does not exist
+20130211 14:26:45 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 5562->149 but one of the session does not exist
+20130211 14:26:56 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 5562->222 (versionid: 5543->222)
+20130211 14:26:58 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 5562->223 (versionid: 5543->223)
+20130211 14:29:04 | DEBUG | ionlinks\delete\index.php:51 | admin | Removed session connection between sessions 5562->222 (versionid: 5543->222)
+20130211 14:29:06 | DEBUG | ofetched\delete\index.php:29 | admin | admin removed autofetched sw record with id ,1704
+20130211 18:52:56 | INFO | sessionweb\checklogin.php:214 | admin | User logged in
+20130211 18:53:23 | DEBUG | : | admin |  Load time for http://localhost/sessionweb/list2.php 0.3308 seconds
+20130211 18:53:30 | DEBUG | : | admin |  Load time for http://localhost/sessionweb/list2.php 0.1626 seconds
+20130211 18:58:22 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 110->110 (versionid: 110->110)
+20130211 18:58:39 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 110->117 (versionid: 110->117)
+20130211 18:58:42 | ERROR | classes\sessionObject.php:105 | admin | Session id 11111111 does not exist
+20130211 18:58:42 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 110->11111111 but one of the session does not exist
+20130211 19:00:14 | DEBUG | ionlinks\delete\index.php:51 | admin | Removed session connection between sessions 110->110 (versionid: 110->110)
+20130211 19:00:21 | ERROR | classes\sessionObject.php:105 | admin | Session id 118 does not exist
+20130211 19:00:21 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 110->118 but one of the session does not exist
+20130211 19:00:28 | DEBUG | essionlinks\set\index.php:50 | admin | Created session connection between sessions 110->150 (versionid: 110->150)
+20130211 19:00:33 | ERROR | classes\sessionObject.php:105 | admin | Session id kjhj does not exist
+20130211 19:00:33 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 110->kjhj but one of the session does not exist
+20130211 19:00:36 | ERROR | classes\sessionObject.php:105 | admin | Session id lkkjlkj does not exist
+20130211 19:00:36 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 110->lkkjlkj but one of the session does not exist
+20130211 19:00:38 | ERROR | classes\sessionObject.php:105 | admin | Session id ölklkjlkj does not exist
+20130211 19:00:38 | DEBUG | essionlinks\set\index.php:64 | admin | Tried to create a session connection between sessions 110->ölklkjlkj but one of the session does not exist
+20130211 19:00:38 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:20 | DEBUG | __FILE___:50 | admin | Added requirement 110 to session 110
+20130211 19:14:37 | DEBUG | __FILE___:50 | admin | Added requirement 111 to session 110
+20130211 19:14:39 | DEBUG | __FILE___:50 | admin | Added requirement 112 to session 110
+20130211 19:14:42 | DEBUG | __FILE___:50 | admin | Added requirement 113 to session 110
+20130211 19:14:42 | DEBUG | __FILE___:50 | admin | Added requirement 114 to session 110
+20130211 19:14:43 | DEBUG | __FILE___:50 | admin | Added requirement  to session 110
+20130211 19:14:52 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:53 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:53 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:54 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:54 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:54 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:54 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:14:54 | DEBUG | essionlinks\set\index.php:71 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:16:32 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:33 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:33 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:33 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:34 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:34 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:34 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:35 | DEBUG | __FILE___:50 | admin | Added requirement 123 to session 110
+20130211 19:16:35 | DEBUG | __FILE___:50 | admin | Added requirement 1324 to session 110
+20130211 19:16:36 | DEBUG | __FILE___:50 | admin | Added requirement 4321 to session 110
+20130211 19:16:36 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:37 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:16:38 | DEBUG | equirements\set\index.php:68 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:21:03 | DEBUG | irements\delete\index.php:64 | admin | Tried to delete a session connection with bad 'from' or 'to' parameters
+20130211 19:21:05 | DEBUG | irements\delete\index.php:64 | admin | Tried to delete a session connection with bad 'from' or 'to' parameters
+20130211 19:21:10 | DEBUG | irements\delete\index.php:64 | admin | Tried to delete a session connection with bad 'from' or 'to' parameters
+20130211 19:21:11 | DEBUG | irements\delete\index.php:64 | admin | Tried to delete a session connection with bad 'from' or 'to' parameters
+20130211 19:28:36 | DEBUG | __FILE___:46 | admin | Deleted requirement 4321 from session 110
+20130211 19:28:44 | DEBUG | irements\delete\index.php:72 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:29:54 | DEBUG | irements\delete\index.php:72 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:30:37 | DEBUG | irements\delete\index.php:72 | admin | Tried to create a requirement but one of the parameters is bad
+20130211 19:31:10 | DEBUG | __FILE___:46 | admin | Deleted requirement 110 from session 110
+20130211 19:31:16 | DEBUG | __FILE___:46 | admin | Deleted requirement 29386 from session 110
+20130211 19:32:01 | DEBUG | irements\delete\index.php:46 | admin | Deleted requirement 1324 from session 110
+20130211 19:35:27 | DEBUG | irements\delete\index.php:46 | admin | Deleted requirement 123 from session 110
+20130211 19:35:31 | DEBUG | irements\delete\index.php:46 | admin | Deleted requirement 112 from session 110
+20130211 19:36:16 | DEBUG | irements\delete\index.php:46 | admin | Deleted requirement 111 from session 110
+20130211 19:36:27 | DEBUG | __FILE___:50 | admin | Added requirement 111 to session 110

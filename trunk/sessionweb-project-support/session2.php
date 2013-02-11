@@ -79,23 +79,23 @@ class session2
 
         echo '<span class="sH3">Test requirements:</span>';
         echo '<span id="addReq">[+]</span><input type="text" class="sInput" id="new_requirement" size="10" ><br>';
-        echo "<span id='testReqId'></span></p>";
+        echo "<span id='testReqId'></span>";
         echo '<span class="sH3">Link to other sessions:</span>';
         echo '<span id="addSessionLink">[+]</span><input type="text" class="sInput" id="new_sessionlink" size="10" ><br>';
-        echo "<span id='linkToOtherSessions'></span></p>";
+        echo "<span id='linkToOtherSessions'></span>";
         echo "<span class='sH3'>Automatically fetched software versions:</span>";
         echo '<span id="addAutoFetchedSw">[+]</span><br>';
-        echo "<span id='autoSoftwareVersions'></span></p>";
+        echo "<span id='autoSoftwareVersions'></span>";
         echo '</td></tr></table>';
         echo '</div>
 
             <div id="tabs-2">';
 
-        echo '<div id="idcharter">Charter<br><textarea class="ckeditor" name="chartereditor"></textarea></div>';
+        echo '<div id="idcharter">Charter<br><textarea class="ckeditor" name="chartereditor" rows="300" cols="30"></textarea></div>';
 
         echo '</div>
             <div id="tabs-3">';
-        echo '<div id="idnotes">Notes<br><textarea class="ckeditor" name="noteseditor" rows="600"></textarea></div>';
+        echo '<div id="idnotes">Notes<br><textarea class="ckeditor" name="noteseditor" rows="300" cols="30"></textarea></div>';
 
         echo '</div>
             <div id="tabs-4">';

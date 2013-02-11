@@ -125,7 +125,7 @@ function AddRequirementManager() {
     });
     $("#new_requirement").keypress(function () {
         if (event.which == 13) {
-            AddSingleRequirement(this.value);
+            CreateRequirement(this.value);
             $('#new_requirement').val("");
         }
     });
@@ -143,7 +143,8 @@ function AddSessionLinkManager() {
     });
     $("#new_sessionlink").keypress(function () {
         if (event.which == 13) {
-            AddSingleSessionLink(this.value);
+            CreateSessionLink(this.value)
+            //AddSingleSessionLink(this.value);
             $('#new_sessionlink').val("");
         }
     });
@@ -292,6 +293,40 @@ function onSoftwareAutoFetchedDeleteClick(aId) {
         }
     });
 }
+
+function onSessionLinkDeleteClick(aId) {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $.ajax({
+        type: "POST",
+        data: {
+            from: sessionID,
+            to: aId
+        },
+        url: 'api/sessionlinks/delete/index.php',
+        complete: function (data) {
+            if (data.status == '200') {
+                $('#sl_del_' + aId).remove();
+            }
+        }
+    });
+}
+function onRequirementLinkDeleteClick(aId) {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $.ajax({
+        type: "GET",
+        data: {
+            sessionid: sessionID,
+            id: aId
+        },
+        url: 'api/requirements/delete/index.php',
+        complete: function (data) {
+            if (data.status == '200') {
+                $('#' + aId+'REQ').remove();
+            }
+        }
+    });
+}
+
 function onSoftwareAutoFetchedClick(aId) {
     var url = 'api/softwareautofetched/get/index.php?id=' + aId;
     $(this).colorbox({
@@ -310,34 +345,88 @@ function AddSingleRequirement(aReq) {
         data: {
             reqId: aReq
         },
-
         url: 'api/titles/requirement/get/index.php',
         complete: function (data) {
 
             if (data.status == '200') {
                 var title = data.responseText;
                 if (title == "") {
-                    title = aReq;
-                }
-                $('#' + aReq + 'REQ').html('<p id="r_' + aReq + '">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a>');
+                    title = aReq;                }
+                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq+'>"<span onClick="onRequirementLinkDeleteClick(' + aReq + ')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
             }
         }
     });
 }
 
+function CreateRequirement(requirementId) {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $.ajax({
+        type: "GET",
+        data: {
+            sessionid: sessionID,
+            id: requirementId
+        },
+        url: 'api/requirements/set/index.php',
+        complete: function (data) {
+            if (data.status == '201') {
+                AddSingleRequirement(requirementId);
+            }
+            else if (data.status == '404') {
+                alert("Could not create link, please check that the sessionid you link to is valid");
+            }
+            else if (data.status == '409') {
+                alert("Can not add link, requirement already mapped to session");
+            }
+        }
+    });
+}
+
+function CreateSessionLink(sessionIdToLinkTo) {
+    var sessionID = $(document).getUrlParam("sessionid");
+    if (sessionID == sessionIdToLinkTo) {
+        alert("Can not link session to itself")
+    }
+    else {
+        $.ajax({
+            type: "GET",
+            data: {
+                from: sessionID,
+                to: sessionIdToLinkTo
+            },
+            url: 'api/sessionlinks/set/index.php',
+            complete: function (data) {
+                if (data.status == '201') {
+                    AddSingleSessionLink(sessionIdToLinkTo);
+                }
+                else if (data.status == '404') {
+                    alert("Could not create link, please check that the sessionid you link to is valid");
+                }
+                else if (data.status == '409') {
+                    alert("Can not add link, already mapped to session");
+                }
+            }
+        });
+    }
+}
+
 function AddSingleSessionLink(aLink) {
+
     $('#linkToOtherSessions').append('<p id="' + aLink + 'SessionLink">' + aLink + ': Loading title</p>');
     $.ajax({
         type: "GET",
         data: {
             sessionid: aLink
         },
-
         url: 'api/titles/session/get/index.php',
         complete: function (data) {
 
             if (data.status == '200') {
                 var title = data.responseText;
+
+                $('#' + aLink + 'SessionLink').html('<span class="sw_p" id=sl_del_' + aLink + '> <span onClick="onSessionLinkDeleteClick(' + aLink + ')">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
+            }
+            else if (data.status == '404') {
+                var title = "Could not find title for session"
                 $('#' + aLink + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLink + '">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
             }
         }

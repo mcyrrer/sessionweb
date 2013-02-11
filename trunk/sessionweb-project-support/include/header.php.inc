@@ -16,7 +16,7 @@ echo "      <title>Sessionweb</title>\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery-ui-1.10.0.custom.css\">\n";
-echo "     <script src=\"js/jquery-1.9.0.min.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>\n";
 //echo '     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>';
 echo "     <script src=\"js/jqueryui/jquery-ui-1.10.0.custom.min.js\" type=\"text/javascript\"></script>\n";
 

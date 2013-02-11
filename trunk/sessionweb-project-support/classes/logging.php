@@ -110,7 +110,7 @@ class logging
             $username = "";
 
         if (in_array($loglevel, $this->loglevel)) {
-            $messageToWriteTofile = $this->getDateTime() . " | " . $this->getFileName($filename) . ":" . $line . " | " . $loglevel . " | " . $username . " | " . $logmessage . "\n";
+            $messageToWriteTofile = $this->getDateTime() . " | " . $loglevel . " | " . $this->getFileName($filename) . ":" . $line . " | " . $username . " | " . $logmessage . "\n";
             file_put_contents($this->logpath, $messageToWriteTofile, FILE_APPEND | LOCK_EX);
         }
     }
@@ -123,7 +123,7 @@ class logging
             $username = "";
 
         if (in_array($loglevel, $this->loglevel)) {
-            $messageToWriteTofile = $this->getDateTime() . " | " . $this->getFileName($filename) . ":" . $line . " | " . $loglevel . " | " . $username . " | " . $logmessage . "\n";
+            $messageToWriteTofile = $this->getDateTime() . " | " . $loglevel . " | " . $this->getFileName($filename) . ":" . $line . " | " . $username . " | " . $logmessage . "\n";
             file_put_contents($this->logpathsql, $messageToWriteTofile, FILE_APPEND | LOCK_EX);
         }
     }

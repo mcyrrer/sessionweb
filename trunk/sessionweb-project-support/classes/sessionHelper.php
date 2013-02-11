@@ -27,14 +27,15 @@ class sessionHelper
             $this->logger->debug("User not allowed to edit session " . $sessionId, __FILE__, __LINE__);
             return false;
         }
+
     }
 
     function getSessionIdFromVersionId($versionId, $mysqli_con)
     {
-      $sql = "SELECT sessionid FROM mission WHERE versionid = "+$versionId;
-      $result = dbHelper::sw_mysqli_execute($mysqli_con,$sql,__FILE__,__LINE__);
-      $row = mysqli_fetch_row($result);
-      return $row[0];
+        $sql = "SELECT sessionid FROM mission WHERE versionid = " + $versionId;
+        $result = dbHelper::sw_mysqli_execute($mysqli_con, $sql, __FILE__, __LINE__);
+        $row = mysqli_fetch_row($result);
+        return $row[0];
     }
 
     function getSessionStatus($versionid, $mysqli_con)
@@ -43,14 +44,14 @@ class sessionHelper
         $sqlSelectSessionStatus .= "SELECT * ";
         $sqlSelectSessionStatus .= "FROM   mission_status ";
         $sqlSelectSessionStatus .= "WHERE  versionid = $versionid";
-        $resultSessionStatus = dbHelper::sw_mysqli_execute($mysqli_con,$sqlSelectSessionStatus,__FILE__,__LINE__);
-       if (!$resultSessionStatus) {
-            $this->logger->error("Could not fetch sessionstatus for versionid ".$versionid,__FILE__,__LINE__);
-           echo "error: Check log!!";
-           die();
+        $resultSessionStatus = dbHelper::sw_mysqli_execute($mysqli_con, $sqlSelectSessionStatus, __FILE__, __LINE__);
+        if (!$resultSessionStatus) {
+            $this->logger->error("Could not fetch sessionstatus for versionid " . $versionid, __FILE__, __LINE__);
+            echo "error: Check log!!";
+            die();
         }
 
-        return mysqli_fetch_array($resultSessionStatus,MYSQLI_ASSOC);
+        return mysqli_fetch_array($resultSessionStatus, MYSQLI_ASSOC);
     }
 }
 
