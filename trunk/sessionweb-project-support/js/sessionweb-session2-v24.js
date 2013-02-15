@@ -302,7 +302,7 @@ function onSessionLinkDeleteClick(aId) {
             from: sessionID,
             to: aId
         },
-        url: 'api/sessionlinks/delete/index.php',
+        url: 'api/sessionlink/delete/index.php',
         complete: function (data) {
             if (data.status == '200') {
                 $('#sl_del_' + aId).remove();
@@ -318,7 +318,7 @@ function onRequirementLinkDeleteClick(aId) {
             sessionid: sessionID,
             id: aId
         },
-        url: 'api/requirements/delete/index.php',
+        url: 'api/requirement/delete/index.php',
         complete: function (data) {
             if (data.status == '200') {
                 $('#' + aId+'REQ').remove();
@@ -366,7 +366,7 @@ function CreateRequirement(requirementId) {
             sessionid: sessionID,
             id: requirementId
         },
-        url: 'api/requirements/set/index.php',
+        url: 'api/requirement/set/index.php',
         complete: function (data) {
             if (data.status == '201') {
                 AddSingleRequirement(requirementId);
@@ -393,7 +393,7 @@ function CreateSessionLink(sessionIdToLinkTo) {
                 from: sessionID,
                 to: sessionIdToLinkTo
             },
-            url: 'api/sessionlinks/set/index.php',
+            url: 'api/sessionlink/set/index.php',
             complete: function (data) {
                 if (data.status == '201') {
                     AddSingleSessionLink(sessionIdToLinkTo);

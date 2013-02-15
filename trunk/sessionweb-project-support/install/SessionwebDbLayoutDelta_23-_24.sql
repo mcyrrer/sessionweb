@@ -9,5 +9,6 @@ UPDATE `sessionwebos`.`teamnames` SET `project`='0';
 UPDATE `sessionwebos`.`testenvironment` SET `project`='0'
 UPDATE `sessionwebos`.`user_sessionsnotification` SET `project`='0';
 UPDATE `sessionwebos`.`user_settings` SET `project`='0';
+UPDATE `sessionwebos`.`testenvironment` SET `project`='0';
 
 UPDATE  `sessionwebos`.`version` SET  `versioninstalled` =  '24' WHERE  `version`.`id` =1;

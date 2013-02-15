@@ -74,3 +74,57 @@
 20130211 19:35:31 | DEBUG | irements\delete\index.php:46 | admin | Deleted requirement 112 from session 110
 20130211 19:36:16 | DEBUG | irements\delete\index.php:46 | admin | Deleted requirement 111 from session 110
 20130211 19:36:27 | DEBUG | __FILE___:50 | admin | Added requirement 111 to session 110
+20130211 19:42:45 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 111 from session 110
+20130211 19:42:47 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 113 from session 110
+20130211 19:42:48 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 114 from session 110
+20130211 19:42:49 | DEBUG | sionlink\delete\index.php:51 | admin | Removed session connection between sessions 110->150 (versionid: 110->150)
+20130211 19:42:50 | DEBUG | sionlink\delete\index.php:51 | admin | Removed session connection between sessions 110->117 (versionid: 110->117)
+20130211 19:42:53 | DEBUG | __FILE___:50 | admin | Added requirement 110 to session 110
+20130211 19:43:04 | DEBUG | __FILE___:50 | admin | Added requirement 112 to session 110
+20130211 19:43:08 | ERROR | classes\sessionObject.php:105 | admin | Session id 111 does not exist
+20130211 19:43:08 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 110->111 but one of the session does not exist
+20130211 19:43:11 | ERROR | classes\sessionObject.php:105 | admin | Session id 112 does not exist
+20130211 19:43:11 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 110->112 but one of the session does not exist
+20130211 19:43:15 | ERROR | classes\sessionObject.php:105 | admin | Session id 115 does not exist
+20130211 19:43:15 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 110->115 but one of the session does not exist
+20130211 19:43:17 | ERROR | classes\sessionObject.php:105 | admin | Session id 113 does not exist
+20130211 19:43:17 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 110->113 but one of the session does not exist
+20130211 19:43:21 | DEBUG | : | admin |  Load time for http://localhost/sessionweb/list2.php 0.2748 seconds
+20130211 19:43:28 | DEBUG | sessionlink\set\index.php:50 | admin | Created session connection between sessions 110->143 (versionid: 110->143)
+20130211 19:43:30 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 110 from session 110
+20130211 19:43:31 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 112 from session 110
+20130211 19:43:32 | DEBUG | sionlink\delete\index.php:51 | admin | Removed session connection between sessions 110->143 (versionid: 110->143)
+20130211 19:44:25 | DEBUG | __FILE___:50 | admin | Added requirement 110 to session 110
+20130211 19:44:29 | ERROR | classes\sessionObject.php:105 | admin | Session id 144 does not exist
+20130211 19:44:29 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 110->144 but one of the session does not exist
+20130211 19:44:38 | DEBUG | sessionlink\set\index.php:50 | admin | Created session connection between sessions 110->117 (versionid: 110->117)
+20130211 19:44:49 | DEBUG | sessionlink\set\index.php:50 | admin | Created session connection between sessions 110->150 (versionid: 110->150)
+20130211 19:44:49 | DEBUG | sessionlink\set\index.php:77 | admin | Tried to create a session connection with bad 'from' or 'to' parameters
+20130211 19:44:59 | DEBUG | sionlink\delete\index.php:51 | admin | Removed session connection between sessions 110->150 (versionid: 110->150)
+20130211 19:45:00 | DEBUG | sionlink\delete\index.php:51 | admin | Removed session connection between sessions 110->117 (versionid: 110->117)
+20130211 19:45:01 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 110 from session 110
+20130211 19:45:27 | DEBUG | : | admin |  Load time for http://localhost/sessionweb/session.php?sessionid=123&command=edit 0.1456 seconds
+20130211 19:47:22 | DEBUG | __FILE___:50 | admin | Added requirement 110 to session 110
+20130211 19:47:30 | DEBUG | sessionlink\set\index.php:50 | admin | Created session connection between sessions 110->117 (versionid: 110->117)
+20130211 19:47:47 | ERROR | classes\sessionObject.php:105 | admin | Session id 21423413241324 does not exist
+20130211 19:47:47 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 110->21423413241324 but one of the session does not exist
+20130211 19:47:54 | DEBUG | uirement\delete\index.php:46 | admin | Deleted requirement 110 from session 110
+20130211 19:48:06 | DEBUG | __FILE___:50 | admin | Added requirement 110 to session 110
+20130211 19:48:07 | DEBUG | __FILE___:50 | admin | Added requirement 111 to session 110
+20130211 19:48:09 | DEBUG | __FILE___:50 | admin | Added requirement 112 to session 110
+20130211 19:48:10 | DEBUG | __FILE___:50 | admin | Added requirement 114 to session 110
+20130211 19:48:11 | DEBUG | __FILE___:50 | admin | Added requirement 116 to session 110
+20130211 19:48:13 | DEBUG | __FILE___:50 | admin | Added requirement 117 to session 110
+20130211 19:48:21 | DEBUG | : | admin |  Load time for http://localhost/sessionweb/list2.php 0.1521 seconds
+20130211 19:48:27 | DEBUG | sessionlink\set\index.php:50 | admin | Created session connection between sessions 110->167 (versionid: 110->167)
+02/11/13 19:48:48,683 [5180] INFO root - admin created area Area 00
+20130211 19:49:26 | DEBUG | __FILE___:50 | admin | Added requirement 118 to session 110
+20130211 19:49:51 | DEBUG | : | admin |  Load time for http://localhost/sessionweb/session.php?sessionid=117&command=view 1.6466 seconds
+20130215 13:26:50 | INFO | sessionweb\checklogin.php:214 | admin | User logged in
+20130215 13:26:51 | DEBUG | : | admin |  Load time for http://172.30.112.13/sessionweb/list2.php 0.243 seconds
+20130215 13:29:36 | DEBUG | __FILE___:50 | admin | Added requirement 118 to session 5592
+20130215 13:29:57 | DEBUG | __FILE___:50 | admin | Added requirement 116 to session 5592
+20130215 13:29:58 | ERROR | classes\sessionObject.php:105 | admin | Session id 114 does not exist
+20130215 13:29:58 | DEBUG | sessionlink\set\index.php:70 | admin | Tried to create a session connection between sessions 5592->114 but one of the session does not exist
+20130215 13:29:58 | DEBUG | __FILE___:50 | admin | Added requirement 35 to session 5592
+20130215 13:30:45 | DEBUG | : | admin |  Load time for http://172.30.112.13/sessionweb/list2.php 2.1087 seconds
