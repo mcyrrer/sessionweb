@@ -2,7 +2,7 @@ ALTER TABLE `sessionwebos`.`softwareuseautofetched` ADD INDEX `versionid` (`vers
 
 UPDATE `sessionwebos`.`areas` SET `project`='0';
 UPDATE `sessionwebos`.`custom_items` SET `project`='0';
-UPDATE `sessionwebos`.`mission` SET `project`='0';
+UPDATE `sessionwebos`.`mission` SET `project`='0', updated=updated;
 UPDATE `sessionwebos`.`settings` SET `project`='0';
 UPDATE `sessionwebos`.`sprintnames` SET `project`='0';
 UPDATE `sessionwebos`.`teamnames` SET `project`='0';

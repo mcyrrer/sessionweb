@@ -5,19 +5,17 @@ require_once('../../../../include/validatesession.inc');
 
 error_reporting(0);
 
-$response = "!!";
-
 require_once ('../../../../include/apistatuscodes.inc');
 
 if (file_exists("../../../../include/customfunctions.php.inc")) ;
 {
-    $bugId = $_REQUEST['$bugId'];
+    $bugId = $_REQUEST['id'];
 
     require_once('../../../../include/customfunctions.php.inc');
-    $reqName = getBugNameFromServer($bugId);
+    $bugName = getBugNameFromServer($bugId);
 
     header("HTTP/1.0 200 Ok");
-    echo $bugId;
+    echo $bugName;
     return;
 }
 

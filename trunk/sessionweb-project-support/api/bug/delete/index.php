@@ -21,35 +21,35 @@ require_once('../../../classes/dbHelper.php');
 $logger = new logging();
 $sHelper = new sessionHelper();
 $dbManager = new dbHelper();
-print_r($_REQUEST);
+
 if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id'] != null) {
 
     $con = $dbManager->db_getMySqliConnection();
     $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);
-    $requirementId = dbHelper::escape($con, $_REQUEST['id']);
+    $bugId = dbHelper::escape($con, $_REQUEST['id']);
     $so = new sessionObject($sessionid);
-
+    //$logger->arraylog($so->getRequirements());
+    echo $so->toJson();
     header("HTTP/1.0 501 Internal Server Error");
-    // $logger->debug("soFrom exist:".$soFrom->getSessionExist(), __FILE__, __LINE__);
-    //$logger->debug("soTo exist:".$soTo->getSessionExist(), __FILE__, __LINE__);
+
 
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
         if ($sHelper->isUserAllowedToEditSession($so)) {
-            if (in_array($requirementId, $so->getRequirements())) {
+            if (in_array($bugId, $so->getBugs())) {
                 $sql = "";
-                $sql .= "DELETE FROM mission_requirements ";
+                $sql .= "DELETE FROM mission_bugs ";
                 $sql .= "WHERE  versionid = $versionid ";
-                $sql .= "       AND requirementsid = '$requirementId' ";
+                $sql .= "       AND bugid = '$bugId' ";
 
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-                $logger->debug("Deleted requirement $requirementId from session $sessionid", __FILE__, __LINE__);
+                $logger->debug("Deleted requirement $bugId from session $sessionid", __FILE__, __LINE__);
 
                 header("HTTP/1.0 200 OK");
                 $response['code'] = ITEM_REMOVED;
                 $response['text'] = "ITEM_REMOVED";
             } else {
-                $logger->debug("Tried to delete a requirement $requirementId but is not mapped to sessionid $sessionid", __FILE__, __LINE__);
+                $logger->debug("Tried to delete a requirement $bugId but is not mapped to sessionid $sessionid", __FILE__, __LINE__);
                 header("HTTP/1.0 404 Not found");
                 $response['code'] = ITEM_DOES_NOT_EXIST;
                 $response['text'] = "ITEM_DOES_NOT_EXIST";
@@ -62,7 +62,7 @@ if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id'] !
             $response['text'] = "UNAUTHORIZED";
         }
     } else {
-        $logger->debug("Tried to add a requirement $requirementId but sessionid $sessionid does not exist", __FILE__, __LINE__);
+        $logger->debug("Tried to add a requirement $bugId but sessionid $sessionid does not exist", __FILE__, __LINE__);
         header("HTTP/1.0 404 Not found");
         $response['code'] = ITEM_DOES_NOT_EXIST;
         $response['text'] = "ITEM_DOES_NOT_EXIST";

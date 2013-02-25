@@ -26,28 +26,24 @@ if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id']!=
 
     $con = $dbManager->db_getMySqliConnection();
     $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);
-    $requirementId = dbHelper::escape($con, $_REQUEST['id']);
+    $bugId = dbHelper::escape($con, $_REQUEST['id']);
     $so = new sessionObject($sessionid);
 
     header("HTTP/1.0 501 Internal Server Error");
-    // $logger->debug("soFrom exist:".$soFrom->getSessionExist(), __FILE__, __LINE__);
-    //$logger->debug("soTo exist:".$soTo->getSessionExist(), __FILE__, __LINE__);
 
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
         if ($sHelper->isUserAllowedToEditSession($so)) {
-            if (!(in_array($requirementId, $so->getRequirements()))) {
-                //print_($soFrom->getLinked_to_session());
-                // if ($sHelper->isUserAllowedToEditSession($versionidFrom)) {
+            if (!(in_array($bugId, $so->getBugs()))) {
                 $sql = "";
-                $sql .= "INSERT INTO mission_requirements ";
+                $sql .= "INSERT INTO mission_bugs ";
                 $sql .= "            (versionid, ";
-                $sql .= "             requirementsid) ";
+                $sql .= "             bugid) ";
                 $sql .= "VALUES      ( $versionid, ";
-                $sql .= "              '$requirementId' ) " ;
+                $sql .= "              '$bugId' ) " ;
 
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-                $logger->debug("Added requirement $requirementId to session $sessionid",__FILE___, __LINE__);
+                $logger->debug("Added bug $bugId to session $sessionid",__FILE__, __LINE__);
                 header("HTTP/1.0 201 Created");
                 $response['code'] = ITEM_ADDED;
                 $response['text'] = "ITEM_ADDED";
@@ -64,7 +60,7 @@ if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id']!=
             $response['text'] = "UNAUTHORIZED";
         }
     } else {
-        $logger->debug("Tried to add a requirement $requirementId but sessionid $sessionid does not exist", __FILE__, __LINE__);
+        $logger->debug("Tried to add a requirement $bugId but sessionid $sessionid does not exist", __FILE__, __LINE__);
         header("HTTP/1.0 404 Not found");
         $response['code'] = ITEM_DOES_NOT_EXIST;
         $response['text'] = "ITEM_DOES_NOT_EXIST";

@@ -15,8 +15,8 @@ class logging
 
     function __construct()
     {
-        //Populate with the levels you need to have in file, "TIMER","SQL","DEBUG","INFO","WARN","ERROR","FATAL"
-        $this->loglevel = array("SQL", "DEBUG", "INFO", "WARN", "ERROR", "FATAL");
+        //Populate with the levels you need to have in file, "ARRAY","TIMER","SQL","DEBUG","INFO","WARN","ERROR","FATAL"
+        $this->loglevel = array("ARRAY","SQL", "DEBUG", "INFO", "WARN", "ERROR", "FATAL");
 
         $this->logpath = '';
         if (file_exists('log')) {
@@ -53,6 +53,13 @@ class logging
             $user = "None";
         }
 
+    }
+
+    public function arraylog($array, $filename = "", $line = "")
+    {
+        $loglevel = "ARRAY";
+
+        $this->writeMessageToLog($loglevel, implode('->',$array), $filename, $line);
     }
 
     public function sql($logmessage, $filename = "", $line = "")
