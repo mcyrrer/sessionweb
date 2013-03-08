@@ -61,6 +61,7 @@ class session2
             <li><a href="#tabs-2">Charter</a></li>
             <li><a href="#tabs-3">Notes</a></li>
             <li><a href="#tabs-4">Metrics</a></li>
+            <li><a href="#tabs-5">Attachments</a></li>
           </ul>
           <div id="tabs-1">';
         echo '<table class="sTable"><tr><td>';
@@ -121,8 +122,12 @@ class session2
 ;
         echo "Session mood:<br>";
         echo "Executed:<br>";
+
         echo '</div>
-</div>';
+            <div id="tabs-5">';
+        $sessionId = $this->session->getSessionid();
+        echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid='.$sessionId.'" width=100% height="600" frameborder="0"></iframe>';
+        echo '</div>';
     }
 }
 

@@ -1,10 +1,10 @@
 <?php
 error_reporting(0);
-require_once('../../include/loggingsetup.php');
+require_once('../../../include/loggingsetup.php');
 session_start();
-require_once('../../include/validatesession.inc');
-include_once("../../include/db.php");
-include "../../config/db.php.inc";
+require_once('../../../include/validatesession.inc');
+include_once("../../../include/db.php");
+include "../../../config/db.php.inc";
 
 $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
 
