@@ -32,9 +32,10 @@ class sessionHelper
 
     function getSessionIdFromVersionId($versionId, $mysqli_con)
     {
-        $sql = "SELECT sessionid FROM mission WHERE versionid = " + $versionId;
+        $sql = "SELECT sessionid FROM mission WHERE versionid = " . $versionId;
         $result = dbHelper::sw_mysqli_execute($mysqli_con, $sql, __FILE__, __LINE__);
         $row = mysqli_fetch_row($result);
+        print_r($row);
         return $row[0];
     }
 

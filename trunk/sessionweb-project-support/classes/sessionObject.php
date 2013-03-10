@@ -64,12 +64,14 @@ class sessionObject extends sessionObjectSave
         $this->logger = new logging();
         $this->dbHelper = new dbHelper();
         if ($sessionid == null) {
+            //$this->logger->debug("Will create a new charter since sessionid = null",__FILE__,__LINE__);
             $this->createEmptySessionObject();
         } else {
             if ($this->doesSessionExist($sessionid)) {
-                $this->setSessionExist(true);
+                 $this->setSessionExist(true);
                 $this->getSessionData($sessionid);
             } else {
+                $this->logger->warn("Sessionid $sessionid does not exist",__FILE__,__LINE__);
                 $this->setSessionExist(false);
             }
         }

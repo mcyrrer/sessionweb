@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
-    <script src="../js/jquery-1.7.1.js"></script>
+    <script src="../js/jquery-1.9.1.min.js"></script>
     <script src="../js/counterstring.js"></script>
 </head>
 <body>
@@ -14,8 +14,8 @@ Add length of counterstring to create:
 <input type="submit" id="pressme" value="Submit"/>
 <br>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#pressme").click(function(event) {
+    $(document).ready(function () {
+        $("#pressme").click(function (event) {
             if (parseInt($("#cnt").val()) <= 1000000) {
                 var cntString = counterstring($("#cnt").val());
                 $("#counterstring").val(cntString);
@@ -41,5 +41,24 @@ fast to create the string.
         </td>
     </tr>
 </table>
+<?php
+$codeunits = array();
+for ($i = 0; $i<0xD800; $i++)
+    $codeunits[] = unichr($i);
+for ($i = 0xE000; $i<0xFFFF; $i++)
+    $codeunits[] = unichr($i);
+$all = implode($codeunits);
+echo $all;
+?>
 </body>
 </html>
+
+<?php
+
+function unichr($i)
+{
+    return iconv('UCS-4LE', 'UTF-8', pack('V', $i));
+}
+
+
+?>

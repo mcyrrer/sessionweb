@@ -1,10 +1,6 @@
 <?php
 //session_start();
-require_once('../../../include/validatesession.inc');
-require_once('../../../classes/logging.php');
-require_once('../../../config/db.php.inc');
-require_once('../../../classes/dbHelper.php');
-
+require_once('../../../validatesession.inc');
 
 /*
  * jQuery File Upload Plugin PHP Class 6.1.2
@@ -19,8 +15,6 @@ require_once('../../../classes/dbHelper.php');
 
 class UploadHandler
 {
-    var $logging;
-    var $mySqlManager;
     protected $options;
     // PHP File Upload error message codes:
     // http://php.net/manual/en/features.file-upload.errors.php
@@ -45,8 +39,6 @@ class UploadHandler
 
     function __construct($options = null, $initialize = true)
     {
-        $this->logging = new logging();
-        $this->mySqlManager = new dbHelper();
         $this->options = array(
             'script_url' => $this->get_full_url() . '/',
             'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']) . '/files/',
@@ -60,7 +52,13 @@ class UploadHandler
             'access_control_allow_origin' => '*',
             'access_control_allow_credentials' => false,
             'access_control_allow_methods' => array(
-                'POST'
+                'OPTIONS',
+                'HEAD',
+                'GET',
+                'POST',
+                'PUT',
+                'PATCH',
+                'DELETE'
             ),
             'access_control_allow_headers' => array(
                 'Content-Type',
@@ -123,8 +121,20 @@ class UploadHandler
     protected function initialize()
     {
         switch ($_SERVER['REQUEST_METHOD']) {
+            case 'OPTIONS':
+            case 'HEAD':
+                $this->head();
+                break;
+            case 'GET':
+                $this->get();
+                break;
+            case 'PATCH':
+            case 'PUT':
             case 'POST':
                 $this->post();
+                break;
+            case 'DELETE':
+                $this->delete();
                 break;
             default:
                 $this->header('HTTP/1.1 405 Method Not Allowed');
@@ -170,19 +180,34 @@ class UploadHandler
         return strpos($url, '?') === false ? '?' : '&';
     }
 
-    protected function get_download_url($file_name)
+    protected function get_download_url($file_name, $version = null)
     {
-        return $this->options['script_url'] . "../download/index.php?id=" . $file_name;
-    }
-
-    protected function get_download_url_thumbnail($file_name)
-    {
-        return $this->options['script_url'] . "../getThumb/index.php?id=" . $file_name;
+        if ($this->options['download_via_php']) {
+            $url = $this->options['script_url']
+                . $this->get_query_separator($this->options['script_url'])
+                . 'file=' . rawurlencode($file_name);
+            if ($version) {
+                $url .= '&version=' . rawurlencode($version);
+            }
+            return $url . '&download=1';
+        }
+        $version_path = empty($version) ? '' : rawurlencode($version) . '/';
+        return $this->options['upload_url'] . $this->get_user_path()
+            . $version_path . rawurlencode($file_name);
     }
 
     protected function set_file_delete_properties($file)
     {
-        $file->delete_url = $this->options['script_url'] . "../delete/index.php?id=" . $file->id;
+        $file->delete_url = $this->options['script_url']
+            . $this->get_query_separator($this->options['script_url'])
+            . 'file=' . rawurlencode($file->name);
+        $file->delete_type = $this->options['delete_type'];
+        if ($file->delete_type !== 'DELETE') {
+            $file->delete_url .= '&_method=DELETE';
+        }
+        if ($this->options['access_control_allow_credentials']) {
+            $file->delete_with_credentials = true;
+        }
     }
 
     // Fix for overflowing signed 32 bit integers,
@@ -213,12 +238,49 @@ class UploadHandler
         return false;
     }
 
+    protected function get_file_object($file_name)
+    {
+        if ($this->is_valid_file_object($file_name)) {
+            $file = new stdClass();
+            $file->name = $file_name;
+            $file->size = $this->get_file_size(
+                $this->get_upload_path($file_name)
+            );
+            $file->url = $this->get_download_url($file->name);
+            foreach ($this->options['image_versions'] as $version => $options) {
+                if (!empty($version)) {
+                    if (is_file($this->get_upload_path($file_name, $version))) {
+                        $file->{$version . '_url'} = $this->get_download_url(
+                            $file->name,
+                            $version
+                        );
+                    }
+                }
+            }
+            $this->set_file_delete_properties($file);
+            return $file;
+        }
+        return null;
+    }
+
+    protected function get_file_objects($iteration_method = 'get_file_object')
+    {
+        $upload_dir = $this->get_upload_path();
+        if (!is_dir($upload_dir)) {
+            return array();
+        }
+        return array_values(array_filter(array_map(
+            array($this, $iteration_method),
+            scandir($upload_dir)
+        )));
+    }
+
     protected function count_file_objects()
     {
         return count($this->get_file_objects('is_valid_file_object'));
     }
 
-    protected function create_scaled_image($file_name, $version, $options, $file)
+    protected function create_scaled_image($file_name, $version, $options)
     {
         $file_path = $this->get_upload_path($file_name);
         if (!empty($version)) {
@@ -282,12 +344,9 @@ class UploadHandler
             $img_width,
             $img_height
         ) && $write_image($new_img, $new_file_path, $image_quality);
-        $this->logging->debug($new_file_path, __FILE__, __LINE__);
         // Free up memory (imagedestroy does not delete files):
         @imagedestroy($src_img);
         @imagedestroy($new_img);
-        $this->uploadThumbToDatabase($new_file_path, $file);
-
         return $success;
     }
 
@@ -476,94 +535,6 @@ class UploadHandler
         return $success;
     }
 
-    private function uploadToDatabase($uploaded_file, $file)
-    {
-        try {
-            $con = $this->mySqlManager->db_getMySqliConnection();
-            $name = $file->name;
-            $this->logging->debug("$name: Will open file to be read into memory", __FILE__, __LINE__);
-            $fp = fopen($uploaded_file, 'r');
-            $content = fread($fp, filesize($uploaded_file));
-            $this->logging->debug("$name: File loaded into memory");
-
-            $content = addslashes($content);
-            $file->name = addslashes($file->name);
-
-            $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
-                "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
-
-            $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-
-            if (!$result) {
-                $this->logging->error($name . ': ' . mysqli_error($con), __FILE__, __LINE__);
-            } else {
-                $this->logging->info($name . ': File uploaded into database', __FILE__, __LINE__);
-            }
-
-            $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
-
-            $this->logging->debug($name . ": " . $sqlFindLatestId, __FILE__, __LINE__);
-            $result2 = dbHelper::sw_mysqli_execute($con, $sqlFindLatestId, __FILE__, __LINE__);
-            $row = mysqli_fetch_row($result2);
-            //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
-            //$row = mysql_fetch_row($result2);
-            //   print_r($row);
-            $id = $row[0];
-            //}
-            $this->logging->debug($name . ': File id in database: ' . $id, __FILE__, __LINE__);
-            mysqli_close($con);
-
-            return $id;
-        } catch (Exception $e) {
-            $this->logging->error($name . ': ' . $e->getMessage(), __FILE__, __LINE__);
-        }
-        return null;
-    }
-
-    private function uploadThumbToDatabase($uploaded_file, $file)
-    {
-        try {
-            $con = $this->mySqlManager->db_getMySqliConnection();
-            $name = $file->name;
-            $this->logging->debug("$name: Will open file to be read into memory", __FILE__, __LINE__);
-            $fp = fopen($uploaded_file, 'r');
-            $content = fread($fp, filesize($uploaded_file));
-            $this->logging->debug("$name: File loaded into memory");
-
-            $content = addslashes($content);
-            $file->name = addslashes($file->name);
-            $sql = "update mission_attachments set thumbnail = '$content' where id = " . $file->id;
-
-            $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-
-            if (!$result) {
-                $this->logging->error($name . ': ' . mysqli_error($con), __FILE__, __LINE__);
-            } else {
-                $this->logging->info('Thumbnail with id ' . $file->id . ' uploaded into database', __FILE__, __LINE__);
-
-            }
-
-            $sqlFindLatestId = "SELECT id FROM `mission_attachments` ORDER BY `id` DESC LIMIT 0,1";
-
-            $this->logging->debug($name . ": " . $sqlFindLatestId, __FILE__, __LINE__);
-            $result2 = dbHelper::sw_mysqli_execute($con, $sqlFindLatestId, __FILE__, __LINE__);
-            $row = mysqli_fetch_row($result2);
-            //while ($row = mysql_fetch_array($result2, MYSQL_NUM)) {
-            //$row = mysql_fetch_row($result2);
-            //   print_r($row);
-            $id = $row[0];
-            //}
-            $this->logging->debug($name . ': File id in database: ' . $id, __FILE__, __LINE__);
-            mysqli_close($con);
-
-            return $id;
-        } catch (Exception $e) {
-            $this->logging->error($name . ': ' . $e->getMessage(), __FILE__, __LINE__);
-        }
-
-        return null;
-    }
-
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
                                           $index = null, $content_range = null)
     {
@@ -589,10 +560,7 @@ class UploadHandler
                         FILE_APPEND
                     );
                 } else {
-
-                    //DATABASE UPLOAD
                     $file->id = $this->uploadToDatabase($uploaded_file, $file);
-
                     move_uploaded_file($uploaded_file, $file_path);
                 }
             } else {
@@ -608,11 +576,14 @@ class UploadHandler
                 if ($this->options['orient_image']) {
                     $this->orient_image($file_path);
                 }
-                $file->url = $this->get_download_url($file->id);
+                $file->url = $this->get_download_url($file->name);
                 foreach ($this->options['image_versions'] as $version => $options) {
-                    if ($this->create_scaled_image($file->name, $version, $options, $file)) {
+                    if ($this->create_scaled_image($file->name, $version, $options)) {
                         if (!empty($version)) {
-                            $file->{$version . '_url'} = $this->get_download_url_thumbnail($file->id);
+                            $file->{$version . '_url'} = $this->get_download_url(
+                                $file->name,
+                                $version
+                            );
                         } else {
                             $file_size = $this->get_file_size($file_path, true);
                         }
@@ -624,12 +595,6 @@ class UploadHandler
             }
             $file->size = $file_size;
             $this->set_file_delete_properties($file);
-        }
-        unlink($file_path);
-        $baseDir = dirname($file_path);
-        $thumbNailPath = dirname($file_path) . "/thumbnail/" . basename($file_path);
-        if (file_exists($thumbNailPath)) {
-            unlink(dirname($file_path) . "/thumbnail/" . basename($file_path));
         }
         return $file;
     }
@@ -761,6 +726,23 @@ class UploadHandler
         $this->send_content_type_header();
     }
 
+    public function get($print_response = true)
+    {
+        if ($print_response && isset($_GET['download'])) {
+            return $this->download();
+        }
+        $file_name = $this->get_file_name_param();
+        if ($file_name) {
+            $response = array(
+                substr($this->options['param_name'], 0, -1) => $this->get_file_object($file_name)
+            );
+        } else {
+            $response = array(
+                $this->options['param_name'] => $this->get_file_objects()
+            );
+        }
+        return $this->generate_response($response, $print_response);
+    }
 
     public function post($print_response = true)
     {
@@ -818,5 +800,22 @@ class UploadHandler
         );
     }
 
+    public function delete($print_response = true)
+    {
+        $file_name = $this->get_file_name_param();
+        $file_path = $this->get_upload_path($file_name);
+        $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
+        if ($success) {
+            foreach ($this->options['image_versions'] as $version => $options) {
+                if (!empty($version)) {
+                    $file = $this->get_upload_path($file_name, $version);
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
+                }
+            }
+        }
+        return $this->generate_response(array('success' => $success), $print_response);
+    }
 
 }

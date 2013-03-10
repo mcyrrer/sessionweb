@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../../../include/validatesession.inc');
+require_once('../../../validatesession.inc');
 
 
 /*
@@ -14,6 +14,6 @@ require_once('../../../include/validatesession.inc');
  * http://www.opensource.org/licenses/MIT
  */
 
-error_reporting(0);
+error_reporting(E_ALL | E_STRICT);
 require('UploadHandler.php');
 $upload_handler = new UploadHandler();

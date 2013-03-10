@@ -1,50 +1,69 @@
 <?php
-error_reporting(0);
-require_once('../../../include/loggingsetup.php');
+
+
 session_start();
+
 require_once('../../../include/validatesession.inc');
-include_once("../../../include/db.php");
-include "../../../config/db.php.inc";
+
+require_once('../../../config/db.php.inc');
+require_once ('../../../include/commonFunctions.php.inc');
+require_once ('../../../include/db.php');
+require_once('../../../classes/sessionHelper.php');
+require_once('../../../classes/logging.php');
+require_once('../../../classes/dbHelper.php');
+
+$logger = new logging();
+$sHelper = new sessionHelper();
+$dbManager = new dbHelper();
 
 $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
 
 
-//$con = getMySqlConnection();
-$con = mysql_connect(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB) or die("cannot connect");
-mysql_select_db(DB_NAME_SESSIONWEB)or die("cannot select DB");
-mysql_set_charset('utf8');
+list($attachmentId, $filename, $mimeType, $size, $data) = getAttachmentFromDb($dbManager, $logger);
 
+header("Content-length: " . $size);
+header("Content-type: " . $mimeType);
 
-$attachmentId = $_REQUEST['id'];
-
-$sql = "SELECT id,mimetype,filename,thumbnail as content, OCTET_LENGTH(thumbnail) as size FROM `mission_attachments` WHERE `id` = " . $_GET['id'];
-$result = mysql_query($sql);
-addToLog1($result, $logger, $attachmentId, $sql);
-
-$row = mysql_fetch_array($result);
-
-mysql_close();
-$logger->debug("Attachment download:[$attachmentId] id:" . $row['id'] . " mission_versionid:" . $row['mission_versionid'] . " filename: " . $row['filename'] . " mimetype: " . $row['mimetype'] . " size: " . $row['size']);
-
-header("Content-length: " . $row['size']);
-header("Content-type: " . $row['mimetype']);
-
-if (!in_array($row['mimetype'], $picture_mimetypes)) {
-    $logger->debug("Attachment download:[$attachmentId] Is not a picture, will add content-disposition header");
-    header("Content-Disposition: attachment; filename=" . $row['filename']);
+if (!in_array($mimeType, $picture_mimetypes)) {
+    $logger->debug("Attachment download:[$attachmentId] Is not a picture, will add content-disposition header",__FILE__,__LINE__);
+    header("Content-Disposition: attachment; filename=" . $filename);
 }
 
-echo $row['content'];
+echo $data;
 
 exit;
 
-function addToLog1($result, $logger, $attachmentId, $sql)
+/**
+ * @param $dbManager
+ * @param $logger
+ * @return array
+ */
+function getAttachmentFromDb($dbManager, $logger)
 {
-    if (!$result) {
-        $logger->error("**Attachment download[$attachmentId]: " . mysql_error());
-        $logger->debug("Attachment download:[$attachmentId] " . $sql);
-    } else {
-        $logger->debug("**Attachment download:[$attachmentId] File downloaded from database");
-    }
+    $con = $dbManager->db_getMySqliConnection();
+
+    $attachmentId = dbHelper::escape($con, $_REQUEST['id']);
+
+    $sql = "SELECT id, mission_versionid, filename, mimetype, size, thumbnail, OCTET_LENGTH(thumbnail) as thumbsize FROM `mission_attachments` WHERE `id` = " . $_GET['id'];
+    //$sql = "SELECT id,mimetype,filename,thumbnail as content, OCTET_LENGTH(thumbnail) as size FROM `mission_attachments` WHERE `id` = " . $_GET['id'];
+
+    $result = $dbManager->sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
+
+    $row = mysqli_fetch_row($result);
+
+
+    $dbId = $row[0];
+    $versionId = $row[1];
+    $filename = $row[2];
+    $mimeType = $row[3];
+    $size = $row[4];
+    $thumbnailData = $row[5];
+    $thumbnailSize = $row[6];
+
+    mysqli_close($con);
+
+    $logger->debug("Thumbnail download:[$attachmentId] id:" . $dbId . " mission_versionid:" . $versionId . " filename: " . $filename . " mimetype: " . $mimeType . " size: " . $thumbnailSize, __FILE__, __LINE__);
+    return array($attachmentId, $filename, $mimeType, $thumbnailSize, $thumbnailData);
 }
+
 ?>

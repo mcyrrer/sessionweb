@@ -68,11 +68,12 @@ $(function () {
             });
         }
     } else {
+
         // Load existing files:
         $.ajax({
-            // Uncomment the following to send cross-domain cookies:
+        // Uncomment the following to send cross-domain cookies:
             //xhrFields: {withCredentials: true},
-            url: $('#fileupload').fileupload('option', 'url'),
+            url: '../../api/attachment/list/index.php?sessionid='+sessionID,
             dataType: 'json',
             context: $('#fileupload')[0]
         }).done(function (result) {

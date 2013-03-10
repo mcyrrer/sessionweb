@@ -112,7 +112,7 @@ echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
 if (isset($_SESSION['username'])) {
     echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
-echo "      <a class='counterstring' href='include/counterstring.html'>&copy;</a>";
+echo "      <a class='counterstring' href='include/counterstring.php'>&copy;</a>";
 echo "</div>";
 echo "<div id='menubottom'></div>";
 
