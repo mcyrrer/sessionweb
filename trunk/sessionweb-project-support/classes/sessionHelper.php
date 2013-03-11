@@ -54,6 +54,33 @@ class sessionHelper
 
         return mysqli_fetch_array($resultSessionStatus, MYSQLI_ASSOC);
     }
+
+    /**
+     * Prints percent (belongs to a HTML select item) to screen. E.g 5,10,15,20...
+     *
+     */
+    function echoPercentSelection($htmlId, $htmlClass = "", $htmlName = "")
+    {
+        echo '<select id="' . $htmlId . '" class="' . $htmlClass . '" name="' . $htmlName . '">';
+        for ($index = 0; $index <= 100; $index = $index + 5) {
+            echo "<option>$index</option>\n";
+        }
+        echo '</select>';
+    }
+
+    /**
+     * Prints duration option (belongs to a HTML select item) to screen
+     *
+     */
+    function echoDurationSelection($htmlId, $htmlClass = "", $htmlName = "")
+    {
+        echo '<select id="' . $htmlId . '" class="' . $htmlClass . '" name="' . $htmlName . '">';
+        for ($index = 15; $index <= 480; $index = $index + 15) {
+            echo "<option>$index</option>\n";
+        }
+        echo '</select>';
+
+    }
 }
 
 ?>

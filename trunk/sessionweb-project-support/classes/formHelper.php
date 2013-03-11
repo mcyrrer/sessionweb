@@ -96,9 +96,7 @@ class formHelper
 
     public function getTeamSelect($selectedName = "")
     {
-
         $teamArray = $this->queryHelper->getTeamNamesActive();
-        $this->logger->arraylog($teamArray,__FILE__,__LINE__);
         return $this->formSelectListSingle($teamArray, $selectedName, true, "idTeam", "nameTeam", 'class="fixedWidth"');
     }
 

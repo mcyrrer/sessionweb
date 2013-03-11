@@ -44,7 +44,7 @@ if (isset($_REQUEST['sessionid']) != null) {
             {
                 $path_parts = pathinfo($tmpFileInfo['name']);
                 $extension = $path_parts['extension'];
-                $logger->arraylog($path_parts);
+
                 $thumpPath = $tmpFileInfo['thumbnail_url'] = $scriptUrl . "/../../../../pictures/mimetypes/$extension.png";
                 $scriptPath = pathinfo(__FILE__);
                 if(file_exists($scriptPath['dirname']."/../../../pictures/mimetypes/$extension.png"))

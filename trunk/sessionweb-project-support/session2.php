@@ -53,7 +53,9 @@ class session2
     {
 
         echo ' <div id="divTitle"><label for="input_title">Session title:</label>
-              <input type="text" id="input_title" size="130" style="border: 0; font-weight: bold; border-color: #808500" /></div>';
+              <input type="text" id="input_title" size="130" style="border: 0; font-weight: bold; border-color: #808500" />';
+        echo '<button>Set charter to executed</button>';
+        echo '</div>';
         echo '
         <div id="tabs">
           <ul>
@@ -106,22 +108,29 @@ class session2
 
         echo '</div>
             <div id="tabs-4">';
-        echo "<br>Attachments:<br>";
-        echo "Defects:<br>";
-        echo "Metrics:<br>";
-        echo '
-              <label for="amount">Setup time:</label>
 
-              <label for="amount">Test time:</label>
+        echo "<div>Metrics:";
+        echo "<span id='metricsCalc'></span><br>";
 
+        echo "Setup(%):";
+        $this->sessionHelper->echoPercentSelection("setupId","metrics","setup");
+        echo "Test(%):";
+        $this->sessionHelper->echoPercentSelection("testId","metrics","test");
+        echo "Bug(%):";
+        $this->sessionHelper->echoPercentSelection("bugId","metrics","bug");
+        echo "Opportunity(%):";
+        $this->sessionHelper->echoPercentSelection("oppId","metrics","opportunity");
+        echo "Session duration (min):";
+        $this->sessionHelper->echoDurationSelection("durId","duration","duration");
+        echo "</div>";
+        echo "<br><br><div>Session mood:";
+        echo '<div>
+            <img class="session_mode" id="sm_1" src="pictures/emotes/face-cool.png" alt="" value="1">
+            <img class="session_mode" id="sm_2" src="pictures/emotes/face-plain.png" alt="" value="2">
+            <img class="session_mode" id="sm_3" src="pictures/emotes/face-sad.png" alt="" value="3">
+            <img class="session_mode" id="sm_4" src="pictures/emotes/face-angry.png" alt="" value="4">
+            </div></div>';
 
-              <label for="amount">Bug time:</label>
-
-
-              <label for="amount">Opportunity time:</label>';
-;
-        echo "Session mood:<br>";
-        echo "Executed:<br>";
 
         echo '</div>
             <div id="tabs-5">';

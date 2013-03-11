@@ -47,3 +47,7 @@ a {
 .minmax {
     vertical-align: top;
 }
+
+.session_mode {
+    border: 2px solid white;
+}

@@ -42,6 +42,8 @@ class UploadHandler
         'max_height' => 'Image exceeds maximum height',
         'min_height' => 'Image requires a minimum height'
     );
+    var $picture_mimetypes = array("jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+
 
     function __construct($options = null, $initialize = true)
     {
@@ -178,6 +180,7 @@ class UploadHandler
     protected function get_download_url_thumbnail($file_name)
     {
         return $this->options['script_url'] . "../getThumb/index.php?id=" . $file_name;
+
     }
 
     protected function set_file_delete_properties($file)
@@ -618,6 +621,21 @@ class UploadHandler
                         }
                     }
                 }
+                $fileInfo = pathinfo($file_path);
+                if (!isset($file->thumbnail_url)) {
+                    if (!in_array($fileInfo['extension'], $this->picture_mimetypes)) {
+                        $scriptUrl = $this->get_full_url() . '/';
+                        $extension = $fileInfo['extension'];
+                        $thumpPath = $fileInfo['thumbnail_url'] = $scriptUrl . "/../../../../pictures/mimetypes/$extension.png";
+                        $scriptPath = pathinfo(__FILE__);
+                        if (file_exists($scriptPath['dirname'] . "/../../../pictures/mimetypes/$extension.png")) {
+                            $file->thumbnail_url = $thumpPath;
+                        } else {
+                            $file->thumbnail_url = $scriptUrl . "../../../pictures/mimetypes/unknown.png";
+                        }
+                    }
+                }
+
             } else if (!$content_range && $this->options['discard_aborted_uploads']) {
                 unlink($file_path);
                 $file->error = 'abort';

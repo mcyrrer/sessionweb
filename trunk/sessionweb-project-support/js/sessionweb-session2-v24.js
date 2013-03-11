@@ -37,8 +37,230 @@ $(document).ready(function () {
     ShowHideSprint();
     ShowHideTeam();
     ShowHideTestenv();
+
+    ChangeOfMode();
+    ChangeOfMetrics();
+    ChangeOfDuration();
+    ChangeOfSprint();
+    ChangeOfTeam();
+    ChangeOfAdditionalTester();
+    ChangeOfArea();
+    ChangeOfTestenvironment();
+    ChangeOfSwUnderTest();
+
+
 });
 
+function ChangeOfAdditionalTester() {
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    $('#idAdditionalTester').change(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                names: $('#idAdditionalTester').val()
+            },
+            url: 'api/testers/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update additional testers names");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfArea() {
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    $('#idArea').change(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                names: $('#idArea').val()
+            },
+            url: 'api/area/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update areas");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfSprint() {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $('#idSprint').change(function () {
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+                name: $('#idSprint').val()
+            },
+            url: 'api/sprint/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update sprint name");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfCharter() {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $('#idSoftwareUnderTest').change(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                text: $('#idSoftwareUnderTest').val()
+            },
+            url: 'api/software/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update software information");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfSwUnderTest() {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $('#idSoftwareUnderTest').change(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                text: $('#idSoftwareUnderTest').val()
+            },
+            url: 'api/software/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update software information");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfTestenvironment() {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $('#idEnvironment').change(function () {
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+                name: $('#idEnvironment').val()
+            },
+            url: 'api/testenvironment/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update testenvironment name");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfTeam() {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $('#idTeam').change(function () {
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+                name: $('#idTeam').val()
+            },
+            url: 'api/team/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update team name");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfDuration() {
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    $('.duration').change(function () {
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+                duration: parseInt($("#durId").val())
+            },
+            url: 'api/duration/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update duration");
+                }
+            }
+        });
+    });
+}
+
+function ChangeOfMetrics() {
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    $('.metrics').change(function () {
+        var setup = parseInt($("#setupId").val());
+        var test = parseInt($("#testId").val());
+        var bug = parseInt($("#bugId").val());
+        var opp = parseInt($("#oppId").val());
+        var sum = setup + test + bug + opp;
+        if (sum == 100) {
+            $('#metricsCalc').css('border', "solid 2px green");
+            $('#metricsCalc').html(sum + "%");
+            $.ajax({
+                type: "GET",
+                data: {
+                    sessionid: sessionID,
+                    setup: parseInt($("#setupId").val()),
+                    test: parseInt($("#testId").val()),
+                    bug: parseInt($("#bugId").val()),
+                    opp: parseInt($("#oppId").val()),
+                },
+                url: 'api/metrics/set/index.php',
+                complete: function (data) {
+                    if (data.status != '200') {
+                        alert("Could not update metrics");
+                    }
+                }
+            });
+        }
+        else {
+            $('#metricsCalc').css('border', "solid 2px red");
+            $('#metricsCalc').html(sum + "% (should be 100%)");
+        }
+    });
+}
+function ChangeOfMode() {
+    var sessionID = $(document).getUrlParam("sessionid");
+    $('.session_mode').click(function () {
+        $('.session_mode').css('border', "solid 2px white");
+        $(this).css('border', "solid 2px green");
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+                mood: $(this).attr('value')
+            },
+            url: 'api/mood/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not update mood");
+                }
+            }
+        });
+    });
+}
 
 //Resize of form elements
 function ShowHideTeam() {
@@ -55,6 +277,7 @@ function ShowHideTeam() {
         $('#minimizeTeam').hide();
     });
 }
+
 function ShowHideTestenv() {
     $('#minimizeTestenv').hide();
     $('#maximizeTestenv').click(function () {
@@ -69,6 +292,7 @@ function ShowHideTestenv() {
         $('#minimizeTestenv').hide();
     });
 }
+
 function ShowHideAddTester() {
     $('#minimizeAddTest').hide();
     $('#maximizeAddTest').click(function () {
@@ -83,6 +307,7 @@ function ShowHideAddTester() {
         $('#minimizeAddTest').hide();
     });
 }
+
 function ShowHideSprint() {
     $('#minimizeSprint').hide();
     $('#maximizeSprint').click(function () {
@@ -97,6 +322,7 @@ function ShowHideSprint() {
         $('#minimizeSprint').hide();
     });
 }
+
 function ShowHideAreaRows() {
     $('#minimizeArea').hide();
     $('#maximizeArea').click(function () {
@@ -150,16 +376,25 @@ function setSessionData(jsonResponseContent) {
     //Autofetched sw
     PopulateAutofetchedSoftware(jsonResponseContent['softwareuseautofetched']);
 
+    //Mood
+    $('#sm_' + jsonResponseContent['mood']).css('border', "solid 2px green");
 
     //Charter Content
     setTimeout(function () {
         SetContentsCharter(jsonResponseContent['charter']);
-    }, 100);
+    }, 500);
 
     //Notes Content
     setTimeout(function () {
         SetContentsNotes(jsonResponseContent['notes']);
-    }, 100);
+    }, 500);
+
+    //Metrics
+    $('#setupId').val(jsonResponseContent['setup_percent']);
+    $('#testId').val(jsonResponseContent['test_percent']);
+    $('#bugId').val(jsonResponseContent['bug_percent']);
+    $('#oppId').val(jsonResponseContent['opportunity_percent']);
+    $('#durId').val(jsonResponseContent['duration_time']);
 
     $(".colorPopUp").colorbox({
         iframe: true,
@@ -198,11 +433,13 @@ function AddNewAutofetchedSwManager() {
     });
 
 }
+
 function PopulateAutofetchedSoftware(softwareids) {
     $.each(softwareids, function (index, value) {
         AddSingelAutofetchedSoftware(value['id'], value['environment'], value['updated']);
     });
 }
+
 function AddSingelAutofetchedSoftware(aId, env, updated) {
     var linkName = env + '(' + updated + ')';
     $('#autoSoftwareVersions').append(
@@ -212,6 +449,7 @@ function AddSingelAutofetchedSoftware(aId, env, updated) {
             "</p>");
 
 }
+
 function onSoftwareAutoFetchedDeleteClick(aId) {
     $.ajax({
         type: "GET",
@@ -226,6 +464,7 @@ function onSoftwareAutoFetchedDeleteClick(aId) {
         }
     });
 }
+
 function onSoftwareAutoFetchedClick(aId) {
     var url = 'api/softwareautofetched/get/index.php?id=' + aId;
     $(this).colorbox({
@@ -255,6 +494,7 @@ function AddRequirementManager() {
         $('#new_requirement').val("");
     });
 }
+
 function PopulateRequirements(req) {
 
     req.forEach(function (aReq) {
@@ -262,6 +502,7 @@ function PopulateRequirements(req) {
     });
 
 }
+
 function onRequirementLinkDeleteClick(aId) {
     var sessionID = $(document).getUrlParam("sessionid");
     $.ajax({
@@ -273,11 +514,12 @@ function onRequirementLinkDeleteClick(aId) {
         url: 'api/requirement/delete/index.php',
         complete: function (data) {
             if (data.status == '200') {
-                $('#' + aId+'REQ').remove();
+                $('#' + aId + 'REQ').remove();
             }
         }
     });
 }
+
 function CreateRequirement(requirementId) {
     var sessionID = $(document).getUrlParam("sessionid");
     $.ajax({
@@ -300,6 +542,7 @@ function CreateRequirement(requirementId) {
         }
     });
 }
+
 function AddSingleRequirement(aReq) {
     $('#testReqId').append('<p class="sw_p" id="' + aReq + 'REQ">' + aReq + ': Loading title</p>');
     $.ajax({
@@ -313,8 +556,9 @@ function AddSingleRequirement(aReq) {
             if (data.status == '200') {
                 var title = data.responseText;
                 if (title == "") {
-                    title = aReq;                }
-                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq+'>"<span onClick="onRequirementLinkDeleteClick(' + aReq + ')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
+                    title = aReq;
+                }
+                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq + '>"<span onClick="onRequirementLinkDeleteClick(' + aReq + ')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
             }
         }
     });
@@ -338,6 +582,7 @@ function AddBugManager() {
         $('#new_bug').val("");
     });
 }
+
 function onBugLinkDeleteClick(aId) {
     var sessionID = $(document).getUrlParam("sessionid");
     $.ajax({
@@ -349,11 +594,12 @@ function onBugLinkDeleteClick(aId) {
         url: 'api/bug/delete/index.php',
         complete: function (data) {
             if (data.status == '200') {
-                $('#' + aId+'BUG').remove();
+                $('#' + aId + 'BUG').remove();
             }
         }
     });
 }
+
 function CreateBug(bugId) {
     var sessionID = $(document).getUrlParam("sessionid");
     $.ajax({
@@ -376,6 +622,7 @@ function CreateBug(bugId) {
         }
     });
 }
+
 function AddSingleBug(aBug) {
     $('#testBugId').append('<p class="sw_p" id="' + aBug + 'BUG">' + aBug + ': Loading title</p>');
     $.ajax({
@@ -389,12 +636,14 @@ function AddSingleBug(aBug) {
             if (data.status == '200') {
                 var title = data.responseText;
                 if (title == "") {
-                    title = aBug;                }
-                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug+'>"<span onClick="onBugLinkDeleteClick(' + aBug + ')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
+                    title = aBug;
+                }
+                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(' + aBug + ')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
             }
         }
     });
 }
+
 function PopulateBugs(bugs) {
 
     bugs.forEach(function (aBug) {
@@ -422,6 +671,7 @@ function AddSessionLinkManager() {
         $('#new_sessionlink').val("");
     });
 }
+
 function onSessionLinkDeleteClick(aId) {
     var sessionID = $(document).getUrlParam("sessionid");
     $.ajax({
@@ -438,6 +688,7 @@ function onSessionLinkDeleteClick(aId) {
         }
     });
 }
+
 function CreateSessionLink(sessionIdToLinkTo) {
     var sessionID = $(document).getUrlParam("sessionid");
     if (sessionID == sessionIdToLinkTo) {
@@ -465,6 +716,7 @@ function CreateSessionLink(sessionIdToLinkTo) {
         });
     }
 }
+
 function AddSingleSessionLink(aLink) {
 
     $('#linkToOtherSessions').append('<p id="' + aLink + 'SessionLink">' + aLink + ': Loading title</p>');
@@ -488,6 +740,7 @@ function AddSingleSessionLink(aLink) {
         }
     });
 }
+
 function PopulateLinksToOtherSessions(linksToOtherSessions) {
 
     linksToOtherSessions.forEach(function (aLink) {
@@ -513,6 +766,7 @@ function AddNewAreaManager() {
         $('#addNewAreaInput').val("");
     });
 }
+
 function AddNewAreaToDb(areaName) {
     $.ajax({
         type: "GET",
@@ -529,6 +783,7 @@ function AddNewAreaToDb(areaName) {
         }
     });
 }
+
 function updateAreas() {
     $.ajax({
         type: "GET",
@@ -552,15 +807,17 @@ function SetContentsCharter(text) {
     var editor = CKEDITOR.instances.chartereditor;
     editor.setData(text);
 }
+
 function SetContentsNotes(text) {
     var editor = CKEDITOR.instances.noteseditor;
     editor.setData(text);
-
 }
+
 function GetContentsCharter() {
     var editor = CKEDITOR.instances.chartereditor;
     return editor.getData();
 }
+
 function GetContentsNotes() {
     var editor = CKEDITOR.instances.noteseditor;
     return editor.getData();
