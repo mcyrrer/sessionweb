@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $("#tabs").tabs();
 
     var sessionID = $(document).getUrlParam("sessionid");
     $.ajax({
@@ -12,7 +13,6 @@ $(document).ready(function () {
             if (data.status == '200') {
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
                 setSessionData(jsonResponseContent);
-                $("#tabs").tabs();
 
             } else if (data.status == '400') {
                 $('#message').prepend('<div class="log_div">Error: Some parameters was missing in request.</div>');
@@ -47,9 +47,64 @@ $(document).ready(function () {
     ChangeOfArea();
     ChangeOfTestenvironment();
     ChangeOfSwUnderTest();
+    ExecutedButtonPressed();
 
+    //Save notes and charter before exit page..
+    $(window).bind("beforeunload", function () {
+        return saveBeforeExit(sessionID);
+    })
 
 });
+
+function ExecutedButtonPressed() {
+    $('#setExecuted').click(function () {
+        var sessionID = $(document).getUrlParam("sessionid");
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+            },
+            url: 'api/status/executed/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not set executed");
+                }
+            }
+        });
+    });
+}
+function saveBeforeExit(sessionID) {
+    $.ajax({
+        type: "POST",
+        data: {
+            sessionid: sessionID,
+            text: GetContentsCharter()
+        },
+        url: 'api/charter/set/index.php',
+        complete: function (data) {
+            if (data.status != '200') {
+                alert("Could not save charter");
+            }
+        },
+        async: false
+    });
+    $.ajax({
+        type: "POST",
+        data: {
+            sessionid: sessionID,
+            text: GetContentsNotes()
+        },
+        url: 'api/notes/set/index.php',
+        complete: function (data) {
+            if (data.status != '200') {
+                alert("Could not save notes");
+            }
+        },
+        async: false
+    });
+
+
+}
 
 function ChangeOfAdditionalTester() {
     var sessionID = $(document).getUrlParam("sessionid");
@@ -225,7 +280,7 @@ function ChangeOfMetrics() {
                     setup: parseInt($("#setupId").val()),
                     test: parseInt($("#testId").val()),
                     bug: parseInt($("#bugId").val()),
-                    opp: parseInt($("#oppId").val()),
+                    opp: parseInt($("#oppId").val())
                 },
                 url: 'api/metrics/set/index.php',
                 complete: function (data) {
@@ -250,7 +305,7 @@ function ChangeOfMode() {
             type: "GET",
             data: {
                 sessionid: sessionID,
-                mood: $(this).attr('value')
+                mood: $(this).attr('alt')
             },
             url: 'api/mood/set/index.php',
             complete: function (data) {
@@ -380,14 +435,14 @@ function setSessionData(jsonResponseContent) {
     $('#sm_' + jsonResponseContent['mood']).css('border', "solid 2px green");
 
     //Charter Content
-    setTimeout(function () {
+    //setTimeout(function () {
         SetContentsCharter(jsonResponseContent['charter']);
-    }, 500);
+    //}, 500);
 
     //Notes Content
-    setTimeout(function () {
+    //setTimeout(function () {
         SetContentsNotes(jsonResponseContent['notes']);
-    }, 500);
+    //}, 500);
 
     //Metrics
     $('#setupId').val(jsonResponseContent['setup_percent']);
@@ -804,13 +859,26 @@ function updateAreas() {
 
 //EDITOR MANAGER
 function SetContentsCharter(text) {
+    var sessionID = $(document).getUrlParam("sessionid");
     var editor = CKEDITOR.instances.chartereditor;
     editor.setData(text);
+    setTimeout(function () {
+        editor.on('change', function (e) {
+            saveCharter(sessionID);
+        });
+    }, 5000);
 }
 
 function SetContentsNotes(text) {
+    var sessionID = $(document).getUrlParam("sessionid");
     var editor = CKEDITOR.instances.noteseditor;
     editor.setData(text);
+    setTimeout(function () {
+        editor.on('change', function (e) {
+            saveNotes(sessionID);
+        });
+    }, 5000);
+
 }
 
 function GetContentsCharter() {
@@ -821,4 +889,36 @@ function GetContentsCharter() {
 function GetContentsNotes() {
     var editor = CKEDITOR.instances.noteseditor;
     return editor.getData();
+}
+
+function saveCharter(sessionID) {
+    $.ajax({
+        type: "POST",
+        data: {
+            sessionid: sessionID,
+            text: GetContentsCharter()
+        },
+        url: 'api/charter/set/index.php',
+        complete: function (data) {
+            if (data.status != '200') {
+                alert("Could not save charter");
+            }
+        }
+    });
+}
+
+function saveNotes(sessionID) {
+    $.ajax({
+        type: "POST",
+        data: {
+            sessionid: sessionID,
+            text: GetContentsNotes()
+        },
+        url: 'api/notes/set/index.php',
+        complete: function (data) {
+            if (data.status != '200') {
+                alert("Could not save notes");
+            }
+        }
+    });
 }

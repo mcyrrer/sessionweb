@@ -31,4 +31,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Remove some buttons, provided by the standard plugins, which we don't
 	// need to have in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
+
+    config.extraPlugins='onchange';
+    config.minimumChangeMilliseconds = 10000; // 100 milliseconds (default value)
 };

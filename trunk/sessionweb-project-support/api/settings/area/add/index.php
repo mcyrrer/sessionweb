@@ -6,12 +6,11 @@ require_once('../../../../include/validatesession.inc');
 error_reporting(0);
 
 require_once('../../../../config/db.php.inc');
+require_once('../../../../classes/logging.php');
 require_once ('../../../../include/db.php');
 require_once ('../../../../include/apistatuscodes.inc');
-require_once ('../../../../include/loggingsetup.php');
 
-
-
+$logger = new logging();
 $response = array();
 if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
 
@@ -48,7 +47,7 @@ if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
         }
         else
         {
-            $logger->info($_SESSION['username']." created area $areaName");
+            $logger->info("Created area $areaName for project ".$_SESSION['project'],__FILE__,__LINE__);
             header("HTTP/1.0 201 Created");
             $response['code'] = ITEM_ADDED;
             $response['text'] = "ITEM_ADDED";

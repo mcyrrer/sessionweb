@@ -52,9 +52,9 @@ class session2
     private function showHtmlAllowedToEditSession()
     {
 
-        echo ' <div id="divTitle"><label for="input_title">Session title:</label>
-              <input type="text" id="input_title" size="130" style="border: 0; font-weight: bold; border-color: #808500" />';
-        echo '<button>Set charter to executed</button>';
+        echo ' <div id="divTitle" ><label for="input_title">Session title:</label>
+              <input type="text" id="input_title" size="130" style="border: 0; font-weight: bold; border-color: #808500">';
+        echo '<button id="setExecuted">Set charter to executed</button>';
         echo '</div>';
         echo '
         <div id="tabs">
@@ -125,18 +125,18 @@ class session2
         echo "</div>";
         echo "<br><br><div>Session mood:";
         echo '<div>
-            <img class="session_mode" id="sm_1" src="pictures/emotes/face-cool.png" alt="" value="1">
-            <img class="session_mode" id="sm_2" src="pictures/emotes/face-plain.png" alt="" value="2">
-            <img class="session_mode" id="sm_3" src="pictures/emotes/face-sad.png" alt="" value="3">
-            <img class="session_mode" id="sm_4" src="pictures/emotes/face-angry.png" alt="" value="4">
+            <img class="session_mode" id="sm_1" src="pictures/emotes/face-cool.png" alt="1">
+            <img class="session_mode" id="sm_2" src="pictures/emotes/face-plain.png" alt="2">
+            <img class="session_mode" id="sm_3" src="pictures/emotes/face-sad.png" alt="3">
+            <img class="session_mode" id="sm_4" src="pictures/emotes/face-angry.png" alt="4">
             </div></div>';
 
 
         echo '</div>
             <div id="tabs-5">';
         $sessionId = $this->session->getSessionid();
-        echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid='.$sessionId.'" width=100% height="600" frameborder="0"></iframe>';
-        echo '</div>';
+        echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid='.$sessionId.'" width="100%" height="600" frameborder="0"></iframe>';
+        echo '</div></div> ';
     }
 }
 
