@@ -76,6 +76,7 @@ class sessionObjectSave
     private function saveMissionTable_Insert($missionDataArray, $con)
     {
 
+
         $sqlInsert = "";
         $sqlInsert .= "INSERT INTO mission ";
         $sqlInsert .= "            (`sessionid`, ";

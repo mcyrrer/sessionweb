@@ -47,7 +47,7 @@ if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id']!=
                 $sql .= "              '$requirementId' ) " ;
 
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-                $logger->debug("Added requirement $requirementId to session $sessionid",__FILE___, __LINE__);
+                $logger->debug("Added requirement $requirementId to session $sessionid",__FILE__, __LINE__);
                 header("HTTP/1.0 201 Created");
                 $response['code'] = ITEM_ADDED;
                 $response['text'] = "ITEM_ADDED";

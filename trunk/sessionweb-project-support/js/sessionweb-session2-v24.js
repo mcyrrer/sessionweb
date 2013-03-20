@@ -1,7 +1,8 @@
 $(document).ready(function () {
-    $("#tabs").tabs();
-
     var sessionID = $(document).getUrlParam("sessionid");
+    var editorsActivated = false;
+    var jsonResponseContent = "";
+    $('#ui-master').hide();
     $.ajax({
         type: "GET",
         data: {
@@ -11,8 +12,33 @@ $(document).ready(function () {
         complete: function (data) {
 
             if (data.status == '200') {
-                var jsonResponseContent = jQuery.parseJSON(data.responseText);
+                jsonResponseContent = jQuery.parseJSON(data.responseText);
                 setSessionData(jsonResponseContent);
+                $('#tabs').tabs({
+//                    beforeActivate: function( event, ui ) {
+//                        alert('beforeActivate'+$(ui.selector).text())
+//                    },
+//                    create: function( event, ui ) {
+//                        alert('create'+$(ui.selector).text())
+//                    },
+//                    load: function( event, ui ) {
+//                        alert('load'+$(ui.selector).text())
+//                    },
+                    beforeActivate: function (event, ui) {
+                        //activate: function (event, ui) {
+                        if (editorsActivated == false) {
+                            SetContentsCharter(jsonResponseContent['charter']);
+                            SetContentsNotes(jsonResponseContent['notes']);
+                            editorsActivated = true;
+                        }
+                    }
+//                    select: function(event, ui) {
+//                        selectedTabTitle = $(ui.newPanel.selector).text();
+//                        alert(selectedTabTitle);
+//                    }
+                });
+                $('#ui-master').fadeIn();
+
 
             } else if (data.status == '400') {
                 $('#message').prepend('<div class="log_div">Error: Some parameters was missing in request.</div>');
@@ -25,6 +51,9 @@ $(document).ready(function () {
             }
         }
     });
+    //   setTimeout(function () {
+    // }, 5000);
+
 
     AddRequirementManager();
     AddBugManager();
@@ -47,63 +76,133 @@ $(document).ready(function () {
     ChangeOfArea();
     ChangeOfTestenvironment();
     ChangeOfSwUnderTest();
+    ChangeOfTitle();
     ExecutedButtonPressed();
-
+    UnExecutedButtonPressed();
     //Save notes and charter before exit page..
     $(window).bind("beforeunload", function () {
-        return saveBeforeExit(sessionID);
+        return saveBeforeExit(sessionID, editorsActivated, jsonResponseContent);
     })
+
 
 });
 
 function ExecutedButtonPressed() {
+
     $('#setExecuted').click(function () {
+        var sessionID = $(document).getUrlParam("sessionid");
+        var setup = parseInt($("#setupId").val());
+        var test = parseInt($("#testId").val());
+        var bug = parseInt($("#bugId").val());
+        var opp = parseInt($("#oppId").val());
+        var sum = setup + test + bug + opp;
+        if (sum == 100) {
+            $.ajax({
+                type: "GET",
+                data: {
+                    sessionid: sessionID
+                },
+                url: 'api/status/executed/set/index.php',
+                complete: function (data) {
+                    if (data.status != '200') {
+                        alert("Could not set executed");
+                    }
+                    else
+                    {
+                        $('#setExecuted').hide();
+                        $('#unsetExecuted').show();
+                    }
+                }
+            });
+        }
+        else {
+            alert("Metrics need to sum up to 100% to be able to set an execution as finished.");
+        }
+    });
+
+}
+
+
+function UnExecutedButtonPressed() {
+
+    $('#unsetExecuted').click(function () {
         var sessionID = $(document).getUrlParam("sessionid");
         $.ajax({
             type: "GET",
             data: {
-                sessionid: sessionID,
+                sessionid: sessionID
             },
-            url: 'api/status/executed/set/index.php',
+            url: 'api/status/executed/unset/index.php',
             complete: function (data) {
                 if (data.status != '200') {
-                    alert("Could not set executed");
+                    alert("Could not unset executed");
+                }
+                else
+                {
+                    $('#setExecuted').show();
+                    $('#unsetExecuted').hide();
+                }
+            }
+        });
+
+    });
+
+}
+
+function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
+    if (editorsActivated == true) {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                text: GetContentsCharter()
+            },
+            url: 'api/charter/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not save charter");
+                }
+            },
+            async: false
+        });
+
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                text: GetContentsNotes()
+            },
+            url: 'api/notes/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not save notes");
+                }
+            },
+            async: false
+        });
+    }
+
+
+}
+
+function ChangeOfTitle() {
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    $('#input_title').change(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                text: $('#input_title').val()
+            },
+            url: 'api/title/set/index.php',
+            complete: function (data) {
+                if (data.status != '200') {
+                    alert("Could not save title");
                 }
             }
         });
     });
-}
-function saveBeforeExit(sessionID) {
-    $.ajax({
-        type: "POST",
-        data: {
-            sessionid: sessionID,
-            text: GetContentsCharter()
-        },
-        url: 'api/charter/set/index.php',
-        complete: function (data) {
-            if (data.status != '200') {
-                alert("Could not save charter");
-            }
-        },
-        async: false
-    });
-    $.ajax({
-        type: "POST",
-        data: {
-            sessionid: sessionID,
-            text: GetContentsNotes()
-        },
-        url: 'api/notes/set/index.php',
-        complete: function (data) {
-            if (data.status != '200') {
-                alert("Could not save notes");
-            }
-        },
-        async: false
-    });
-
-
 }
 
 function ChangeOfAdditionalTester() {
@@ -434,15 +533,6 @@ function setSessionData(jsonResponseContent) {
     //Mood
     $('#sm_' + jsonResponseContent['mood']).css('border', "solid 2px green");
 
-    //Charter Content
-    //setTimeout(function () {
-        SetContentsCharter(jsonResponseContent['charter']);
-    //}, 500);
-
-    //Notes Content
-    //setTimeout(function () {
-        SetContentsNotes(jsonResponseContent['notes']);
-    //}, 500);
 
     //Metrics
     $('#setupId').val(jsonResponseContent['setup_percent']);
@@ -456,6 +546,16 @@ function setSessionData(jsonResponseContent) {
         width: "80%",
         height: "80%"
     });
+    if(jsonResponseContent['executed']==0)
+    {
+            $('#setExecuted').show();
+            $('#unsetExecuted').hide();
+    }
+    else
+    {
+        $('#setExecuted').hide();
+        $('#unsetExecuted').show();
+    }
 }
 
 //AUTOFETCHED SW MANAGER
@@ -538,8 +638,8 @@ function AddRequirementManager() {
         $('#new_requirement').show();
         $('#new_requirement').focus();
     });
-    $("#new_requirement").keypress(function () {
-        if (event.which == 13) {
+    $("#new_requirement").keypress(function (event, type) {
+        if (isKeyPressedEnter(event, type)) {
             CreateRequirement(this.value);
             $('#new_requirement').val("");
         }
@@ -626,8 +726,8 @@ function AddBugManager() {
         $('#new_bug').show();
         $('#new_bug').focus();
     });
-    $("#new_bug").keypress(function () {
-        if (event.which == 13) {
+    $("#new_bug").keypress(function (event, type) {
+        if (isKeyPressedEnter(event, type)) {
             CreateBug(this.value);
             $('#new_bug').val("");
         }
@@ -714,13 +814,13 @@ function AddSessionLinkManager() {
         $('#new_sessionlink').show();
         $('#new_sessionlink').focus();
     });
-    $("#new_sessionlink").keypress(function () {
-        if (event.which == 13) {
+    $("#new_sessionlink").keypress(function (event, type) {
+        if (isKeyPressedEnter(event, type)) {
             CreateSessionLink(this.value)
-            //AddSingleSessionLink(this.value);
             $('#new_sessionlink').val("");
         }
     });
+
     $("#new_sessionlink").focusout(function () {
         $('#new_sessionlink').hide();
         $('#new_sessionlink').val("");
@@ -810,12 +910,13 @@ function AddNewAreaManager() {
         $('#addNewAreaInput').show();
         $('#addNewAreaInput').focus();
     });
-    $("#addNewAreaInput").keypress(function () {
-        if (event.which == 13) {
+    $("#addNewAreaInput").keypress(function (event, type) {
+        if (isKeyPressedEnter(event, type)) {
             AddNewAreaToDb(this.value);
             $('#addNewArea').val("");
         }
     });
+
     $("#addNewAreaInput").focusout(function () {
         $('#addNewAreaInput').hide();
         $('#addNewAreaInput').val("");
@@ -860,24 +961,39 @@ function updateAreas() {
 //EDITOR MANAGER
 function SetContentsCharter(text) {
     var sessionID = $(document).getUrlParam("sessionid");
+    var config = { extraPlugins: 'onchange'};
+    CKEDITOR.replace('chartereditor');//, config);
+
     var editor = CKEDITOR.instances.chartereditor;
     editor.setData(text);
-    setTimeout(function () {
-        editor.on('change', function (e) {
-            saveCharter(sessionID);
-        });
-    }, 5000);
+
+    editor.on('change', function (e) {
+        saveCharter(sessionID);
+    });
+    $("#charterStatus").empty().append(" Autosave enabled");
+
+
+    /*   setTimeout(function () {
+     editor.on('change', function (e) {
+     saveCharter(sessionID);
+     });
+     $("#charterStatus").empty().append(" Autosave enabled");
+
+     }, 500);*/
 }
 
 function SetContentsNotes(text) {
     var sessionID = $(document).getUrlParam("sessionid");
+    var config = { extraPlugins: 'onchange'};
+    CKEDITOR.replace('noteseditor');//, config);
+
     var editor = CKEDITOR.instances.noteseditor;
     editor.setData(text);
-    setTimeout(function () {
-        editor.on('change', function (e) {
-            saveNotes(sessionID);
-        });
-    }, 5000);
+
+    editor.on('change', function (e) {
+        saveNotes(sessionID);
+    });
+    $("#notesStatus").empty().append(" Autosave enabled");
 
 }
 
@@ -887,6 +1003,7 @@ function GetContentsCharter() {
 }
 
 function GetContentsNotes() {
+
     var editor = CKEDITOR.instances.noteseditor;
     return editor.getData();
 }
@@ -902,6 +1019,15 @@ function saveCharter(sessionID) {
         complete: function (data) {
             if (data.status != '200') {
                 alert("Could not save charter");
+            }
+            else {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                $("#charterStatus").empty().append(" Last saved at: " + h + ":" + m + ":" + s);
             }
         }
     });
@@ -919,6 +1045,29 @@ function saveNotes(sessionID) {
             if (data.status != '200') {
                 alert("Could not save notes");
             }
+            else {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                $("#notesStatus").empty().append("Last saved at: " + h + ":" + m + ":" + s);
+            }
         }
     });
+}
+
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+function isKeyPressedEnter(event, type) {
+    if (event.keyCode == 13) {
+        return true;
+    }
+    return false;
 }

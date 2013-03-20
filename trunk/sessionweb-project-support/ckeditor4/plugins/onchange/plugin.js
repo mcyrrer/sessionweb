@@ -1,6 +1,7 @@
 /*
+ * http://ckeditor.com/addon/onchange
  * @file change event plugin for CKEditor
- * Copyright (C) 2011 Alfonso Martínez de Lizarrondo
+ * Copyright (C) 2011 Alfonso Martï¿½nez de Lizarrondo
  *
  * == BEGIN LICENSE ==
  *
@@ -37,6 +38,7 @@ CKEDITOR.plugins.add( 'onchange',
 		// Avoid firing the event too often
 		function somethingChanged()
 		{
+            console.log("Checking if something changed...");
 			// don't fire events if the editor is readOnly as they are false detections
 			if (editor.readOnly)
 				return;
@@ -80,7 +82,9 @@ CKEDITOR.plugins.add( 'onchange',
 		if ( theMutationObserver )
 		{
 			observer = new theMutationObserver( function( mutations ) {
-				somethingChanged();
+                console.log("DOES THIS WORK?");
+
+                somethingChanged();
 			} );
 
 			// To check that we are using a cool browser.

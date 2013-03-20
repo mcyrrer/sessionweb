@@ -35,7 +35,16 @@ class sessionHelper
         $sql = "SELECT sessionid FROM mission WHERE versionid = " . $versionId;
         $result = dbHelper::sw_mysqli_execute($mysqli_con, $sql, __FILE__, __LINE__);
         $row = mysqli_fetch_row($result);
-        print_r($row);
+
+        return $row[0];
+    }
+
+    function getVersionIdFromSessionId($sessionId, $mysqli_con)
+    {
+        $sql = "SELECT versionid FROM mission WHERE sessionid = " . $sessionId;
+        $result = dbHelper::sw_mysqli_execute($mysqli_con, $sql, __FILE__, __LINE__);
+        $row = mysqli_fetch_row($result);
+
         return $row[0];
     }
 

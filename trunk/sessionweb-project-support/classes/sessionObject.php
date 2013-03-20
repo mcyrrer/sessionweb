@@ -61,11 +61,14 @@ class sessionObject extends sessionObjectSave
      */
     function __construct($sessionid = null)
     {
+
         $this->logger = new logging();
         $this->dbHelper = new dbHelper();
         if ($sessionid == null) {
-            //$this->logger->debug("Will create a new charter since sessionid = null",__FILE__,__LINE__);
             $this->createEmptySessionObject();
+            $this->logger->debug("Created a new charter with sessionid ".$this->getSessionid() ,__FILE__,__LINE__);
+            $this->setSessionExist(true);
+            $this->setUsername($_SESSION['username']);
         } else {
             if ($this->doesSessionExist($sessionid)) {
                  $this->setSessionExist(true);
@@ -82,11 +85,8 @@ class sessionObject extends sessionObjectSave
      */
     private function createEmptySessionObject()
     {
-
-
         $this->generatePublickey();
         $this->generateSessionid();
-
     }
 
     private function doesSessionExist($sessionid)

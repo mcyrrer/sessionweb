@@ -33,5 +33,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = 'Underline,Subscript,Superscript';
 
     config.extraPlugins='onchange';
-    config.minimumChangeMilliseconds = 10000; // 100 milliseconds (default value)
+    config.minimumChangeMilliseconds = 2000; // 100 milliseconds (default value)
 };

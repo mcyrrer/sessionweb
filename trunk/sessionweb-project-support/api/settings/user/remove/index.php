@@ -27,8 +27,6 @@ if ($_SESSION['useradmin'] == 1) {
         }
     } else {
         $logger->debug("CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST", __FILE__, __LINE__);
-        print_r($_REQUEST);
-
         header("HTTP/1.0 400 Bad Request");
         $response['code'] = CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST;
         $response['text'] = "CORRECT_PARAMETER_NOT_PROVIDED_IN_REQUEST";

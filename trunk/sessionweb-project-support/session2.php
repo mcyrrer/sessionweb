@@ -13,6 +13,20 @@ if (is_file("include/customfunctions.php.inc")) {
     include "include/customfunctions.php.inc";
 }
 
+
+//Create a new session and forward the browser to it
+if(!isset($_REQUEST['sessionid']))
+{
+    $logger = new logging();
+    $session = new sessionObject();
+    $sessionid = $session->getSessionid();
+    $session->saveObjectToDb();
+    header("Location: session2.php?sessionid=$sessionid");
+    exit();
+}
+
+
+
 require_once("include/header.php.inc");
 echo "<div id='message'></div>";
 
@@ -51,10 +65,10 @@ class session2
 
     private function showHtmlAllowedToEditSession()
     {
-
+        echo '<div id=ui-master>';
         echo ' <div id="divTitle" ><label for="input_title">Session title:</label>
-              <input type="text" id="input_title" size="130" style="border: 0; font-weight: bold; border-color: #808500">';
-        echo '<button id="setExecuted">Set charter to executed</button>';
+              <input type="text" id="input_title" size="80" class="sInput">';
+        echo '<button id="setExecuted">Mark as executed</button><button id="unsetExecuted">Mark as in progress</button>';
         echo '</div>';
         echo '
         <div id="tabs">
@@ -71,7 +85,7 @@ class session2
         echo "<span class='sH3'>Team:</span><p>" . $this->formHelper->getTeamSelect() . "<span class='minmax' id='minimizeTeam'>[&uarr;]</span><span class='minmax' id='maximizeTeam'>[&darr;]</span></p>";
         echo "<span class='sH3'>Additional tester:</span><p>" . $this->formHelper->AdditionalTester() . "<span class='minmax' id='minimizeAddTest'>[&uarr;]</span><span class='minmax' id='maximizeAddTest'>[&darr;]</span></p>";
 
-        echo '<span class="sH3">Area:</span><span id="addNewArea">[+]</span><input type="text" class="newAreaInput" id="addNewAreaInput" size="10" ><p>' . $this->formHelper->getAreaSelect() . "<span class='minmax' id='minimizeArea'>[&uarr;]</span><span class='minmax' id='maximizeArea'>[&darr;]</span></p>";
+        echo '<span class="sH3">Area:</span><span id="addNewArea">[+]</span><input type="text" class="sInput" id="addNewAreaInput" size="10" ><p>' . $this->formHelper->getAreaSelect() . "<span class='minmax' id='minimizeArea'>[&uarr;]</span><span class='minmax' id='maximizeArea'>[&darr;]</span></p>";
 
 
         echo "<span class='sH3'>Testenvironment:</span><p>" . $this->formHelper->getEnvironmentSelect() . "<span class='minmax' id='minimizeTestenv'>[&uarr;]</span><span class='minmax' id='maximizeTestenv'>[&darr;]</span></p>";
@@ -85,7 +99,7 @@ class session2
         echo "<span id='testReqId'></span>";
 
         echo '<span class="sH3">Bug reported:</span>';
-        echo '<span id="addBug">[+]</span><input type="text" class="bInput" id="new_bug" size="10" ><br>';
+        echo '<span id="addBug">[+]</span><input type="text" class="sInput" id="new_bug" size="10" ><br>';
         echo "<span id='testBugId'></span>";
 
         echo '<span class="sH3">Link to other sessions:</span>';
@@ -100,11 +114,11 @@ class session2
 
             <div id="tabs-2">';
 
-        echo '<div id="idcharter">Charter<br><textarea class="ckeditor" name="chartereditor" rows="300" cols="30"></textarea></div>';
+        echo '<div id="idcharter">Charter <span id="charterStatus"></span><br><textarea name="chartereditor" rows="30" cols="30">&nbsp;d</textarea></div>';
 
         echo '</div>
             <div id="tabs-3">';
-        echo '<div id="idnotes">Notes<br><textarea class="ckeditor" name="noteseditor" rows="300" cols="30"></textarea></div>';
+        echo '<div id="idnotes">Notes<span id="notesStatus"></span><br><textarea name="noteseditor" rows="30" cols="30">&nbsp;d</textarea></div>';
 
         echo '</div>
             <div id="tabs-4">';
@@ -137,6 +151,7 @@ class session2
         $sessionId = $this->session->getSessionid();
         echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid='.$sessionId.'" width="100%" height="600" frameborder="0"></iframe>';
         echo '</div></div> ';
+        echo '</div>';
     }
 }
 

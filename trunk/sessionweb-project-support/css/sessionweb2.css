@@ -9,11 +9,14 @@ table, th, td {
 }
 
 .sInput {
-    border: 0px;
+    /*border: #000000;*/
+    border-width: thin;
 
-    font-size: x-small;
-    font-family: monospace;
+    /*font-size: x-small;
+    font-family: monospace;*/
     border-color: #808500;
+    background-color: #eef3f3;
+
 }
 
 .sH3 {

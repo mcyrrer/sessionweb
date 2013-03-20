@@ -94,7 +94,7 @@ function viewSession_newtab() {
 function editSession_newtab() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session.php?sessionid=' + id + '&command=edit', '_blank');
+    window.open('session2.php?sessionid=' + id, '_blank');
     else {
         displaySelectSessionMsg();
     }
@@ -354,20 +354,33 @@ $(document).ready(function () {
                 var id = target.get(0).firstChild.textContent;
                 var id_new = $('.trSelected td:nth-child(1) div').text();
                 var command = "view"
-                if (status == "Not Executed") {
-                    command = "edit";
-                }
-                if (status == "In progress") {
-                    command = "edit";
-                }
+
                 if (status == "Executed") {
                     command = "debrief";
+                    var url = "session.php?sessionid=" + id+"&command="+command;
+
                 }
-                var url = "session.php?sessionid=" + id + "&command=" + command;
+                else if (status == "Closed") {
+                    command = "view";
+                    var url = "session.php?sessionid=" + id+"&command="+command;
+
+                }
+                else if (status == "Debriefed") {
+                    command = "view";
+                    var url = "session.php?sessionid=" + id+"&command="+command;
+
+                }
+                else
+                {
+                   var url = "session2.php?sessionid=" + id;
+
+                }
+
+
                 window.open(url, '_blank');
             }
             else {
-                alert("IE 6+7+8 does not suppport dubbleclick, please use navigation buttons above or upgrade to IE9, Firefox or Chrome.");
+                alert("IE 6+7+8 does not support dubbleclick, please use navigation buttons above or upgrade to IE9, Firefox or Chrome.");
             }
         });
     });

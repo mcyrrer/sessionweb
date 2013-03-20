@@ -4,6 +4,8 @@ require_once('../../../include/validatesession.inc');
 require_once('../../../classes/logging.php');
 require_once('../../../config/db.php.inc');
 require_once('../../../classes/dbHelper.php');
+require_once('../../../classes/sessionObject.php');
+require_once('../../../classes/sessionHelper.php');
 
 
 /*
@@ -21,6 +23,10 @@ class UploadHandler
 {
     var $logging;
     var $mySqlManager;
+    var $sh;
+    var $con;
+    var $versionid;
+
     protected $options;
     // PHP File Upload error message codes:
     // http://php.net/manual/en/features.file-upload.errors.php
@@ -49,6 +55,11 @@ class UploadHandler
     {
         $this->logging = new logging();
         $this->mySqlManager = new dbHelper();
+        $this->con = $this->mySqlManager->db_getMySqliConnection();
+        $sessionid=dbHelper::escape($this->con,$_REQUEST['sessionid']);
+        $this->sh = new sessionHelper();
+        $this->versionid = $this->sh->getVersionIdFromSessionId($sessionid,$this->con);
+
         $this->options = array(
             'script_url' => $this->get_full_url() . '/',
             'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']) . '/files/',
@@ -493,7 +504,7 @@ class UploadHandler
             $file->name = addslashes($file->name);
 
             $sql = "INSERT INTO mission_attachments (mission_versionid, filename, mimetype, size, data ) " .
-                "VALUES (" . $_REQUEST['sessionid'] . ", '$file->name', '$file->type', '$file->size', '$content')";
+                "VALUES (" . $this->versionid . ", '$file->name', '$file->type', '$file->size', '$content')";
 
             $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
 

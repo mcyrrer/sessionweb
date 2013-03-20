@@ -43,11 +43,13 @@ if (strstr($_SERVER['PHP_SELF'], "session.php") != false) {
 if (strstr($_SERVER['PHP_SELF'], "session2.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionweb2.css\">\n";
 
-    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-session2-v24.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/config.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/styles.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-session2-v24.js\"></script>\n";
+
 //    echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"ckeditor4/contents.css\">\n";
+
 
 } else {
     echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs-v19.js\"></script>\n";
@@ -103,7 +105,7 @@ if (isset($_SESSION['user']) && $_SESSION['user'] != "") {
 //    echo "<img src='pictures/star_smal.png' alt='Notifications' class='uploadajax' href='include/notification.php'>";
 //}
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
-echo "      <a href=\"session.php?command=new\" id=\"url_newsession\">New session</a> |";
+echo "      <a href=\"session2.php\" id=\"url_newsession\">New session</a> |";
 echo "      <a href=\"list2.php\" id=\"url_list\">List sessions</a> |";
 echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
