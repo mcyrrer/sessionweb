@@ -61,20 +61,27 @@ class sessionObject extends sessionObjectSave
      */
     function __construct($sessionid = null)
     {
-
         $this->logger = new logging();
         $this->dbHelper = new dbHelper();
+
+        //     if(!is_int($sessionid) && !is_null($sessionid))
+        //   {
+        //       $this->logger->error("sessionid is not an integer. Sessionid=".$sessionid,__FILE__,__LINE__);
+        //        return false;
+        //    }
+
+
         if ($sessionid == null) {
             $this->createEmptySessionObject();
-            $this->logger->debug("Created a new charter with sessionid ".$this->getSessionid() ,__FILE__,__LINE__);
+            $this->logger->debug("Created a new charter with sessionid " . $this->getSessionid(), __FILE__, __LINE__);
             $this->setSessionExist(true);
             $this->setUsername($_SESSION['username']);
         } else {
             if ($this->doesSessionExist($sessionid)) {
-                 $this->setSessionExist(true);
+                $this->setSessionExist(true);
                 $this->getSessionData($sessionid);
             } else {
-                $this->logger->warn("Sessionid $sessionid does not exist",__FILE__,__LINE__);
+                $this->logger->warn("Sessionid $sessionid does not exist", __FILE__, __LINE__);
                 $this->setSessionExist(false);
             }
         }
@@ -93,7 +100,7 @@ class sessionObject extends sessionObjectSave
     {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
-        $sessionid = mysqli_real_escape_string($con,$sessionid);
+        $sessionid = mysqli_real_escape_string($con, $sessionid);
 
         //mission data
         $sqlSelectSession = "SELECT sessionid ";
@@ -104,7 +111,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelectSession, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelectSession);
         if (mysqli_num_rows($result) == 0) {
-            $this->logger->error("Session id $sessionid does not exist",__FILE__,__LINE__);
+            $this->logger->error("Session id $sessionid does not exist", __FILE__, __LINE__);
             mysqli_close($con);
             return false;
         } else {
@@ -125,7 +132,7 @@ class sessionObject extends sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
 
-        $sessionid = dbHelper::escape($con,$sessionid);
+        $sessionid = dbHelper::escape($con, $sessionid);
 
         //mission data
         $sqlSelectSession = "SELECT * ";
@@ -228,20 +235,23 @@ class sessionObject extends sessionObjectSave
         //mission custom fields
         $tmpAreaArray = array();
         $tmpAreaArray2 = array();
-        $sql = "SELCECT * from mission_custom WHERE versionid=$versionid";
+        $sql = "SELECT * from mission_custom WHERE versionid=$versionid";
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = $this->dbHelper->sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sql);
-        if ($result!=false) {
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
-            foreach ($row as $key => $value) {
-                if (!is_int($key)) {
-                    $tmpAreaArray2[$key] = $value;
+        if ($result != false) {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
+            while ($row = mysqli_fetch_array($result)) {
+                foreach ($row as $key => $value) {
+                    if (!is_int($key)) {
+                        $tmpAreaArray2[$key] = $value;
+                    }
+
                 }
+                $tmpName= $tmpAreaArray2['customtablename'].'_name';
+                $tmpAreaArray2['realcustomname']=$_SESSION['settings'][$tmpName];
                 $tmpAreaArray[$row['id']] = $tmpAreaArray2;
             }
-        }
         }
         $this->setCustom_fields($tmpAreaArray);
 
@@ -299,9 +309,9 @@ class sessionObject extends sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
 
-            $tmp["id"]= $row['id'];
-            $tmp["environment"]= $row['environment'];
-            $tmp["updated"]= $row['updated'];
+            $tmp["id"] = $row['id'];
+            $tmp["environment"] = $row['environment'];
+            $tmp["updated"] = $row['updated'];
             $tmpAreaArray[$tmp["id"]] = $tmp;
         }
         //print_r($tmpAreaArray);
@@ -320,7 +330,7 @@ class sessionObject extends sessionObjectSave
         $sqlSelect .= "FROM   mission_sessionsconnections AS ms, ";
         $sqlSelect .= "       mission AS m ";
         $sqlSelect .= "WHERE  ms.linked_to_versionid = m.versionid ";
-        $sqlSelect .= "       AND ms.linked_to_versionid = $versionid;" ;
+        $sqlSelect .= "       AND ms.linked_to_versionid = $versionid;";
 
 
         /** @noinspection PhpVoidFunctionResultUsedInspection */
@@ -346,14 +356,14 @@ class sessionObject extends sessionObjectSave
         $sqlSelect .= "FROM   mission_sessionsconnections AS ms, ";
         $sqlSelect .= "       mission AS m ";
         $sqlSelect .= "WHERE  ms.linked_to_versionid = m.versionid ";
-        $sqlSelect .= "       AND ms.linked_from_versionid = $versionid" ;
+        $sqlSelect .= "       AND ms.linked_from_versionid = $versionid";
 
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
-          //  print_r($row);
+            //  print_r($row);
 
 
             $tmpAreaArray[] = $row['sessionid'];

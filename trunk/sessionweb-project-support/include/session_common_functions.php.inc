@@ -2,17 +2,17 @@
 
 function echoExecutedStatus($rowSessionStatus)
 {
-    if($rowSessionStatus["executed"]==1)
+    if($rowSessionStatus["closed"]==1)
+    {
+        echo "                          Closed\n";
+    }
+    elseif($rowSessionStatus["executed"]==1)
     {
         echo "                          Executed\n";
     }
     elseif($rowSessionStatus["debriefed"]==1)
     {
         echo "                          Debriefed\n";
-    }
-    elseif($rowSessionStatus["closed"]==1)
-    {
-        echo "                          Closed\n";
     }
     else
     {

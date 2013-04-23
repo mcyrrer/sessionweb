@@ -120,6 +120,29 @@ class queryHelper
         return $toReturn;
     }
 
+    public function getCustomFieldNames($custom_items)
+    {
+        $project = $_SESSION['project'];
+
+        $sqlSelect = "SELECT name FROM custom_items WHERE tablename = '".$custom_items."' ORDER BY name ASC";
+
+        $con = $this->dbHelper->db_getMySqliConnection();
+
+        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
+        $toReturn = array();
+        if ($result) {
+            while ($row = mysqli_fetch_array($result)) {
+                $toReturn[$row['name']] = $row['name'];
+            }
+        } else {
+            $this->logger->error("Error getting custom field names", __FILE__, __LINE__);
+            $this->logger->error($sqlSelect);
+        }
+        mysqli_close($con);
+
+        return $toReturn;
+    }
+
     public function getAdditionalTester()
     {
         $project = $_SESSION['project'];

@@ -22,7 +22,7 @@ $logger = new logging();
 $sHelper = new sessionHelper();
 $dbManager = new dbHelper();
 
-if (isset($_REQUEST['name']) && isset($_REQUEST['sessionid']) && $_REQUEST['name']!=null) {
+if (isset($_REQUEST['name']) && isset($_REQUEST['sessionid'])) {
 
     $con = $dbManager->db_getMySqliConnection();
     $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);

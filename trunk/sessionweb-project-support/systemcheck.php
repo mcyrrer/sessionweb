@@ -5,17 +5,20 @@ require_once('include/validatesession.inc');
 require_once('include/commonFunctions.php.inc');
 
 include_once('config/db.php.inc');
+if (isAdmin()) {
+    echo "<h1>Sessionweb System check</h1>";
+    $con = getMySqlConnection();
 
-echo "<h1>Sessionweb System check</h1>";
-$con = getMySqlConnection();
+//checkFoldersForRW();
+    checkForMaxAttachmentSize();
+    debugInfo();
+    mysql_close();
+    echo "<h2>PHP info</h2>";
 
-checkFoldersForRW();
-checkForMaxAttachmentSize();
-debugInfo();
-mysql_close();
-echo "<h2>PHP info</h2>";
-
-phpinfo();
+    phpinfo();
+} else {
+    echo "You are not allowed to access this page";
+}
 
 
 function debugInfo()
@@ -23,4 +26,6 @@ function debugInfo()
     echo "Browser: " . $_SERVER['HTTP_USER_AGENT'] . "<br>";
     echo "PHP Memory peek usage: " . (memory_get_peak_usage() / 1024 / 1024) . "mb<br>";
 }
+
+
 ?>

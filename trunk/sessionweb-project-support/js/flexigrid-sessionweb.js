@@ -24,10 +24,14 @@ function flexi_colorGridRows() {
 ;
 
 function deleteSession() {
+    //$(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
+
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
-        $.fn.colorbox({
+        //$.fn.colorbox({
+        $('.delete').colorbox({
             href:'api/session/delete/?sessionid=' + id,
+//            href:'http://www.google.com',
             open:true,
             iframe:true,
             width:500,
@@ -111,7 +115,7 @@ function displaySelectSessionMsg() {
 function copySession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
-        $.fn.colorbox({
+        $('.copy').colorbox({
             href:'api/session/copy/?sessionid=' + id,
             open:true,
             iframe:true,
@@ -131,7 +135,7 @@ function copySession() {
 function reassignSession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
-        $.fn.colorbox({
+        $('.reassign').colorbox({
             href:'api/session/reassign/?sessionid=' + id,
             open:true,
             iframe:true,
@@ -150,7 +154,7 @@ function reassignSession() {
 function shareSession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
-        $.fn.colorbox({
+        $('.share').colorbox({
             href:'api/session/share/?sessionid=' + id,
             open:true,
             iframe:true,
@@ -252,7 +256,7 @@ function quickView(sessionid) {
         html = html+"<b>"+data['title']+"</b>";
         html = html+"<H2>Charter</H2>"+data['charter'];
         html = html + "<H2>Notes</H2>"+data['notes'];
-        $.fn.colorbox({
+        $('.qview').colorbox({
             html:html,
             open:true,
             width:"80%",
@@ -271,7 +275,7 @@ $(document).ready(function () {
     $("#filterbox").hide();
 
     $('#helpsearch').click(function () {
-        $.fn.colorbox({
+        $('#helpsearch').colorbox({
             href:'api/help/search',
             open:true,
             iframe:true,

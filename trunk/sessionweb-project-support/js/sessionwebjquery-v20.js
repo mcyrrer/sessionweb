@@ -185,7 +185,7 @@ $(document).ready(function () {
 
 
 //************Colorbox ifram for counterstring page****
-    $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
+//    $(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
 
 
 //**************FILE UPLOAD i sessionReadObject.php
@@ -510,3 +510,18 @@ $.extend({URLEncode:function (c) {
         return o;
     }
 });
+
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+};
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+    });
+}

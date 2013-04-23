@@ -15,15 +15,7 @@ $(document).ready(function () {
                 jsonResponseContent = jQuery.parseJSON(data.responseText);
                 setSessionData(jsonResponseContent);
                 $('#tabs').tabs({
-//                    beforeActivate: function( event, ui ) {
-//                        alert('beforeActivate'+$(ui.selector).text())
-//                    },
-//                    create: function( event, ui ) {
-//                        alert('create'+$(ui.selector).text())
-//                    },
-//                    load: function( event, ui ) {
-//                        alert('load'+$(ui.selector).text())
-//                    },
+
                     beforeActivate: function (event, ui) {
                         //activate: function (event, ui) {
                         if (editorsActivated == false) {
@@ -32,10 +24,6 @@ $(document).ready(function () {
                             editorsActivated = true;
                         }
                     }
-//                    select: function(event, ui) {
-//                        selectedTabTitle = $(ui.newPanel.selector).text();
-//                        alert(selectedTabTitle);
-//                    }
                 });
                 $('#ui-master').fadeIn();
 
@@ -66,6 +54,9 @@ $(document).ready(function () {
     ShowHideSprint();
     ShowHideTeam();
     ShowHideTestenv();
+    ShowHideCustomField1();
+    ShowHideCustomField2();
+    ShowHideCustomField3();
 
     ChangeOfMode();
     ChangeOfMetrics();
@@ -76,6 +67,7 @@ $(document).ready(function () {
     ChangeOfArea();
     ChangeOfTestenvironment();
     ChangeOfSwUnderTest();
+    ChangeOfCustomField();
     ChangeOfTitle();
     ExecutedButtonPressed();
     UnExecutedButtonPressed();
@@ -107,8 +99,7 @@ function ExecutedButtonPressed() {
                     if (data.status != '200') {
                         alert("Could not set executed");
                     }
-                    else
-                    {
+                    else {
                         $('#setExecuted').hide();
                         $('#unsetExecuted').show();
                     }
@@ -137,8 +128,7 @@ function UnExecutedButtonPressed() {
                 if (data.status != '200') {
                     alert("Could not unset executed");
                 }
-                else
-                {
+                else {
                     $('#setExecuted').show();
                     $('#unsetExecuted').hide();
                 }
@@ -181,9 +171,29 @@ function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
             async: false
         });
     }
-
-
 }
+
+function ChangeOfCustomField() {
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    $('.customField').change(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                sessionid: sessionID,
+                customfield: this.id,
+                value: $('#'+this.id).val()
+            },
+            url: 'api/customfields/set/index.php',
+            complete: function (data) {
+                if (data.status != '201') {
+                    alert("Could not update custom field "+this.id);
+                }
+            }
+        });
+    });
+}
+
 
 function ChangeOfTitle() {
     var sessionID = $(document).getUrlParam("sessionid");
@@ -447,6 +457,57 @@ function ShowHideTestenv() {
     });
 }
 
+function ShowHideCustomField1() {
+    if ($("#idcustom1").length == 1) {
+        $('#minimizeCust1').hide();
+        $('#maximizeCust1').click(function () {
+            $('#idcustom1').attr('size', 20);
+            $('#minimizeCust1').show();
+            $('#maximizeCust1').hide();
+        });
+
+        $('#minimizeCust1').click(function () {
+            $('#idcustom1').attr('size', 1);
+            $('#maximizeCust1').show();
+            $('#minimizeCust1').hide();
+        });
+    }
+}
+
+function ShowHideCustomField2() {
+    if ($("#idcustom2").length == 1) {
+        $('#minimizeCust2').hide();
+        $('#maximizeCust2').click(function () {
+            $('#idcustom2').attr('size', 20);
+            $('#minimizeCust2').show();
+            $('#maximizeCust2').hide();
+        });
+
+        $('#minimizeCust2').click(function () {
+            $('#idcustom2').attr('size', 1);
+            $('#maximizeCust2').show();
+            $('#minimizeCust2').hide();
+        });
+    }
+}
+
+function ShowHideCustomField3() {
+    if ($("#idcustom3").length == 1) {
+        $('#minimizeCust3').hide();
+        $('#maximizeCust3').click(function () {
+            $('#idcustom3').attr('size', 20);
+            $('#minimizeCust3').show();
+            $('#maximizeCust3').hide();
+        });
+
+        $('#minimizeCust3').click(function () {
+            $('#idcustom3').attr('size', 1);
+            $('#maximizeCust3').show();
+            $('#minimizeCust3').hide();
+        });
+    }
+}
+
 function ShowHideAddTester() {
     $('#minimizeAddTest').hide();
     $('#maximizeAddTest').click(function () {
@@ -546,13 +607,11 @@ function setSessionData(jsonResponseContent) {
         width: "80%",
         height: "80%"
     });
-    if(jsonResponseContent['executed']==0)
-    {
-            $('#setExecuted').show();
-            $('#unsetExecuted').hide();
+    if (jsonResponseContent['executed'] == 0) {
+        $('#setExecuted').show();
+        $('#unsetExecuted').hide();
     }
-    else
-    {
+    else {
         $('#setExecuted').hide();
         $('#unsetExecuted').show();
     }
@@ -585,6 +644,9 @@ function AddNewAutofetchedSwManager() {
                 }
             });
         }
+        else {
+            alert("No test environment selected");
+        }
     });
 
 }
@@ -599,8 +661,8 @@ function AddSingelAutofetchedSoftware(aId, env, updated) {
     var linkName = env + '(' + updated + ')';
     $('#autoSoftwareVersions').append(
         '<p class="sw_p" id="' + aId + '_sw">' +
-            '    <span onClick="onSoftwareAutoFetchedDeleteClick(' + aId + ')">[-]</span>' +
-            '    <span onClick="onSoftwareAutoFetchedClick(' + aId + ')" href="api/softwareautofetched/get/index.php?id=' + aId + '">' + linkName + '</span>' +
+            '    <span onClick="onSoftwareAutoFetchedDeleteClick(\'' + aId + '\')">[-]</span>' +
+            '    <span onClick="onSoftwareAutoFetchedClick(\'' + aId + '\')" href="api/softwareautofetched/get/index.php?id=' + aId + '">' + linkName + '</span>' +
             "</p>");
 
 }
@@ -677,6 +739,7 @@ function onRequirementLinkDeleteClick(aId) {
 
 function CreateRequirement(requirementId) {
     var sessionID = $(document).getUrlParam("sessionid");
+    requirementId = escapeHtml(requirementId);
     $.ajax({
         type: "GET",
         data: {
@@ -699,12 +762,14 @@ function CreateRequirement(requirementId) {
 }
 
 function AddSingleRequirement(aReq) {
+    aReq = aReq.replace("#", "");
     $('#testReqId').append('<p class="sw_p" id="' + aReq + 'REQ">' + aReq + ': Loading title</p>');
     $.ajax({
         type: "GET",
         data: {
             reqId: aReq
         },
+        timeout: 5000,
         url: 'api/titles/requirement/get/index.php',
         complete: function (data) {
 
@@ -713,7 +778,10 @@ function AddSingleRequirement(aReq) {
                 if (title == "") {
                     title = aReq;
                 }
-                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq + '>"<span onClick="onRequirementLinkDeleteClick(' + aReq + ')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
+                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq + '>"<span onClick="onRequirementLinkDeleteClick(\'' + aReq + '\')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
+            }
+            else {
+                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq + '>"<span onClick="onRequirementLinkDeleteClick(\'' + aReq + '\')">[-]</span><a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + aReq + '</a></span><br></span>');
             }
         }
     });
@@ -757,6 +825,7 @@ function onBugLinkDeleteClick(aId) {
 
 function CreateBug(bugId) {
     var sessionID = $(document).getUrlParam("sessionid");
+    bugId = escapeHtml(bugId);
     $.ajax({
         type: "GET",
         data: {
@@ -779,12 +848,14 @@ function CreateBug(bugId) {
 }
 
 function AddSingleBug(aBug) {
+    aBug = aBug.replace("#", "");
     $('#testBugId').append('<p class="sw_p" id="' + aBug + 'BUG">' + aBug + ': Loading title</p>');
     $.ajax({
         type: "GET",
         data: {
             id: aBug
         },
+        timeout: 5000,
         url: 'api/titles/bug/get/index.php',
         complete: function (data) {
 
@@ -793,7 +864,11 @@ function AddSingleBug(aBug) {
                 if (title == "") {
                     title = aBug;
                 }
-                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(' + aBug + ')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
+                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
+            }
+            else {
+                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
+
             }
         }
     });
@@ -846,6 +921,7 @@ function onSessionLinkDeleteClick(aId) {
 
 function CreateSessionLink(sessionIdToLinkTo) {
     var sessionID = $(document).getUrlParam("sessionid");
+    sessionIdToLinkTo = escapeHtml(sessionIdToLinkTo);
     if (sessionID == sessionIdToLinkTo) {
         alert("Can not link session to itself")
     }
@@ -873,6 +949,7 @@ function CreateSessionLink(sessionIdToLinkTo) {
 }
 
 function AddSingleSessionLink(aLink) {
+    aLink = aLink.replace("#", "");
 
     $('#linkToOtherSessions').append('<p id="' + aLink + 'SessionLink">' + aLink + ': Loading title</p>');
     $.ajax({
@@ -880,17 +957,21 @@ function AddSingleSessionLink(aLink) {
         data: {
             sessionid: aLink
         },
+        timeout: 5000,
         url: 'api/titles/session/get/index.php',
         complete: function (data) {
 
             if (data.status == '200') {
                 var title = data.responseText;
 
-                $('#' + aLink + 'SessionLink').html('<span class="sw_p" id=sl_del_' + aLink + '> <span onClick="onSessionLinkDeleteClick(' + aLink + ')">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
+                $('#' + aLink + 'SessionLink').html('<span class="sw_p" id=sl_del_' + aLink + '> <span onClick="onSessionLinkDeleteClick(\'' + aLink + '\')">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
             }
             else if (data.status == '404') {
                 var title = "Could not find title for session"
                 $('#' + aLink + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLink + '">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
+            }
+            else {
+                $('#' + aLink + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLink + '">[-]</span><a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + aLink + '</a></span>');
             }
         }
     });
@@ -924,6 +1005,7 @@ function AddNewAreaManager() {
 }
 
 function AddNewAreaToDb(areaName) {
+    areaName = escapeHtml(areaName);
     $.ajax({
         type: "GET",
         data: {
@@ -935,6 +1017,10 @@ function AddNewAreaToDb(areaName) {
 
             if (data.status == '201') {
                 updateAreas();
+            }
+            else if (data.status == '409') {
+                alert('Area already exist in database');
+
             }
         }
     });
@@ -948,12 +1034,13 @@ function updateAreas() {
 
             if (data.status == '200') {
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
-                $('#idArea').html('');
+
+                $('#idArea').append('<option></option>');
                 $.each(jsonResponseContent, function (index, value) {
                     $('#idArea').append('<option>' + value + '</option>');
                 });
-
             }
+
         }
     });
 }
@@ -1070,4 +1157,20 @@ function isKeyPressedEnter(event, type) {
         return true;
     }
     return false;
+}
+
+
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+};
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+    });
 }

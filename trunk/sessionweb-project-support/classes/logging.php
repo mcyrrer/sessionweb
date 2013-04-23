@@ -101,6 +101,8 @@ class logging
     {
         $loglevel = "ERROR";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
+       // $this->writeMessageToLog($loglevel, debug_string_backtrace(), $filename, $line);
+       // $this->writeMessageToLog($loglevel, "!!!!!", $filename, $line);
     }
 
     public function fatal($logmessage, $filename = "", $line = "")
@@ -137,8 +139,8 @@ class logging
 
     private function getFileName($filename)
     {
-        if (strlen($filename) > 30) {
-            return substr($filename, -25);
+        if (strlen($filename) > 45) {
+            return substr($filename, -43);
         } else
             return $filename;
     }
@@ -146,5 +148,21 @@ class logging
     private function getDateTime()
     {
         return date('Ymd H:i:s', time());
+    }
+
+    function debug_string_backtrace() {
+        //ob_start();
+        var_dump(debug_backtrace());
+        $trace = ob_get_contents();
+        //ob_end_clean();
+
+        // Remove first item from backtrace as it's this function which
+        // is redundant.
+        //$trace = preg_replace ('/^#0\s+' . __FUNCTION__ . "[^\n]*\n/", '', $trace, 1);
+
+        // Renumber backtrace items.
+        //$trace = preg_replace ('/^#(\d+)/me', '\'#\' . ($1 - 1)', $trace);
+
+        return $trace;
     }
 }

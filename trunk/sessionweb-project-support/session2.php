@@ -15,8 +15,7 @@ if (is_file("include/customfunctions.php.inc")) {
 
 
 //Create a new session and forward the browser to it
-if(!isset($_REQUEST['sessionid']))
-{
+if (!isset($_REQUEST['sessionid'])) {
     $logger = new logging();
     $session = new sessionObject();
     $sessionid = $session->getSessionid();
@@ -24,7 +23,6 @@ if(!isset($_REQUEST['sessionid']))
     header("Location: session2.php?sessionid=$sessionid");
     exit();
 }
-
 
 
 require_once("include/header.php.inc");
@@ -51,7 +49,6 @@ class session2
         $this->formHelper = new formHelper();
         $this->session = new sessionObject($_REQUEST['sessionid']);
         $this->sessionHelper = new sessionHelper();
-
     }
 
     public function showHtml()
@@ -89,7 +86,15 @@ class session2
 
 
         echo "<span class='sH3'>Testenvironment:</span><p>" . $this->formHelper->getEnvironmentSelect() . "<span class='minmax' id='minimizeTestenv'>[&uarr;]</span><span class='minmax' id='maximizeTestenv'>[&darr;]</span></p>";
-
+        if ($_SESSION['settings']['custom1'] == 1) {
+            echo "<span class='sH3'>".$_SESSION['settings']['custom1_name'].":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom1", $_SESSION['settings']['custom1_multiselect']) . "<span class='minmax' id='minimizeCust1'>[&uarr;]</span><span class='minmax' id='maximizeCust1'>[&darr;]</span></p>";
+        }
+        if ($_SESSION['settings']['custom2'] == 1) {
+            echo "<span class='sH3'>".$_SESSION['settings']['custom2_name'].":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom2", $_SESSION['settings']['custom2_multiselect']) . "<span class='minmax' id='minimizeCust2'>[&uarr;]</span><span class='minmax' id='maximizeCust2'>[&darr;]</span></p>";
+        }
+        if ($_SESSION['settings']['custom3'] == 1) {
+            echo "<span class='sH3'>".$_SESSION['settings']['custom3_name'].":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom3", $_SESSION['settings']['custom3_multiselect']) . "<span class='minmax' id='minimizeCust3'>[&uarr;]</span><span class='minmax' id='maximizeCust3'>[&darr;]</span></p>";
+        }
         echo "<span class='sH3'>Software under test:</span><br>";
         echo "<textarea rows='4' cols='50' id='idSoftwareUnderTest' name='nameSoftwareUnderTest' class='fixedWidth'></textarea>";
         echo '</td><td>';
@@ -127,15 +132,15 @@ class session2
         echo "<span id='metricsCalc'></span><br>";
 
         echo "Setup(%):";
-        $this->sessionHelper->echoPercentSelection("setupId","metrics","setup");
+        $this->sessionHelper->echoPercentSelection("setupId", "metrics", "setup");
         echo "Test(%):";
-        $this->sessionHelper->echoPercentSelection("testId","metrics","test");
+        $this->sessionHelper->echoPercentSelection("testId", "metrics", "test");
         echo "Bug(%):";
-        $this->sessionHelper->echoPercentSelection("bugId","metrics","bug");
+        $this->sessionHelper->echoPercentSelection("bugId", "metrics", "bug");
         echo "Opportunity(%):";
-        $this->sessionHelper->echoPercentSelection("oppId","metrics","opportunity");
+        $this->sessionHelper->echoPercentSelection("oppId", "metrics", "opportunity");
         echo "Session duration (min):";
-        $this->sessionHelper->echoDurationSelection("durId","duration","duration");
+        $this->sessionHelper->echoDurationSelection("durId", "duration", "duration");
         echo "</div>";
         echo "<br><br><div>Session mood:";
         echo '<div>
@@ -149,7 +154,7 @@ class session2
         echo '</div>
             <div id="tabs-5">';
         $sessionId = $this->session->getSessionid();
-        echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid='.$sessionId.'" width="100%" height="600" frameborder="0"></iframe>';
+        echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid=' . $sessionId . '" width="100%" height="600" frameborder="0"></iframe>';
         echo '</div></div> ';
         echo '</div>';
     }

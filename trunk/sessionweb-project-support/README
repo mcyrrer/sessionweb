@@ -4,6 +4,27 @@ If you do not know how to install/configure it please use XAMPP Server
 (http://www.apachefriends.org/en/xampp.html)
 To enable some of the feature's please read through README-TipsAndTrixs
 
+==SessionWeb 25==
+Notes:
+This version have is a major update. Edit page is rewritten from scratch to take care of some nasty encoding bugs.
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_24-_25.sql
+to upgrade from 24->25
+
+===Release include (release 25) ===
+ID  Type            Milestone   Summary
+.
+.
+.
+.
+.
+.
+.
 
 
 ==SessionWeb 24==

@@ -19,6 +19,7 @@ echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery
 echo "     <script src=\"js/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>\n";
 //echo '     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>';
 echo "     <script src=\"js/jqueryui/jquery-ui-1.10.0.custom.min.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"js/sessionwebcommon.js\" type=\"text/javascript\"></script>\n";
 
 if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
@@ -114,9 +115,11 @@ echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
 if (isset($_SESSION['username'])) {
     echo "      <a href=\"index.php?logout=yes\" id=\"url_logout\">Log out</a> |";
 }
-echo "      <a class='counterstring' href='include/counterstring.php'>&copy;</a>";
+
+echo "      <a href='testhelper.php' target='_blank'>&copy;</a>";
 echo "</div>";
 echo "<div id='menubottom'></div>";
+
 
 
 /**

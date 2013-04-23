@@ -3,9 +3,9 @@
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
-    <script src="../js/jquery-1.9.1.min.js"></script>
-    <script src="../js/counterstring.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/sessionwebcss.css">
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/counterstring.js"></script>
 </head>
 <body>
 <h1>Create counterstring</h1>

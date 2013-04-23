@@ -71,12 +71,9 @@ class formHelper
 
         }
         foreach ($selectArray as $key => $option) {
-            if(array_key_exists($key,$selectedName))
-            {
+            if (array_key_exists($key, $selectedName)) {
                 $html .= "<option value='$key' selected='selected'>" . htmlspecialchars($option) . "</option>\n";
-            }
-            else
-            {
+            } else {
                 $html .= "<option value='$key'>" . htmlspecialchars($option) . "</option>\n";
             }
 //            foreach ($selectedName as $toSelectKey => $toSelectValue)
@@ -122,6 +119,15 @@ class formHelper
     {
         $environmentArray = $this->queryHelper->getEnvironmentsNames();
         return $this->formSelectListSingle($environmentArray, $selectedName, true, "idEnvironment", "nameEnvironment", 'class="fixedWidth"');
+    }
+
+    public function getCustomFieldSelect($selectedName = "", $customfieldname, $multiselect)
+    {
+        $customfieldnamesArray = $this->queryHelper->getCustomFieldNames($customfieldname);
+        if ($multiselect == false)
+            return $this->formSelectListSingle($customfieldnamesArray, $selectedName, true, "id".$customfieldname, "name".$customfieldname, 'class="fixedWidth customField"');
+        else
+            return $this->formSelectListMultiple($customfieldnamesArray, $selectedName, true, "id".$customfieldname, "name".$customfieldname, 'class="fixedWidth customField"');
     }
 
     private function checkIfRootFolder($pathToRoot)

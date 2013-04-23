@@ -52,6 +52,7 @@ class dbHelper
         $pageTimer->startMeasurePageLoadTime();
         $result = mysqli_query($con, $query);
         $pageTimer->stopMeasurePageLoadTimeWithoutLog();
+
         if (strlen($query) > 100) {
             $queryToLog = "Execution time: ".$pageTimer->getTime() .": ". substr($query,0, 99);
         } else {
@@ -59,6 +60,10 @@ class dbHelper
         }
         $logger->timer($queryToLog, $file, $line);
         $logger->sql($query, $file, $line);
+        if ( false===$result ) {
+            $logger->sql(mysqli_error($con), $file, $line);
+            $logger->error(mysqli_error($con), $file, $line);
+        }
         return $result;
     }
 

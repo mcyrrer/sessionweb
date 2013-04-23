@@ -197,6 +197,8 @@ class UploadHandler
     protected function set_file_delete_properties($file)
     {
         $file->delete_url = $this->options['script_url'] . "../delete/index.php?id=" . $file->id;
+        $file->delete_type = "DELETE";
+
     }
 
     // Fix for overflowing signed 32 bit integers,
