@@ -94,15 +94,15 @@ $(document).ready(function () {
         });
     });
 
-    $('#copy_session').click(function () {
-        $.fn.colorbox({
-            href:'api/session/copy/?sessionid=' + sessionid,
-            open:true,
-            iframe:true,
-            width:500,
-            height:500
-        });
-    });
+//    $('#copy_session').click(function () {
+//        $.fn.colorbox({
+//            href:'api/session/copy/?sessionid=' + sessionid,
+//            open:true,
+//            iframe:true,
+//            width:500,
+//            height:500
+//        });
+//    });
 
 
 //Initiation of WYSIWUG editor

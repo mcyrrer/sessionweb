@@ -5,7 +5,7 @@ require_once('../../../include/validatesession.inc');
 
 
 echo "<center>";
-echo "<img src='../../../pictures/dialog-question-large.png' alt=''>";
+echo "<img src='pictures/dialog-question-large.png' alt=''>";
 
 echo "<h2>Free text search help</h2>";
 echo "<p>+</p>

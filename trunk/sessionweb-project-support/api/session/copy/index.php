@@ -4,6 +4,8 @@ require_once ('../../../include/db.php');
 include_once('../../../config/db.php.inc');
 require_once('../../../include/validatesession.inc');
 include_once ('../../../include/commonFunctions.php.inc');
+require_once('../../../classes/logging.php');
+$logger = new logging();
 
 $con = getMySqlConnection();
 
@@ -52,14 +54,15 @@ saveSession_InsertSessionMetricsToDb($versionid, $metrics);
 $areasFromOldSession = getSessionAreas($versionIdToCopy);
 
 saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
+$logger->info("Copied session ".$_REQUEST["sessionid"]." into new sessionid ".$sessionid,__FILE__,__LINE__);
 $title = $sessionDataToCopy["title"];
 echo "<center>";
-echo "<img src='../../../pictures/edit-copy-9-medium.png' alt=''>";
+echo "<img src='pictures/edit-copy-9-medium.png' alt=''>";
 
 echo "<h2>Copy session</h2>";
 echo "<p>Title of copy:".$sessionDataToCopy["title"]."(Copy)</p>";
 echo "<p>Copy created</p>";
-echo "<div id='editCopy'><a href='../../../session2.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
+echo "<div id='editCopy'><a href='session2.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
 echo "</center>";
 
 ?>

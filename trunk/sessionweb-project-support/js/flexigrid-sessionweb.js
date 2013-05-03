@@ -30,13 +30,13 @@ function deleteSession() {
     if (id != "") {
         //$.fn.colorbox({
         $('.delete').colorbox({
-            href:'api/session/delete/?sessionid=' + id,
+            href: 'api/session/delete/?sessionid=' + id,
 //            href:'http://www.google.com',
-            open:true,
-            iframe:true,
-            width:500,
-            height:500,
-            onClosed:function () {
+            open: true,
+            iframe: false,
+            width: 500,
+            height: 500,
+            onClosed: function () {
                 jQuery("#flexgrid1").flexReload();
             }
         });
@@ -68,7 +68,7 @@ function editSession() {
 //    alert('hi');
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session2.php?sessionid=' + id , '_self', false);
+        window.open('session2.php?sessionid=' + id, '_self', false);
     else {
         displaySelectSessionMsg();
     }
@@ -98,7 +98,7 @@ function viewSession_newtab() {
 function editSession_newtab() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-    window.open('session2.php?sessionid=' + id, '_blank');
+        window.open('session2.php?sessionid=' + id, '_blank');
     else {
         displaySelectSessionMsg();
     }
@@ -115,10 +115,29 @@ function displaySelectSessionMsg() {
 function copySession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
+//        $("#dialogurl").attr("src", 'api/session/copy/?sessionid=' + id);
+//        $("#dialog").dialog({
+//            title: 'Copy session',
+//            modal: true,
+//            width: 500,
+//            height: 500,
+//            buttons: {
+//                Ok: function () {
+//                    $(this).dialog("close");
+//                }
+//            },
+//            open: function (event, ui) {
+//                $('#dialog').css('overflow', 'hidden');
+//            },
+//            close: function () {
+//                jQuery("#flexgrid1").flexReload();
+//                $("#dialogurl").attr('src', "about:blank");
+//            }
+//        });
         $('.copy').colorbox({
             href:'api/session/copy/?sessionid=' + id,
             open:true,
-            iframe:true,
+            iframe:false,
             width:500,
             height:500,
             onClosed:function () {
@@ -136,12 +155,12 @@ function reassignSession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
         $('.reassign').colorbox({
-            href:'api/session/reassign/?sessionid=' + id,
-            open:true,
-            iframe:true,
-            width:500,
-            height:500,
-            onClosed:function () {
+            href: 'api/session/reassign/?sessionid=' + id,
+            open: true,
+            iframe: false,
+            width: 500,
+            height: 500,
+            onClosed: function () {
                 jQuery("#flexgrid1").flexReload();
             }
         });
@@ -155,11 +174,11 @@ function shareSession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "") {
         $('.share').colorbox({
-            href:'api/session/share/?sessionid=' + id,
-            open:true,
-            iframe:true,
-            width:500,
-            height:500
+            href: 'api/session/share/?sessionid=' + id,
+            open: true,
+            iframe: false,
+            width: 500,
+            height: 500
         });
     }
     else {
@@ -185,48 +204,48 @@ function searchSession() {
 
 $(function () {
     $("#flexgrid1").flexigrid({
-        url:'api/list/',
-        dataType:'json',
-        colModel:[
-            {display:'ID', name:'id', width:40, sortable:true, align:'left'},
+        url: 'api/list/',
+        dataType: 'json',
+        colModel: [
+            {display: 'ID', name: 'id', width: 40, sortable: true, align: 'left'},
 //            {display:'Notes', name:'notes', width:30, sortable:true, align:'left'},
-            {display:'Status', name:'status', width:65, sortable:true, align:'left'},
-            {display:'Title', name:'title', width:300, sortable:false, align:'left'},
-            {display:'User', name:'user', width:100, sortable:false, align:'left'},
-            {display:'Sprint', name:'sprint', width:100, sortable:false, align:'left'},
-            {display:'Team', name:'team', width:100, sortable:false, align:'left'},
-            {display:'Area', name:'area', width:100, sortable:false, align:'left', hide:false},
+            {display: 'Status', name: 'status', width: 65, sortable: true, align: 'left'},
+            {display: 'Title', name: 'title', width: 300, sortable: false, align: 'left'},
+            {display: 'User', name: 'user', width: 100, sortable: false, align: 'left'},
+            {display: 'Sprint', name: 'sprint', width: 100, sortable: false, align: 'left'},
+            {display: 'Team', name: 'team', width: 100, sortable: false, align: 'left'},
+            {display: 'Area', name: 'area', width: 100, sortable: false, align: 'left', hide: false},
 //            {display:'Environment', name:'env', width:100, sortable:false, align:'left', hide:false},
-            {display:'Updated', name:'updated', width:105, sortable:true, align:'left'},
-            {display:'Executed', name:'executed', width:105, sortable:true, align:'left', hide:true}
+            {display: 'Updated', name: 'updated', width: 105, sortable: true, align: 'left'},
+            {display: 'Executed', name: 'executed', width: 105, sortable: true, align: 'left', hide: true}
         ],
-        buttons:[
-            {name:'View', bclass:'view', onpress:viewSession},
-            {name:'View in new tab', bclass:'view', onpress:viewSession_newtab},
-            {name:'Edit', bclass:'edit', onpress:editSession},
-            {name:'Edit in new tab', bclass:'edit', onpress:editSession_newtab},
-            {name:'Delete', bclass:'delete', onpress:deleteSession},
-            {name:'Copy', bclass:'copy', onpress:copySession},
-            {name:'Share', bclass:'share', onpress:shareSession},
-            {name:'Debrief', bclass:'debrief', onpress:debirefSession},
-            {name:'Reasign', bclass:'reasign', onpress:reassignSession},
-            {name:'Filter', bclass:'filter', onpress:filterSession},
-            {name:'Search', bclass:'search', onpress:searchSession}
+        buttons: [
+            {name: 'View', bclass: 'view', onpress: viewSession},
+            {name: 'View in new tab', bclass: 'view', onpress: viewSession_newtab},
+            {name: 'Edit', bclass: 'edit', onpress: editSession},
+            {name: 'Edit in new tab', bclass: 'edit', onpress: editSession_newtab},
+            {name: 'Delete', bclass: 'delete', onpress: deleteSession},
+            {name: 'Copy', bclass: 'copy', onpress: copySession},
+            {name: 'Share', bclass: 'share', onpress: shareSession},
+            {name: 'Debrief', bclass: 'debrief', onpress: debirefSession},
+            {name: 'Reasign', bclass: 'reasign', onpress: reassignSession},
+            {name: 'Filter', bclass: 'filter', onpress: filterSession},
+            {name: 'Search', bclass: 'search', onpress: searchSession}
 
         ],
-        sortname:"updated",
-        sortorder:"desc",
-        usepager:true,
-        title:"Sessions",
-        useRp:false,
-        rp:30,
-        showTableToggleBtn:false,
-        resizable:false,
-        width:1115,
-        height:740,
-        onSubmit:addFormData,
-        onSuccess:flexi_colorGridRows, //change row colours here
-        singleSelect:true
+        sortname: "updated",
+        sortorder: "desc",
+        usepager: true,
+        title: "Sessions",
+        useRp: false,
+        rp: 30,
+        showTableToggleBtn: false,
+        resizable: false,
+        width: 1115,
+        height: 740,
+        onSubmit: addFormData,
+        onSuccess: flexi_colorGridRows, //change row colours here
+        singleSelect: true
     });
 });
 
@@ -234,7 +253,7 @@ $(function () {
 function addFormData() {
     //passing a form object to serializeArray will get the valid data from all the objects, but, if the you pass a non-form object, you have to specify the input elements that the data will come from
     var dt = $('#sform').serializeArray();
-    $("#flexgrid1").flexOptions({params:dt});
+    $("#flexgrid1").flexOptions({params: dt});
     return true;
 }
 
@@ -249,18 +268,18 @@ function stopRKey(evt) {
 
 
 function quickView(sessionid) {
-    $.getJSON('api/session/get?sessionid='+sessionid, function (data) {
+    $.getJSON('api/session/get?sessionid=' + sessionid, function (data) {
 
         var html = "<H1>Quick view of session</H1>";
 
-        html = html+"<b>"+data['title']+"</b>";
-        html = html+"<H2>Charter</H2>"+data['charter'];
-        html = html + "<H2>Notes</H2>"+data['notes'];
+        html = html + "<b>" + data['title'] + "</b>";
+        html = html + "<H2>Charter</H2>" + data['charter'];
+        html = html + "<H2>Notes</H2>" + data['notes'];
         $('.qview').colorbox({
-            html:html,
-            open:true,
-            width:"80%",
-            height:"80%"
+            html: html,
+            open: true,
+            width: "80%",
+            height: "80%"
         });
     });
 
@@ -270,24 +289,24 @@ document.onkeypress = stopRKey;
 
 $(document).ready(function () {
 
-
     $("#searchbox").hide();
     $("#filterbox").hide();
 
     $('#helpsearch').click(function () {
         $('#helpsearch').colorbox({
-            href:'api/help/search',
-            open:true,
-            iframe:true,
-            width:500,
-            height:500
+            href: 'api/help/search',
+            open: true,
+            iframe: false,
+            width: 500,
+            height: 500
 
         });
     });
 
 
+
     $("select").change(function () {
-        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        $('#flexgrid1').flexOptions({newp: 1}).flexReload();
         setPermSearchUrl();
         return false;
     });
@@ -305,12 +324,12 @@ $(document).ready(function () {
     }
 
     $('#searchSessions').click(function () {
-        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        $('#flexgrid1').flexOptions({newp: 1}).flexReload();
         setPermSearchUrl();
     });
 
     $('#searchSessionsRef').click(function () {
-        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        $('#flexgrid1').flexOptions({newp: 1}).flexReload();
         setPermSearchUrl();
     });
 
@@ -322,13 +341,13 @@ $(document).ready(function () {
     $('#clearSearchSessions').click(function () {
         $('#searchstring').val('');
         $("#select_status_type").removeAttr('disabled');
-        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        $('#flexgrid1').flexOptions({newp: 1}).flexReload();
     });
 
     $('#clearSearchSessionsRef').click(function () {
         $('#searchstringref').val('');
         $("#select_status_type").removeAttr('disabled');
-        $('#flexgrid1').flexOptions({newp:1}).flexReload();
+        $('#flexgrid1').flexOptions({newp: 1}).flexReload();
     });
 
     $(function () {
@@ -337,7 +356,7 @@ $(document).ready(function () {
          ****************************************************************/
         $('#flexgrid1').dblclick(function (e) {
             var Browser = {
-                Version:function () {
+                Version: function () {
                     var version = 999; // we assume a sane browser
                     if (navigator.appVersion.indexOf("MSIE") != -1)
                     // bah, IE again, lets downgrade version number
@@ -361,22 +380,21 @@ $(document).ready(function () {
 
                 if (status == "Executed") {
                     command = "debrief";
-                    var url = "session.php?sessionid=" + id+"&command="+command;
+                    var url = "session.php?sessionid=" + id + "&command=" + command;
 
                 }
                 else if (status == "Closed") {
                     command = "view";
-                    var url = "session.php?sessionid=" + id+"&command="+command;
+                    var url = "session.php?sessionid=" + id + "&command=" + command;
 
                 }
                 else if (status == "Debriefed") {
                     command = "view";
-                    var url = "session.php?sessionid=" + id+"&command="+command;
+                    var url = "session.php?sessionid=" + id + "&command=" + command;
 
                 }
-                else
-                {
-                   var url = "session2.php?sessionid=" + id;
+                else {
+                    var url = "session2.php?sessionid=" + id;
 
                 }
 
@@ -388,4 +406,6 @@ $(document).ready(function () {
             }
         });
     });
+
+
 });

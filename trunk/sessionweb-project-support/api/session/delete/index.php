@@ -6,7 +6,8 @@ require_once ('../../../include/db.php');
 include_once('../../../config/db.php.inc');
 include_once ('../../../include/commonFunctions.php.inc');
 include_once('../../../include/session_database_functions.php.inc');
-require_once ('../../../include/loggingsetup.php');
+require_once('../../../classes/logging.php');
+$logger = new logging();
 
 $con = getMySqlConnection();
 $sessionInfo = (getSessionData($_REQUEST["sessionid"]));
@@ -18,7 +19,7 @@ if(!isset($_REQUEST['delete']))
 {
     $sessionid = $_REQUEST["sessionid"];
     echo "<center>";
-    echo "<img src='../../../pictures/user-trash-full-3.png' alt=''>";
+    echo "<img src='pictures/user-trash-full-3.png' alt=''>";
     echo "<h2>Delete session</h2>\n";
     echo "<p>Title: $title</p>";
     echo "<p>Are you sure that you want to delete session?</p>\n";
@@ -34,23 +35,26 @@ if (strcmp($_SESSION['username'],$sessionInfo['username'])== 0 || $_SESSION['sup
 
     $title = $sessionInfo["title"];
     echo "<center>";
-    echo "<img src='../../../pictures/user-trash-full-3.png' alt=''>";
+    echo "<img src='pictures/user-trash-full-3.png' alt=''>";
 
     echo "<h2>Deleted session</h2>";
     echo "<p> $title</p>";
 
     echo "</center>";
+    $logger->info("Deleted session ".$sessionid,__FILE__,__LINE__);
 }
 else
 {
     echo "<center>";
-    echo "<img src='../../../pictures/user-trash-full-3.png' alt=''>";
+    echo "<img src='pictures/user-trash-full-3.png' alt=''>";
 
     echo "<h2>Could not delete session $title</h2>";
     echo "Session " . $_REQUEST["sessionid"] . " could not be deleted.<br>
     You are not the owner of the session.";
 
     echo "</center>";
+    $logger->error("Failed to deleted session ".$sessionid,__FILE__,__LINE__);
+
 
 
 }
