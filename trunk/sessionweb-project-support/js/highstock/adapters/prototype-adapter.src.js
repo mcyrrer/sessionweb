@@ -1,5 +1,5 @@
 /**
- * @license Highstock JS v1.1.4 (2012-02-15)
+ * @license Highstock JS v1.3.1 (2013-04-09)
  * Prototype adapter
  *
  * @author Michael Nelson, Torstein Hønsi.
@@ -9,7 +9,7 @@
  */
 
 // JSLint options:
-/*global Effect, Class, Event, $, $A */
+/*global Effect, Class, Event, Element, $, $$, $A */
 
 // Adapter interface between prototype and the Highcharts charting library
 var HighchartsAdapter = (function () {
@@ -83,7 +83,10 @@ return {
 					}
 
 					if (element.attr) { // SVGElement
-						element.attr(this.options.attribute, position);
+						
+						if (element.element) { // If not, it has been destroyed (#1405)
+							element.attr(this.options.attribute, position);
+						}
 					
 					} else { // HTML, #409
 						obj = {};
@@ -95,9 +98,37 @@ return {
 				finish: function () {
 					// Delete the property that holds this animation now that it is finished.
 					// Both canceled animations and complete ones gets a 'finish' call.
-					delete this.element._highchart_animation[this.key];
+					if (this.element && this.element._highchart_animation) { // #1405
+						delete this.element._highchart_animation[this.key];
+					}
 				}
 			});
+		}
+	},
+	
+	/**
+	 * Run a general method on the framework, following jQuery syntax
+	 * @param {Object} el The HTML element
+	 * @param {String} method Which method to run on the wrapped element
+	 */
+	adapterRun: function (el, method) {
+		
+		// This currently works for getting inner width and height. If adding
+		// more methods later, we need a conditional implementation for each.
+		return parseInt($(el).getStyle(method), 10);
+		
+	},
+
+	/**
+	 * Downloads a script and executes a callback when done.
+	 * @param {String} scriptLocation
+	 * @param {Function} callback
+	 */
+	getScript: function (scriptLocation, callback) {
+		var head = $$('head')[0]; // Returns an array, so pick the first element.
+		if (head) {
+			// Append a new 'script' element, set its type and src attributes, add a 'load' handler that calls the callback
+			head.appendChild(new Element('script', { type: 'text/javascript', src: scriptLocation}).observe('load', callback));
 		}
 	},
 
@@ -133,6 +164,7 @@ return {
 		options = options || {};
 		options.delay = 0;
 		options.duration = (options.duration || 500) / 1000;
+		options.afterFinish = options.complete;
 
 		// animate wrappers and DOM elements
 		if (hasEffect) {
@@ -142,8 +174,13 @@ return {
 				fx = new Effect.HighchartsTransition($(el), key, params[key], options);
 			}
 		} else {
-			for (key in params) {
-				el.attr(key, params[key]);
+			if (el.attr) { // #409 without effects
+				for (key in params) {
+					el.attr(key, params[key]);
+				}
+			}
+			if (options.complete) {
+				options.complete();
 			}
 		}
 
@@ -169,6 +206,10 @@ return {
 		$A(arr).each(fn);
 	},
 	
+	inArray: function (item, arr) {
+		return arr.indexOf(item);
+	},
+
 	/**
 	 * Get the cumulative offset relative to the top left of the page. This method, unlike its
 	 * jQuery and MooTools counterpart, still suffers from issue #208 regarding the position
@@ -210,6 +251,10 @@ return {
 			el._highcharts_stop_observing(event, handler);
 		}
 	},
+	
+	washMouseEvent: function (e) {
+		return e;
+	},
 
 	// um, grep
 	grep: function (arr, fn) {
@@ -219,82 +264,6 @@ return {
 	// um, map
 	map: function (arr, fn) {
 		return arr.map(fn);
-	},
-
-	// deep merge. merge({a : 'a', b : {b1 : 'b1', b2 : 'b2'}}, {b : {b2 : 'b2_prime'}, c : 'c'}) => {a : 'a', b : {b1 : 'b1', b2 : 'b2_prime'}, c : 'c'}
-	/*merge: function(){
-		function doCopy(copy, original) {
-			var value,
-				key,
-				undef,
-				nil,
-				same,
-				obj,
-				arr,
-				node;
-
-			for (key in original) {
-				value = original[key];
-				undef = typeof(value) === 'undefined';
-				nil = value === null;
-				same = original === copy[key];
-
-				if (undef || nil || same) {
-					continue;
-				}
-
-				obj = typeof(value) === 'object';
-				arr = value && obj && value.constructor == Array;
-				node = !!value.nodeType;
-
-				if (obj && !arr && !node) {
-					copy[key] = doCopy(typeof copy[key] == 'object' ? copy[key] : {}, value);
-				}
-				else {
-					copy[key] = original[key];
-				}
-			}
-			return copy;
-		}
-
-		var args = arguments, retVal = {};
-
-		for (var i = 0; i < args.length; i++) {
-			retVal = doCopy(retVal, args[i]);
-		}
-
-		return retVal;
-	},*/
-	merge: function () { // the built-in prototype merge function doesn't do deep copy
-		function doCopy(copy, original) {
-			var value, key;
-
-			for (key in original) {
-				value = original[key];
-				if (value && typeof value === 'object' && value.constructor !== Array &&
-						typeof value.nodeType !== 'number') {
-					copy[key] = doCopy(copy[key] || {}, value); // copy
-
-				} else {
-					copy[key] = original[key];
-				}
-			}
-			return copy;
-		}
-
-		function merge() {
-			var args = arguments,
-				i,
-				retVal = {};
-
-			for (i = 0; i < args.length; i++) {
-				retVal = doCopy(retVal, args[i]);
-
-			}
-			return retVal;
-		}
-
-		return merge.apply(this, arguments);
 	},
 
 	// extend an object to handle highchart events (highchart objects, not svg elements).
@@ -320,6 +289,7 @@ return {
 					}
 				},
 				_highcharts_fire: function (name, args) {
+					var target = this;
 					(this._highchart_events[name] || []).each(function (fn) {
 						// args is never null here
 						if (args.stopped) {
@@ -330,6 +300,7 @@ return {
 						args.preventDefault = function () {
 							args.defaultPrevented = true;
 						};
+						args.target = target;
 
 						// If the event handler return false, prevent the default handler from executing
 						if (fn.bind(this)(args) === false) {

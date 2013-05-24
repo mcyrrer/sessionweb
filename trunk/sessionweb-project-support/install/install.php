@@ -7,7 +7,7 @@ require_once ('../classes/logging.php');
 include ('headerinstall.php');
 $logger = new logging();
 
-define("INSTALLATION_SCRIPT", "SessionwebDbLayout_24.sql");
+define("INSTALLATION_SCRIPT", "SessionwebDbLayout_25.sql");
 ?>
 <div id="container">
     <div><H1>Installation of Sessionweb</H1></div>
@@ -105,7 +105,7 @@ function install()
                 </dl>
             </fieldset>
        <fieldset>
-                <legend>Attachment setup</legend>
+                <legend>Attachment information</legend>
                 <dl>
                     <dd>';
     checkForMaxAttachmentSize(true);
@@ -294,7 +294,7 @@ function checkFoldersForRWDuringInstallation()
 {
     $logger = new logging();
     echo "<b>Check for Read Write access for certain folders.</b><br>";
-    $foldersToCheckRW = array("../config/", "../include/filemanagement/files/", "../include/filemanagement/thumbnails/", "../log/");
+    $foldersToCheckRW = array("../config/", "../log/"); //"../include/filemanagement/files/", "../include/filemanagement/thumbnails/"
     $foldersOk = true;
     foreach ($foldersToCheckRW as $aFolder) {
         try {

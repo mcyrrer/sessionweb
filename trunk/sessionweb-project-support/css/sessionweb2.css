@@ -23,6 +23,11 @@ table, th, td {
     font-size: 1.17em;
     font-weight: bold;
     font-family: "'Comic Sans MS'";
+    margin-bottom: 40px;
+}
+
+.itemList {
+    padding-bottom: 30px;
 }
 
 .sw_p:hover {

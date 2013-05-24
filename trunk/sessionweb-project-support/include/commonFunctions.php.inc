@@ -8,21 +8,21 @@ function checkForMaxAttachmentSize($updateJsFile = false)
     $maxsizebytes = getMaxUploadSize() * 1024 * 1024;
     echo "<b>Attachment size setup<br></b>";
     echo "Attachments max size according to php and mysql settings <b>" . getMaxUploadSize() . " mb</b><br>";
-    $sessionwebPath = str_replace("\\", "/", getcwd());
-    $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
-    $sessionwebPath = $sessionwebPath . "/include/filemanagement/application.js";
-    if ($updateJsFile) {
-        if (updateOneLineInTextFile($sessionwebPath, "maxFileSize:", "        maxFileSize: $maxsizebytes"))
-            echo "Was able to automatically update /include/filemanagement/application.js with correct attachment size value according to your php and mysql config paramateters";
-        else {
-            echo "<b>Failed to update /include/filemanagement/application.js with correct value, please update it manually</b>";
-            echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
-            echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
-        }
-    } else {
-        echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
-        echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
-    }
+//    $sessionwebPath = str_replace("\\", "/", getcwd());
+//    $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
+//    $sessionwebPath = $sessionwebPath . "/include/filemanagement/application.js";
+//    if ($updateJsFile) {
+//        if (updateOneLineInTextFile($sessionwebPath, "maxFileSize:", "        maxFileSize: $maxsizebytes"))
+//            echo "Was able to automatically update /include/filemanagement/application.js with correct attachment size value according to your php and mysql config paramateters";
+//        else {
+//            echo "<b>Failed to update /include/filemanagement/application.js with correct value, please update it manually</b>";
+//            echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
+//            echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
+//        }
+//    } else {
+//        echo 'Synchronize this with the parameter maxFileSize in include\filemanagement\application.js. Parameter <i><b>maxFileSize</b></i> should be <b>' . $maxsizebytes . '</b> in the js file.<br>';
+//        echo '<br>If the size is to small or large change the upload_max_filesize, post_max_size, memory_limit php configuration values in php.ini and synchronize this with the max_allowed_packet config value in mysql settings.<br>';
+//    }
     echo "<br>Debug info:<br>";
     echo echoMaxUploadSizePhp();
     echo "MySql max_allowed_packet:" . getSqlMaxAllowedPacketAsMb() . "mb<br>";

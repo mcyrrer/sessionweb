@@ -99,21 +99,37 @@ class session2
         echo "<textarea rows='4' cols='50' id='idSoftwareUnderTest' name='nameSoftwareUnderTest' class='fixedWidth'></textarea>";
         echo '</td><td>';
 
+        echo "<div class='itemList'>";
         echo '<span class="sH3">Test requirements:</span>';
         echo '<span id="addReq">[+]</span><input type="text" class="sInput" id="new_requirement" size="10" ><br>';
         echo "<span id='testReqId'></span>";
+        echo "</div>";
 
+        echo "<div class='itemList'>";
         echo '<span class="sH3">Bug reported:</span>';
         echo '<span id="addBug">[+]</span><input type="text" class="sInput" id="new_bug" size="10" ><br>';
         echo "<span id='testBugId'></span>";
+        echo "</div>";
 
+        echo "<div class='itemList'>";
         echo '<span class="sH3">Link to other sessions:</span>';
         echo '<span id="addSessionLink">[+]</span><input type="text" class="sInput" id="new_sessionlink" size="10" ><br>';
         echo "<span id='linkToOtherSessions'></span>";
+        echo "</div>";
 
+        echo "<div class='itemList'>";
         echo "<span class='sH3'>Automatically fetched software versions:</span>";
         echo '<span id="addAutoFetchedSw">[+]</span><br>';
         echo "<span id='autoSoftwareVersions'></span>";
+        echo "</div>";
+
+        echo "<div class='itemList'>";
+        echo "<span class='sH3'>Minmaps:</span>";
+        echo '<span id="addMindMap">[+]</span><br>';
+        echo "<span id='mindMaps'></span>";
+        echo "</div>";
+
+
         echo '</td></tr></table>';
         echo '</div>
 

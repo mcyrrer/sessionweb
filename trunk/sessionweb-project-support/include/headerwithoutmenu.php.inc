@@ -14,7 +14,7 @@ echo "      <title>Sessionweb</title>\n";
 
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"".$basepathcss."sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"".$basepathcss."css/colorbox.css\">\n";
-echo "     <script src=\"".$basepathcss."js/jquery-1.7.1.js\" type=\"text/javascript\"></script>\n";
+echo "     <script src=\"".$basepathcss."js/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"".$basepathcss."js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"".$basepathcss."js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"".$basepathcss."js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";

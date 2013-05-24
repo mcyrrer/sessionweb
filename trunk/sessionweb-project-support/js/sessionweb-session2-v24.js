@@ -48,6 +48,7 @@ $(document).ready(function () {
     AddSessionLinkManager();
     AddNewAreaManager();
     AddNewAutofetchedSwManager();
+    AddNewMindMapManager();
 
     ShowHideAreaRows();
     ShowHideAddTester();
@@ -182,12 +183,12 @@ function ChangeOfCustomField() {
             data: {
                 sessionid: sessionID,
                 customfield: this.id,
-                value: $('#'+this.id).val()
+                value: $('#' + this.id).val()
             },
             url: 'api/customfields/set/index.php',
             complete: function (data) {
                 if (data.status != '201') {
-                    alert("Could not update custom field "+this.id);
+                    alert("Could not update custom field " + this.id);
                 }
             }
         });
@@ -585,6 +586,9 @@ function setSessionData(jsonResponseContent) {
     //Bugs
     PopulateBugs(jsonResponseContent['bugs']);
 
+    //MindMaps
+    populateMindMaps(jsonResponseContent['mindmaps']);
+
     //Link to other sessions
     PopulateLinksToOtherSessions(jsonResponseContent['linked_to_session']);
 
@@ -617,6 +621,69 @@ function setSessionData(jsonResponseContent) {
     }
 }
 
+function AddNewMindMapManager() {
+
+    $('#addMindMap').click(function () {
+        var sessionID = $(document).getUrlParam("sessionid");
+        var title = sessionID + ":" + $('#input_title').val();
+        var description = "Sessionweb mindmap connected to sessionid" + sessionID;
+        $.ajax({
+            type: "GET",
+            data: {
+                sessionid: sessionID,
+                title: title,
+                description: description
+            },
+            url: 'api/mindmap/create/index.php',
+            complete: function (data) {
+                if (data.status == '201') {
+                    var response = data.responseText;
+
+                    var resultArray = $.parseJSON(response);
+                    var mind_map_id = resultArray['data'];
+                    var title = resultArray['title'];
+                    var url = resultArray['url'];
+                    AddSingleMindMap(mind_map_id,title,url);
+                }
+                else
+                {
+                    alert("Could not create a mindmap, please check logs");
+                }
+            }
+        });
+    });
+}
+
+function AddSingleMindMap(mindMapId,mindMapTitle,url) {
+    $('#mindMaps').append('<p class="sw_p" id="' + mindMapId + 'MindMap"><a href="'+url+'" target="_blank">'+mindMapTitle+'</a></p>');
+
+//    $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
+
+//    $('#mindMaps').append('<p class="sw_p" id="' + mindMaps + 'MindMap">' + mindMaps + ': Loading title</p>');
+//    $.ajax({
+//        type: "GET",
+//        data: {
+//            id: aBug
+//        },
+//        timeout: 5000,
+//        url: 'api/titles/bug/get/index.php',
+//        complete: function (data) {
+//
+//            if (data.status == '200') {
+//                var title = data.responseText;
+//                if (title == "") {
+//                    title = aBug;
+//                }
+//                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
+//            }
+//            else {
+//                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
+//
+//            }
+//        }
+//    });
+}
+
 //AUTOFETCHED SW MANAGER
 function AddNewAutofetchedSwManager() {
 
@@ -641,6 +708,14 @@ function AddNewAutofetchedSwManager() {
                         AddSingelAutofetchedSoftware(id, environment, updated, "Nobody");
 
                     }
+                    else if (data.status == '400') {
+                       alert("400:Could not create mind map!");
+                    }
+                    else
+                    {
+                        alert("Could not create mind map!");
+
+                    }
                 }
             });
         }
@@ -648,7 +723,6 @@ function AddNewAutofetchedSwManager() {
             alert("No test environment selected");
         }
     });
-
 }
 
 function PopulateAutofetchedSoftware(softwareids) {
@@ -872,6 +946,20 @@ function AddSingleBug(aBug) {
             }
         }
     });
+}
+
+
+function populateMindMaps(mindmaps)
+{
+    $.each(mindmaps, function(index, value) {
+        var mindMapId = value['map_id'];
+        var url = value['url'];
+        var mindMapTitle =mindMapId+":Unknown Title";
+        AddSingleMindMap(mindMapId,mindMapTitle,url);
+
+    });
+//    $('#mindMaps').append('<p class="sw_p" id="' + mindMapId + 'MindMap"><a href="'+url+'" target="_blank">'+mindMapTitle+'</a></p>');
+
 }
 
 function PopulateBugs(bugs) {

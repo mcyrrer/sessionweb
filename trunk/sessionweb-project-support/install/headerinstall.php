@@ -7,9 +7,9 @@ echo'
     <title>Sessionweb</title>
     <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
     <link rel="stylesheet" type="text/css" href="../css/colorbox.css">
-    <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.8.20.custom.css">
-    <script src="../js/jquery-1.7.1.js" type="text/javascript"></script>
-    <script src="../js/jqueryui/jquery-ui-1.8.20.custom.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.10.0.custom.css">
+    <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="../js/jqueryui/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
     <script src="../js/jquery.autosave.js" type="text/javascript"></script>
     <script src="../js/jquery.validate.js" type="text/javascript"></script>
     <script src="../js/jquery.getparams.js" type="text/javascript"></script>

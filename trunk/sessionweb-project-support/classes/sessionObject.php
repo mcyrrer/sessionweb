@@ -52,6 +52,7 @@ class sessionObject extends sessionObjectSave
     private $username; //Text
     private $versionid; //Int
     private $sessionExist; //Validate if a session exists or not. should be checked for true before accessing any get..
+    private $mindMaps; //Array
 
     private $logger;
     private $dbHelper;
@@ -411,6 +412,23 @@ class sessionObject extends sessionObjectSave
         }
         $this->setAdditional_testers($tmpArray);
 
+        //mission mind_maps
+        $tmpArray = array();
+        $sqlSelect = "";
+        $sqlSelect .= "SELECT * ";
+        $sqlSelect .= "FROM   mission_mindmaps ";
+        $sqlSelect .= "WHERE  versionid = $versionid";
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
+//        $result = mysqli_query($con, $sqlSelect);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        while ($row = mysqli_fetch_array($result)) {
+            $tmpMindMapArray['map_id']=$row['map_id'];
+            $tmpMindMapArray['url'] = $_SESSION['settings']['wisemapping_url'].'/c/maps/'.$row['map_id'].'/edit';
+            $tmpArray[] = $tmpMindMapArray;
+        }
+        $this->setMindMaps($tmpArray);
+
         mysqli_close($con);
     }
 
@@ -678,6 +696,14 @@ class sessionObject extends sessionObjectSave
             return array();
     }
 
+    function getMindMaps()
+    {
+        if ($this->mindMaps != null) {
+            return $this->mindMaps;
+        } else
+            return array();
+    }
+
     function getSessionid()
     {
         return $this->sessionid;
@@ -914,6 +940,14 @@ class sessionObject extends sessionObjectSave
         } else false;
     }
 
+    function setMindMaps($x)
+    {
+        if (is_array($x)) {
+            $this->mindMaps = $x;
+            return true;
+        } else false;
+    }
+
     private function setPublickey($x)
     {
         $this->publickey = $x;
@@ -1021,6 +1055,7 @@ class sessionObject extends sessionObjectSave
         $sessionDataAsArray['linked_from_session'] = $this->linked_from_session; //Array
         $sessionDataAsArray['linked_to_session'] = $this->linked_to_session; //Array
         $sessionDataAsArray['masterdibriefed'] = $this->masterdibriefed; //Boolean 0,1
+        $sessionDataAsArray['mindmaps'] = $this->mindMaps; //Boolean 0,1
         $sessionDataAsArray['mood'] = $this->mood; //Int 0-4
         $sessionDataAsArray['notes'] = $this->notes; //Text
         $sessionDataAsArray['opportunity_percent'] = $this->opportunity_percent; //Int
@@ -1049,7 +1084,7 @@ class sessionObject extends sessionObjectSave
     public function toJson()
     {
         //return json_encode(jsonPrettifyer::indent($this->toArray()));
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(),JSON_PRETTY_PRINT);
     }
 
     /**

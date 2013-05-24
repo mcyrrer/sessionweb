@@ -23,9 +23,9 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
            <link rel="stylesheet" type="text/css" href="../css/sprintreport.css">
            <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
 
-           <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.8.20.custom.css">
-           <script src="../js/jquery-1.7.1.js" type="text/javascript"></script>
-           <script src="../js/jqueryui/jquery-ui-1.8.20.custom.min.js" type="text/javascript"></script>
+           <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.10.0.custom.css">
+           <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
+           <script src="../js/jqueryui/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
            <script type="text/javascript" src="../js/highcharts/highcharts.js"></script>
            <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>
            <script type="text/javascript" src="../js/highstock/highstock.js"></script>

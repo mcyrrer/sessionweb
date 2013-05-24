@@ -12,7 +12,6 @@ $pageTimer = new pagetimer();
 $pageTimer->startMeasurePageLoadTime();
 ?>
 
-<div id="test">TJOHO!!!!</div>
 <div id="content">
     <form id="sform" action="">
         <div id="filterbox" class="flexigrid">

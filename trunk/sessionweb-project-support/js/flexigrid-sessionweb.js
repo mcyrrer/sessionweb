@@ -134,16 +134,17 @@ function copySession() {
 //                $("#dialogurl").attr('src', "about:blank");
 //            }
 //        });
+
         $('.copy').colorbox({
-            href:'api/session/copy/?sessionid=' + id,
-            open:true,
-            iframe:false,
-            width:500,
-            height:500,
-            onClosed:function () {
-                jQuery("#flexgrid1").flexReload();
-            }
-        });
+        href:'api/session/copy/?sessionid=' + id,
+        open:true,
+        iframe:false,
+        width:500,
+        height:500,
+        onClosed:function () {
+            jQuery("#flexgrid1").flexReload();
+        }
+    });
     }
     else {
         displaySelectSessionMsg();
@@ -228,7 +229,7 @@ $(function () {
             {name: 'Copy', bclass: 'copy', onpress: copySession},
             {name: 'Share', bclass: 'share', onpress: shareSession},
             {name: 'Debrief', bclass: 'debrief', onpress: debirefSession},
-            {name: 'Reasign', bclass: 'reasign', onpress: reassignSession},
+            {name: 'Reassign', bclass: 'reassign', onpress: reassignSession},
             {name: 'Filter', bclass: 'filter', onpress: filterSession},
             {name: 'Search', bclass: 'search', onpress: searchSession}
 
@@ -302,7 +303,6 @@ $(document).ready(function () {
 
         });
     });
-
 
 
     $("select").change(function () {

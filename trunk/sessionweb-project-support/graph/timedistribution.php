@@ -14,7 +14,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
           <meta http-equiv="Content-type" content="text/html;charset=utf-8">
       <title>Sessionweb</title>
            <link rel="stylesheet" href="../css/sessionwebcss.css">
-           <script src="../js/jquery-1.7.1.js" type="text/javascript"></script>
+           <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
            <script type="text/javascript" src="../js/highcharts/highcharts.js"></script>
             <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>
   </head>
