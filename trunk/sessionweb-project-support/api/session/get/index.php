@@ -9,6 +9,9 @@ require_once('../../../config/db.php.inc');
 require_once ('../../../include/db.php');
 require_once ('../../../include/apistatuscodes.inc');
 require_once ('../../../classes/sessionObject.php');
+require_once ('../../../classes/logging.php');
+
+$logger = new logging();
 
 
 $response = array();
@@ -18,8 +21,8 @@ if (isset($_REQUEST['sessionid'])) {
     $sessionid = mysql_real_escape_string($_REQUEST['sessionid']);
     $session = new sessionObject($sessionid);
     $response = $session->toJson();
-
     header("HTTP/1.0 200 Ok");
+
 }
 else
 {

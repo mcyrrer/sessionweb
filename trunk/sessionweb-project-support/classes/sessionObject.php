@@ -424,7 +424,10 @@ class sessionObject extends sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
             $tmpMindMapArray['map_id']=$row['map_id'];
+            $tmpMindMapArray['title']=$row['map_title'];
             $tmpMindMapArray['url'] = $_SESSION['settings']['wisemapping_url'].'/c/maps/'.$row['map_id'].'/edit';
+            $tmpMindMapArray['url_view'] = $_SESSION['settings']['wisemapping_url'].'/c/maps/'.$row['map_id'].'/view';
+            $tmpMindMapArray['url_delete'] = $_SESSION['settings']['wisemapping_url'].'/c/restful/maps/batch?ids='.$row['map_id'];
             $tmpArray[] = $tmpMindMapArray;
         }
         $this->setMindMaps($tmpArray);

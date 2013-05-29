@@ -57,7 +57,10 @@ class formHelper
 
     private function formSelectListMultiple($selectArray, $selectedName = array(), $includeEmptyRow = true, $htmlTagId, $htmlTagName, $extraParameters = "")
     {
-
+        if(!is_array($selectedName))
+        {
+            $this->logger->warn('selectedName is not an array!',__FILE__,__LINE__);
+        }
         $index = 0;
         $html = "<select id=\"$htmlTagId\" name=\"" . $htmlTagName . "[]\" multiple=\"multiple\" $extraParameters>\n";
         if ($includeEmptyRow) {
@@ -71,7 +74,7 @@ class formHelper
 
         }
         foreach ($selectArray as $key => $option) {
-            if (array_key_exists($key, $selectedName)) {
+            if (is_array($selectedName) && array_key_exists($key, $selectedName)) {
                 $html .= "<option value='$key' selected='selected'>" . htmlspecialchars($option) . "</option>\n";
             } else {
                 $html .= "<option value='$key'>" . htmlspecialchars($option) . "</option>\n";
@@ -124,6 +127,7 @@ class formHelper
     public function getCustomFieldSelect($selectedName = "", $customfieldname, $multiselect)
     {
         $customfieldnamesArray = $this->queryHelper->getCustomFieldNames($customfieldname);
+        $this->logger->arraylog($customfieldnamesArray);
         if ($multiselect == false)
             return $this->formSelectListSingle($customfieldnamesArray, $selectedName, true, "id".$customfieldname, "name".$customfieldname, 'class="fixedWidth customField"');
         else

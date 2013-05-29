@@ -53,7 +53,7 @@ function debirefSession() {
 
     if (status == "Executed") {
         if (id != "")
-            window.open('session.php?sessionid=' + id + '&command=debrief', '_blank');
+            window.open('view.php?sessionid=' + id + '&debrief=yes', '_blank');
     }
     else {
         $("#msgdiv").fadeIn("slow");
@@ -68,7 +68,7 @@ function editSession() {
 //    alert('hi');
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session2.php?sessionid=' + id, '_self', false);
+        window.open('edit.php?sessionid=' + id, '_self', false);
     else {
         displaySelectSessionMsg();
     }
@@ -78,7 +78,7 @@ function viewSession() {
 //    alert('hi');
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session.php?sessionid=' + id + '&command=view', '_self', false);
+        window.open('view.php?sessionid=' + id + '', '_self', false);
     else {
         displaySelectSessionMsg();
     }
@@ -88,7 +88,7 @@ function viewSession_newtab() {
 //    alert('hi');
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session.php?sessionid=' + id + '&command=view', '_blank');
+        window.open('view.php?sessionid=' + id + '', '_blank');
     else {
         displaySelectSessionMsg();
     }
@@ -98,7 +98,7 @@ function viewSession_newtab() {
 function editSession_newtab() {
     var id = $('.trSelected td:nth-child(1) div').text();
     if (id != "")
-        window.open('session2.php?sessionid=' + id, '_blank');
+        window.open('edit.php?sessionid=' + id, '_blank');
     else {
         displaySelectSessionMsg();
     }
@@ -380,12 +380,12 @@ $(document).ready(function () {
 
                 if (status == "Executed") {
                     command = "debrief";
-                    var url = "session.php?sessionid=" + id + "&command=" + command;
+                    var url = "view.php?sessionid=" + id + "&debrief=yes";
 
                 }
                 else if (status == "Closed") {
                     command = "view";
-                    var url = "session.php?sessionid=" + id + "&command=" + command;
+                    var url = "view.php?sessionid=" + id;
 
                 }
                 else if (status == "Debriefed") {
@@ -394,7 +394,7 @@ $(document).ready(function () {
 
                 }
                 else {
-                    var url = "session2.php?sessionid=" + id;
+                    var url = "edit.php?sessionid=" + id;
 
                 }
 
@@ -402,7 +402,7 @@ $(document).ready(function () {
                 window.open(url, '_blank');
             }
             else {
-                alert("IE 6+7+8 does not support dubbleclick, please use navigation buttons above or upgrade to IE9, Firefox or Chrome.");
+                alert("IE 6+7+8 does not support doubleclick, please use navigation buttons above or upgrade to IE9, Firefox or Chrome.");
             }
         });
     });

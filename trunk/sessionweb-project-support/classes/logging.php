@@ -58,8 +58,8 @@ class logging
     public function arraylog($array, $filename = "", $line = "")
     {
         $loglevel = "ARRAY";
-
-        $this->writeMessageToLog($loglevel, implode('->',$array), $filename, $line);
+        $array = print_r($array,true);
+        $this->writeMessageToLog($loglevel, $array, $filename, $line);
     }
 
     public function sql($logmessage, $filename = "", $line = "")

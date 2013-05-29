@@ -1,0 +1,31 @@
+Idé: Mandatory checkers på setup tabben..
+Bug: summarise för metrics är inte alignad rätt.
+Bug: select all i attachment är inte alignad rätt samma sätt på olika browsers
+Bug: Upload. check size på file vs post_max_size
+Bug: req/bug/link fungerar inte att ha asdfasd
+Bug: fånga alt+tab när man är utanför tabbarna för att inte bli flyttad till annan sida..
+Feature: Charter lägg till rubriker....
+
+
+
+
+
+
+
+
+
+
+
+
+
+Idé: Mandatory checkers på setup tabben..
+OK Bug: Add area: när man lägger till ett area så saknas det tomma valet
+Bug: summarise för metrics är inte alignad rätt.
+Bug: select all i attachment är inte alignad rätt samma sätt på olika browsers
+Bug: Upload. check size på file vs post_max_size
+OK Bug: måste ta bort attachment 2 gånger!?
+Bug: req/bug/link fungerar inte att ha asdfasd
+Bug: fånga alt+tab när man är utanför tabbarna för att inte bli flyttad till annan sida..
+Bug: gå igenom och validera iconer på list sidan...
+Feature: Charter lägg till rubriker....
+

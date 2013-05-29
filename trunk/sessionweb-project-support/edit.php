@@ -20,7 +20,7 @@ if (!isset($_REQUEST['sessionid'])) {
     $session = new sessionObject();
     $sessionid = $session->getSessionid();
     $session->saveObjectToDb();
-    header("Location: session2.php?sessionid=$sessionid");
+    header("Location: edit.php?sessionid=$sessionid");
     exit();
 }
 
@@ -29,14 +29,14 @@ require_once("include/header.php.inc");
 echo "<div id='message'></div>";
 
 
-$s2 = new session2();
+$s2 = new Edit();
 
 $s2->showHtml();
 
 
 require_once("include/footer.php.inc");
 
-class session2
+class Edit
 {
     private $logger;
     private $formHelper;
@@ -63,8 +63,10 @@ class session2
     private function showHtmlAllowedToEditSession()
     {
         echo '<div id=ui-master>';
-        echo ' <div id="divTitle" ><label for="input_title">Session title:</label>
-              <input type="text" id="input_title" size="80" class="sInput">';
+        echo ' <div id="divTitle" >
+
+              <label for="input_title" >Session title:</label>
+              <input type="text" id="input_title" size="80" class="sInput" title="Company name or ticker">';
         echo '<button id="setExecuted">Mark as executed</button><button id="unsetExecuted">Mark as in progress</button>';
         echo '</div>';
         echo '
@@ -75,7 +77,7 @@ class session2
             <li><a href="#tabs-3">Notes</a></li>
             <li><a href="#tabs-4">Metrics</a></li>
             <li><a href="#tabs-5">Attachments</a></li>
-          </ul>
+            </ul>
           <div id="tabs-1">';
         echo '<table class="sTable"><tr><td>';
         echo "<span class='sH3'>Sprint:</span>  <p>" . $this->formHelper->getSprintSelect() . "<span class='minmax' id='minimizeSprint'>[&uarr;]</span><span class='minmax' id='maximizeSprint'>[&darr;]</span></p>";
@@ -135,16 +137,16 @@ class session2
 
             <div id="tabs-2">';
 
-        echo '<div id="idcharter">Charter <span id="charterStatus"></span><br><textarea name="chartereditor" rows="30" cols="30">&nbsp;d</textarea></div>';
+        echo '<div id="idcharter"><span class="larger">Charter</span> <span id="charterStatus"></span><br><textarea name="chartereditor" rows="30" cols="30">&nbsp;</textarea></div>';
 
         echo '</div>
             <div id="tabs-3">';
-        echo '<div id="idnotes">Notes<span id="notesStatus"></span><br><textarea name="noteseditor" rows="30" cols="30">&nbsp;d</textarea></div>';
+        echo '<div id="idnotes"><span class="larger">Notes</span><span id="notesStatus"></span>&nbsp;&nbsp;&nbsp;&nbsp;<img id="reportBug" src="pictures/bug.png" alt="Report a Bug"><input type="text" class="sInput" id="new_bug2" size="10" title="Add bug id and press enter"><textarea name="noteseditor" rows="30" cols="30">&nbsp;d</textarea></div>';
 
         echo '</div>
             <div id="tabs-4">';
 
-        echo "<div>Metrics:";
+        echo '<div><span class="larger">Metrics</span>:';
         echo "<span id='metricsCalc'></span><br>";
 
         echo "Setup(%):";
@@ -170,6 +172,7 @@ class session2
         echo '</div>
             <div id="tabs-5">';
         $sessionId = $this->session->getSessionid();
+        echo '<span class="larger">Attachments</span>';
         echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid=' . $sessionId . '" width="100%" height="600" frameborder="0"></iframe>';
         echo '</div></div> ';
         echo '</div>';

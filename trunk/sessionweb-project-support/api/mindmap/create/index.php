@@ -64,9 +64,11 @@ if (isset($_REQUEST['sessionid']) && isset($_REQUEST['title'])) {
                 $sql = "";
                 $sql .= "INSERT INTO mission_mindmaps ";
                 $sql .= "            (versionid, ";
-                $sql .= "             map_id) ";
+                $sql .= "             map_id, ";
+                $sql .= "             map_title )";
                 $sql .= "VALUES      ( $versionid, ";
-                $sql .= "              '$mapId' ) ";
+                $sql .= "              '$mapId',  ";
+                $sql .= "              '$title' ) ";
 
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
                 $logger->debug("Added MindMap with map_id $mapId to session $sessionid", __FILE__, __LINE__);

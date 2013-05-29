@@ -296,6 +296,7 @@ function checkFoldersForRWDuringInstallation()
     echo "<b>Check for Read Write access for certain folders.</b><br>";
     $foldersToCheckRW = array("../config/", "../log/"); //"../include/filemanagement/files/", "../include/filemanagement/thumbnails/"
     $foldersOk = true;
+
     foreach ($foldersToCheckRW as $aFolder) {
         try {
             $ourFileName = $aFolder . "testFile.txt";

@@ -35,7 +35,7 @@ if (isset($_REQUEST['sessionid']) != null) {
             // print_r($row);
 
             $tmpFileInfo['name'] = $row['filename'];
-            $tmpFileInfo['size'] = $row['filename'];
+            $tmpFileInfo['size'] = $row['size'];
             $tmpFileInfo['url'] = $scriptUrl . "../download/index.php?id=" . $row['id'];
             if ($row['thumbnail']!=null && in_array($row['mimetype'], $picture_mimetypes)) {
                 $tmpFileInfo['thumbnail_url'] = $scriptUrl . "../getThumb/index.php?id=" . $row['id'];

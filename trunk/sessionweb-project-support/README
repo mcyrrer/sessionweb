@@ -6,7 +6,10 @@ To enable some of the feature's please read through README-TipsAndTrixs
 
 ==SessionWeb 25==
 Notes:
-This version have is a major update. Edit page is rewritten from scratch to take care of some nasty encoding bugs.
+This version have is a major update.
+PHP version supported is 5.4.x-> Version below this will not work!!
+
+Edit page is rewritten from scratch to take care of some nasty encoding bugs.
 Installation/Upgrade from any previous version:
 Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
 

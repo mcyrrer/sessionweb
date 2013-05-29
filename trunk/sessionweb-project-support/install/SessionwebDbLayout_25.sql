@@ -457,6 +457,7 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_mindmaps` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `map_id` INT NOT NULL ,
+  `map_title` VARCHAR(300) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `versionid` (`versionid` ASC) )
 ENGINE = InnoDB;

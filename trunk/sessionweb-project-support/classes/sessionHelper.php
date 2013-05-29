@@ -15,6 +15,10 @@ class sessionHelper
         $this->queryHelper = new queryHelper();
     }
 
+    function getCurrentUserName()
+    {
+        return $_SESSION['username'];
+    }
     function isUserAllowedToEditSession($sessionObject)
     {
         $sessionId = $sessionObject->getSessionid();

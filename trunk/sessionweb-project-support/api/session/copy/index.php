@@ -62,7 +62,7 @@ echo "<img src='pictures/edit-copy-9-medium.png' alt=''>";
 echo "<h2>Copy session</h2>";
 echo "<p>Title of copy:".$sessionDataToCopy["title"]."(Copy)</p>";
 echo "<p>Copy created</p>";
-echo "<div id='editCopy'><a href='session2.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
+echo "<div id='editCopy'><a href='edit.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
 echo "</center>";
 
 ?>

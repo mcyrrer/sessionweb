@@ -76,8 +76,6 @@ $(document).ready(function () {
     $(window).bind("beforeunload", function () {
         return saveBeforeExit(sessionID, editorsActivated, jsonResponseContent);
     })
-
-
 });
 
 function ExecutedButtonPressed() {
@@ -878,6 +876,25 @@ function AddBugManager() {
         $('#new_bug').hide();
         $('#new_bug').val("");
     });
+
+    $('#new_bug2').hide();
+    $('#reportBug').click(function () {
+        $('#new_bug2').show();
+        $('#new_bug2').focus();
+    });
+    $("#new_bug2").keypress(function (event, type) {
+        if (isKeyPressedEnter(event, type)) {
+            CreateBug(this.value);
+            $('#new_bug2').val("");
+        }
+    });
+    $("#new_bug2").focusout(function () {
+        $('#new_bug2').hide();
+        $('#new_bug2').val("");
+    });
+
+
+
 }
 
 function onBugLinkDeleteClick(aId) {
@@ -1262,3 +1279,4 @@ function escapeHtml(string) {
         return entityMap[s];
     });
 }
+

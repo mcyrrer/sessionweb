@@ -1,7 +1,8 @@
 <?php
-
-require_once 'config/auth.php.inc';
-require_once 'classes/logging.php';
+require_once 'PathHelper.php';
+$rootPath = PathHelper::getRootPath("");
+require_once $rootPath.'/config/auth.php.inc';
+require_once $rootPath.'/classes/logging.php';
 
 class authentication
 {
@@ -83,10 +84,10 @@ class authentication
         } elseif (mysql_num_rows($result) == 0) {
 
             return 2;
-        }
-        else {
+        } else {
             $logger->warning("More then one user have username $username", __FILE__, __LINE__);
             return 3;
         }
     }
+
 }

@@ -8,7 +8,7 @@ body {
 
 #header {
     position: relative;
-    width: 1140px;
+    /*width: 1140px;*/
     height: 5.0em;
     background: #2B2B2B url('../pictures/topbg.gif') repeat-x;
     margin-bottom: 2px;
@@ -38,7 +38,7 @@ body {
 
 #menu {
     position: relative;
-    width: 1140px;
+    /*width: 1140px;*/
     height: 1.5em;
     background: #808500 repeat-x;
     margin-bottom: 1.5px;
@@ -56,7 +56,7 @@ body {
 
 #menubottom {
     position: relative;
-    width: 1140px;
+    /*width: 1140px;*/
     height: 1.0em;
     background: url('../pictures/border1.gif') repeat-x;
     margin-bottom: 2px;
@@ -64,7 +64,7 @@ body {
 
 #boldline {
     position: relative;
-    width: 1140px;
+    /*width: 1140px;*/
     height: 0.5em;
     background: #808500 repeat-x;
     margin-bottom: 2px;
@@ -183,7 +183,7 @@ p {
         (so it'll take up 82% of the browser window's width). You can set it to a different percentage
         value (70%, 90%, etc.) or even a pixel value (760px, 800px, etc.) to enforce a fixed width.
     */
-    width: 1140px;
+    /*width: 1140px;*/
     border: solid 7px #fff;
     background-color: #fff;
     margin: 0 auto;
@@ -191,7 +191,7 @@ p {
 
 #footer {
     position: relative;
-    width: 1140px;
+    /*width: 1140px;*/
     height: 1.5em;
     background: #aaa;
     margin-bottom: 2px;
@@ -209,7 +209,7 @@ p {
 
 .graybox {
     background-color: #efefef;
-    width: 1024px;
+    /*width: 1024px;*/
     height: 100%;
     background-color: rgb(239, 239, 239);
 }

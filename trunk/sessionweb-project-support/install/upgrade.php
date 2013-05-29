@@ -99,7 +99,10 @@ function upgrade($versions)
             $mysqlExecuter = new MySqlExecuter();
             echo "<h2>Upgrade of sessionweb from $currentVersion</h2>";
             $logger->info('Upgrade from ' . $currentVersion . ' started.', __FILE__, __LINE__);
-
+            if($currentVersion==24)
+            {
+                require_once('correctTableAttachmentsSessionIdToVersionid.inc');
+            }
             $resultOfSql = $mysqlExecuter->multiQueryFromFile($versions[$currentVersion], DB_NAME_SESSIONWEB);
             mysql_close($con);
 
