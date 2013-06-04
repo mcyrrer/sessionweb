@@ -34,7 +34,7 @@ if (isset($_REQUEST['sessionid'])) {
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
         if ($sHelper->isUserAllowedToEditSession($so)) {
-                $sql = "UPDATE mission_status SET executed=0,executed_timestamp='' WHERE versionid='".$so->getVersionid()."'" ;
+                $sql = "UPDATE mission_status SET executed=0,executed_timestamp=null WHERE versionid='".$so->getVersionid()."'" ;
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
                 $logger->debug("Changed status for executed to 0 for session $sessionid",__FILE__, __LINE__);
                 header("HTTP/1.0 200 OK");

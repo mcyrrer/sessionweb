@@ -1,3 +1,5 @@
+var contentChanged = false;
+
 $(document).ready(function () {
     var sessionID = $(document).getUrlParam("sessionid");
     var editorsActivated = false;
@@ -23,7 +25,7 @@ $(document).ready(function () {
                             SetContentsNotes(jsonResponseContent['notes']);
                             if ($("#debriefNotes").length == 1) {
                                 SetContentDebrief(jsonResponseContent['debrief_notes']);
-                            editorsActivated = true;
+                                editorsActivated = true;
                             }
 
                         }
@@ -44,6 +46,8 @@ $(document).ready(function () {
         }
     });
 
+    AddDebriefManager();
+
     ShowHideAreaRows();
     ShowHideAddTester();
     ShowHideSprint();
@@ -57,6 +61,44 @@ $(document).ready(function () {
     })
 
 });
+
+function AddDebriefManager() {
+    $('.dbStatus').click(function () {
+        UpdateDebriefStatus();
+    });
+}
+
+function UpdateDebriefStatus() {
+    var selectedButton = $(".dbStatus:checked").val();
+    var sessionID = $(document).getUrlParam("sessionid");
+
+    if ($('#debriefed').is(':checked')) {
+        var debriefed = true;
+        var closed = false;
+    } else if ($('#closed').is(':checked')) {
+        var debriefed = false;
+        var closed = true;
+    }
+    else {
+        var debriefed = false;
+        var closed = false;
+    }
+
+    $.ajax({
+        type: "GET",
+        data: {
+            sessionid: sessionID,
+            debriefed: debriefed,
+            closed: closed
+        },
+        url: 'api/status/debrief/index.php',
+        complete: function (data) {
+            if (data.status != '200') {
+                alert("Could not update debrief status, check system logs");
+            }
+        }
+    });
+}
 
 function ExecutedButtonPressed() {
 
@@ -120,20 +162,25 @@ function UnExecutedButtonPressed() {
 
 function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
     if (editorsActivated == true) {
-        $.ajax({
-            type: "POST",
-            data: {
-                sessionid: sessionID,
-                text: GetContentsDebriefNotes()
-            },
-            url: 'api/debriefnotes/set/index.php',
-            complete: function (data) {
-                if (data.status != '200') {
-                    alert("Could not save notes");
-                }
-            },
-            async: false
-        });
+        var currentText = GetContentsDebriefNotes();
+        var orgText = jsonResponseContent['debrief_notes'];
+        if (contentChanged) {
+            $.ajax({
+                type: "POST",
+                data: {
+                    sessionid: sessionID,
+                    text: GetContentsDebriefNotes(),
+                    final: true
+                },
+                url: 'api/debriefnotes/set/index.php',
+                complete: function (data) {
+                    if (data.status != '200') {
+                        alert("Could not save notes");
+                    }
+                },
+                async: false
+            });
+        }
     }
 }
 
@@ -309,13 +356,32 @@ function setSessionData(jsonResponseContent) {
     //idSoftwareUnderTest
     $('#idSoftwareUnderTest').html(jsonResponseContent['software']);
 
+    //DebriefStatus
+    if (jsonResponseContent['debriefed'] == 0 && jsonResponseContent['closed'] !== 0) {
+        $("#notdebriefed").prop("checked", true);
+        $("#debriefStatus").html("Status: Not yet debriefed");
+
+    }
+
+    if (jsonResponseContent['debriefed'] == 1) {
+        $("#debriefed").prop("checked", true);
+        $("#debriefStatus").html("Status: Debriefed");
+
+    }
+
+    if (jsonResponseContent['closed'] == 1) {
+        $("#closed").prop("checked", true);
+        $("#debriefStatus").html("Status: Closed");
+
+    }
+
     //Requriements
     PopulateRequirements(jsonResponseContent['requirements']);
 
     //Bugs
     PopulateBugs(jsonResponseContent['bugs']);
 
-    if (jsonResponseContent['debriefed']==1) {
+    if (jsonResponseContent['debriefed'] == 1) {
         $("#debriefText").html(jsonResponseContent['debrief_notes']);
     }
 
@@ -865,6 +931,7 @@ function saveDebriefNotes(sessionID) {
                 m = checkTime(m);
                 s = checkTime(s);
                 $("#debriefStatus").empty().append("Last saved at: " + h + ":" + m + ":" + s);
+                contentChanged = true;
             }
         }
     });
@@ -904,10 +971,10 @@ function escapeHtml(string) {
 function MetricsPieChart(setup, test, bug, opp) {
     var data = new Array();
     var data = {
-        "Setup":setup,
-        "Test":test,
-        "Bug":bug,
-        "Opportunity":opp
+        "Setup": setup,
+        "Test": test,
+        "Bug": bug,
+        "Opportunity": opp
     };
 
     var title = "Time distribution";
@@ -916,13 +983,13 @@ function MetricsPieChart(setup, test, bug, opp) {
         type: "POST",
         data: {
             data: data,
-            title:title
+            title: title
         },
         url: 'api/statistics/metrics/index.php',
         complete: function (data) {
             if (data.status == '200') {
                 var response = data.responseText;
-                $('#metricsPic').html('<img src="'+response+'" alt="Metrics Picture"> ');
+                $('#metricsPic').html('<img src="' + response + '" alt="Metrics Picture"> ');
             }
         }
     });
@@ -939,13 +1006,13 @@ function populateAttachments() {
         complete: function (data) {
             if (data.status == '200') {
                 var response = data.responseText;
-                var attachments = jQuery.parseJSON( response );
+                var attachments = jQuery.parseJSON(response);
                 $.each(attachments['files'], function (index, value) {
                     var name = value['name'];
                     var url = value['url'];
                     var size = value['size'];
                     var thumbnail_url = value['thumbnail_url'];
-                    $('#attachments').append('<p><img src="'+thumbnail_url+'" alt="">&nbsp&nbsp&nbsp&nbsp&nbsp<a href="' + url + '" target="_blank">' + name + '</a></p>');
+                    $('#attachments').append('<p><img src="' + thumbnail_url + '" alt="">&nbsp&nbsp&nbsp&nbsp&nbsp<a href="' + url + '" target="_blank">' + name + '</a></p>');
 
 
                 });

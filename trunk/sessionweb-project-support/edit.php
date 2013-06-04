@@ -89,13 +89,13 @@ class Edit
 
         echo "<span class='sH3'>Testenvironment:</span><p>" . $this->formHelper->getEnvironmentSelect() . "<span class='minmax' id='minimizeTestenv'>[&uarr;]</span><span class='minmax' id='maximizeTestenv'>[&darr;]</span></p>";
         if ($_SESSION['settings']['custom1'] == 1) {
-            echo "<span class='sH3'>".$_SESSION['settings']['custom1_name'].":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom1", $_SESSION['settings']['custom1_multiselect']) . "<span class='minmax' id='minimizeCust1'>[&uarr;]</span><span class='minmax' id='maximizeCust1'>[&darr;]</span></p>";
+            echo "<span class='sH3'>" . $_SESSION['settings']['custom1_name'] . ":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom1", $_SESSION['settings']['custom1_multiselect']) . "<span class='minmax' id='minimizeCust1'>[&uarr;]</span><span class='minmax' id='maximizeCust1'>[&darr;]</span></p>";
         }
         if ($_SESSION['settings']['custom2'] == 1) {
-            echo "<span class='sH3'>".$_SESSION['settings']['custom2_name'].":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom2", $_SESSION['settings']['custom2_multiselect']) . "<span class='minmax' id='minimizeCust2'>[&uarr;]</span><span class='minmax' id='maximizeCust2'>[&darr;]</span></p>";
+            echo "<span class='sH3'>" . $_SESSION['settings']['custom2_name'] . ":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom2", $_SESSION['settings']['custom2_multiselect']) . "<span class='minmax' id='minimizeCust2'>[&uarr;]</span><span class='minmax' id='maximizeCust2'>[&darr;]</span></p>";
         }
         if ($_SESSION['settings']['custom3'] == 1) {
-            echo "<span class='sH3'>".$_SESSION['settings']['custom3_name'].":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom3", $_SESSION['settings']['custom3_multiselect']) . "<span class='minmax' id='minimizeCust3'>[&uarr;]</span><span class='minmax' id='maximizeCust3'>[&darr;]</span></p>";
+            echo "<span class='sH3'>" . $_SESSION['settings']['custom3_name'] . ":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom3", $_SESSION['settings']['custom3_multiselect']) . "<span class='minmax' id='minimizeCust3'>[&uarr;]</span><span class='minmax' id='maximizeCust3'>[&darr;]</span></p>";
         }
         echo "<span class='sH3'>Software under test:</span><br>";
         echo "<textarea rows='4' cols='50' id='idSoftwareUnderTest' name='nameSoftwareUnderTest' class='fixedWidth'></textarea>";
@@ -105,7 +105,7 @@ class Edit
         echo '<span class="sH3">Test requirements:</span>';
         echo '<span id="addReq">[+]</span><input type="text" class="sInput" id="new_requirement" size="10" ><br>';
         echo "<span id='testReqId'></span>";
-        echo "</div>";
+//        echo "</div>";
 
         echo "<div class='itemList'>";
         echo '<span class="sH3">Bug reported:</span>';
@@ -125,11 +125,13 @@ class Edit
         echo "<span id='autoSoftwareVersions'></span>";
         echo "</div>";
 
-        echo "<div class='itemList'>";
-        echo "<span class='sH3'>Minmaps:</span>";
-        echo '<span id="addMindMap">[+]</span><br>';
-        echo "<span id='mindMaps'></span>";
-        echo "</div>";
+        if ($_SESSION['settings']['wisemapping'] == 1) {
+            echo "<div class='itemList'>";
+            echo "<span class='sH3'>Minmaps:</span>";
+            echo '<span id="addMindMap">[+]</span><br>';
+            echo "<span id='mindMaps'></span>";
+            echo "</div>";
+        }
 
 
         echo '</td></tr></table>';

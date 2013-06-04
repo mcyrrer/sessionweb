@@ -54,7 +54,7 @@ if (strcmp($_SESSION['username'], $sessionInfo['username']) == 0 || $_SESSION['s
 else
 {
     echo "<center>";
-    echo "<img src='../../../pictures/multiUserIcon.jpg' alt=''>";
+    echo "<img src='pictures/multiUserIcon.jpg' alt=''>";
 
     echo "<h2>Could not reassign session $title</h2>";
     echo "Session " . $_REQUEST["sessionid"] . " could not be reassigned.<br>

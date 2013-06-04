@@ -22,7 +22,7 @@ table, th, td {
 .sH3 {
     font-size: 1.17em;
     font-weight: bold;
-    font-family: "'Comic Sans MS'";
+    /*font-family: "'Comic Sans MS'";*/
     margin-bottom: 40px;
 }
 

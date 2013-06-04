@@ -1139,13 +1139,19 @@ function updateAreas() {
 
             if (data.status == '200') {
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
-
+                var selectedAreas = [];
+                $('#idArea :selected').each(function(i, selected){
+                    selectedAreas[i] = $(selected).text();
+                });
+                $('#idArea').empty();
                 $('#idArea').append('<option></option>');
                 $.each(jsonResponseContent, function (index, value) {
                     $('#idArea').append('<option>' + value + '</option>');
                 });
-            }
+                $('#addNewAreaInput').val("");
+                $('#idArea').val(selectedAreas);
 
+            }
         }
     });
 }

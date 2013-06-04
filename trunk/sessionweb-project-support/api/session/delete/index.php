@@ -1,65 +1,59 @@
 <?php
+/**
+ * API to delete a session
+ * api/session/delete/index.php?sessionid=[sessionId]
+ */
+
 session_start();
-error_reporting(0);
+
 require_once('../../../include/validatesession.inc');
+
+//error_reporting(0);
+
+require_once('../../../config/db.php.inc');
+require_once ('../../../include/commonFunctions.php.inc');
 require_once ('../../../include/db.php');
-include_once('../../../config/db.php.inc');
-include_once ('../../../include/commonFunctions.php.inc');
-include_once('../../../include/session_database_functions.php.inc');
+require_once('../../../classes/sessionHelper.php');
 require_once('../../../classes/logging.php');
+require_once('../../../classes/dbHelper.php');
+
 $logger = new logging();
+$sHelper = new sessionHelper();
+$dbManager = new dbHelper();
 
-$con = getMySqlConnection();
-$sessionInfo = (getSessionData($_REQUEST["sessionid"]));
-$title = $sessionInfo["title"];
+if (isset($_REQUEST['sessionid']) && $_REQUEST['sessionid'] != null) {
 
-$sessionid = $_REQUEST["sessionid"];
+    $con = $dbManager->db_getMySqliConnection();
+    $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);
+    $so = new sessionObject($sessionid);
 
-if(!isset($_REQUEST['delete']))
-{
-    $sessionid = $_REQUEST["sessionid"];
-    echo "<center>";
-    echo "<img src='pictures/user-trash-full-3.png' alt=''>";
-    echo "<h2>Delete session</h2>\n";
-    echo "<p>Title: $title</p>";
-    echo "<p>Are you sure that you want to delete session?</p>\n";
-    echo "<a href='index.php?sessionid=$sessionid&delete=yes'>Delete</a>\n";
-
-    echo "</center>";
-    die();
-}
-if (strcmp($_SESSION['username'],$sessionInfo['username'])== 0 || $_SESSION['superuser']==1 || $_SESSION['useradmin']==1) {
-    $title = getSessionTitle(getSessionVersionId($sessionid));
-    deleteSessionFromDatabase($sessionid);
-    $logger->info($_SESSION['username']." deleted session ($sessionid): $title");
-
-    $title = $sessionInfo["title"];
-    echo "<center>";
-    echo "<img src='pictures/user-trash-full-3.png' alt=''>";
-
-    echo "<h2>Deleted session</h2>";
-    echo "<p> $title</p>";
-
-    echo "</center>";
-    $logger->info("Deleted session ".$sessionid,__FILE__,__LINE__);
-}
-else
-{
-    echo "<center>";
-    echo "<img src='pictures/user-trash-full-3.png' alt=''>";
-
-    echo "<h2>Could not delete session $title</h2>";
-    echo "Session " . $_REQUEST["sessionid"] . " could not be deleted.<br>
-    You are not the owner of the session.";
-
-    echo "</center>";
-    $logger->error("Failed to deleted session ".$sessionid,__FILE__,__LINE__);
+    header("HTTP/1.0 501 Internal Server Error");
 
 
+    if ($so->getSessionExist()) {
+        $versionid = $so->getVersionid();
+        if ($sHelper->isUserAllowedToEditSession($so)) {
+            $so->deleteFromDatabase();
+            header("HTTP/1.0 200 OK");
+            $response['code'] = ITEM_REMOVED;
+            $response['text'] = "ITEM_REMOVED";
+        } else {
+            header("HTTP/1.0 401 Unauthorized");
+            $response['code'] = UNAUTHORIZED;
+            $response['text'] = "UNAUTHORIZED";
+        }
+    } else {
+        $logger->debug("Tried to delete session $sessionid but it does not exist", __FILE__, __LINE__);
+        header("HTTP/1.0 404 Not found");
+        $response['code'] = ITEM_DOES_NOT_EXIST;
+        $response['text'] = "ITEM_DOES_NOT_EXIST";
+    }
 
+} else {
+    $logger->debug("Tried to delete a session but one of the parameters is bad", __FILE__, __LINE__);
+    header("HTTP/1.0 400 Bad Request");
+    $response['code'] = PARAMETER_NOT_PROVIDED_IN_REQUEST;
+    $response['text'] = "PARAMETER_NOT_PROVIDED_IN_REQUEST";
 }
 
-
-
-
-?>
+echo json_encode($response);

@@ -43,14 +43,21 @@ class View
 
     public function showHtml()
     {
-        if ($this->sessionHelper->isUserAllowedToEditSession($this->session)) {
-            $this->showHtmlAllowedToEditSession();
-        } else {
-            echo "User not allowed to edit session, please ask owner of session to reassign it and try again.";
+        if(isset($_REQUEST['debrief']))
+        {
+            if ($this->sessionHelper->isUserAllowedToDebriefSession($this->session)) {
+                $this->showHtmlAllowedToViewDebriefSession();
+            }else {
+                echo "You are not allowed to debrief session, only superuser or admin can do a debrief.";
+            }
         }
-    }
+        else
+        {
+            $this->showHtmlAllowedToViewDebriefSession();
+        }
+     }
 
-    private function showHtmlAllowedToEditSession()
+    private function showHtmlAllowedToViewDebriefSession()
     {
         echo '<div id=ui-mastnoteseditorer>'; #fff
         echo ' <div id="divTitle" ><label for="input_title">Session title:</label>
@@ -64,7 +71,7 @@ class View
             <li><a href="#tabs-3">Notes</a></li>
             <li><a href="#tabs-4">Metrics</a></li>
             <li><a href="#tabs-5">Attachments</a></li>';
-        if (isset($_REQUEST['debrief']) || $this->session->getDebriefed()) {
+        if (isset($_REQUEST['debrief']) || $this->session->isDebriefed()) {
             echo             '<li><a href="#tabs-6">Debrief</a></li>';
         }
 
@@ -110,9 +117,11 @@ class View
         echo "<span id='autoSoftwareVersions'></span>";
         echo "</div>";
 
-        echo "<div class='itemList'>";
-        echo "<span class='sH3'>Minmaps:</span><br>";
-        echo "<span id='mindMaps'></span>";
+        if ($_SESSION['settings']['wisemapping'] == 1) {
+            echo "<div class='itemList'>";
+            echo "<span class='sH3'>Minmaps:</span><br>";
+            echo "<span id='mindMaps'></span>";
+        }
         echo "</div>";
 
 
@@ -154,25 +163,36 @@ class View
 
             echo '<div id="tabs-6">';
             echo '  <div id="debrief">';
-            echo '      <div id="iddebrief"><span class="larger">Debrief</span>&nbsp;&nbsp;<span id="debriefStatus"></span><span id="debriefNotes"></span><textarea name="debriefeditor" rows="30" cols="30">&nbsp;d</textarea></div>';
+            echo '      <div id="iddebrief">
+                            <span class="larger">Debrief</span>&nbsp;&nbsp;
+                            <span id="debriefStatus"></span>
+                            <div id="debriefNotes">
+                                <input class="dbStatus" id="notdebriefed" type="radio" name="debriefstatus" value="notdebriefed" >Not debriefed
+                                |
+                                <input class="dbStatus" id="debriefed" type="radio" name="debriefstatus" value="debriefed">Debriefed
+                                |
+                                <input class="dbStatus" id="closed" type="radio" name="debriefstatus" value="closed">Closed
+                            </div>
+                            <textarea name="debriefeditor" rows="30" cols="30">&nbsp;d</textarea>
+                        </div>';
             echo '  </div>';
             echo '</div>';
-        } elseif($this->session->getDebriefed())
-        {
+        } elseif ($this->session->isDebriefed()) {
             echo '<div id="tabs-6">';
-            echo '  <div id="debrief">';
-            echo '      <div id="iddebrief"><span class="larger">Debrief</span>&nbsp;&nbsp;<div id="debriefText"></div></div>';
-            echo '  </div>';
+            echo '      <div id="debrief">';
+            echo '          <div id="iddebrief">
+                                <span class="larger">Debrief</span>&nbsp;&nbsp;
+                            <div id="debriefStatus"></div>
+                            <div id="debriefText"></div>
+                        </div>';
             echo '</div>';
-        }
-        else
-        {
+        } else {
             $this->logger->info("Tried to debrief but is not authorized");
         }
 
 
         echo '</div></div> ';
-        echo '</div>';
+//        echo '</div>';
     }
 }
 

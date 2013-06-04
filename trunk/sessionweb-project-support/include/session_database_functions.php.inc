@@ -897,6 +897,11 @@ function deleteSessionFromDatabase($sessionId)
     $sqlDeleteSessionId .= "WHERE  sessionid = $sessionId ";
     $result = mysql_query($sqlDeleteSessionId);
 
+    $sqlDeleteSessionId = "";
+    $sqlDeleteSessionId .= "DELETE FROM mission_mindmaps ";
+    $sqlDeleteSessionId .= "WHERE  versionid = $versionid ";
+    $result = mysql_query($sqlDeleteSessionId);
+
     mysql_close($conDeleteSession);
 
 }

@@ -12,7 +12,6 @@ echo "<html>\n";
 echo "  <head>\n";
 echo "      <meta http-equiv=\"Content-type\" content=\"text/html;charset=utf-8\">\n";
 echo "      <title>Sessionweb</title>\n";
-
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionwebcss.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/colorbox.css\">\n";
 echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"js/jqueryui/jquery-ui-1.10.0.custom.css\">\n";

@@ -15,10 +15,16 @@ class sessionHelper
         $this->queryHelper = new queryHelper();
     }
 
-    function getCurrentUserName()
+    function getUserName()
+{
+    return $_SESSION['username'];
+}
+
+    function getUserFullName()
     {
-        return $_SESSION['username'];
+        return $_SESSION['user'];
     }
+
     function isUserAllowedToEditSession($sessionObject)
     {
         $sessionId = $sessionObject->getSessionid();
@@ -31,7 +37,19 @@ class sessionHelper
             $this->logger->debug("User not allowed to edit session " . $sessionId, __FILE__, __LINE__);
             return false;
         }
+    }
 
+    function isUserAllowedToDebriefSession($sessionObject)
+    {
+        $sessionId = $sessionObject->getSessionid();
+        $users = $sessionObject->getAdditional_testers();
+        $users[] = $sessionObject->getUsername();
+        if ($this->isSuperUser() == 1 || $this->isAdmin() == 1) {
+            return true;
+        } else {
+            $this->logger->debug("User not allowed to debrief session " . $sessionId, __FILE__, __LINE__);
+            return false;
+        }
     }
 
     function getSessionIdFromVersionId($versionId, $mysqli_con)
@@ -93,6 +111,25 @@ class sessionHelper
         }
         echo '</select>';
 
+    }
+
+
+    function isAdmin()
+    {
+        if ($_SESSION['useradmin'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function isSuperUser()
+    {
+        if ($_SESSION['useradmin'] == 1 || $_SESSION['superuser'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

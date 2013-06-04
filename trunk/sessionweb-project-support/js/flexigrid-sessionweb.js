@@ -23,23 +23,44 @@ function flexi_colorGridRows() {
 }
 ;
 
+//TODO: CHange to delete through API!!!!
 function deleteSession() {
     //$(".counterstring").colorbox({iframe:true, width:"80%", height:"80%"});
 
     var id = $('.trSelected td:nth-child(1) div').text();
+    var title = $('.trSelected td:nth-child(3) div').text();
     if (id != "") {
-        //$.fn.colorbox({
-        $('.delete').colorbox({
-            href: 'api/session/delete/?sessionid=' + id,
-//            href:'http://www.google.com',
-            open: true,
-            iframe: false,
-            width: 500,
-            height: 500,
-            onClosed: function () {
-                jQuery("#flexgrid1").flexReload();
-            }
-        });
+        if (confirm('Are you sure you want to delete this session: ('+title+") ?")) {
+            $.ajax({
+                type: "GET",
+                data: {
+                    sessionid: id
+                },
+                url: 'api/session/delete/index.php',
+                complete: function (data) {
+                    if (data.status == '200') {
+                        jQuery("#flexgrid1").flexReload();
+                        $("#msgdiv").fadeIn("slow");
+                        $("#msgdiv").text("Session deleted");
+                        $('#msgdiv').fadeOut(3000, function () {
+                        });
+                    }
+                    else if(data.status == '401')
+                    {
+                        $("#msgdiv").fadeIn("slow");
+                        $("#msgdiv").text("You are not allowed to delete this session");
+                        $('#msgdiv').fadeOut(3000, function () {
+                        });
+                    }else
+                    {
+                        $("#msgdiv").fadeIn("slow");
+                        $("#msgdiv").text("On error occured, please check log files");
+                        $('#msgdiv').fadeOut(3000, function () {
+                        });
+                    }
+                }
+            });
+        }
     }
     else {
         displaySelectSessionMsg();
@@ -56,8 +77,14 @@ function debirefSession() {
             window.open('view.php?sessionid=' + id + '&debrief=yes', '_blank');
     }
     else {
+        if (status == "Closed" || status == "Debriefed") {
+            var msg = "Session is already debriefed."
+        }
+        else {
+            var msg = "Session is not executed and can therefore not be debriefed.";
+        }
         $("#msgdiv").fadeIn("slow");
-        $("#msgdiv").text("Session is not executed and can therefore not be debriefed.");
+        $("#msgdiv").text(msg);
         $('#msgdiv').fadeOut(3000, function () {
             // Animation complete.
         });
@@ -136,27 +163,7 @@ function copySession() {
 //        });
 
         $('.copy').colorbox({
-        href:'api/session/copy/?sessionid=' + id,
-        open:true,
-        iframe:false,
-        width:500,
-        height:500,
-        onClosed:function () {
-            jQuery("#flexgrid1").flexReload();
-        }
-    });
-    }
-    else {
-        displaySelectSessionMsg();
-    }
-}
-
-
-function reassignSession() {
-    var id = $('.trSelected td:nth-child(1) div').text();
-    if (id != "") {
-        $('.reassign').colorbox({
-            href: 'api/session/reassign/?sessionid=' + id,
+            href: 'api/session/copy/?sessionid=' + id,
             open: true,
             iframe: false,
             width: 500,
@@ -169,6 +176,37 @@ function reassignSession() {
     else {
         displaySelectSessionMsg();
     }
+}
+
+
+function reassignSession() {
+    var id = $('.trSelected td:nth-child(1) div').text();
+    var status = $('.trSelected td:nth-child(2) div').text();
+    if (status == "Not Executed" || status == "In progress") {
+        if (id != "") {
+            $('.reassign').colorbox({
+                href: 'api/session/reassign/?sessionid=' + id,
+                open: true,
+                iframe: true,
+                width: 500,
+                height: 500,
+                onClosed: function () {
+                    jQuery("#flexgrid1").flexReload();
+                }
+            });
+        }
+        else {
+            displaySelectSessionMsg();
+        }
+    }
+    else {
+        $("#msgdiv").fadeIn("slow");
+        $("#msgdiv").text("You can only reassign a session that is Not Executed or In progress.");
+        $('#msgdiv').fadeOut(3000, function () {
+            // Animation complete.
+        });
+    }
+
 }
 
 function shareSession() {
@@ -211,11 +249,11 @@ $(function () {
             {display: 'ID', name: 'id', width: 40, sortable: true, align: 'left'},
 //            {display:'Notes', name:'notes', width:30, sortable:true, align:'left'},
             {display: 'Status', name: 'status', width: 65, sortable: true, align: 'left'},
-            {display: 'Title', name: 'title', width: 300, sortable: false, align: 'left'},
+            {display: 'Title', name: 'title', width: 400, sortable: false, align: 'left'},
             {display: 'User', name: 'user', width: 100, sortable: false, align: 'left'},
             {display: 'Sprint', name: 'sprint', width: 100, sortable: false, align: 'left'},
             {display: 'Team', name: 'team', width: 100, sortable: false, align: 'left'},
-            {display: 'Area', name: 'area', width: 100, sortable: false, align: 'left', hide: false},
+            {display: 'Area', name: 'area', width: 200, sortable: false, align: 'left', hide: false},
 //            {display:'Environment', name:'env', width:100, sortable:false, align:'left', hide:false},
             {display: 'Updated', name: 'updated', width: 105, sortable: true, align: 'left'},
             {display: 'Executed', name: 'executed', width: 105, sortable: true, align: 'left', hide: true}
@@ -227,7 +265,7 @@ $(function () {
             {name: 'Edit in new tab', bclass: 'edit', onpress: editSession_newtab},
             {name: 'Delete', bclass: 'delete', onpress: deleteSession},
             {name: 'Copy', bclass: 'copy', onpress: copySession},
-            {name: 'Share', bclass: 'share', onpress: shareSession},
+//            {name: 'Share', bclass: 'share', onpress: shareSession},
             {name: 'Debrief', bclass: 'debrief', onpress: debirefSession},
             {name: 'Reassign', bclass: 'reassign', onpress: reassignSession},
             {name: 'Filter', bclass: 'filter', onpress: filterSession},

@@ -1,10 +1,10 @@
 <?php
 /**
  * API to set debrief notes content to a session
- * api/charter/set/index.php
+ * api/debriefnotes/set/index.php
  * [POST]
- * text=[sprintName]
- * sessionid=[sessionId]
+ * text=[text]
+ * final=[true, adds users full name to debrief notes]
  */
 
 session_start();
@@ -30,6 +30,10 @@ if (isset($_REQUEST['text']) && isset($_REQUEST['sessionid'])) {
     $con = $dbManager->db_getMySqliConnection();
     $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);
     $notes = dbHelper::escape($con, $_REQUEST['text']);
+    if(isset($_REQUEST['final']) && $_REQUEST['final'] == true)
+    {
+        $notes = 'Notes added by: '.$sHelper->getUserFullName() . '<br>'.$notes;
+    }
     $so = new sessionObject($sessionid);
 
     header("HTTP/1.0 501 Internal Server Error");
@@ -50,8 +54,8 @@ if (isset($_REQUEST['text']) && isset($_REQUEST['sessionid'])) {
                             (
                                 ".$versionid.",
                                 '".$notes."',
-                                '".$sHelper->getCurrentUserName()."'
-                            ) ON DUPLICATE KEY UPDATE notes='".$notes."', debriefedby='".$sHelper->getCurrentUserName()."'";
+                                '".$sHelper->getUserName()."'
+                            ) ON DUPLICATE KEY UPDATE notes='".$notes."', debriefedby='".$sHelper->getUserName()."'";
 
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
                 $logger->debug("Added/updated debrief notes content for session $sessionid",__FILE__, __LINE__);

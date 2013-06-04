@@ -20,6 +20,7 @@ define("ITEM_DOES_NOT_EXIST", 17);
 define("EXTERNAL_WEB_404", 18);
 define("EXTERNAL_WEB_UNAUTHORIZED", 19);
 define("UNKNOWN_ERROR", 20);
+define("SESSION_NOT_EXECUTED", 21);
 
 
 ?>

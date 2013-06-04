@@ -249,8 +249,8 @@ class sessionObject extends sessionObjectSave
                     }
 
                 }
-                $tmpName= $tmpAreaArray2['customtablename'].'_name';
-                $tmpAreaArray2['realcustomname']=$_SESSION['settings'][$tmpName];
+                $tmpName = $tmpAreaArray2['customtablename'] . '_name';
+                $tmpAreaArray2['realcustomname'] = $_SESSION['settings'][$tmpName];
                 $tmpAreaArray[$row['id']] = $tmpAreaArray2;
             }
         }
@@ -423,11 +423,11 @@ class sessionObject extends sessionObjectSave
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         while ($row = mysqli_fetch_array($result)) {
-            $tmpMindMapArray['map_id']=$row['map_id'];
-            $tmpMindMapArray['title']=$row['map_title'];
-            $tmpMindMapArray['url'] = $_SESSION['settings']['wisemapping_url'].'/c/maps/'.$row['map_id'].'/edit';
-            $tmpMindMapArray['url_view'] = $_SESSION['settings']['wisemapping_url'].'/c/maps/'.$row['map_id'].'/view';
-            $tmpMindMapArray['url_delete'] = $_SESSION['settings']['wisemapping_url'].'/c/restful/maps/batch?ids='.$row['map_id'];
+            $tmpMindMapArray['map_id'] = $row['map_id'];
+            $tmpMindMapArray['title'] = $row['map_title'];
+            $tmpMindMapArray['url'] = $_SESSION['settings']['wisemapping_url'] . '/c/maps/' . $row['map_id'] . '/edit';
+            $tmpMindMapArray['url_view'] = $_SESSION['settings']['wisemapping_url'] . '/c/maps/' . $row['map_id'] . '/view';
+            $tmpMindMapArray['url_delete'] = $_SESSION['settings']['wisemapping_url'] . '/c/restful/maps/batch?ids=' . $row['map_id'];
             $tmpArray[] = $tmpMindMapArray;
         }
         $this->setMindMaps($tmpArray);
@@ -607,7 +607,7 @@ class sessionObject extends sessionObjectSave
         return $this->debrief_notes;
     }
 
-    function getDebriefed()
+    function isDebriefed()
     {
         return $this->debriefed;
     }
@@ -1087,7 +1087,7 @@ class sessionObject extends sessionObjectSave
     public function toJson()
     {
         //return json_encode(jsonPrettifyer::indent($this->toArray()));
-        return json_encode($this->toArray(),JSON_PRETTY_PRINT);
+        return json_encode($this->toArray(), JSON_PRETTY_PRINT);
     }
 
     /**
@@ -1169,5 +1169,81 @@ class sessionObject extends sessionObjectSave
     public function getSessionExist()
     {
         return $this->sessionExist;
+    }
+
+    /**
+     * Delete a session from the database by delete all rows in all tables that have information about the session
+     */
+    public function deleteFromDatabase()
+    {
+        $con = $this->dbHelper->db_getMySqliConnection();
+
+        $versionid = $this->getVersionid();
+        $sessionId =  $this->getSessionid();
+
+        $sqlDeleteAttachments = "";
+        $sqlDeleteAttachments .= "DELETE FROM mission_attachments ";
+        $sqlDeleteAttachments .= "WHERE  mission_versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteAttachments, __FILE__, __LINE__);
+
+        $sqlDeleteMissionStatus = "";
+        $sqlDeleteMissionStatus .= "DELETE FROM mission_status ";
+        $sqlDeleteMissionStatus .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionStatus, __FILE__, __LINE__);
+
+        $sqlDeleteMissionMetrics = "";
+        $sqlDeleteMissionMetrics .= "DELETE FROM mission_sessionmetrics ";
+        $sqlDeleteMissionMetrics .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionMetrics, __FILE__, __LINE__);
+
+        $sqlDeleteMissionRequirements = "";
+        $sqlDeleteMissionRequirements .= "DELETE FROM mission_requirements ";
+        $sqlDeleteMissionRequirements .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionRequirements, __FILE__, __LINE__);
+
+        $sqlDeleteMissionDebriefNotes = "";
+        $sqlDeleteMissionDebriefNotes .= "DELETE FROM mission_debriefnotes ";
+        $sqlDeleteMissionDebriefNotes .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionDebriefNotes, __FILE__, __LINE__);
+
+        $sqlDeleteMissionBugs = "";
+        $sqlDeleteMissionBugs .= "DELETE FROM mission_bugs ";
+        $sqlDeleteMissionBugs .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionBugs, __FILE__, __LINE__);
+
+        $sqlDeleteMissionAreas = "";
+        $sqlDeleteMissionAreas .= "DELETE FROM mission_areas ";
+        $sqlDeleteMissionAreas .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionAreas, __FILE__, __LINE__);
+
+        $sqlDeleteMissionConnectionsFrom = "";
+        $sqlDeleteMissionConnectionsFrom .= "DELETE FROM mission_sessionsconnections ";
+        $sqlDeleteMissionConnectionsFrom .= "WHERE  linked_from_versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionConnectionsFrom, __FILE__, __LINE__);
+
+        $sqlDeleteMissionConnectionsTo = "";
+        $sqlDeleteMissionConnectionsTo .= "DELETE FROM mission_sessionsconnections ";
+        $sqlDeleteMissionConnectionsTo .= "WHERE  linked_to_versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMissionConnectionsTo, __FILE__, __LINE__);
+
+        $sqlDeleteMission = "";
+        $sqlDeleteMission .= "DELETE FROM mission ";
+        $sqlDeleteMission .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteMission, __FILE__, __LINE__);
+
+        $sqlDeleteSessionId = "";
+        $sqlDeleteSessionId .= "DELETE FROM sessionid ";
+        $sqlDeleteSessionId .= "WHERE  sessionid = $sessionId ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteSessionId, __FILE__, __LINE__);
+
+
+        $sqlDeleteSessionId = "";
+        $sqlDeleteSessionId .= "DELETE FROM mission_mindmaps ";
+        $sqlDeleteSessionId .= "WHERE  versionid = $versionid ";
+        $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteSessionId, __FILE__, __LINE__);
+
+        $this->logger->info("Deleted session " . $sessionId .  " from database");
+        mysqli_close($con);
+
     }
 }
