@@ -1,0 +1,61 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, th, td {
+    vertical-align: top;
+    border: 0px solid black;
+}
+
+.sInput {
+    /*border: #000000;*/
+    border-width: thin;
+
+    /*font-size: x-small;
+    font-family: monospace;*/
+    border-color: #808500;
+    background-color: #eef3f3;
+
+}
+
+.sH3 {
+    font-size: 1.17em;
+    font-weight: bold;
+    /*font-family: "'Comic Sans MS'";*/
+    margin-bottom: 40px;
+}
+
+.itemList {
+    padding-bottom: 30px;
+}
+
+.sw_p:hover {
+    text-decoration: underline;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.sw_p .delReqLink{
+    text-decoration: none;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+a {
+    text-decoration: none;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.fixedWidth {
+    width: 400px;
+}
+
+.minmax {
+    vertical-align: top;
+}
+
+.session_mode {
+    border: 2px solid white;
+}

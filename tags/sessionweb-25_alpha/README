@@ -1,0 +1,314 @@
+=SessionWeb=
+Sessionweb require PHP5 and MYSQL to work.
+If you do not know how to install/configure it please use XAMPP Server 
+(http://www.apachefriends.org/en/xampp.html)
+To enable some of the feature's please read through README-TipsAndTrixs
+
+==SessionWeb 25==
+Notes:
+This version have is a major update.
+PHP version supported is 5.4.x-> Version below this will not work!!
+
+Edit page is rewritten from scratch to take care of some nasty encoding bugs.
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_24-_25.sql
+to upgrade from 24->25
+
+===Release include (release 25) ===
+ID  Type            Milestone   Summary
+.
+.
+.
+.
+.
+.
+.
+
+
+==SessionWeb 24==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_23-_24.sql
+to upgrade from 23->24
+
+===Release include (release 24) ===
+ID  Type            Milestone   Summary
+124 Defect          Release24   View session shows wrong status if session is closed
+128 Defect          Release24   Edit/view session takes a long time to load
+129 Enhancement     Release24   Area report: add switch that alow to show areas with 0 sessions in the report
+130 Enhancement     Release24   Add sql query timer
+131 Enhancement     Release24   Add expand and collapse to areas and testers in session edit to make it easier to choose values
+
+
+==SessionWeb 23==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_22-_23.sql
+to upgrade from 22->23
+
+===Release include (release 23) ===
+ID  Type            Milestone   Summary
+111 Enhancement     Release23   Add direct link to Area report created at the bottom of the area report page
+119 Enhancement     Release23   Add remove user functionality
+120 Enhancement     Release23   Add support for Ad authentication
+122 Defect          Release23   Only list user that have a created sessions in drop down in list2.php
+123 Enhancement     Release23   Extend Area grid report with overview; bug; req and charter tables
+125 Defect          Release23   Sessions with no area is not visible in area report.
+126 Defect          Release23   warnings when test environment is disabled
+127 Defect          Release23   Area grid report have rounding issues
+
+
+==SessionWeb 22==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_21-_22.sql
+to upgrade from 21->22
+
+===Release include (release 22) ===
+ID  Type            Milestone   Summary
+113 Defect          Release22   Errors adding member to a team
+114 Defect          Release22   Error changing user password
+116 Defect          Release22   Application report doesn't show all entered bugs in 'Bugs found'
+117 Defect          Release22   Application report 'Requirements tested' not accurate
+
+
+==SessionWeb 21==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_20-_21.sql
+to upgrade from 20->21
+
+===Release include (release 21) ===
+ID  Type            Milestone   Summary
+89  Defect          Release21   Remove all warnings when php.ini log error settins is error_reporting = E_ALL
+90  Defect          Release21   Get software version automatically does not work when a session is edited the first time
+91  Defect          Release21   Add support to search for requirements/bugs from list view
+92  Defect          Release21   Add config check link again to setting page
+93  Enhancement     Release21   Add support for basic auth
+94  Enhancement     Release21   Add support for an admin to view the log file from a browser
+95  Defect          Release21   Add statistics/graph for "applications" based on area name
+96  Defect          Release21   Search in list2.php does not work.
+97  Enhancement     Release21   Add report "area grid report"
+98  Defect          Release21   Not possible to edit autosave setting from new setting page!
+102 Defect          Release21   Requirement/bug search does not work
+108 Defect          Release21   predefined settings for new session does not work
+
+
+==SessionWeb 20==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_19-_20.sql
+to upgrade from 19->20
+
+===Release include (release 20) ===
+ID  Type            Milestone   Summary
+78  Defect          Release20   Old version of jquery  used for counterstring
+79  Defect          Release20   Wordcloud: Uncaught TypeError: Object [object Object] has no method 'validate'
+80  Defect          Release20   Wordcloud: Can not add words to stoplist
+83  Enhancement     Release20   Add new settings page with add and remove for all items and settings
+85  Enhancement     Release20   Add support for  bulk close sessions in state executed
+86  Defect          Release20   Session statistics on index pages count wrong number of session to debrief
+
+
+==SessionWeb 19==
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_18-_19.sql
+to upgrade from 18->19
+
+===Release include (release 19) ===
+ID  Type    Milestone   Summary
+71  Defect  Release19   Change from google charts to highcharts
+72  Enhanc. Release19   Add icon on list view for executed sessions where debrief comments exists
+73  Defect  Release19   Disable/enable executed status button when search box changes
+74  Defect  Release19   Add support for mood metrics
+75  Defect  Release19   Remove the need of a first save before autosave and attachments starts to work
+76  Defect  Release19   Make it possible to remove some areas;sprints and teams without breaking sw
+77  Defect  Release19   Shared session does not displayed as executed.
+
+==SessionWeb 18==
+Installation:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_1.7-_18.sql 
+to upgrade from 1.7->18
+
+Install manually:
+got to sessionweb/install/install.php to check that r/w of folders is correct then
+execute install/SessionwebDbLayout_18.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Release include (release 18) ===
+ID  Type        Milestone   Summary
+64  Enhancement Release18   Add support for pair testing 
+65  Defect      Release18   Remove deprecated session_.... usage in php
+66  Defect      Release18   Add add team to default list of filters of list view
+67  Defect      Release18   Replace list view with a new list view with ajax support
+68  Defect      Release18   Add free text search in list view
+69  Defect      Release18   Add support to add a user to a default team
+70  Defect      Release18   Add support to display a message after upgrade of sessionweb
+
+
+
+==SessionWeb 1.7==
+Installation:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute
+install/SessionwebDbLayoutDelta_1.5-_1.6.sql
+install/SessionwebDbLayoutDelta_1.6-_1.7.sql 
+to upgrade from 1.5->1.7
+
+Install manually:
+got to sessionweb/install/install.php to check that r/w of folders is correct then
+execute install/SessionwebDbLayout_1.7.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Release include (release 1.7) ===
+ID  Type        Status      Milestone   Summary
+14  Enhancement Implemented Release1.7  Possibility to have a tag called release
+29  Defect      Implemented Release1.7  Fix error in html footer when db is not setup correct or not at all
+56  Defect      Implemented Release1.7  Add support for custom fields
+57  Defect      Fixed       Release1.7  Junk chars in database
+58  Defect      Fixed       Release1.7  Remove Js error notes and charter is not defined
+59  Defect      Implemented Release1.7  Upgrade to jquery 1.7.1 to remove js warnings
+60  Defect      Implemented Release1.7  Change layout and use more css to layout the page
+61  Defect      Accepted    Release1.7  Not possible to sort on stings containing nonascii chars like åäö
+62  Defect      Implemented Release1.7  Add support to change mysql collation 
+63  Defect      Implemented Release1.7  Tool tip text cut off if Title contains double quotes
+
+==SessionWeb 1.5==
+Installation:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute install/SessionwebDbLayoutDelta_1.4-_1.5.sql to
+upgrade from 1.4->1.5
+
+Install manually:
+got to sessionweb/install/install.php to check that r/w of folders is correct then
+execute install/SessionwebDbLayout_1.5.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Release include (release 1.5) ===
+ID  Type        Status      Milestone   Summary
+42  Defect      Implemented Release1.5  Attachments in db is not deleted when a session is deleted
+44  Defect      Implemented Release1.5  Debriefed note saved when not debriefed
+45  Defect      Implemented Release1.5  Not possilbe to copy and paste XML into the editor
+46  Enhancement Implemented Release1.5  make sessionwebos db name dynamic
+50  Defect      Implemented Release1.5  Add check that mission notes/charter is shorter then TEXT max length
+53  Defect      Implemented Release1.5  Do not update owner of session if an admin makes notes in charter etc
+54  Enhancement Implemented Release1.5  Add support for wordcloud for all sessions
+
+
+==SessionWeb 1.4==
+Go to sessionweb/install to install/upgrade
+
+Upgrade manually:
+If you can not upgrade please manually execute install/SessionwebDbLayoutDelta_1.3-_1.4.sql to
+upgrade from 1.3->1.4
+
+Install manually:
+got to sessionweb/install/install.php to check that r/w of folders then
+execute install/SessionwebDbLayout_1.4.sql
+then create a file called sessionweb/config/db.php.inc
+Content of file(Change user and password not host and db name):
+<?php
+        define('DB_HOST_SESSIONWEB', 'localhost');
+        define('DB_USER_SESSIONWEB', 'sw');
+        define('DB_PASS_SESSIONWEB', '2easy');
+        define('DB_NAME_SESSIONWEB', 'sessionwebos');
+?>
+
+===Release include (release 1.4)===
+Issue   Status  Milestone   Summary
+33  Fixed   Release1.4  Append debrief notes instead of overwrite them
+34  Fixed   Release1.4  Remove test file written when testing RW of FS
+35  Fixed   Release1.4  Add counterstring functionality to menu
+37  Fixed   Release1.4  Debrief by manager not working
+38  Fixed   Release1.4  Close session not working
+39  Fixed   Release1.4  Enhancement: Radio buttons instead of check boxes for debrief
+40  Fixed   Release1.4  Attachment header does not have correct layout
+41  Fixed   Release1.4  Move debrief icon to the right
+
+
+==SessionWeb 1.3==
+Attachments to sessions implemented
+Personal settings for default sprint, area etc.
+Reworked installation script.
+Bug fixes
+
+==SessionWeb 1.2==
+UTF-8 support in database
+Misc bugfixes
+
+==SessionWeb 1.1==
+===Installations Instructions===
+For new installation follow 1.0 instruction
+For Upgrade from 1.0-1.1:
+Replace all files in your sessionweb folder with the new once and execute the 
+config/SessionwebDbLayoutDeelta_1.0-_1.1_DRAFT.sql script to modify the database.
+If you are sessonweb on unix/linux/mac please check that the include/StoplistWordCloud.txt have 
+the correct read/write permissions (chmod 666 include/StoplistWordCloud.txt). This is needed to 
+be able to add words to the list.
+====What is new in 1.1====
+Wordcloud of a session when viewing it. Possible to switch off and on for admin under settings.
+
+==SessionWeb 1.0==
+===Installations Instructions===
+Put the content into on a web server and browse to sessionweb/install.php page and follow the 
+instructions.
