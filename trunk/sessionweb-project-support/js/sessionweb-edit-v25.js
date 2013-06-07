@@ -218,6 +218,8 @@ function ChangeOfAdditionalTester() {
     var sessionID = $(document).getUrlParam("sessionid");
 
     $('#idAdditionalTester').change(function () {
+        var count = $("#idAdditionalTester :selected").length;
+        if (count != 0) {
         $.ajax({
             type: "POST",
             data: {
@@ -231,6 +233,7 @@ function ChangeOfAdditionalTester() {
                 }
             }
         });
+        }
     });
 }
 
@@ -238,19 +241,22 @@ function ChangeOfArea() {
     var sessionID = $(document).getUrlParam("sessionid");
 
     $('#idArea').change(function () {
-        $.ajax({
-            type: "POST",
-            data: {
-                sessionid: sessionID,
-                names: $('#idArea').val()
-            },
-            url: 'api/area/set/index.php',
-            complete: function (data) {
-                if (data.status != '200') {
-                    alert("Could not update areas");
+        var count = $("#idArea :selected").length;
+        if (count != 0) {
+            $.ajax({
+                type: "POST",
+                data: {
+                    sessionid: sessionID,
+                    names: $('#idArea').val()
+                },
+                url: 'api/area/set/index.php',
+                complete: function (data) {
+                    if (data.status != '200') {
+                        alert("Could not update areas");
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 }
 
@@ -641,10 +647,9 @@ function AddNewMindMapManager() {
                     var mind_map_id = resultArray['data'];
                     var title = resultArray['title'];
                     var url = resultArray['url'];
-                    AddSingleMindMap(mind_map_id,title,url);
+                    AddSingleMindMap(mind_map_id, title, url);
                 }
-                else
-                {
+                else {
                     alert("Could not create a mindmap, please check logs");
                 }
             }
@@ -652,35 +657,10 @@ function AddNewMindMapManager() {
     });
 }
 
-function AddSingleMindMap(mindMapId,mindMapTitle,url) {
-    $('#mindMaps').append('<p class="sw_p" id="' + mindMapId + 'MindMap"><a href="'+url+'" target="_blank">'+mindMapTitle+'</a></p>');
-
-//    $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
-
-//    $('#mindMaps').append('<p class="sw_p" id="' + mindMaps + 'MindMap">' + mindMaps + ': Loading title</p>');
-//    $.ajax({
-//        type: "GET",
-//        data: {
-//            id: aBug
-//        },
-//        timeout: 5000,
-//        url: 'api/titles/bug/get/index.php',
-//        complete: function (data) {
-//
-//            if (data.status == '200') {
-//                var title = data.responseText;
-//                if (title == "") {
-//                    title = aBug;
-//                }
-//                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
-//            }
-//            else {
-//                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
-//
-//            }
-//        }
-//    });
+function AddSingleMindMap(mindMapId, mindMapTitle, url) {
+    $('#mindMaps').append('<p class="sw_p" id="' + mindMapId + 'MindMap"><a href="' + url + '" target="_blank">' + mindMapTitle + '</a></p>');
 }
+
 
 //AUTOFETCHED SW MANAGER
 function AddNewAutofetchedSwManager() {
@@ -707,10 +687,9 @@ function AddNewAutofetchedSwManager() {
 
                     }
                     else if (data.status == '400') {
-                       alert("400:Could not create mind map!");
+                        alert("400:Could not create mind map!");
                     }
-                    else
-                    {
+                    else {
                         alert("Could not create mind map!");
 
                     }
@@ -894,7 +873,6 @@ function AddBugManager() {
     });
 
 
-
 }
 
 function onBugLinkDeleteClick(aId) {
@@ -966,13 +944,13 @@ function AddSingleBug(aBug) {
 }
 
 
-function populateMindMaps(mindmaps)
-{
-    $.each(mindmaps, function(index, value) {
+function populateMindMaps(mindmaps) {
+    $.each(mindmaps, function (index, value) {
         var mindMapId = value['map_id'];
         var url = value['url'];
-        var mindMapTitle =mindMapId+":Unknown Title";
-        AddSingleMindMap(mindMapId,mindMapTitle,url);
+        var title = value['title'];
+        var mindMapTitle = title;
+        AddSingleMindMap(mindMapId, mindMapTitle, url);
 
     });
 //    $('#mindMaps').append('<p class="sw_p" id="' + mindMapId + 'MindMap"><a href="'+url+'" target="_blank">'+mindMapTitle+'</a></p>');
@@ -1140,7 +1118,7 @@ function updateAreas() {
             if (data.status == '200') {
                 var jsonResponseContent = jQuery.parseJSON(data.responseText);
                 var selectedAreas = [];
-                $('#idArea :selected').each(function(i, selected){
+                $('#idArea :selected').each(function (i, selected) {
                     selectedAreas[i] = $(selected).text();
                 });
                 $('#idArea').empty();

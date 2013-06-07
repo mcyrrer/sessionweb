@@ -484,42 +484,41 @@ class sessionObject extends sessionObjectSave
 
     public function saveObjectToDb()
     {
-//mission DONE
-//mission_areas  DONE
-//mission_bugs  DONE
-//mission_custom
-//mission_debriefnotes  DONE
-//mission_requirements  DONE
-//mission_sessionmetrics DONE
-//mission_sessionsconnections
-//mission_status DONE
-//mission_testers
-//mission_attachments
         if ($this->getSessionExist()) {
             $save = new sessionObjectSave();
             $sessiondata = $this->toArray();
-
             if (!$save->saveToMissionTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission",__FILE__,__LINE__);
                 die("Could not save data to table mission");
             } else {
+//                $this->logger->arraylog($sessiondata,__FILE__,__LINE__);
+
                 $this->validateVersionIdExistAndSetItIfNot($sessiondata);
+//                $this->logger->arraylog($sessiondata,__FILE__,__LINE__);
+
             }
             if (!$save->saveToMissionStatusTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission_status",__FILE__,__LINE__);
                 die("Could not save data to table mission_status");
             }
             if (!$save->saveToMissionAreaTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission_area",__FILE__,__LINE__);
                 die("Could not save data to table mission_area");
             }
             if (!$save->saveToMissionBugsTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission_bugs",__FILE__,__LINE__);
                 die("Could not save data to table mission_bugs");
             }
             if (!$save->saveToMissionRequirementsTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission_requirements",__FILE__,__LINE__);
                 die("Could not save data to table mission_requirements");
             }
             if (!$save->saveToMissionDebriefNotesTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission_debriefnotes",__FILE__,__LINE__);
                 die("Could not save data to table mission_debriefnotes");
             }
             if (!$save->saveToMissionMetricsTable($sessiondata)) {
+                $this->logger->error("Could not save data to table mission_debriefnotes",__FILE__,__LINE__);
                 die("Could not save data to table mission_debriefnotes");
             }
             $this->logger->debug("Saved sessionid " . $this->getSessionid() . " ", __FILE__, __LINE__);
@@ -533,13 +532,13 @@ class sessionObject extends sessionObjectSave
     private function validateVersionIdExistAndSetItIfNot(&$sessiondata)
     {
         if ($this->getVersionid() == null || strcmp($this->getVersionid(), "") == 0) {
-            echo "VERSIONID DOES NOT EXIST";
+
             $con = getMySqliConnection();
             $sql = "SELECT versionid FROM mission WHERE username = '" . $this->getUsername() . "' ORDER BY versionid DESC LIMIT 0,1";
-            $this->logger->sql($sql, __FILE__, __LINE__);
+//            $this->logger->debug($sql,__FILE__,__LINE__);
 
             $result = $this->dbHelper->sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-//            $result = mysqli_query($con, $sql);
+
             $row = mysqli_fetch_row($result);
             foreach ($row as $oneRow) {
                 $this->setVersionid($oneRow);
@@ -547,9 +546,7 @@ class sessionObject extends sessionObjectSave
             }
             $sessiondata = $this->toArray();
         }
-//        else {
-//            echo "VERSIONID EXIST";
-//        }
+
     }
 
     function getAdditional_testers()
@@ -1086,8 +1083,32 @@ class sessionObject extends sessionObjectSave
      */
     public function toJson()
     {
-        //return json_encode(jsonPrettifyer::indent($this->toArray()));
-        return json_encode($this->toArray(), JSON_PRETTY_PRINT);
+        $version = explode('.', phpversion());
+        $PHP_MAJOR_VERSION=$version[0];
+        $PHP_MINOR_VERSION=$version[1];
+        $PHP_RELEASE_VERSION=$version[2];
+
+//        $this->logger->arraylog($this->toArray(),__FILE__,__LINE__);
+//        echo print_r($this->toArray(),true);
+        //Pretty print is supported from version 5.4->
+        if($PHP_MAJOR_VERSION>=5 && $PHP_MINOR_VERSION>=4)
+        {
+            $this->logger->debug("Using JSON pretty print since php version is ". phpversion(),__FILE__,__LINE__);
+            $json = json_encode($this->toArray(), JSON_PRETTY_PRINT);
+//            $this->logger->debug("HI!!",__FILE__,__LINE__);
+
+//            $this->logger->debug($json,__FILE__,__LINE__);
+            return $json;
+        }
+        else
+        {
+            $this->logger->debug("Do not use JSON pretty print since php version is ". phpversion(),__FILE__,__LINE__);
+            $json =  json_encode($this->toArray());
+//            $this->logger->debug("HI!!",__FILE__,__LINE__);
+//            $this->logger->debug($json,__FILE__,__LINE__);
+            return $json;
+
+        }
     }
 
     /**

@@ -105,7 +105,7 @@ class Edit
         echo '<span class="sH3">Test requirements:</span>';
         echo '<span id="addReq">[+]</span><input type="text" class="sInput" id="new_requirement" size="10" ><br>';
         echo "<span id='testReqId'></span>";
-//        echo "</div>";
+        echo "</div>";
 
         echo "<div class='itemList'>";
         echo '<span class="sH3">Bug reported:</span>';

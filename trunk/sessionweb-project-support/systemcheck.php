@@ -7,6 +7,10 @@ require_once('include/commonFunctions.php.inc');
 include_once('config/db.php.inc');
 if (isAdmin()) {
     echo "<h1>Sessionweb System check</h1>";
+
+    echo "<h2>Database</h2>";
+    echo "<p>Database name: ".DB_NAME_SESSIONWEB."</p>";
+
     $con = getMySqlConnection();
 
 //checkFoldersForRW();

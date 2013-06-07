@@ -2,28 +2,26 @@
 session_start();
 
 require_once('../../include/validatesession.inc');
-require_once('../../include/db.php');
+require_once('../../classes/dbHelper.php');
 require_once('../../config/db.php.inc');
+require_once('../../classes/logging.php');
 require_once('../../classes/sessionReadObject.php');
+require_once('../../classes/sessionObject.php');
 require_once('../../include/commonFunctions.php.inc');
 
-$con = getMySqlConnection();
+$logger = new logging();
+
+$dbManager = new dbHelper();
+$con = $dbManager->db_getMySqliConnection();
 
 $whereSql = "";
 $StringSearchSql = null;
 
 if (isset($_REQUEST['searchstringref']) && $_REQUEST['searchstringref'] != "") {
-    $data = generateDataForIssueAndRequritementSearch();
+    $data = generateDataForIssueAndRequritementSearch($con);
 } else {
     if ($_REQUEST['searchstring'] != null) {
-        //    if(strpos($whereSql,"WHERE") === false) {
-        //        $whereSql = "WHERE ";
-        //    }
-        //    else
-        //    {
-        //        $whereSql = $whereSql ."AND ";
-        //    }
-        $searchstring = mysql_real_escape_string($_REQUEST['searchstring']);
+        $searchstring = $dbManager->escape($con,$_REQUEST['searchstring']);
         $StringSearchSql = $whereSql . "MATCH(charter,notes, title,software) AGAINST ('$searchstring' IN BOOLEAN MODE) ";
     }
 
@@ -106,17 +104,17 @@ if (isset($_REQUEST['searchstringref']) && $_REQUEST['searchstringref'] != "") {
     $data['page'] = (int)$_REQUEST['page'];
 //$data['total'] = 500;
 
-    $data = getNumberOfSessions($data, $whereSql, $StringSearchSql);
+    $data = getNumberOfSessions($con,$dbManager,$data, $whereSql, $StringSearchSql);
 
-    $data = getSessions($data, $whereSql, $StringSearchSql);
+    $data = getSessions($con,$dbManager,$data, $whereSql, $StringSearchSql);
 
 
 }
 echo json_encode($data);
 
-mysql_close($con);
+mysqli_close($con);
 
-function generateDataForIssueAndRequritementSearch()
+function generateDataForIssueAndRequritementSearch($con)
 {
     $data = null;
 
@@ -124,7 +122,7 @@ function generateDataForIssueAndRequritementSearch()
     $sqlReq = "SELECT * FROM `mission_requirements` WHERE `requirementsid` = '$issueReference'";
     $sqlBugs = "SELECT * FROM `mission_bugs` WHERE `bugid` = '$issueReference'";
 
-    $issueList = getListofSessionsFromBugOrRequirementsSearch($sqlReq, $sqlBugs);
+    $issueList = getListofSessionsFromBugOrRequirementsSearch($con,$sqlReq, $sqlBugs);
     $sessionList = array();
 
     foreach ($issueList as $aIssue) {
@@ -168,33 +166,35 @@ function generateDataForIssueAndRequritementSearch()
     return $data;
 }
 
-function getListofSessionsFromBugOrRequirementsSearch($sqlReq, $sqlBugs)
+function getListofSessionsFromBugOrRequirementsSearch($con,$sqlReq, $sqlBugs)
 {
     $issueList = array();
 
-    $result = mysql_query($sqlReq);
+    $result = dbHelper::sw_mysqli_execute($con,$sqlReq,__FILE__,__LINE__);
 
     if (!$result) {
-        echo mysql_error() . "<br/>";
+        echo mysqli_error($con) . "<br/>";
     }
 
-    while ($row = mysql_fetch_array($result)) {
-        $issueList[] = getSessionSessionId($row['versionid']);
+    while ($row = mysqli_fetch_array($result)) {
+        $sh = new sessionHelper();
+        $issueList[] = $sh->getSessionIdFromVersionId($row['versionid'],$con);
+
     }
 
-    $result = mysql_query($sqlBugs);
+    $result = dbHelper::sw_mysqli_execute($con,$sqlBugs,__FILE__,__LINE__);
 
     if (!$result) {
-        echo mysql_error() . "<br/>";
+        echo mysqli_error($con) . "<br/>";
     }
 
-    while ($row = mysql_fetch_array($result)) {
-        $issueList[] = getSessionSessionId($row['versionid']);
+    while ($row = mysqli_fetch_array($result)) {
+        $issueList[] = $sh->getSessionIdFromVersionId($row['versionid'],$con);
     }
     return $issueList;
 }
 
-function getNumberOfSessions($data, $whereSql, $StringSearchSql)
+function getNumberOfSessions($con,$dbManager,$data, $whereSql, $StringSearchSql)
 {
 
     $whereSql = str_replace("WHERE", " AND ", $whereSql);
@@ -206,14 +206,16 @@ function getNumberOfSessions($data, $whereSql, $StringSearchSql)
     }
     //$sql = "SELECT COUNT(*) as numberofSessions FROM mission as m, mission_status as ms WHERE m.versionid = ms.versionid $whereSql $StringSearchSql";
     //echo $sql;
-    $result = mysql_query($sql);
-    $result = mysql_fetch_row($result);
+
+    $result = $dbManager->sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
+    $result = mysqli_fetch_row($result);
     $data['total'] = $result[0];
     return $data;
 }
 
-function getSessions($data, $whereSql, $StringSearchSql)
+function getSessions($con,$dbManager,$data, $whereSql, $StringSearchSql)
 {
+    $logger = new logging();
     $numberOfSessionsToDisplay = $_REQUEST['rp'];
     if (isset($_REQUEST['page'])) {
         $page = $_REQUEST['page'];
@@ -255,14 +257,14 @@ function getSessions($data, $whereSql, $StringSearchSql)
     //$sql = "SELECT * FROM $tablename $whereSql $StringSearchSql ORDER BY $sortname $sortorder LIMIT " . $startLimit . ",$numberOfSessionsToDisplay;";
 
     //echo $sql;
-
-    $result = mysql_query($sql);
+    $result = $dbManager->sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
 
     if (!$result) {
-        echo mysql_error() . "<br/>";
+        echo mysqli_error($con) . "<br/>";
     }
 
-    while ($row = mysql_fetch_array($result)) {
+    while ($row = mysqli_fetch_array($result)) {
+
         $sessionid = $row['sessionid'];
         $versionid = $row['versionid'];
         $title = $row['title'];
@@ -276,9 +278,11 @@ function getSessions($data, $whereSql, $StringSearchSql)
         $sqlSelect .= "WHERE username = '$username' ";
         $sqlSelect .= "ORDER  BY fullname ASC";
 
-        $result2 = mysql_query($sqlSelect);
+        $result2=$dbManager->sw_mysqli_execute($con,$sqlSelect,__FILE__,__LINE__);
+//        $result2 = mysql_query($sqlSelect);
 
-        $row2 = mysql_fetch_row($result2);
+        $row2 = mysqli_fetch_row($result2);
+
         $fullname = $row2[0];
 
         $updated = $row['updated'];
@@ -293,9 +297,9 @@ function getSessions($data, $whereSql, $StringSearchSql)
         $sqlSelectSessionMetrics .= "SELECT * ";
         $sqlSelectSessionMetrics .= "FROM   mission_status ";
         $sqlSelectSessionMetrics .= "WHERE  versionid = $versionid";
-        $resultSessionMetrics = mysql_query($sqlSelectSessionMetrics);
+        $resultSessionMetrics = $dbManager->sw_mysqli_execute($con,$sqlSelectSessionMetrics,__FILE__,__LINE__);
 
-        $rowMetrics = mysql_fetch_array($resultSessionMetrics);
+        $rowMetrics = mysqli_fetch_array($resultSessionMetrics);
         // print_r($rowMetrics);
 
         $executed = $rowMetrics['executed'];
@@ -329,8 +333,8 @@ function getSessions($data, $whereSql, $StringSearchSql)
         $sqlSelectArea .= "SELECT * ";
         $sqlSelectArea .= "FROM   mission_areas ";
         $sqlSelectArea .= "WHERE  versionid = $versionid";
-        $resultSessionAreas = mysql_query($sqlSelectArea);
-        while ($row = mysql_fetch_array($resultSessionAreas)) {
+        $resultSessionAreas = $dbManager->sw_mysqli_execute($con,$sqlSelectArea,__FILE__,__LINE__);
+        while ($row = mysqli_fetch_array($resultSessionAreas)) {
             if ($notFirstArea) {
                 $areas = $areas . ", ";
             }
@@ -339,8 +343,8 @@ function getSessions($data, $whereSql, $StringSearchSql)
         }
 
         $sql = "SELECT * FROM mission_debriefnotes WHERE notes NOT LIKE '' AND versionid = $versionid";
-        $resultDoesNotesExist = mysql_query($sql);
-        if (strstr($status, "Executed") != false && mysql_num_rows($resultDoesNotesExist) != 0) {
+        $resultDoesNotesExist = $dbManager->sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
+        if (strstr($status, "Executed") != false && mysqli_num_rows($resultDoesNotesExist) != 0) {
             $debriefComments = "<img src='pictures/notify-star.png' alt='Debrief comments exists'>";
         } else {
             $debriefComments = "";

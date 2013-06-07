@@ -25,8 +25,8 @@ class uploadManager
         }
         else
         {
-            $this->logger->arraylog($_REQUEST);
-            $this->logger->arraylog($_FILES);
+//            $this->logger->arraylog($_REQUEST);
+//            $this->logger->arraylog($_FILES);
 
             $this->logger->debug("Upload: " . $_FILES["file"]["name"]);
             $this->logger->debug("Type: " . $_FILES["file"]["type"]);

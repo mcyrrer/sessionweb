@@ -4,8 +4,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 DROP SCHEMA IF EXISTS `sessionwebos` ;
 CREATE SCHEMA IF NOT EXISTS `sessionwebos` DEFAULT CHARACTER SET utf8 ;
-DROP SCHEMA IF EXISTS `new_schema1` ;
-CREATE SCHEMA IF NOT EXISTS `new_schema1` ;
+
 USE `sessionwebos` ;
 
 -- -----------------------------------------------------
@@ -457,7 +456,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_mindmaps` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `versionid` INT NOT NULL ,
   `map_id` INT NOT NULL ,
-  `map_title` VARCHAR(300) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `versionid` (`versionid` ASC) )
 ENGINE = InnoDB;
@@ -530,8 +528,6 @@ AS `lastupdatedby`, `mission_areas`.`areaname` AS `areaname`, `mission`.`project
 JOIN `mission_areas`) 
 WHERE (`mission`.`versionid` =
 `mission_areas`.`versionid`) ;
-USE `new_schema1` ;
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -569,6 +565,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`, `versioncol`) VALUES (NULL, 23, NULL);
+INSERT INTO `sessionwebos`.`version` (`id`, `versioninstalled`, `versioncol`) VALUES (NULL, 25, NULL);
 
 COMMIT;

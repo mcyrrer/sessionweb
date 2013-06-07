@@ -18,7 +18,12 @@ $response = array();
 
 
 if (isset($_REQUEST['sessionid'])) {
-    $sessionid = mysql_real_escape_string($_REQUEST['sessionid']);
+
+    $dbManager = new dbHelper();
+    $con = $dbManager->db_getMySqliConnection();
+
+    $sessionid = $dbManager->escape($con,$_REQUEST['sessionid']);
+    $logger->debug("Api get session ".$sessionid,__FILE__,__LINE__);
     $session = new sessionObject($sessionid);
     $response = $session->toJson();
     header("HTTP/1.0 200 Ok");

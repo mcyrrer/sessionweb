@@ -127,7 +127,7 @@ class formHelper
     public function getCustomFieldSelect($selectedName = "", $customfieldname, $multiselect)
     {
         $customfieldnamesArray = $this->queryHelper->getCustomFieldNames($customfieldname);
-        $this->logger->arraylog($customfieldnamesArray);
+//        $this->logger->arraylog($customfieldnamesArray);
         if ($multiselect == false)
             return $this->formSelectListSingle($customfieldnamesArray, $selectedName, true, "id".$customfieldname, "name".$customfieldname, 'class="fixedWidth customField"');
         else

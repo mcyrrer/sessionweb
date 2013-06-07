@@ -19,6 +19,7 @@ include_once $rootPath."/config/db.php.inc";
 include_once $rootPath."/classes/logging.php";
 /** @noinspection PhpIncludeInspection */
 include_once $rootPath."/classes/dbHelper.php";
+include_once $rootPath."/classes/sessionHelper.php";
 /** @noinspection PhpIncludeInspection */
 include_once $rootPath."/include/db.php";
 
@@ -28,7 +29,7 @@ class sessionObjectSave
 {
     private $logger;
     private $dbHelper;
-
+    private $sessionHelper;
     /**
      * @param null $sessionid
      */
@@ -36,6 +37,7 @@ class sessionObjectSave
     {
         $this->logger = new logging();
         $this->dbHelper = new dbHelper();
+        $this->sessionHelper = new sessionHelper();
     }
 
     /**
@@ -50,6 +52,7 @@ class sessionObjectSave
         $con = getMySqliConnection();
 
         $sql = "SELECT sessionid FROM mission WHERE sessionid=" . $missionDataArray['sessionid'];
+
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $resultSessionExist = mysqli_query($con, $sql);
 
@@ -59,9 +62,9 @@ class sessionObjectSave
 
         if ($createNewSession) {
             $result = $this->saveMissionTable_Insert($missionDataArray, $con);
-
         } else {
             $result = $this->saveMissionTable_Update($missionDataArray, $con);
+
         }
         mysqli_close($con);
         return $result;
@@ -76,6 +79,7 @@ class sessionObjectSave
     private function saveMissionTable_Insert($missionDataArray, $con)
     {
 
+        $this->logger->debug("USERNAME: ".$missionDataArray["username"], __FILE__,__LINE__);
 
         $sqlInsert = "";
         $sqlInsert .= "INSERT INTO mission ";
@@ -92,32 +96,32 @@ class sessionObjectSave
         $sqlInsert .= "             `project`, ";
         $sqlInsert .= "             `publickey`) ";
         $sqlInsert .= "VALUES      ('" . $missionDataArray["sessionid"] . "', ";
-        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
-        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
-        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
-        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
+        $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray["title"]) . "', ";
+        $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray["charter"]) . "', ";
+        $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray["notes"]) . "', ";
+        $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray["username"]) . "', ";
         if ($missionDataArray['sprintname'] == "") {
             $sqlInsert .= "             null, ";
         } else {
-            $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['sprintname']) . "', ";
+            $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray['sprintname']) . "', ";
         }
         if ($missionDataArray['testenvironment'] == "") {
             $sqlInsert .= "             null, ";
         } else {
-            $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['testenvironment']) . "', ";
+            $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray['testenvironment']) . "', ";
         }
         if ($missionDataArray['software'] == "") {
             $sqlInsert .= "             null, ";
         } else {
-            $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['software']) . "', ";
+            $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray['software']) . "', ";
         }
         if ($missionDataArray['teamname'] == "") {
             $sqlInsert .= "             null, ";
         } else {
-            $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray['teamname']) . "', ";
+            $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray['teamname']) . "', ";
         }
         $sqlInsert .= "             '" . $missionDataArray['project'] . "', ";
-        $sqlInsert .= "             '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
+        $sqlInsert .= "             '" . dbHelper::escape($con, $missionDataArray["username"]) . "', ";
         $sqlInsert .= "             '" . $missionDataArray["publickey"] . "' ";
         $sqlInsert .= ") ";
 
@@ -139,13 +143,13 @@ class sessionObjectSave
 
         $sqlUpdate = "";
         $sqlUpdate .= "UPDATE mission ";
-        $sqlUpdate .= "SET    `title` = '" . mysql_real_escape_string($missionDataArray["title"]) . "', ";
-        $sqlUpdate .= "       `charter` = '" . mysql_real_escape_string($missionDataArray["charter"]) . "', ";
-        $sqlUpdate .= "       `notes` = '" . mysql_real_escape_string($missionDataArray["notes"]) . "', ";
-        $sqlUpdate .= "       `project` = '" . mysql_real_escape_string($missionDataArray["project"]) . "', ";
-        $sqlUpdate .= "       `lastupdatedby` = '" . mysql_real_escape_string($missionDataArray["username"]) . "', ";
+        $sqlUpdate .= "SET    `title` = '" . dbHelper::escape($con, $missionDataArray["title"]) . "', ";
+        $sqlUpdate .= "       `charter` = '" . dbHelper::escape($con, $missionDataArray["charter"]) . "', ";
+        $sqlUpdate .= "       `notes` = '" . dbHelper::escape($con, $missionDataArray["notes"]) . "', ";
+        $sqlUpdate .= "       `project` = '" . dbHelper::escape($con, $missionDataArray["project"]) . "', ";
+        $sqlUpdate .= "       `lastupdatedby` = '" . dbHelper::escape($con, $missionDataArray["username"]) . "', ";
         if (isset($missionDataArray['sprintname']) && $missionDataArray['sprintname'] != "") {
-            $sqlUpdate .= "       `sprintname` = '" . mysql_real_escape_string($missionDataArray['sprintname']) . "', ";
+            $sqlUpdate .= "       `sprintname` = '" . dbHelper::escape($con, $missionDataArray['sprintname']) . "', ";
         } else {
             $sqlUpdate .= "       `sprintname` = null, ";
         }
@@ -154,19 +158,19 @@ class sessionObjectSave
         if ($missionDataArray['testenvironment'] == "") {
             $sqlUpdate .= "       `testenvironment` = null, ";
         } else {
-            $sqlUpdate .= "       `testenvironment` = '" . mysql_real_escape_string($missionDataArray['testenvironment']) . "', ";
+            $sqlUpdate .= "       `testenvironment` = '" . dbHelper::escape($con, $missionDataArray['testenvironment']) . "', ";
         }
 
         if ($missionDataArray['software'] == "") {
             $sqlUpdate .= "       `software` = null, ";
         } else {
-            $sqlUpdate .= "       `software` = '" . mysql_real_escape_string($missionDataArray['software']) . "', ";
+            $sqlUpdate .= "       `software` = '" . dbHelper::escape($con, $missionDataArray['software']) . "', ";
         }
 
         if ($missionDataArray['teamname'] == "") {
             $sqlUpdate .= "       `teamname` = null ";
         } else {
-            $sqlUpdate .= "       `teamname` = '" . mysql_real_escape_string($missionDataArray['teamname']) . "' ";
+            $sqlUpdate .= "       `teamname` = '" . dbHelper::escape($con, $missionDataArray['teamname']) . "' ";
         }
         $sqlUpdate .= "WHERE sessionid='" . $missionDataArray['sessionid'] . "'";
 
@@ -183,6 +187,8 @@ class sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
         $sql = "SELECT versionid FROM mission_status WHERE versionid=" . $missionDataArray['versionid'];
+//        $this->logger->debug($sql,__FILE__,__LINE__);
+
         if (strcmp($missionDataArray['versionid'], "") != 0) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
             $resultSessionExist = mysqli_query($con, $sql);
@@ -197,10 +203,13 @@ class sessionObjectSave
 
         if ($createNewSession) {
             $this->saveToMissionStatusTable_Insert($missionDataArray, $con);
-            echo "new session status";
+//            $this->logger->debug("New session status",__FILE__,__LINE__);
+//            echo "new session status";
         } else {
             $this->saveToMissionStatusTable_Update($missionDataArray, $con);
-            echo "update session status";
+//            $this->logger->debug("Updated of session status",__FILE__,__LINE__);
+
+//            echo "update session status";
         }
         mysqli_close($con);
         return true;
@@ -447,18 +456,21 @@ class sessionObjectSave
      */
     private function executeInsert($sqlInsert, $con, $file, $line)
     {
-        $this->logger->sql($sqlInsert, $file, $line);
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
-        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, $file, $line);
-        //$result = mysqli_query($con, $sqlInsert);
-        if (!$result) {
-            $this->logger->error(" Mysql Code:" . $sqlInsert, $file, $line);
-            /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $this->logger->error(mysqli_error($con), $file, $line);
-            $this->dieAndPrintErrorMessage();
-            return false;
-        } else
-            return true;
+        $this->logger->debug($sqlInsert, $file, $line);
+
+        return $this->dbHelper->sw_mysqli_execute($con,$sqlInsert,__FILE__, __LINE__);
+
+//        /** @noinspection PhpVoidFunctionResultUsedInspection */
+//        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, $file, $line);
+//        //$result = mysqli_query($con, $sqlInsert);
+//        if (!$result) {
+//            $this->logger->error(" Mysql Code:" . $sqlInsert, $file, $line);
+//            /** @noinspection PhpVoidFunctionResultUsedInspection */
+//            $this->logger->error(mysqli_error($con), $file, $line);
+//            $this->dieAndPrintErrorMessage();
+//            return false;
+//        } else
+//            return true;
     }
 
     /**

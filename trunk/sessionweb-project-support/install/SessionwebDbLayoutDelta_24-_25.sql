@@ -39,8 +39,6 @@ ALTER TABLE `sessionwebos`.`mission_attachments` ADD COLUMN `thumbnail` MEDIUMBL
 
 ALTER TABLE `sessionwebos`.`user_sessionsnotification` CHANGE COLUMN `project` `project` VARCHAR(45) NOT NULL  ;
 
-ALTER TABLE `sessionwebos`.`softwareuseautofetched` ADD COLUMN `softwareuseautofetchedcol` VARCHAR(45) NULL DEFAULT NULL  AFTER `environment` , ADD COLUMN `softwareuseautofetchedcol1` VARCHAR(45) NULL DEFAULT NULL  AFTER `softwareuseautofetchedcol` ;
-
 ALTER TABLE `sessionwebos`.`custom_items` CHANGE COLUMN `project` `project` VARCHAR(45) NOT NULL  ;
 
 CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_mindmaps` (
