@@ -690,7 +690,7 @@ function AddNewAutofetchedSwManager() {
                         alert("400:Could not create mind map!");
                     }
                     else {
-                        alert("Could not create mind map!");
+                        alert("Could not fetch softer under test!");
 
                     }
                 }

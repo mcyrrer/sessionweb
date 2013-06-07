@@ -8,10 +8,12 @@
     <script src="js/counterstring.js"></script>
 </head>
 <body>
+<h1>Test utilities</h1>
+
 <h1>Create counterstring</h1>
 Add length of counterstring to create:
 <input type="text" id="cnt" name="cnt"/>
-<input type="submit" id="pressme" value="Submit"/>
+<input type="submit" id="pressme" value="Create"/>
 <br>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -42,8 +44,15 @@ fast to create the string.
     </tr>
 </table>
 
-Quicktest string for forms etc:
+<h1>Test string for database tests and escape tests</h1>
 <pre>'"$%><*!);--//</pre>
+
+<h1>Test sentences</h1>
+<pre><?php
+echo file_get_contents('include/quickbrown.txt');
+
+    ?>
+</pre>
 <?php
 //$codeunits = array();
 //for ($i = 0; $i<0xD800; $i++)
