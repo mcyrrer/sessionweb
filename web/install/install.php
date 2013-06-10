@@ -77,13 +77,15 @@ function install()
 
         if (sizeof($resultOfSql) == 0) {
             echo "Database created and installed<br>";
-            $logger->info("INSTALLATION: Database created");
+            $logger->info("Database $dbname created",__FILE__,__LINE__);
             createDbConfigFile($dbuser, $dbpassword, $dbname);
+            $logger->info("Database configuration file created",__FILE__,__LINE__);
+
             if (strcmp($dbcreateuser, "true") == 0)
                 createDbUser($dbuser, $dbpassword, $dbname);
-            else {
+        else {
                 echo "User not created since checkbox was unchecked.<br>";
-                $logger->info("Database user not created since checkbox was unchecked");
+                $logger->info("Database ".$dbname."user not created since checkbox was unchecked");
             }
             echo "Delete this folder to make sure that no one can destroy your database!.<br>";
             echo "Use username <b>admin</b> and password <b>admin</b> to login.<br>";
@@ -92,7 +94,7 @@ function install()
 
 
         } else {
-            $logger->error("INSTALLATION: Error during installation", __FILE__, __LINE__);
+            $logger->error("Error during installation", __FILE__, __LINE__);
             foreach ($resultOfSql as $oneError) {
                 echo "--------------ERROR--------------<br>";
                 $logger->error($oneError);
@@ -123,13 +125,15 @@ function createDbUser($dbuser, $dbpassword, $dbname)
     $logger = new logging();
     $sqlCreateUser = "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword'";
     $sqlGrantUsage = "GRANT USAGE ON * . * TO  '$dbuser'@'localhost' IDENTIFIED BY  '$dbpassword' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
-    $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE ON  `$dbname` . * TO  '$dbuser'@'localhost'";
+    $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE, SHOW VIEW ON  `$dbname` . * TO  '$dbuser'@'localhost'";
     if (mysql_query($sqlCreateUser) === false) {
         echo "failed to create $dbuser user<br>";
         $logger->error("Failed to create user $dbuser.Does it already exist? ", __FILE__, __LINE__);
         $logger->sql($sqlCreateUser, __FILE__, __LINE__);
     } else {
         echo "Created $dbuser user<br>";
+        $logger->info("Create user $dbuser ", __FILE__, __LINE__);
+
     }
     if (mysql_query($sqlGrantUsage) === false) {
         echo "failed to grant usage for $dbuser user<br>";
@@ -139,6 +143,8 @@ function createDbUser($dbuser, $dbpassword, $dbname)
 
     } else {
         echo "Added grant usage for $dbuser user<br>";
+        $logger->info("Granted usage for $dbuser added", __FILE__, __LINE__);
+
     }
     if (mysql_query($sqlGrantSessionweb) === false) {
         echo "failed to grant usage for sessionweb for $dbuser user<br>";
@@ -148,11 +154,14 @@ function createDbUser($dbuser, $dbpassword, $dbname)
 
     } else {
         echo "Added grant usage for sessionwebos db for $dbuser user<br>";
+        $logger->info("Added grant usage for sessionwebos db for $dbuser user", __FILE__, __LINE__);
+
     }
 }
 
 function createDbConfigFile($dbuser, $dbpassword, $dbname)
 {
+
     $configfileString = "<?php
         define('DB_HOST_SESSIONWEB', 'localhost');
         define('DB_USER_SESSIONWEB', '$dbuser');
@@ -261,7 +270,7 @@ function echoForm()
 
                 <dl>
                     <dd>This is the user that sessionweb will use for all normal access like SELECT, INSERT and DELETE.
-                        Should not be the same as the admin user if posible.
+                        Should not be the same as the admin user if possible.
                     </dd>
                 </dl>
                 <dl>
@@ -293,6 +302,7 @@ function echoForm()
 function checkFoldersForRWDuringInstallation()
 {
     $logger = new logging();
+    $logger->info("Will check if some folders is R/W",__FILE__,__LINE__);
     echo "<b>Check for Read Write access for certain folders.</b><br>";
     $foldersToCheckRW = array("../config/", "../log/"); //"../include/filemanagement/files/", "../include/filemanagement/thumbnails/"
     $foldersOk = true;
@@ -306,14 +316,17 @@ function checkFoldersForRWDuringInstallation()
             fclose($fh);
             if (file_exists($ourFileName)) {
                 echo "folder $aFolder is RW => OK<br>";
+                $logger->info("folder $aFolder is RW => OK",__FILE__,__LINE__);
                 unlink($ourFileName);
             } else {
-                echo "folder $aFolder is RW => NOK (file could not be created)<br>";
+                echo "folder $aFolder is NOT RW => NOK (file could not be created)<br>";
+                $logger->error("folder $aFolder is RW => NOK",__FILE__,__LINE__);
+                $logger->info("Please change folder $aFolder to allow read write for the www user (chmod 664)",__FILE__,__LINE__);
                 $foldersOk = false;
             }
         } catch (Exception $e) {
-            $logger->error("folder $aFolder is RW => NOK");
-            $logger->info("Please change folder $aFolder to allow read write for the www user (chmod 664)");
+            $logger->error("folder $aFolder is RW => NOK",__FILE__,__LINE__);
+            $logger->info("Please change folder $aFolder to allow read write for the www user (chmod 664)",__FILE__,__LINE__);
 
             echo "folder $aFolder is RW => NOK<br>";
             //echo 'Error: ', $e->getMessage(), "\n";
