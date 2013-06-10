@@ -514,7 +514,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sessionwebos`;
-INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`, `adaccount`, `deleted`) VALUES ('admin', 'Administrator', true, true, true, '2012-02-21 20:05:04', '60eaf2ab4fbb5654c481f52a5106171e', false, false);
+INSERT INTO `sessionwebos`.`members` (`username`, `fullname`, `active`, `superuser`, `admin`, `updated`, `password`, `adaccount`, `deleted`) VALUES ('admin', 'Administrator', true, true, true, '2012-02-21 20:05:04', '21232f297a57a5a743894a0e4a801fc3', false, false);
 
 COMMIT;
 
