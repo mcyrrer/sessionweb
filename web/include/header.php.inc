@@ -60,14 +60,14 @@ if (strstr($_SERVER['PHP_SELF'], "edit.php") != false) {
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/config.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/styles.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-view-v24.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-view-v25.js\"></script>\n";
     echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"ckeditor4/contents.css\">\n";
 
 }
 else
 {
-    echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs-v19.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v20.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionwebjs-v25.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionwebjquery-v25.js\"></script>\n";
 }
 
 echo "              <script type=\"text/javascript\">\n";
