@@ -14,8 +14,8 @@ echo'
     <script src="../js/jquery.validate.js" type="text/javascript"></script>
     <script src="../js/jquery.getparams.js" type="text/javascript"></script>
     <script src="../js/jquery.colorbox-min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../js/sessionwebjs-v19.js"></script>
-    <script type="text/javascript" src="../js/sessionwebjquery-v20.js"></script>
+    <script type="text/javascript" src="../js/sessionwebjs-v25.js"></script>
+    <script type="text/javascript" src="../js/sessionwebjquery-v25.js"></script>
 </head>
 <body>
   <div id="outer">
