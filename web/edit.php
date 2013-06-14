@@ -3,6 +3,7 @@ session_start();
 //Check that you are logged in as a user
 require_once('include/validatesession.inc');
 require_once('classes/dbHelper.php');
+require_once('classes/QueryHelper.php');
 require_once('classes/formHelper.php');
 require_once('classes/sessionHelper.php');
 require_once('classes/logging.php');
@@ -42,6 +43,7 @@ class Edit
     private $formHelper;
     private $session;
     private $sessionHelper;
+    private $quaryHelper;
 
     function __construct()
     {
@@ -49,6 +51,7 @@ class Edit
         $this->formHelper = new formHelper();
         $this->session = new sessionObject($_REQUEST['sessionid']);
         $this->sessionHelper = new sessionHelper();
+        $this->quaryHelper = new QueryHelper();
     }
 
     public function showHtml()
@@ -80,14 +83,21 @@ class Edit
             </ul>
           <div id="tabs-1">';
         echo '<table class="sTable"><tr><td>';
-        echo "<span class='sH3'>Sprint:</span>  <p>" . $this->formHelper->getSprintSelect() . "<span class='minmax' id='minimizeSprint'>[&uarr;]</span><span class='minmax' id='maximizeSprint'>[&darr;]</span></p>";
-        echo "<span class='sH3'>Team:</span><p>" . $this->formHelper->getTeamSelect() . "<span class='minmax' id='minimizeTeam'>[&uarr;]</span><span class='minmax' id='maximizeTeam'>[&darr;]</span></p>";
+        if ($_SESSION['settings']['sprint'] == 1) {
+            echo "<span class='sH3'>Sprint:</span>  <p>" . $this->formHelper->getSprintSelect() . "<span class='minmax' id='minimizeSprint'>[&uarr;]</span><span class='minmax' id='maximizeSprint'>[&darr;]</span></p>";
+        }
+        if ($_SESSION['settings']['team'] == 1) {
+            echo "<span class='sH3'>Team:</span><p>" . $this->formHelper->getTeamSelect() . "<span class='minmax' id='minimizeTeam'>[&uarr;]</span><span class='minmax' id='maximizeTeam'>[&darr;]</span></p>";
+        }
         echo "<span class='sH3'>Additional tester:</span><p>" . $this->formHelper->AdditionalTester() . "<span class='minmax' id='minimizeAddTest'>[&uarr;]</span><span class='minmax' id='maximizeAddTest'>[&darr;]</span></p>";
+        if ($_SESSION['settings']['area'] == 1) {
 
-        echo '<span class="sH3">Area:</span><span id="addNewArea">[+]</span><input type="text" class="sInput" id="addNewAreaInput" size="10" ><p>' . $this->formHelper->getAreaSelect() . "<span class='minmax' id='minimizeArea'>[&uarr;]</span><span class='minmax' id='maximizeArea'>[&darr;]</span></p>";
+            echo '<span class="sH3">Area:</span><span id="addNewArea">[+]</span><input type="text" class="sInput" id="addNewAreaInput" size="10" ><p>' . $this->formHelper->getAreaSelect() . "<span class='minmax' id='minimizeArea'>[&uarr;]</span><span class='minmax' id='maximizeArea'>[&darr;]</span></p>";
+        }
 
-
-        echo "<span class='sH3'>Testenvironment:</span><p>" . $this->formHelper->getEnvironmentSelect() . "<span class='minmax' id='minimizeTestenv'>[&uarr;]</span><span class='minmax' id='maximizeTestenv'>[&darr;]</span></p>";
+        if ($_SESSION['settings']['testenvironment'] == 1) {
+            echo "<span class='sH3'>Testenvironment:</span><p>" . $this->formHelper->getEnvironmentSelect() . "<span class='minmax' id='minimizeTestenv'>[&uarr;]</span><span class='minmax' id='maximizeTestenv'>[&darr;]</span></p>";
+        }
         if ($_SESSION['settings']['custom1'] == 1) {
             echo "<span class='sH3'>" . $_SESSION['settings']['custom1_name'] . ":</span><p>" . $this->formHelper->getCustomFieldSelect(null, "custom1", $_SESSION['settings']['custom1_multiselect']) . "<span class='minmax' id='minimizeCust1'>[&uarr;]</span><span class='minmax' id='maximizeCust1'>[&darr;]</span></p>";
         }
@@ -119,12 +129,13 @@ class Edit
         echo "<span id='linkToOtherSessions'></span>";
         echo "</div>";
 
-        echo "<div class='itemList'>";
-        echo "<span class='sH3'>Automatically fetched software versions:</span>";
-        echo '<span id="addAutoFetchedSw">[+]</span><br>';
-        echo "<span id='autoSoftwareVersions'></span>";
-        echo "</div>";
-
+        if ($this->quaryHelper->isTestEnvoronmentUrlDefined()) {
+            echo "<div class='itemList'>";
+            echo "<span class='sH3'>Automatically fetched software versions:</span>";
+            echo '<span id="addAutoFetchedSw">[+]</span><br>';
+            echo "<span id='autoSoftwareVersions'></span>";
+            echo "</div>";
+        }
         if ($_SESSION['settings']['wisemapping'] == 1) {
             echo "<div class='itemList'>";
             echo "<span class='sH3'>Minmaps:</span>";

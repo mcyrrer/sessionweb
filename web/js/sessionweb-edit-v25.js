@@ -101,6 +101,7 @@ function ExecutedButtonPressed() {
                     else {
                         $('#setExecuted').hide();
                         $('#unsetExecuted').show();
+                        setLastSavedLable();
                     }
                 }
             });
@@ -130,6 +131,7 @@ function UnExecutedButtonPressed() {
                 else {
                     $('#setExecuted').show();
                     $('#unsetExecuted').hide();
+                    setLastSavedLable();
                 }
             }
         });
@@ -151,6 +153,11 @@ function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
                 if (data.status != '200') {
                     alert("Could not save charter");
                 }
+                else
+                {
+                    setLastSavedLable();
+                }
+
             },
             async: false
         });
@@ -165,6 +172,10 @@ function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not save notes");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             },
             async: false
@@ -188,6 +199,10 @@ function ChangeOfCustomField() {
                 if (data.status != '201') {
                     alert("Could not update custom field " + this.id);
                 }
+                else
+                {
+                    setLastSavedLable();
+                }
             }
         });
     });
@@ -208,6 +223,10 @@ function ChangeOfTitle() {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not save title");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             }
         });
@@ -230,6 +249,10 @@ function ChangeOfAdditionalTester() {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not update additional testers names");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             }
         });
@@ -254,6 +277,10 @@ function ChangeOfArea() {
                     if (data.status != '200') {
                         alert("Could not update areas");
                     }
+                    else
+                    {
+                        setLastSavedLable();
+                    }
                 }
             });
         }
@@ -274,6 +301,10 @@ function ChangeOfSprint() {
                 if (data.status != '200') {
                     alert("Could not update sprint name");
                 }
+                else
+                {
+                    setLastSavedLable();
+                }
             }
         });
     });
@@ -292,6 +323,10 @@ function ChangeOfCharter() {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not update software information");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             }
         });
@@ -312,6 +347,10 @@ function ChangeOfSwUnderTest() {
                 if (data.status != '200') {
                     alert("Could not update software information");
                 }
+                else
+                {
+                    setLastSavedLable();
+                }
             }
         });
     });
@@ -330,6 +369,10 @@ function ChangeOfTestenvironment() {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not update testenvironment name");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             }
         });
@@ -350,6 +393,10 @@ function ChangeOfTeam() {
                 if (data.status != '200') {
                     alert("Could not update team name");
                 }
+                else
+                {
+                    setLastSavedLable();
+                }
             }
         });
     });
@@ -369,6 +416,10 @@ function ChangeOfDuration() {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not update duration");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             }
         });
@@ -401,6 +452,10 @@ function ChangeOfMetrics() {
                     if (data.status != '200') {
                         alert("Could not update metrics");
                     }
+                    else
+                    {
+                        setLastSavedLable();
+                    }
                 }
             });
         }
@@ -425,6 +480,10 @@ function ChangeOfMode() {
             complete: function (data) {
                 if (data.status != '200') {
                     alert("Could not update mood");
+                }
+                else
+                {
+                    setLastSavedLable();
                 }
             }
         });
@@ -684,7 +743,7 @@ function AddNewAutofetchedSwManager() {
                         var environment = resultArray['environment'];
                         var updated = resultArray['updated'];
                         AddSingelAutofetchedSoftware(id, environment, updated, "Nobody");
-
+                        setLastSavedLable();
                     }
                     else if (data.status == '400') {
                         alert("400:Could not create mind map!");
@@ -728,6 +787,7 @@ function onSoftwareAutoFetchedDeleteClick(aId) {
         complete: function (data) {
             if (data.status == '200') {
                 $('#' + aId + '_sw').remove();
+                setLastSavedLable();
             }
         }
     });
@@ -783,6 +843,7 @@ function onRequirementLinkDeleteClick(aId) {
         complete: function (data) {
             if (data.status == '200') {
                 $('#' + aId + 'REQ').remove();
+                setLastSavedLable();
             }
         }
     });
@@ -801,6 +862,7 @@ function CreateRequirement(requirementId) {
         complete: function (data) {
             if (data.status == '201') {
                 AddSingleRequirement(requirementId);
+                setLastSavedLable();
             }
             else if (data.status == '404') {
                 alert("Could not create link, please check that the sessionid you link to is valid");
@@ -887,6 +949,7 @@ function onBugLinkDeleteClick(aId) {
         complete: function (data) {
             if (data.status == '200') {
                 $('#' + aId + 'BUG').remove();
+                setLastSavedLable();
             }
         }
     });
@@ -905,6 +968,7 @@ function CreateBug(bugId) {
         complete: function (data) {
             if (data.status == '201') {
                 AddSingleBug(bugId);
+                setLastSavedLable();
             }
             else if (data.status == '404') {
                 alert("Could not create link, please check that the sessionid you link to is valid");
@@ -997,6 +1061,7 @@ function onSessionLinkDeleteClick(aId) {
         complete: function (data) {
             if (data.status == '200') {
                 $('#sl_del_' + aId).remove();
+                setLastSavedLable();
             }
         }
     });
@@ -1019,6 +1084,7 @@ function CreateSessionLink(sessionIdToLinkTo) {
             complete: function (data) {
                 if (data.status == '201') {
                     AddSingleSessionLink(sessionIdToLinkTo);
+                    setLastSavedLable();
                 }
                 else if (data.status == '404') {
                     alert("Could not create link, please check that the sessionid you link to is valid");
@@ -1100,6 +1166,7 @@ function AddNewAreaToDb(areaName) {
 
             if (data.status == '201') {
                 updateAreas();
+                setLastSavedLable();
             }
             else if (data.status == '409') {
                 alert('Area already exist in database');
@@ -1138,9 +1205,10 @@ function updateAreas() {
 function SetContentsCharter(text) {
     var sessionID = $(document).getUrlParam("sessionid");
     var config = { extraPlugins: 'onchange'};
-    CKEDITOR.replace('chartereditor');//, config);
+    CKEDITOR.replace('chartereditor', config);
 
     var editor = CKEDITOR.instances.chartereditor;
+
     editor.setData(text);
 
     editor.on('change', function (e) {
@@ -1203,7 +1271,8 @@ function saveCharter(sessionID) {
                 var s = today.getSeconds();
                 m = checkTime(m);
                 s = checkTime(s);
-                $("#charterStatus").empty().append(" Last saved at: " + h + ":" + m + ":" + s);
+//                $("#charterStatus").empty().append(" Last saved at: " + h + ":" + m + ":" + s);
+                setLastSavedLable();
             }
         }
     });
@@ -1228,7 +1297,8 @@ function saveNotes(sessionID) {
                 var s = today.getSeconds();
                 m = checkTime(m);
                 s = checkTime(s);
-                $("#notesStatus").empty().append("Last saved at: " + h + ":" + m + ":" + s);
+//                $("#notesStatus").empty().append("Last saved at: " + h + ":" + m + ":" + s);
+                setLastSavedLable();
             }
         }
     });
@@ -1264,3 +1334,19 @@ function escapeHtml(string) {
     });
 }
 
+function getCurrentTime()
+{
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    return  h + ":" + m + ":" + s;
+}
+
+function setLastSavedLable()
+{
+    var time = getCurrentTime();
+    $('#status').text("Saved: "+time);
+}

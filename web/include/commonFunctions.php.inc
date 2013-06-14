@@ -887,7 +887,7 @@ function echoTesterFullNameSelect($name, $removeInactiveUsers = false, $onlyShow
 {
     $con = getMySqlConnection();
     if ($onlyShowUserThatHaveLoggedASession == true) {
-        $sqlSelect = "SELECT DISTINCT mb.fullname, mb.username FROM sessionwebos.members as mb, sessionwebos.mission as m  WHERE mb.deleted = false AND mb.username LIKE m.username ORDER BY m.username ASC";
+        $sqlSelect = "SELECT DISTINCT mb.fullname, mb.username FROM members as mb, mission as m  WHERE mb.deleted = false AND mb.username LIKE m.username ORDER BY m.username ASC";
     } else {
         $sqlSelect = "";
         $sqlSelect .= "SELECT username,fullname ";

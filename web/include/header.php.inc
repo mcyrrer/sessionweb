@@ -26,7 +26,7 @@ if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid-sessionweb.css\">\n";
     echo "     <script src=\"js/flexigrid.js\" type=\"text/javascript\"></script>\n";
-    echo "     <script src=\"js/flexigrid-sessionweb.js\" type=\"text/javascript\"></script>\n";
+    echo "     <script src=\"js/sessionweb-list-v25.js\" type=\"text/javascript\"></script>\n";
 }
 
 if (strstr($_SERVER['PHP_SELF'], "settings2.php") != false) {
@@ -130,6 +130,7 @@ if (isset($_SESSION['username'])) {
 }
 
 echo "      <a href='testhelper.php' target='_blank'>&copy;</a>";
+echo "      <span id='status'></span>";
 echo "</div>";
 echo "<div id='menubottom'></div>";
 

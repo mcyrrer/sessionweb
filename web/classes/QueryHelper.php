@@ -3,7 +3,7 @@ require_once 'logging.php';
 require_once 'dbHelper.php';
 
 
-class queryHelper
+class QueryHelper
 {
     private $logger;
     private $dbHelper;
@@ -174,6 +174,26 @@ class queryHelper
         return $toReturn;
     }
 
+    public function isTestEnvoronmentUrlDefined()
+    {
+        $sql = 'SELECT * FROM testenvironment WHERE url is not null AND url!="" ';
+        $con = $this->dbHelper->db_getMySqliConnection();
+
+        $result = $this->dbHelper->sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
+        $nbrOfRows = mysqli_num_rows($result);
+        $this->logger->debug("Test env url count ".$nbrOfRows,__FILE__,__LINE__);
+
+        mysqli_close($con);
+
+        if($nbrOfRows>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 ?>

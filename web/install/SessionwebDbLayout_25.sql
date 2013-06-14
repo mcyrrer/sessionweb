@@ -33,7 +33,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`custom_items` (
   `project` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 29
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -89,7 +88,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission` (
   INDEX `fk_mission_testenvironment1_idx` (`testenvironment` ASC) ,
   FULLTEXT INDEX `notes` (`notes` ASC, `charter` ASC, `title` ASC, `software` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 6143
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -106,7 +104,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_areas` (
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
   INDEX `fk_mission_debriefnotes_copy1_areas1_idx` (`areaname` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 230562
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -130,7 +127,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_attachments` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
   INDEX `fk_attach_mission1_idx` (`mission_versionid` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 374
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -146,7 +142,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_bugs` (
   PRIMARY KEY (`id`) ,
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 61128
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -164,7 +159,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_custom` (
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
   INDEX `fk_mission_debriefnotes_copy1_areas1_idx` (`customtablename` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 102054
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -197,7 +191,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_mindmaps` (
   PRIMARY KEY (`id`) ,
   INDEX `versionid` (`versionid` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -213,7 +206,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_requirements` (
   PRIMARY KEY (`id`) ,
   INDEX `fk_missionreq_mission1` (`versionid` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 498727
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -247,7 +239,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_sessionsconnections` (
   PRIMARY KEY (`id`) ,
   INDEX `fk_mission_sessionsconnections_mission1_idx` (`linked_from_versionid` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 42411
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -282,7 +273,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`mission_testers` (
   INDEX `fk_debriefnotes_mission1` (`versionid` ASC) ,
   INDEX `fk_mission_debriefnotes_copy1_areas1_idx` (`tester` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 7733
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -298,7 +288,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`sessionid` (
   PRIMARY KEY (`sessionid`, `createdby`) ,
   INDEX `fk_sessionid_members1_idx` (`createdby` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 6163
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -336,7 +325,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
   `wisemapping` TINYINT(1) NULL DEFAULT '0' ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -358,7 +346,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`softwareuseautofetched` (
   PRIMARY KEY (`id`) ,
   INDEX `versionid` (`versionid` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 2119
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -438,7 +425,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`user_sessionsnotification` (
   INDEX `fk_user_sessionsnotification_mission1_idx` (`versionid` ASC) ,
   INDEX `fk_user_sessionsnotification_members1_idx` (`username` ASC) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -474,7 +460,6 @@ CREATE  TABLE IF NOT EXISTS `sessionwebos`.`version` (
   `versioninstalled` FLOAT NOT NULL DEFAULT '1.1' ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
 
