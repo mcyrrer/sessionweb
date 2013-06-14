@@ -1,12 +1,16 @@
 <?php
-session_start();
 
-require_once('include/loggingsetup.php');
-include_once('include/db.php');
-include_once('config/auth.php.inc');
 require_once('classes/logging.php');
 
 $logger = new logging();
+$logger->debug("Enter index page",__FILE__,__LINE__);
+
+
+session_start();
+
+//require_once('include/loggingsetup.php');
+include_once('include/db.php');
+include_once('config/auth.php.inc');
 
 if (!file_exists('config/db.php.inc')) {
     header("Location: install/install.php");

@@ -14,14 +14,14 @@ if (!isset($basePath)) {
 $rootPath = checkIfRootFolder("");
 include_once 'sessionObject.php';
 /** @noinspection PhpIncludeInspection */
-include_once $rootPath."/config/db.php.inc";
+include_once $rootPath . "/config/db.php.inc";
 /** @noinspection PhpIncludeInspection */
-include_once $rootPath."/classes/logging.php";
+include_once $rootPath . "/classes/logging.php";
 /** @noinspection PhpIncludeInspection */
-include_once $rootPath."/classes/dbHelper.php";
-include_once $rootPath."/classes/sessionHelper.php";
+include_once $rootPath . "/classes/dbHelper.php";
+include_once $rootPath . "/classes/sessionHelper.php";
 /** @noinspection PhpIncludeInspection */
-include_once $rootPath."/include/db.php";
+include_once $rootPath . "/include/db.php";
 
 
 /** @noinspection PhpUndefinedClassInspection */
@@ -30,6 +30,7 @@ class sessionObjectSave
     private $logger;
     private $dbHelper;
     private $sessionHelper;
+
     /**
      * @param null $sessionid
      */
@@ -79,7 +80,7 @@ class sessionObjectSave
     private function saveMissionTable_Insert($missionDataArray, $con)
     {
 
-        $this->logger->debug("USERNAME: ".$missionDataArray["username"], __FILE__,__LINE__);
+        $this->logger->debug("USERNAME: " . $missionDataArray["username"], __FILE__, __LINE__);
 
         $sqlInsert = "";
         $sqlInsert .= "INSERT INTO mission ";
@@ -285,6 +286,7 @@ class sessionObjectSave
      */
     protected function saveToMissionAreaTable($missionDataArray)
     {
+        $this->logger->arraylog($missionDataArray, __FILE__, __LINE__);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
         $result = $this->saveToMissionStatusTable_Execute($missionDataArray, $con);
@@ -303,9 +305,11 @@ class sessionObjectSave
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_areas WHERE mission_areas.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-        foreach ($missionDataArray['areas'] as $area) {
-            $sqlInsert = "INSERT INTO mission_areas (versionid, areaname) VALUES ('$versionId', '$area')";
-            $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+        if (is_array($missionDataArray['areas'])) {
+            foreach ($missionDataArray['areas'] as $area) {
+                $sqlInsert = "INSERT INTO mission_areas (versionid, areaname) VALUES ('$versionId', '$area')";
+                $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+            }
         }
         return true;
     }
@@ -336,9 +340,11 @@ class sessionObjectSave
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_bugs WHERE mission_bugs.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-        foreach ($missionDataArray['bugs'] as $bug) {
-            $sqlInsert = "INSERT INTO mission_bugs (versionid, bugid) VALUES ('$versionId', '$bug')";
-            $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+        if (is_array($missionDataArray['bugs'])) {
+            foreach ($missionDataArray['bugs'] as $bug) {
+                $sqlInsert = "INSERT INTO mission_bugs (versionid, bugid) VALUES ('$versionId', '$bug')";
+                $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+            }
         }
         return true;
     }
@@ -368,9 +374,11 @@ class sessionObjectSave
         $versionId = $missionDataArray['versionid'];
         $sqlDelete = "DELETE FROM mission_requirements WHERE mission_requirements.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
-        foreach ($missionDataArray['requirements'] as $req) {
-            $sqlInsert = "INSERT INTO mission_requirements (versionid, requirementsid) VALUES ('$versionId', '$req')";
-            $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+        if (is_array($missionDataArray['requirements'])) {
+            foreach ($missionDataArray['requirements'] as $req) {
+                $sqlInsert = "INSERT INTO mission_requirements (versionid, requirementsid) VALUES ('$versionId', '$req')";
+                $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
+            }
         }
         return true;
     }
@@ -458,7 +466,7 @@ class sessionObjectSave
     {
         $this->logger->debug($sqlInsert, $file, $line);
 
-        return $this->dbHelper->sw_mysqli_execute($con,$sqlInsert,__FILE__, __LINE__);
+        return $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, __FILE__, __LINE__);
 
 //        /** @noinspection PhpVoidFunctionResultUsedInspection */
 //        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, $file, $line);

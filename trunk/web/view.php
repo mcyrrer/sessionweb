@@ -4,6 +4,7 @@ session_start();
 require_once('include/validatesession.inc');
 require_once('classes/AccessManagement.php');
 require_once('classes/dbHelper.php');
+require_once('classes/QueryHelper.php');
 require_once('classes/formHelper.php');
 require_once('classes/sessionHelper.php');
 require_once('classes/logging.php');
@@ -39,23 +40,22 @@ class View
         $this->formHelper = new formHelper();
         $this->session = new sessionObject($_REQUEST['sessionid']);
         $this->sessionHelper = new sessionHelper();
+        $this->quaryHelper = new QueryHelper();
+
     }
 
     public function showHtml()
     {
-        if(isset($_REQUEST['debrief']))
-        {
+        if (isset($_REQUEST['debrief'])) {
             if ($this->sessionHelper->isUserAllowedToDebriefSession($this->session)) {
                 $this->showHtmlAllowedToViewDebriefSession();
-            }else {
+            } else {
                 echo "You are not allowed to debrief session, only superuser or admin can do a debrief.";
             }
-        }
-        else
-        {
+        } else {
             $this->showHtmlAllowedToViewDebriefSession();
         }
-     }
+    }
 
     private function showHtmlAllowedToViewDebriefSession()
     {
@@ -78,11 +78,19 @@ class View
         echo '</ul>
           <div id="tabs-1">';
         echo '<table class="sTable"><tr><td class="fixedWidth">';
-        echo "<span class='sH3'>Sprint:</span>  <p><span id='idSprint'></span></p>";
-        echo "<span class='sH3'>Team:</span><p><span id='idTeam'></span></p>";
+        if ($_SESSION['settings']['sprint'] == 1) {
+            echo "<span class='sH3'>Sprint:</span>  <p><span id='idSprint'></span></p>";
+        }
+        if ($_SESSION['settings']['team'] == 1) {
+            echo "<span class='sH3'>Team:</span><p><span id='idTeam'></span></p>";
+        }
         echo '<span class="sH3">Additional tester:</span></span><p><span id="idAdditionalTester"></span></p>';
-        echo '<span class="sH3">Area:</span></span><p><span id="idArea"></span></p>';
-        echo '<span class="sH3">Testenvironment:</span></span><p><span id="idEnvironment"></span></p>';
+        if ($_SESSION['settings']['area'] == 1) {
+            echo '<span class="sH3">Area:</span></span><p><span id="idArea"></span></p>';
+        }
+        if ($_SESSION['settings']['testenvironment'] == 1) {
+            echo '<span class="sH3">Testenvironment:</span></span><p><span id="idEnvironment"></span></p>';
+        }
 
 
         if ($_SESSION['settings']['custom1'] == 1) {
@@ -112,10 +120,12 @@ class View
         echo "<span id='linkToOtherSessions'></span>";
         echo "</div>";
 
-        echo "<div class='itemList'>";
-        echo "<span class='sH3'>Automatically fetched software versions:</span><br>";
-        echo "<span id='autoSoftwareVersions'></span>";
-        echo "</div>";
+        if ($this->quaryHelper->isTestEnvoronmentUrlDefined()) {
+            echo "<div class='itemList'>";
+            echo "<span class='sH3'>Automatically fetched software versions:</span><br>";
+            echo "<span id='autoSoftwareVersions'></span>";
+            echo "</div>";
+        }
 
         if ($_SESSION['settings']['wisemapping'] == 1) {
             echo "<div class='itemList'>";

@@ -73,7 +73,17 @@ function install()
         mysql_query("SET CHARACTER SET utf8");
         $mysqlExecuter = new MySqlExecuter();
         $logger->debug("Will install sessionweb with file " . INSTALLATION_SCRIPT, __FILE__, __LINE__);
-        $resultOfSql = $mysqlExecuter->multiQueryFromFile(INSTALLATION_SCRIPT, $dbname, $createDb);
+
+        $tmpInstallationFile = tempnam(sys_get_temp_dir(), "sessionwebInstallation.sql");
+        //read the entire string
+        $orginalInstallationSql = file_get_contents(INSTALLATION_SCRIPT);
+        //replace something in the file string - this is a VERY simple example
+        $newInstallationSql=str_replace('DEFINER=`sessionweb`@`localhost`','DEFINER=`'.$dbuser.'`@`localhost`',$orginalInstallationSql);
+        //now, TOTALLY rewrite the file
+        file_put_contents($tmpInstallationFile,$newInstallationSql);
+        $logger->info("Created temporary installation sql file at $tmpInstallationFile",__FILE__,__LINE__);
+
+        $resultOfSql = $mysqlExecuter->multiQueryFromFile($tmpInstallationFile, $dbname, $createDb);
 
         if (sizeof($resultOfSql) == 0) {
             echo "Database created and installed<br>";

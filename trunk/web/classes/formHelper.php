@@ -1,7 +1,7 @@
 <?php
 require_once 'logging.php';
 require_once 'dbHelper.php';
-require_once 'queryHelper.php';
+require_once 'QueryHelper.php';
 require_once 'sessionObject.php';
 class formHelper
 {
@@ -11,7 +11,7 @@ class formHelper
     function __construct()
     {
         $this->logger = new logging();
-        $this->queryHelper = new queryHelper();
+        $this->queryHelper = new QueryHelper();
     }
 
     /**

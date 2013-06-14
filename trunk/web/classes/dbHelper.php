@@ -28,9 +28,13 @@ class dbHelper
     static function sw_mysql_execute($query, $file = "", $line = "")
     {
         $logger = new logging();
+        $logger->debug("will execute sql...", $file, $line);
+
         $pageTimer = new pagetimer();
         $pageTimer->startMeasurePageLoadTime();
         $result = mysql_query($query);
+        $logger->debug("Done execute sql...", $file, $line);
+
         $pageTimer->stopMeasurePageLoadTime();
 
         if (strlen($query) > 100) {

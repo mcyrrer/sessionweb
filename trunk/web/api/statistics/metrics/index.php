@@ -4,9 +4,10 @@
  *
  */
 
-const X = 450;
-const Y = 150;
-const TITLE = '';
+define("X", 450);
+define("Y", 150);
+define("TITLE", "");
+
 
 session_start();
 
