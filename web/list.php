@@ -117,8 +117,8 @@ $pageTimer->startMeasurePageLoadTime();
 
     </div>
 </div>
-    <div id="dialog" title="this is a dialog" style="display:none;">
-        <iframe id="dialogurl" width="350" height="350"></iframe>
+    <div id="dialog" style="display:none;">
+        <iframe id="dialogurl" width="450" height="450" frameborder="0"></iframe>
     </div>
 <?php
 require_once('include/footer.php.inc');

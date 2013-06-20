@@ -41,7 +41,7 @@ if (isset($_REQUEST['sessionid'])) {
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
 
-        if ($accessManager->IsCurrentUserAllowedToDebiref()) {
+        if ($accessManager->isCurrentUserAllowedToDebiref()) {
             if ($so->getExecuted()) {
                 if (strcmp($debriefed, 'true') == 0) {
                     $sql = "UPDATE mission_status SET debriefed=1, debriefed_timestamp=NOW(), closed=0 WHERE versionid='" . $so->getVersionid() . "'";

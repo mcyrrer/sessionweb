@@ -59,7 +59,7 @@ class formHelper
     {
         if(!is_array($selectedName))
         {
-            $this->logger->warn('selectedName is not an array!',__FILE__,__LINE__);
+            $this->logger->debug('selectedName is not an array!',__FILE__,__LINE__);
         }
         $index = 0;
         $html = "<select id=\"$htmlTagId\" name=\"" . $htmlTagName . "[]\" multiple=\"multiple\" $extraParameters>\n";

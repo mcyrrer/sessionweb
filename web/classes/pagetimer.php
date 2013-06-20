@@ -42,7 +42,7 @@ class pagetimer
         if ($this->loadTime > 5) {
             $this->logger->warning("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
         } else {
-            $this->logger->debug("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
+            $this->logger->timer("$comment Load time for " . $this->getUrl() . " " . $this->loadTime . " seconds", $file, $line);
         }
     }
 
