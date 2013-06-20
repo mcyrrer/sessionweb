@@ -57,12 +57,12 @@ saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
 $logger->info("Copied session ".$_REQUEST["sessionid"]." into new sessionid ".$sessionid,__FILE__,__LINE__);
 $title = $sessionDataToCopy["title"];
 echo "<center>";
-echo "<img src='pictures/edit-copy-9-medium.png' alt=''>";
+echo "<img src='../../../pictures/edit-copy-9-medium.png' alt=''>";
 
 echo "<h2>Copy session</h2>";
 echo "<p>Title of copy:".$sessionDataToCopy["title"]."(Copy)</p>";
 echo "<p>Copy created</p>";
-echo "<div id='editCopy'><a href='edit.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
+echo "<div id='editCopy'><a href='../../../edit.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
 echo "</center>";
 
 ?>

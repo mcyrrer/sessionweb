@@ -250,7 +250,7 @@ function printTagCloud($tags, $maxItemToDisplay)
                 if ($_SESSION['useradmin'] == 1 && isset($_GET['edit']) && $_GET['edit'] == "yes")
                     echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '">' . $key . '</span>';
                 else
-                    echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '"><a href="../list2.php?searchstring=' . $key . '" target="_top">' . $key . '</a></span> ';
+                    echo '<span href="" style="font-size: ' . $size . 'px" title="' . $value . ' occurrence with word ' . $key . '"><a href="../list.php?searchstring=' . $key . '" target="_top">' . $key . '</a></span> ';
 
 
             }

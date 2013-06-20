@@ -169,7 +169,7 @@ class View
         echo '  <span class="larger">Attachments</span>';
         echo '  </div>';
         echo '</div>';
-        if (AccessManagement::IsCurrentUserAllowedToDebiref() && isset($_REQUEST['debrief'])) {
+        if (AccessManagement::isCurrentUserAllowedToDebiref() && isset($_REQUEST['debrief'])) {
 
             echo '<div id="tabs-6">';
             echo '  <div id="debrief">';
@@ -197,7 +197,7 @@ class View
                         </div>';
             echo '</div>';
         } else {
-            $this->logger->info("Tried to debrief but is not authorized");
+            $this->logger->info("Tried to debrief but is not authorized",__FILE__,__LINE__);
         }
 
 

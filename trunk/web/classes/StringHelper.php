@@ -14,13 +14,13 @@ class StringHelper
         $this->dbHelper = new dbHelper();
     }
 
-    function str_startsWith($haystack, $needle)
+    public static function str_startsWith($haystack, $needle)
     {
         $length = strlen($needle);
         return (substr($haystack, 0, $length) === $needle);
     }
 
-    function str_endsWith($haystack, $needle)
+    public static function str_endsWith($haystack, $needle)
     {
         $length = strlen($needle);
         if ($length == 0) {
@@ -29,6 +29,14 @@ class StringHelper
 
         $start = $length * -1; //negative
         return (substr($haystack, $start) === $needle);
+    }
+
+    public static function str_IsEqual($string1, $string2)
+    {
+        if(strcmp($string1,$string2)==0)
+            return true;
+        else
+            return false;
     }
 
 }

@@ -40,7 +40,7 @@ if (isset($_REQUEST['text']) && isset($_REQUEST['sessionid'])) {
 
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
-        if (AccessManagement::IsCurrentUserAllowedToDebiref()) {
+        if (AccessManagement::isCurrentUserAllowedToDebiref()) {
 
                 $sql = "INSERT IGNORE
                         INTO

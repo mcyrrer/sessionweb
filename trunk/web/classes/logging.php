@@ -16,7 +16,7 @@ class logging
     function __construct()
     {
         //Populate with the levels you need to have in file, "ARRAY","TIMER","SQL","DEBUG","INFO","WARN","ERROR","FATAL"
-        $this->loglevel = array("ARRAY","SQL", "DEBUG", "INFO", "WARN", "ERROR", "FATAL");
+        $this->loglevel = array("ARRAY", "SQL", "DEBUG", "INFO", "WARN", "ERROR", "FATAL");
 
         $this->logpath = '';
         if (file_exists('log')) {
@@ -25,24 +25,19 @@ class logging
         } elseif (file_exists('../log')) {
             $this->logpath = '../log/sessionweb.log';
             $this->logpathsql = '../log/sql.log';
-        }
-        elseif (file_exists('../../log')) {
+        } elseif (file_exists('../../log')) {
             $this->logpath = '../../log/sessionweb.log';
             $this->logpathsql = '../../log/sql.log';
-        }
-        elseif (file_exists('../../../log')) {
+        } elseif (file_exists('../../../log')) {
             $this->logpath = '../../../log/sessionweb.log';
             $this->logpathsql = '../../../log/sql.log';
-        }
-        elseif (file_exists('../../../../log')) {
+        } elseif (file_exists('../../../../log')) {
             $this->logpath = '../../../../log/sessionweb.log';
             $this->logpathsql = '../../../../log/sql.log';
-        }
-        elseif (file_exists('../../../../../log')) {
+        } elseif (file_exists('../../../../../log')) {
             $this->logpath = '../../../../../log/sessionweb.log';
             $this->logpathsql = '../../../../../log/sql.log';
-        }
-        else {
+        } else {
             echo "Could not find logfile log/sessionweb.log " . __FILE__;
             exit();
         }
@@ -58,7 +53,7 @@ class logging
     public function arraylog($array, $filename = "", $line = "")
     {
         $loglevel = "ARRAY";
-        $array = print_r($array,true);
+        $array = print_r($array, true);
         $this->writeMessageToLog($loglevel, $array, $filename, $line);
     }
 
@@ -74,10 +69,18 @@ class logging
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
     }
 
-    public function debug($logmessage, $filename = "", $line = "")
+    public function debug($logmessage, $filename = "", $line = "", $trace = false)
     {
         $loglevel = "DEBUG";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
+        if ($trace) {
+            try {
+                throw new Exception();
+            } catch (Exception $e) {
+
+                $this->writeMessageToLog($loglevel, $e, null, null);
+            }
+        }
     }
 
     public function info($logmessage, $filename = "", $line = "")
@@ -101,14 +104,24 @@ class logging
     {
         $loglevel = "ERROR";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
-       // $this->writeMessageToLog($loglevel, debug_string_backtrace(), $filename, $line);
-       // $this->writeMessageToLog($loglevel, "!!!!!", $filename, $line);
+        try {
+            throw new Exception();
+        } catch (Exception $e) {
+
+            $this->writeMessageToLog($loglevel, $e, null, null);
+        }
     }
 
     public function fatal($logmessage, $filename = "", $line = "")
     {
         $loglevel = "FATAL";
         $this->writeMessageToLog($loglevel, $logmessage, $filename, $line);
+        try {
+            throw new Exception();
+        } catch (Exception $e) {
+
+            $this->writeMessageToLog($loglevel, $e, null, null);
+        }
     }
 
     private function writeMessageToLog($loglevel, $logmessage, $filename, $line)
@@ -150,19 +163,22 @@ class logging
         return date('Ymd H:i:s', time());
     }
 
-    function debug_string_backtrace() {
-        //ob_start();
-        var_dump(debug_backtrace());
-        $trace = ob_get_contents();
-        //ob_end_clean();
 
-        // Remove first item from backtrace as it's this function which
-        // is redundant.
-        //$trace = preg_replace ('/^#0\s+' . __FUNCTION__ . "[^\n]*\n/", '', $trace, 1);
+    function MakePrettyException(Exception $e)
+    {
+        $trace = $e->getTrace();
 
-        // Renumber backtrace items.
-        //$trace = preg_replace ('/^#(\d+)/me', '\'#\' . ($1 - 1)', $trace);
+        $result = 'Exception: "';
+        $result .= $e->getMessage();
+        $result .= '" @ ';
+        if ($trace[0]['class'] != '') {
+            $result .= $trace[0]['class'];
+            $result .= '->';
+        }
+        $result .= $trace[0]['function'];
+        $result .= '();<br />';
 
-        return $trace;
+        return $result;
     }
 }
+

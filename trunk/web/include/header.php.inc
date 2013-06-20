@@ -22,7 +22,7 @@ echo "     <script src=\"js/jquery-1.9.1.min.js\" type=\"text/javascript\"></scr
 echo "     <script src=\"js/jqueryui/jquery-ui-1.10.0.custom.min.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"js/sessionwebcommon.js\" type=\"text/javascript\"></script>\n";
 
-if (strstr($_SERVER['PHP_SELF'], "list2.php") != false) {
+if (strstr($_SERVER['PHP_SELF'], "list.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid-sessionweb.css\">\n";
     echo "     <script src=\"js/flexigrid.js\" type=\"text/javascript\"></script>\n";
@@ -120,7 +120,7 @@ if (isset($_SESSION['user']) && $_SESSION['user'] != "") {
 //}
 echo "      <a href=\"index.php\" id=\"url_index\">Main page</a> |";
 echo "      <a href=\"edit.php\" id=\"url_newsession\">New session</a> |";
-echo "      <a href=\"list2.php\" id=\"url_list\">List sessions</a> |";
+echo "      <a href=\"list.php\" id=\"url_list\">List sessions</a> |";
 echo "      <a href='statistics.php' id=\"url_statistics\">Statistics</a> |";
 echo "      <a href=\"settings2.php\" id=\"url_settings\">Settings</a> |";
 

@@ -129,7 +129,7 @@ class sessionObject extends sessionObjectSave
     private function getSessionData($sessionid)
     {
 
-
+        $this->logger->debug("TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",__FILE__,__LINE__,true);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
 
@@ -162,7 +162,7 @@ class sessionObject extends sessionObjectSave
         $this->setUpdated($data['updated']);
         $this->setPublickey($data['publickey']);
         $this->setTestenvironment($data['testenvironment']);
-        $this->setSoftware($data['software']);
+        $this->setSoftware(str_replace("\n","<br>",$data['software']));
         $this->setLastupdatedby($data['lastupdatedby']);
 
         $versionid = $this->getVersionid();

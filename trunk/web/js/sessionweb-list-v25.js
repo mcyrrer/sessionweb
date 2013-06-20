@@ -30,7 +30,7 @@ function deleteSession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     var title = $('.trSelected td:nth-child(3) div').text();
     if (id != "") {
-        if (confirm('Are you sure you want to delete this session: ('+title+") ?")) {
+        if (confirm('Are you sure you want to delete this session: (' + title + ") ?")) {
             $.ajax({
                 type: "GET",
                 data: {
@@ -45,14 +45,12 @@ function deleteSession() {
                         $('#msgdiv').fadeOut(3000, function () {
                         });
                     }
-                    else if(data.status == '401')
-                    {
+                    else if (data.status == '401') {
                         $("#msgdiv").fadeIn("slow");
                         $("#msgdiv").text("You are not allowed to delete this session");
                         $('#msgdiv').fadeOut(3000, function () {
                         });
-                    }else
-                    {
+                    } else {
                         $("#msgdiv").fadeIn("slow");
                         $("#msgdiv").text("On error occured, please check log files");
                         $('#msgdiv').fadeOut(3000, function () {
@@ -141,37 +139,24 @@ function displaySelectSessionMsg() {
 
 function copySession() {
     var id = $('.trSelected td:nth-child(1) div').text();
-    if (id != "") {
-//        $("#dialogurl").attr("src", 'api/session/copy/?sessionid=' + id);
-//        $("#dialog").dialog({
-//            title: 'Copy session',
-//            modal: true,
-//            width: 500,
-//            height: 500,
-//            buttons: {
-//                Ok: function () {
-//                    $(this).dialog("close");
-//                }
-//            },
-//            open: function (event, ui) {
-//                $('#dialog').css('overflow', 'hidden');
-//            },
-//            close: function () {
-//                jQuery("#flexgrid1").flexReload();
-//                $("#dialogurl").attr('src', "about:blank");
-//            }
-//        });
 
-        $('.copy').colorbox({
-            href: 'api/session/copy/?sessionid=' + id,
-            open: true,
-            iframe: false,
-            width: 500,
-            height: 500,
-            onClosed: function () {
-                jQuery("#flexgrid1").flexReload();
-            }
-        });
+    $("#dialog").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 500,
+        height: 500,
+        title: "Copy session",
+        open: function (ev, ui) {
+            $('#dialogurl').attr('src', 'api/session/copy/?sessionid=' + id);
+            $('#dialog').css('overflow', 'hidden');
+        },
+        close: function (event, ui) {
+            jQuery("#flexgrid1").flexReload();
+        }
+    });
+
+    if (id != "") {
+        $('#dialog').dialog('open');
     }
     else {
         displaySelectSessionMsg();
@@ -183,17 +168,24 @@ function reassignSession() {
     var id = $('.trSelected td:nth-child(1) div').text();
     var status = $('.trSelected td:nth-child(2) div').text();
     if (status == "Not Executed" || status == "In progress") {
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 500,
+            height: 500,
+            title: "Reassign session",
+            open: function (ev, ui) {
+                $('#dialogurl').attr('src', 'api/session/reassign/?sessionid=' + id);
+                $('#dialog').css('overflow', 'hidden');
+            },
+            close: function (event, ui) {
+                jQuery("#flexgrid1").flexReload();
+            }
+        });
+
         if (id != "") {
-            $('.reassign').colorbox({
-                href: 'api/session/reassign/?sessionid=' + id,
-                open: true,
-                iframe: true,
-                width: 500,
-                height: 500,
-                onClosed: function () {
-                    jQuery("#flexgrid1").flexReload();
-                }
-            });
+            $('#dialog').dialog('open');
         }
         else {
             displaySelectSessionMsg();
@@ -357,7 +349,7 @@ $(document).ready(function () {
         var status = $('#select_status_type').val();
 
         var searchstring = $('#searchstring').val();
-        var url = 'list2.php?tester=' + tester + '&sprint=' + sprint + '&team=' + team + '&area=' + area + '&status=' + status + '&searchstring=' + searchstring;
+        var url = 'list.php?tester=' + tester + '&sprint=' + sprint + '&team=' + team + '&area=' + area + '&status=' + status + '&searchstring=' + searchstring;
         $('#urldiv').html('<a href="' + url + '">Perm link to filter/search</a>');
     }
 
