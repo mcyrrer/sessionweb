@@ -7,11 +7,12 @@ To enable some of the feature's please read through README-TipsAndTrixs
 ==SessionWeb 25==
 Notes:
 This version have is a major update.
-PHP version supported is 5.4.x-> Version below this will not work!!
+PHP version supported is 5.2.3-> Version below this will not work!!
 
 Edit page is rewritten from scratch to take care of some nasty encoding bugs.
 Installation/Upgrade from any previous version:
-Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade.
+DO NOT FORGET TO CREATE A BACKUP BEFORE YOU UPGRADE!
 
 Upgrade manually:
 If you can not upgrade please manually execute
@@ -19,15 +20,20 @@ If you can not upgrade please manually execute
 install/SessionwebDbLayoutDelta_24-_25.sql
 to upgrade from 24->25
 
-===Release include (release 25) ===
+===Release include (release 25 beta) ===
 ID  Type            Milestone   Summary
-.
-.
-.
-.
-.
-.
-.
+101	Enhancement	    Release25	Remove team sprint and word cloud from the default settings on fresh installation
+112	Defect	        Release25	URLs once entered into link to other session box can not be deleted
+118	Defect	        Release25	Percent sign (%) breaks in sessionweb
+124	Defect	        Release25	View session shows wrong status if session is closed
+131	Enhancement	    Release25	Add expand and collapse to areas and testers in session edit to make it easier to choose values
+133	Defect	        Release25	Content can'd read while Edit session
+135	Defect	        Release25	Summary error in areagrid report for pie chart
+136	Defect	        Release25	Sessions with additional testers are not editable by the additional testers
+139	Enhancement	    Release25	Implement new desing for Edit/View and debrief session
+140	Enhancement	    Release25	Change Edit session to be ajax and api driven
+141	Enhancement	    Release25	Update cheditor to version 4.x
+
 
 
 ==SessionWeb 24==
