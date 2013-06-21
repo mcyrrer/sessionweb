@@ -1,0 +1,5 @@
+0. validate attachment with user and permisions
+1. Add file in db instead of file system
+2. save thumb to db
+3. get thumb from db
+4 get file from db
