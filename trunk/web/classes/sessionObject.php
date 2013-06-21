@@ -129,7 +129,7 @@ class sessionObject extends sessionObjectSave
     private function getSessionData($sessionid)
     {
 
-        $this->logger->debug("TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",__FILE__,__LINE__,true);
+
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $con = getMySqliConnection();
 
