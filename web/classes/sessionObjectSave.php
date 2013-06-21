@@ -464,9 +464,7 @@ class sessionObjectSave
      */
     private function executeInsert($sqlInsert, $con, $file, $line)
     {
-        $this->logger->debug($sqlInsert, $file, $line);
-
-        return $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, __FILE__, __LINE__);
+          return $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, __FILE__, __LINE__);
 
 //        /** @noinspection PhpVoidFunctionResultUsedInspection */
 //        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, $file, $line);
