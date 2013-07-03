@@ -29,7 +29,10 @@ if (isset($_REQUEST['from']) && $_REQUEST['to']) {
     $con = $dbManager->db_getMySqliConnection();
 
     $sessionidFrom = dbHelper::escape($con, $_REQUEST['from']);
+    $sessionidFrom = trim($sessionidFrom);
     $sessionidTo = dbHelper::escape($con, $_REQUEST['to']);
+    $sessionidTo = trim($sessionidTo);
+
     $soFrom = new sessionObject($sessionidFrom);
     $soTo = new sessionObject($sessionidTo);
 

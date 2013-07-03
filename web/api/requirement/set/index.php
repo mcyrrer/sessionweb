@@ -27,6 +27,7 @@ if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id']!=
     $con = $dbManager->db_getMySqliConnection();
     $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);
     $requirementId = dbHelper::escape($con, $_REQUEST['id']);
+    $requirementId = trim($requirementId);
     $so = new sessionObject($sessionid);
 
     header("HTTP/1.0 501 Internal Server Error");
