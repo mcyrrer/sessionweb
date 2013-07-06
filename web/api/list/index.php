@@ -7,6 +7,7 @@ require_once('../../config/db.php.inc');
 require_once('../../classes/logging.php');
 require_once('../../classes/sessionReadObject.php');
 require_once('../../classes/sessionObject.php');
+require_once('../../classes/sessionHelper.php');
 require_once('../../include/commonFunctions.php.inc');
 
 $logger = new logging();
@@ -149,7 +150,8 @@ function generateDataForIssueAndRequritementSearch($con)
         }
 
         $title = $session['title'];
-        $fullname = getTesterFullName($session['username']);
+        $sh = new sessionHelper();
+        $fullname = $sh->getUserFullName($session['username']);
         $sprintname = $session['sprintname'];
         $teamname = $session['teamname'];
         $areas = "";
@@ -168,6 +170,8 @@ function generateDataForIssueAndRequritementSearch($con)
 
 function getListofSessionsFromBugOrRequirementsSearch($con,$sqlReq, $sqlBugs)
 {
+    $sh = new sessionHelper();
+
     $issueList = array();
 
     $result = dbHelper::sw_mysqli_execute($con,$sqlReq,__FILE__,__LINE__);
@@ -177,9 +181,7 @@ function getListofSessionsFromBugOrRequirementsSearch($con,$sqlReq, $sqlBugs)
     }
 
     while ($row = mysqli_fetch_array($result)) {
-        $sh = new sessionHelper();
         $issueList[] = $sh->getSessionIdFromVersionId($row['versionid'],$con);
-
     }
 
     $result = dbHelper::sw_mysqli_execute($con,$sqlBugs,__FILE__,__LINE__);

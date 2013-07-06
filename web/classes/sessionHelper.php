@@ -16,13 +16,37 @@ class sessionHelper
     }
 
     function getUserName()
-{
-    return $_SESSION['username'];
-}
-
-    function getUserFullName()
     {
-        return $_SESSION['user'];
+        return $_SESSION['username'];
+    }
+
+    /**
+     * @param null $userName if null then current users full name is returned.
+     * @return mixed Full name of user
+     */
+
+    function getUserFullName($userName = null)
+    {
+        if ($userName == null)
+            return $_SESSION['user'];
+        else {
+            $dh = new dbHelper();
+            $con = $dh->db_getMySqliConnection();
+
+            $sqlSelect = "";
+            $sqlSelect .= "SELECT fullname ";
+            $sqlSelect .= "FROM   members ";
+            $sqlSelect .= "WHERE username = '$userName' ";
+            $sqlSelect .= "ORDER  BY fullname ASC";
+
+            $result = $dh->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
+
+            $row = mysqli_fetch_row($result);
+            mysqli_close($con);
+
+            return $row[0];
+        }
+
     }
 
     function isUserAllowedToEditSession($sessionObject)

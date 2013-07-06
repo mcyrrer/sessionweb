@@ -19,6 +19,7 @@ function getTitle()
 
     $logger = new logging();
     $sessionId = $_REQUEST["sessionid"];
+    $sessionId = trim($sessionId);
 
 
     if ($sessionId == null || strcmp($sessionId, "") == 0) {
