@@ -10,6 +10,7 @@ require_once ('../../../../include/apistatuscodes.inc');
 if (file_exists("../../../../include/customfunctions.php.inc")) ;
 {
     $bugId = $_REQUEST['id'];
+    $bugId = trim($bugId);
 
     require_once('../../../../include/customfunctions.php.inc');
     $bugName = getBugNameFromServer($bugId);

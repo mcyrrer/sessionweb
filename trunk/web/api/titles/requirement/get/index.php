@@ -12,6 +12,7 @@ require_once ('../../../../include/apistatuscodes.inc');
 if (file_exists("../../../../include/customfunctions.php.inc")) ;
 {
     $reqId = $_REQUEST['reqId'];
+    $reqId = trim($reqId);
 
     require_once('../../../../include/customfunctions.php.inc');
     $reqName = getRequirementNameFromServer($reqId);
