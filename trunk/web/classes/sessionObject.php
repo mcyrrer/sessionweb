@@ -162,7 +162,12 @@ class sessionObject extends sessionObjectSave
         $this->setUpdated($data['updated']);
         $this->setPublickey($data['publickey']);
         $this->setTestenvironment($data['testenvironment']);
-        $this->setSoftware(str_replace("\n","<br>",$data['software']));
+        $this->setSoftware($data['software']);
+
+        /**
+         * Issue 155:	line breaks not interpreted correctly
+         **/
+        //$this->setSoftware(str_replace("\n","<br>",$data['software']));
         $this->setLastupdatedby($data['lastupdatedby']);
 
         $versionid = $this->getVersionid();

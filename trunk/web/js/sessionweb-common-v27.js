@@ -10,10 +10,20 @@ $(document).ready(function () {
     });
 
     $('.counterstring').click(function () {
-
         $('#cntJqueryUiPopup').load('testhelper.php').dialog('open');
     });
 
 
 
 });
+
+/**
+ * Escape an id and adds a # in the beginning.
+ * @param myid id to escape without #
+ * @returns {string} jQuery Id with a # in the beginning.
+ */
+function escapeJqueryIdName( myid ) {
+
+    return "#" + myid.replace( /(:|\.|\[|\])/g, "\\$1" );
+
+}
