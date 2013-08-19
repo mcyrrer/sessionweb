@@ -354,7 +354,7 @@ function setSessionData(jsonResponseContent) {
     $('#idEnvironment').html(jsonResponseContent['testenvironment']);
 
     //idSoftwareUnderTest
-    $('#idSoftwareUnderTest').html(jsonResponseContent['software']);
+    $('#idSoftwareUnderTest').html('<pre>'+jsonResponseContent['software']+'</pre>');
 
     //DebriefStatus
     if (jsonResponseContent['debriefed'] == 0 && jsonResponseContent['closed'] !== 0) {
@@ -833,7 +833,8 @@ function SetContentDebrief(text) {
 
     var editor = CKEDITOR.instances.debriefeditor;
     editor.setData(text);
-
+    var h = $(document).width()/3;
+    editor.config.width = h;
     editor.on('change', function (e) {
         saveDebriefNotes(sessionID);
     });

@@ -138,7 +138,7 @@ class Edit
         }
         if ($_SESSION['settings']['wisemapping'] == 1) {
             echo "<div class='itemList'>";
-            echo "<span class='sH3'>Minmaps:</span>";
+            echo "<span class='sH3'>Mindmaps:</span>";
             echo '<span id="addMindMap">[+]</span><br>';
             echo "<span id='mindMaps'></span>";
             echo "</div>";

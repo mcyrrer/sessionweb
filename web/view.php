@@ -129,7 +129,7 @@ class View
 
         if ($_SESSION['settings']['wisemapping'] == 1) {
             echo "<div class='itemList'>";
-            echo "<span class='sH3'>Minmaps:</span><br>";
+            echo "<span class='sH3'>Mindmaps:</span><br>";
             echo "<span id='mindMaps'></span>";
         }
         echo "</div>";
@@ -144,8 +144,39 @@ class View
 
         echo '</div>
             <div id="tabs-3">';
-        echo '<div id="idnotes"><span class="larger">Notes</span><span id="notesStatus"></span><div id="noteseditor"></div></div>';
+        echo '<table><tr><td width="50%">';
+        echo '<div id="idnotes">
+                    <span class="larger">Notes</span>
+                    <span id="notesStatus"></span>
+                    <div id="noteseditor"></div>
+              </div></td>';
+        if (AccessManagement::isCurrentUserAllowedToDebiref() && isset($_REQUEST['debrief'])) {
 
+            echo '<td>  <div id="debrief">';
+            echo '      <div id="iddebrief">
+                            <span class="larger">Debrief</span>&nbsp;&nbsp;
+                            <span id="debriefStatus"></span>
+                            <div id="debriefNotes">
+                                <input class="dbStatus" id="notdebriefed" type="radio" name="debriefstatus" value="notdebriefed" >Not debriefed
+                                |
+                                <input class="dbStatus" id="debriefed" type="radio" name="debriefstatus" value="debriefed">Debriefed
+                                |
+                                <input class="dbStatus" id="closed" type="radio" name="debriefstatus" value="closed">Closed
+                            </div>
+                            <textarea name="debriefeditor" rows="30" cols="30">&nbsp;d</textarea>
+                        </div>';
+            echo '  </div></td>';
+        } elseif ($this->session->isDebriefed()) {
+            echo '<td>      <div id="debrief">';
+            echo '          <div id="iddebrief">
+                                <span class="larger">Debrief</span>&nbsp;&nbsp;
+                            <div id="debriefStatus"></div>
+                            <div id="debriefText"></div>
+                        </div></td>';
+        } else {
+            $this->logger->info("Tried to debrief but is not authorized",__FILE__,__LINE__);
+        }
+        echo '</tr></table>';
         echo '</div>
             <div id="tabs-4">';
 
@@ -169,36 +200,36 @@ class View
         echo '  <span class="larger">Attachments</span>';
         echo '  </div>';
         echo '</div>';
-        if (AccessManagement::isCurrentUserAllowedToDebiref() && isset($_REQUEST['debrief'])) {
-
-            echo '<div id="tabs-6">';
-            echo '  <div id="debrief">';
-            echo '      <div id="iddebrief">
-                            <span class="larger">Debrief</span>&nbsp;&nbsp;
-                            <span id="debriefStatus"></span>
-                            <div id="debriefNotes">
-                                <input class="dbStatus" id="notdebriefed" type="radio" name="debriefstatus" value="notdebriefed" >Not debriefed
-                                |
-                                <input class="dbStatus" id="debriefed" type="radio" name="debriefstatus" value="debriefed">Debriefed
-                                |
-                                <input class="dbStatus" id="closed" type="radio" name="debriefstatus" value="closed">Closed
-                            </div>
-                            <textarea name="debriefeditor" rows="30" cols="30">&nbsp;d</textarea>
-                        </div>';
-            echo '  </div>';
-            echo '</div>';
-        } elseif ($this->session->isDebriefed()) {
-            echo '<div id="tabs-6">';
-            echo '      <div id="debrief">';
-            echo '          <div id="iddebrief">
-                                <span class="larger">Debrief</span>&nbsp;&nbsp;
-                            <div id="debriefStatus"></div>
-                            <div id="debriefText"></div>
-                        </div>';
-            echo '</div>';
-        } else {
-            $this->logger->info("Tried to debrief but is not authorized",__FILE__,__LINE__);
-        }
+//        if (AccessManagement::isCurrentUserAllowedToDebiref() && isset($_REQUEST['debrief'])) {
+//
+//            echo '<div id="tabs-6">';
+//            echo '  <div id="debrief">';
+//            echo '      <div id="iddebrief">
+//                            <span class="larger">Debrief</span>&nbsp;&nbsp;
+//                            <span id="debriefStatus"></span>
+//                            <div id="debriefNotes">
+//                                <input class="dbStatus" id="notdebriefed" type="radio" name="debriefstatus" value="notdebriefed" >Not debriefed
+//                                |
+//                                <input class="dbStatus" id="debriefed" type="radio" name="debriefstatus" value="debriefed">Debriefed
+//                                |
+//                                <input class="dbStatus" id="closed" type="radio" name="debriefstatus" value="closed">Closed
+//                            </div>
+//                            <textarea name="debriefeditor" rows="30" cols="30">&nbsp;d</textarea>
+//                        </div>';
+//            echo '  </div>';
+//            echo '</div>';
+//        } elseif ($this->session->isDebriefed()) {
+//            echo '<div id="tabs-6">';
+//            echo '      <div id="debrief">';
+//            echo '          <div id="iddebrief">
+//                                <span class="larger">Debrief</span>&nbsp;&nbsp;
+//                            <div id="debriefStatus"></div>
+//                            <div id="debriefText"></div>
+//                        </div>';
+//            echo '</div>';
+//        } else {
+//            $this->logger->info("Tried to debrief but is not authorized",__FILE__,__LINE__);
+//        }
 
 
         echo '</div></div> ';

@@ -875,8 +875,13 @@ function CreateRequirement(requirementId) {
 }
 
 function AddSingleRequirement(aReq) {
-    aReq = aReq.replace("#", "");
-    $('#testReqId').append('<p class="sw_p" id="' + aReq + 'REQ">' + aReq + ': Loading title</p>');
+//    aReq = aReq.replace("#", "");
+    var aReqID = aReq.replace("#", "--");
+    aReqID = aReqID.replace(",", "--");
+    aReqID = aReqID.replace(".", "--");
+    aReqID = aReqID.replace(";", "--");
+    aReqID = aReqID.replace(":", "--");
+    $('#testReqId').append('<p class="sw_p" id="' + aReqID + 'REQ">' + aReq + ': Loading title</p>');
     $.ajax({
         type: "GET",
         data: {
@@ -891,10 +896,10 @@ function AddSingleRequirement(aReq) {
                 if (title == "") {
                     title = aReq;
                 }
-                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq + '>"<span onClick="onRequirementLinkDeleteClick(\'' + aReq + '\')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
+                $('#' + aReqID + 'REQ').html('<span id="req_del_' + aReqID + '>"<span onClick="onRequirementLinkDeleteClick(\'' + aReqID + '\')">[-]</span>' + aReq + ': <a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + title + '</a></span><br></span>');
             }
             else {
-                $('#' + aReq + 'REQ').html('<span id="req_del_' + aReq + '>"<span onClick="onRequirementLinkDeleteClick(\'' + aReq + '\')">[-]</span><a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + aReq + '</a></span><br></span>');
+                $('#' + aReqID + 'REQ').html('<span id="req_del_' + aReqID + '>"<span onClick="onRequirementLinkDeleteClick(\'' + aReqID + '\')">[-]</span><a class="sw_p" href="' + url_to_rms + '' + aReq + '" target="_blank">' + aReq + '</a></span><br></span>');
             }
         }
     });
@@ -981,8 +986,12 @@ function CreateBug(bugId) {
 }
 
 function AddSingleBug(aBug) {
-    aBug = aBug.replace("#", "");
-    $('#testBugId').append('<p class="sw_p" id="' + aBug + 'BUG">' + aBug + ': Loading title</p>');
+    var aBugID = aBug.replace("#", "--");
+    aBugID = aBugID.replace(",", "--");
+    aBugID = aBugID.replace(".", "--");
+    aBugID = aBugID.replace(";", "--");
+    aBugID = aBugID.replace(":", "--");
+    $('#testBugId').append('<p class="sw_p" id="' + aBugID + 'BUG">' + aBug + ': Loading title</p>');
     $.ajax({
         type: "GET",
         data: {
@@ -997,10 +1006,12 @@ function AddSingleBug(aBug) {
                 if (title == "") {
                     title = aBug;
                 }
-                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>');
+                var html = '<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>';
+                $('#' + aBugID + 'BUG').html(html);
+                console.debug(html);
             }
             else {
-                $('#' + aBug + 'BUG').html('<span id="bug_del_' + aBug + '>"<span onClick="onBugLinkDeleteClick(\'' + aBug + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
+                $('#' + aBugID + 'BUG').html('<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
 
             }
         }
@@ -1098,9 +1109,13 @@ function CreateSessionLink(sessionIdToLinkTo) {
 }
 
 function AddSingleSessionLink(aLink) {
-    aLink = aLink.replace("#", "");
+    var aLinkID = aLink.replace("#", "--");
+    aLinkID = aLinkID.replace(",", "--");
+    aLinkID = aLinkID.replace(".", "--");
+    aLinkID = aLinkID.replace(";", "--");
+    aLinkID = aLinkID.replace(":", "--");
 
-    $('#linkToOtherSessions').append('<p id="' + aLink + 'SessionLink">' + aLink + ': Loading title</p>');
+    $('#linkToOtherSessions').append('<p id="' + aLinkID + 'SessionLink">' + aLink + ': Loading title</p>');
     $.ajax({
         type: "GET",
         data: {
@@ -1113,14 +1128,14 @@ function AddSingleSessionLink(aLink) {
             if (data.status == '200') {
                 var title = data.responseText;
 
-                $('#' + aLink + 'SessionLink').html('<span class="sw_p" id=sl_del_' + aLink + '> <span onClick="onSessionLinkDeleteClick(\'' + aLink + '\')">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
+                $('#' + aLinkID + 'SessionLink').html('<span class="sw_p" id=sl_del_' + aLinkID + '> <span onClick="onSessionLinkDeleteClick(\'' + aLinkID + '\')">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
             }
             else if (data.status == '404') {
                 var title = "Could not find title for session"
-                $('#' + aLink + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLink + '">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
+                $('#' + aLinkID + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLinkID + '">[-]</span>' + aLink + ': <a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + title + '</a></span>');
             }
             else {
-                $('#' + aLink + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLink + '">[-]</span><a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + aLink + '</a></span>');
+                $('#' + aLinkID + 'SessionLink').html('<span class="sw_p"> <span id="s_' + aLinkID + '">[-]</span><a href="session.php?sessionid=' + aLink + '&command=view" target="_blank">' + aLink + '</a></span>');
             }
         }
     });
@@ -1326,6 +1341,8 @@ var entityMap = {
     '"': '&quot;',
     "'": '&#39;',
     "/": '&#x2F;'
+//    ",": '&#44;',
+//    ".": '&#46;'
 };
 
 function escapeHtml(string) {
