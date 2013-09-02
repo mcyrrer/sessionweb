@@ -531,8 +531,10 @@ function AddRequirementManager() {
 
 function PopulateRequirements(req) {
 
-    req.forEach(function (aReq) {
-        AddSingleRequirement(aReq)
+
+        $.each(req, function (index, value) {
+
+            AddSingleRequirement(value)
     });
 
 }
@@ -646,9 +648,8 @@ function populateMindMaps(mindmaps) {
 }
 
 function PopulateBugs(bugs) {
-
-    bugs.forEach(function (aBug) {
-        AddSingleBug(aBug)
+    $.each(bugs, function (index, value) {
+        AddSingleBug(value)
     });
 
 }
@@ -749,9 +750,8 @@ function AddSingleSessionLink(aLink) {
 }
 
 function PopulateLinksToOtherSessions(linksToOtherSessions) {
-
-    linksToOtherSessions.forEach(function (aLink) {
-        AddSingleSessionLink(aLink);
+    $.each(linksToOtherSessions, function (index, value) {
+        AddSingleSessionLink(value);
     });
 }
 

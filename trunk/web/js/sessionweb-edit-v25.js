@@ -824,9 +824,9 @@ function AddRequirementManager() {
 }
 
 function PopulateRequirements(req) {
+    $.each(req, function (index, value) {
 
-    req.forEach(function (aReq) {
-        AddSingleRequirement(aReq)
+        AddSingleRequirement(value)
     });
 
 }
@@ -1008,7 +1008,7 @@ function AddSingleBug(aBug) {
                 }
                 var html = '<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>';
                 $('#' + aBugID + 'BUG').html(html);
-                console.debug(html);
+//                console.debug(html);
             }
             else {
                 $('#' + aBugID + 'BUG').html('<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
@@ -1033,9 +1033,8 @@ function populateMindMaps(mindmaps) {
 }
 
 function PopulateBugs(bugs) {
-
-    bugs.forEach(function (aBug) {
-        AddSingleBug(aBug)
+    $.each(bugs, function (index, value) {
+        AddSingleBug(value)
     });
 
 }
@@ -1142,9 +1141,8 @@ function AddSingleSessionLink(aLink) {
 }
 
 function PopulateLinksToOtherSessions(linksToOtherSessions) {
-
-    linksToOtherSessions.forEach(function (aLink) {
-        AddSingleSessionLink(aLink);
+    $.each(linksToOtherSessions, function (index, value) {
+        AddSingleSessionLink(value);
     });
 }
 
