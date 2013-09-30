@@ -1,4 +1,5 @@
 <?php
+require_once ('dbHelper.php');
 /**
  * Created by IntelliJ IDEA.
  * User: mcyrrer
@@ -12,9 +13,10 @@ class logging
     private $logpath;
     private $logpathsql;
     private $loglevel;
-
+    private $dbHelper;
     function __construct()
     {
+
         //Populate with the levels you need to have in file, "ARRAY","TIMER","SQL","DEBUG","INFO","WARN","ERROR","FATAL"
         $this->loglevel = array("DEBUG","INFO","WARN","ERROR","FATAL");
 
@@ -126,6 +128,12 @@ class logging
 
     private function writeMessageToLog($loglevel, $logmessage, $filename, $line)
     {
+        $this->writeMessageToFile($loglevel, $logmessage, $filename, $line);
+        //$this->writeMessageToDb($loglevel, $logmessage, $filename, $line);
+    }
+
+    private function writeMessageToFile($loglevel, $logmessage, $filename, $line)
+    {
         if (isset($_SESSION['username']))
             $username = $_SESSION['username'];
         else
@@ -135,6 +143,25 @@ class logging
             $messageToWriteTofile = $this->getDateTime() . " | " . $loglevel . " | " . $this->getFileName($filename) . ":" . $line . " | " . $username . " | " . $logmessage . "\n";
             file_put_contents($this->logpath, $messageToWriteTofile, FILE_APPEND | LOCK_EX);
         }
+    }
+
+    private function writeMessageToDb($loglevel, $logmessage, $filename, $line)
+    {
+        $this->dbHelper = new dbHelper();
+        $dbCon = $this->dbHelper->db_getMySqliConnection();
+        if (isset($_SESSION['username']))
+            $username = $_SESSION['username'];
+        else
+            $username = "";
+
+        $loglevel=$this->dbHelper->escape($dbCon,$loglevel);
+        $logmessage=$this->dbHelper->escape($dbCon,$logmessage);
+        $logLine =  $this->getFileName($filename) . ":" . $line;
+        if (in_array($loglevel, $this->loglevel)) {
+            $query="INSERT INTO sessionweb_log (level, line, logrow, user) VALUES ('".$loglevel."', '".$logLine."', '".$logmessage."', '".$username."')";
+            $this->dbHelper->sw_mysqli_execute($dbCon,$query);
+        }
+       mysqli_close($dbCon);
     }
 
     private function writeSQLMessageToLog($loglevel, $logmessage, $filename, $line)

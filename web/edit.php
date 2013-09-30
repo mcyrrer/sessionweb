@@ -20,6 +20,11 @@ if (!isset($_REQUEST['sessionid'])) {
     $logger = new logging();
     $session = new sessionObject();
     $sessionid = $session->getSessionid();
+    if(isset($_REQUEST['requirement']))
+    {
+        $reqArray[]=$_REQUEST['requirement'];
+        $session->setRequirements($reqArray);
+    }
     $session->saveObjectToDb();
     header("Location: edit.php?sessionid=$sessionid");
     exit();

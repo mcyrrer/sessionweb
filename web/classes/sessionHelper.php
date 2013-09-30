@@ -155,6 +155,77 @@ class sessionHelper
             return false;
         }
     }
+
+    function requirementsExist(sessionObject $so)
+    {
+        if (count($so->getRequirements()) > 0) {
+            return true;
+        }
+    }
+
+
+    /**
+     * ToDo... add this to deltesession....
+     * @param sessionObject $so
+     *
+     *
+     */
+
+
+    function updateRemoteStatusForCharter(sessionObject $so)
+    {
+        if ($this->requirementsExist($so)) {
+            $patToWebRoot = $this->getRootFolder("");
+
+            if (file_exists($patToWebRoot . 'include/customfunctions.php.inc')) {
+                require_once($patToWebRoot . 'include/customfunctions.php.inc');
+
+                $reqArray = $so->getRequirements();
+                foreach ($reqArray as $requirementIdentifier) {
+                    updateCharterStatusOnRemoteServer($so->getSessionid(), $requirementIdentifier, $so->getTitle(), $so->getFullUsername(), $so->getStatusAsText(), $so->getUpdated());
+                    $this->logger->debug("Updated remote server with new information about session " . $so->getSessionid(), __FILE__, __LINE__);
+                }
+            } else {
+                $this->logger->debug("Could not find customfunctions.php.inc" . $so->getSessionid(), __FILE__, __LINE__);
+
+            }
+        } else {
+            $this->logger->debug("No req exists, will not update remote server...." . $so->getSessionid(), __FILE__, __LINE__);
+        }
+
+    }
+
+    function updateRemoteStatusForCharterSetDeleted(sessionObject $so, $requirementIdentifier)
+    {
+        if ($this->requirementsExist($so)) {
+            $patToWebRoot = $this->getRootFolder("");
+
+            if (file_exists($patToWebRoot . 'include/customfunctions.php.inc')) {
+                require_once($patToWebRoot . 'include/customfunctions.php.inc');
+
+                updateCharterStatusOnRemoteServer($so->getSessionid(), $requirementIdentifier, $so->getTitle(), $so->getFullUsername(), "Requirement unlinked", $so->getUpdated());
+                $this->logger->debug("Updated remote server with new information about session " . $so->getSessionid(), __FILE__, __LINE__);
+
+            } else {
+                $this->logger->debug("Could not find customfunctions.php.inc" . $so->getSessionid(), __FILE__, __LINE__);
+
+            }
+        } else {
+            $this->logger->debug("No req exists, will not update remote server...." . $so->getSessionid(), __FILE__, __LINE__);
+        }
+
+    }
+
+    function getRootFolder($pathToRoot)
+    {
+        if (file_exists($pathToRoot . 'about.php')) {
+            return "./" . $pathToRoot;
+        } else {
+            $pathToRoot .= "../";
+            $pathToRoot = checkIfRootFolder($pathToRoot);
+        }
+        return $pathToRoot;
+    }
 }
 
 ?>

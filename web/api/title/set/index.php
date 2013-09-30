@@ -37,15 +37,19 @@ if (isset($_REQUEST['text']) && isset($_REQUEST['sessionid'])) {
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
         if ($sHelper->isUserAllowedToEditSession($so)) {
-                $sql = "UPDATE mission SET title='$title' WHERE versionid='".$so->getVersionid()."'" ;
-                $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-                $logger->debug("Changed title to $title in session $sessionid",__FILE__, __LINE__);
-                header("HTTP/1.0 200 OK");
-                $response['code'] = ITEM_UPDATED;
-                $response['text'] = "ITEM_UPDATED";
-        }
-        else
-        {
+            $sql = "UPDATE mission SET title='$title' WHERE versionid='" . $so->getVersionid() . "'";
+            $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
+            $logger->debug("Changed title to $title in session $sessionid", __FILE__, __LINE__);
+            header("HTTP/1.0 200 OK");
+            $response['code'] = ITEM_UPDATED;
+            $response['text'] = "ITEM_UPDATED";
+
+            //Reloading SO since it is updated
+            unset($so);
+            $so = new sessionObject($sessionid);
+            $sHelper->updateRemoteStatusForCharter($so);
+
+        } else {
             header("HTTP/1.0 401 Unauthorized");
             $response['code'] = UNAUTHORIZED;
             $response['text'] = "UNAUTHORIZED";
