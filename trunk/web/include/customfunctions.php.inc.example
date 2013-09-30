@@ -54,4 +54,20 @@ function getIssueInformationFromGoogleCode($id)
         return $title;
 }
 
+/**
+ * Function to update a requirement in another system with information on the progress of the charter.
+ * All information that should be submitted can be found in the sessionObject.
+ * @param $sessionId
+ * @param $remoteIssue
+ * @param $title
+ * @param $user
+ * @param $status
+ * @param $timestamp
+ */
+function updateCharterStatusOnRemoteServer($sessionId, $remoteIssue, $title, $user, $status, $timestamp)
+    {
+        //Add your own code here!
+    }
+}
+
 ?>

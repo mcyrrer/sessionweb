@@ -58,6 +58,12 @@ if (isset($_REQUEST['sessionid'])) {
                 header("HTTP/1.0 200 OK");
                 $response['code'] = ITEM_UPDATED;
                 $response['text'] = "ITEM_UPDATED";
+
+                //Reloading SO since it is updated
+                unset($so);
+                $so = new sessionObject($sessionid);
+                $sHelper->updateRemoteStatusForCharter($so);
+
             } else {
                 header("HTTP/1.0 409 Conflict");
                 $response['code'] = SESSION_NOT_EXECUTED;

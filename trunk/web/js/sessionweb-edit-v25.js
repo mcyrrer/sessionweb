@@ -153,8 +153,7 @@ function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
                 if (data.status != '200') {
                     alert("Could not save charter");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
 
@@ -173,8 +172,7 @@ function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
                 if (data.status != '200') {
                     alert("Could not save notes");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             },
@@ -199,8 +197,7 @@ function ChangeOfCustomField() {
                 if (data.status != '201') {
                     alert("Could not update custom field " + this.id);
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -224,8 +221,7 @@ function ChangeOfTitle() {
                 if (data.status != '200') {
                     alert("Could not save title");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -239,23 +235,22 @@ function ChangeOfAdditionalTester() {
     $('#idAdditionalTester').change(function () {
         var count = $("#idAdditionalTester :selected").length;
         if (count != 0) {
-        $.ajax({
-            type: "POST",
-            data: {
-                sessionid: sessionID,
-                names: $('#idAdditionalTester').val()
-            },
-            url: 'api/testers/set/index.php',
-            complete: function (data) {
-                if (data.status != '200') {
-                    alert("Could not update additional testers names");
+            $.ajax({
+                type: "POST",
+                data: {
+                    sessionid: sessionID,
+                    names: $('#idAdditionalTester').val()
+                },
+                url: 'api/testers/set/index.php',
+                complete: function (data) {
+                    if (data.status != '200') {
+                        alert("Could not update additional testers names");
+                    }
+                    else {
+                        setLastSavedLable();
+                    }
                 }
-                else
-                {
-                    setLastSavedLable();
-                }
-            }
-        });
+            });
         }
     });
 }
@@ -277,8 +272,7 @@ function ChangeOfArea() {
                     if (data.status != '200') {
                         alert("Could not update areas");
                     }
-                    else
-                    {
+                    else {
                         setLastSavedLable();
                     }
                 }
@@ -301,8 +295,7 @@ function ChangeOfSprint() {
                 if (data.status != '200') {
                     alert("Could not update sprint name");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -324,8 +317,7 @@ function ChangeOfCharter() {
                 if (data.status != '200') {
                     alert("Could not update software information");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -347,8 +339,7 @@ function ChangeOfSwUnderTest() {
                 if (data.status != '200') {
                     alert("Could not update software information");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -370,8 +361,7 @@ function ChangeOfTestenvironment() {
                 if (data.status != '200') {
                     alert("Could not update testenvironment name");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -393,8 +383,7 @@ function ChangeOfTeam() {
                 if (data.status != '200') {
                     alert("Could not update team name");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -417,8 +406,7 @@ function ChangeOfDuration() {
                 if (data.status != '200') {
                     alert("Could not update duration");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -452,8 +440,7 @@ function ChangeOfMetrics() {
                     if (data.status != '200') {
                         alert("Could not update metrics");
                     }
-                    else
-                    {
+                    else {
                         setLastSavedLable();
                     }
                 }
@@ -481,8 +468,7 @@ function ChangeOfMode() {
                 if (data.status != '200') {
                     alert("Could not update mood");
                 }
-                else
-                {
+                else {
                     setLastSavedLable();
                 }
             }
@@ -649,6 +635,8 @@ function setSessionData(jsonResponseContent) {
     //Bugs
     PopulateBugs(jsonResponseContent['bugs']);
 
+    PopulateCustomFields(jsonResponseContent['custom_fields']);
+
     //MindMaps
     populateMindMaps(jsonResponseContent['mindmaps']);
 
@@ -661,6 +649,7 @@ function setSessionData(jsonResponseContent) {
     //Mood
     $('#sm_' + jsonResponseContent['mood']).css('border', "solid 2px green");
 
+//    $('#idcustom1').val(jsonResponseContent['areas']);
 
     //Metrics
     $('#setupId').val(jsonResponseContent['setup_percent']);
@@ -760,6 +749,7 @@ function AddNewAutofetchedSwManager() {
         }
     });
 }
+
 
 function PopulateAutofetchedSoftware(softwareids) {
     $.each(softwareids, function (index, value) {
@@ -1037,6 +1027,49 @@ function PopulateBugs(bugs) {
         AddSingleBug(value)
     });
 
+}
+
+function PopulateCustomFields(custom_fields) {
+    if ($("#idcustom1").length == 1) {
+        if ("custom1" in custom_fields) {
+            var customData = custom_fields['custom1'];
+            var items = new Array();
+            var i = 0;
+            $.each(customData, function (index, value) {
+                items[i] = value['itemname'];
+                i++;
+            });
+            $('#idcustom1').val(items);
+        }
+    }
+
+    if ($("#idcustom2").length == 1) {
+        if ("custom2" in custom_fields) {
+
+            var customData = custom_fields['custom2'];
+            var items = new Array();
+            var i = 0;
+            $.each(customData, function (index, value) {
+                items[i] = value['itemname'];
+                i++;
+            });
+            $('#idcustom2').val(items);
+        }
+    }
+
+    if ($("#idcustom3").length == 1) {
+        if ("custom3" in custom_fields) {
+
+            var customData = custom_fields['custom3'];
+            var items = new Array();
+            var i = 0;
+            $.each(customData, function (index, value) {
+                items[i] = value['itemname'];
+                i++;
+            });
+            $('#idcustom3').val(items);
+        }
+    }
 }
 
 //SESSIONLINKS MANAGER
@@ -1349,8 +1382,7 @@ function escapeHtml(string) {
     });
 }
 
-function getCurrentTime()
-{
+function getCurrentTime() {
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -1360,8 +1392,7 @@ function getCurrentTime()
     return  h + ":" + m + ":" + s;
 }
 
-function setLastSavedLable()
-{
+function setLastSavedLable() {
     var time = getCurrentTime();
-    $('#status').text("Saved: "+time);
+    $('#status').text("Saved: " + time);
 }

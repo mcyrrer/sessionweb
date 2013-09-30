@@ -4,6 +4,7 @@ if (!isset($basePath)) {
 }
 
 include_once 'sessionObjectSave.php';
+include_once 'sessionHelper.php';
 require_once 'dbHelper.php';
 require_once 'logging.php';
 
@@ -50,12 +51,14 @@ class sessionObject extends sessionObjectSave
     private $title; //Text
     private $updated; //Mysql TimeStamp
     private $username; //Text
+    private $fullusername; //Text
     private $versionid; //Int
     private $sessionExist; //Validate if a session exists or not. should be checked for true before accessing any get..
     private $mindMaps; //Array
 
     private $logger;
     private $dbHelper;
+    private $sh;
 
     /**
      * @param null $sessionid sessionid to create a object of, if null then create a empty one.
@@ -64,7 +67,8 @@ class sessionObject extends sessionObjectSave
     {
         $this->logger = new logging();
         $this->dbHelper = new dbHelper();
-
+        $this->sh = new sessionHelper();
+        $this->sh = new sessionHelper();
         //     if(!is_int($sessionid) && !is_null($sessionid))
         //   {
         //       $this->logger->error("sessionid is not an integer. Sessionid=".$sessionid,__FILE__,__LINE__);
@@ -147,7 +151,7 @@ class sessionObject extends sessionObjectSave
             die("no session exist with sessionid $sessionid");
         }
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        $data = mysqli_fetch_array($result);
+        $data = mysqli_fetch_array($result, MYSQLI_BOTH);
 
         $this->setVersionid($data['versionid']);
         $this->setSessionid($data['sessionid']);
@@ -155,6 +159,7 @@ class sessionObject extends sessionObjectSave
         $this->setCharter($data['charter']);
         $this->setNotes($data['notes']);
         $this->setUsername($data['username']);
+        $this->setFullUserName($this->sh->getUserFullName($this->getUsername()));
         $this->setTeamname($data['teamname']);
         //$this->logger->debug($data['teamname'],__FILE__,__LINE__);
         $this->setSprintname($data['sprintname']);
@@ -164,8 +169,9 @@ class sessionObject extends sessionObjectSave
         $this->setTestenvironment($data['testenvironment']);
         $this->setSoftware($data['software']);
 
+
         /**
-         * Issue 155:	line breaks not interpreted correctly
+         * Issue 155:    line breaks not interpreted correctly
          **/
         //$this->setSoftware(str_replace("\n","<br>",$data['software']));
         $this->setLastupdatedby($data['lastupdatedby']);
@@ -183,7 +189,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelectSessionStatus, __FILE__, __LINE__);
         //$result = mysqli_query($con, $sqlSelectSessionStatus);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
             $tmpAreaArray[] = $row['areaname'];
         }
         $this->setAreas($tmpAreaArray);
@@ -196,7 +202,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sql);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
 
             foreach ($row as $key => $value) {
                 if (!is_int($key)) {
@@ -216,7 +222,7 @@ class sessionObject extends sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
 
             $tmpAreaArray[] = $row['bugid'];
         }
@@ -233,7 +239,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
             $tmpAreaArray[] = $row['requirementsid'];
         }
         $this->setRequirements($tmpAreaArray);
@@ -247,19 +253,20 @@ class sessionObject extends sessionObjectSave
 //        $result = mysqli_query($con, $sql);
         if ($result != false) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            while ($row = mysqli_fetch_array($result)) {
-                foreach ($row as $key => $value) {
-                    if (!is_int($key)) {
-                        $tmpAreaArray2[$key] = $value;
-                    }
-
+            $customData = array();
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                if(in_array($row['customtablename'],$customData))
+                {
+                    array_push($customData,$row['customtablename']);
                 }
-                $tmpName = $tmpAreaArray2['customtablename'] . '_name';
-                $tmpAreaArray2['realcustomname'] = $_SESSION['settings'][$tmpName];
-                $tmpAreaArray[$row['id']] = $tmpAreaArray2;
+                $tmpArray = array();
+                $tmpArray['itemname']=$row['itemname'];
+                $tmpArray['id']=$row['id'];
+                $customData[$row['customtablename']][]=$tmpArray;
             }
+
+            $this->setCustom_fields($customData);
         }
-        $this->setCustom_fields($tmpAreaArray);
 
         //mission mission_debriefnotes
         $sql = "SELECT notes as debrief_notes, debriefedby ";
@@ -270,7 +277,7 @@ class sessionObject extends sessionObjectSave
 //        $result = mysqli_query($con, $sql);
         if (mysqli_num_rows($result) > 0) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $data = mysqli_fetch_array($result);
+            $data = mysqli_fetch_array($result, MYSQLI_BOTH);
             $this->setDebrief_notes($data['debrief_notes']);
             $this->setDebriefedby(($data['debriefedby']));
         } else {
@@ -288,7 +295,7 @@ class sessionObject extends sessionObjectSave
 //        $result = mysqli_query($con, $sql);
         if (mysqli_num_rows($result) > 0) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $data = mysqli_fetch_array($result);
+            $data = mysqli_fetch_array($result, MYSQLI_BOTH);
             $this->setSetup_percent($data['setup_percent']);
             $this->setTest_percent($data['test_percent']);
             $this->setBug_percent($data['bug_percent']);
@@ -313,7 +320,7 @@ class sessionObject extends sessionObjectSave
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
 
             $tmp["id"] = $row['id'];
             $tmp["environment"] = $row['environment'];
@@ -343,7 +350,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
             $tmpAreaArray[] = $row['sessionid'];
         }
         $this->setLinked_from_session($tmpAreaArray);
@@ -368,7 +375,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
             //  print_r($row);
 
 
@@ -386,7 +393,7 @@ class sessionObject extends sessionObjectSave
 //        $result = mysqli_query($con, $sql);
         if (mysqli_num_rows($result) > 0) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $data = mysqli_fetch_array($result);
+            $data = mysqli_fetch_array($result, MYSQLI_BOTH);
             $this->setExecuted($data['executed']);
             $this->setDebriefed($data['debriefed']);
             $this->setClosed($data['closed']);
@@ -412,7 +419,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
             $tmpArray[] = $row['tester'];
         }
         $this->setAdditional_testers($tmpArray);
@@ -427,7 +434,7 @@ class sessionObject extends sessionObjectSave
         $result = $this->dbHelper->sw_mysqli_execute($con, $sqlSelect, __FILE__, __LINE__);
 //        $result = mysqli_query($con, $sqlSelect);
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
             $tmpMindMapArray['map_id'] = $row['map_id'];
             $tmpMindMapArray['title'] = $row['map_title'];
             $tmpMindMapArray['url'] = $_SESSION['settings']['wisemapping_url'] . '/c/maps/' . $row['map_id'] . '/edit';
@@ -444,7 +451,8 @@ class sessionObject extends sessionObjectSave
      * Create a sessionid and return the value created
      * @return mixed sessionid on success else null
      */
-    private function swCreateNewSessionId()
+    private
+    function swCreateNewSessionId()
     {
         $sqlInsert = "";
         $sqlInsert .= "INSERT INTO sessionid ";
@@ -476,7 +484,7 @@ class sessionObject extends sessionObjectSave
 
         if ($result) {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            $row = mysqli_fetch_array($result);
+            $row = mysqli_fetch_array($result, MYSQLI_BOTH);
             $sessionid = $row["sessionid"];
         } else {
             echo "DB Error: " . mysqli_error($con) . "<br/>";
@@ -487,13 +495,14 @@ class sessionObject extends sessionObjectSave
         return $sessionid;
     }
 
-    public function saveObjectToDb()
+    public
+    function saveObjectToDb()
     {
         if ($this->getSessionExist()) {
             $save = new sessionObjectSave();
             $sessiondata = $this->toArray();
             if (!$save->saveToMissionTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission", __FILE__, __LINE__);
                 die("Could not save data to table mission");
             } else {
 //                $this->logger->arraylog($sessiondata,__FILE__,__LINE__);
@@ -503,27 +512,29 @@ class sessionObject extends sessionObjectSave
 
             }
             if (!$save->saveToMissionStatusTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission_status",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission_status", __FILE__, __LINE__);
                 die("Could not save data to table mission_status");
             }
             if (!$save->saveToMissionAreaTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission_area",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission_area", __FILE__, __LINE__);
                 die("Could not save data to table mission_area");
             }
             if (!$save->saveToMissionBugsTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission_bugs",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission_bugs", __FILE__, __LINE__);
                 die("Could not save data to table mission_bugs");
             }
             if (!$save->saveToMissionRequirementsTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission_requirements",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission_requirements", __FILE__, __LINE__);
                 die("Could not save data to table mission_requirements");
+            } else {
+                $this->sh->updateRemoteStatusForCharter($this);
             }
             if (!$save->saveToMissionDebriefNotesTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission_debriefnotes",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission_debriefnotes", __FILE__, __LINE__);
                 die("Could not save data to table mission_debriefnotes");
             }
             if (!$save->saveToMissionMetricsTable($sessiondata)) {
-                $this->logger->error("Could not save data to table mission_debriefnotes",__FILE__,__LINE__);
+                $this->logger->error("Could not save data to table mission_debriefnotes", __FILE__, __LINE__);
                 die("Could not save data to table mission_debriefnotes");
             }
             $this->logger->debug("Saved sessionid " . $this->getSessionid() . " ", __FILE__, __LINE__);
@@ -534,7 +545,8 @@ class sessionObject extends sessionObjectSave
 
     }
 
-    private function validateVersionIdExistAndSetItIfNot(&$sessiondata)
+    private
+    function validateVersionIdExistAndSetItIfNot(&$sessiondata)
     {
         if ($this->getVersionid() == null || strcmp($this->getVersionid(), "") == 0) {
 
@@ -724,6 +736,11 @@ class sessionObject extends sessionObjectSave
         return $this->software;
     }
 
+    function getStatusAsText()
+    {
+        return $this->generateStatusAsText();
+    }
+
     function getSoftwareUseAutoFetched()
     {
         return $this->softwareuseautofetched;
@@ -762,6 +779,11 @@ class sessionObject extends sessionObjectSave
     function getUsername()
     {
         return $this->username;
+    }
+
+    function getFullUsername()
+    {
+        return $this->fullusername;
     }
 
     function getVersionid()
@@ -953,12 +975,14 @@ class sessionObject extends sessionObjectSave
         } else false;
     }
 
-    private function setPublickey($x)
+    private
+    function setPublickey($x)
     {
         $this->publickey = $x;
     }
 
-    private function setSessionid($x)
+    private
+    function setSessionid($x)
     {
         $this->sessionid = $x;
     }
@@ -1018,17 +1042,24 @@ class sessionObject extends sessionObjectSave
         $this->username = $x;
     }
 
+    function setFullUserName($x)
+    {
+        $this->fullusername = $x;
+    }
+
     function setVersionid($x)
     {
         $this->versionid = $x;
     }
 
-    private function generateSessionid()
+    private
+    function generateSessionid()
     {
         $this->sessionid = $this->swCreateNewSessionId();
     }
 
-    private function generatePublickey()
+    private
+    function generatePublickey()
     {
         $this->publickey = md5(rand());
     }
@@ -1037,7 +1068,8 @@ class sessionObject extends sessionObjectSave
      * Export the object to an array representation
      * @return array
      */
-    private function toArray()
+    private
+    function toArray()
     {
         $sessionDataAsArray = array();
         $sessionDataAsArray['additional_testers'] = $this->additional_testers; //Array
@@ -1086,29 +1118,27 @@ class sessionObject extends sessionObjectSave
      * Export the object to a json representation
      * @return string
      */
-    public function toJson()
+    public
+    function toJson()
     {
         $version = explode('.', phpversion());
-        $PHP_MAJOR_VERSION=$version[0];
-        $PHP_MINOR_VERSION=$version[1];
-        $PHP_RELEASE_VERSION=$version[2];
+        $PHP_MAJOR_VERSION = $version[0];
+        $PHP_MINOR_VERSION = $version[1];
+        $PHP_RELEASE_VERSION = $version[2];
 
 //        $this->logger->arraylog($this->toArray(),__FILE__,__LINE__);
 //        echo print_r($this->toArray(),true);
         //Pretty print is supported from version 5.4->
-        if($PHP_MAJOR_VERSION>=5 && $PHP_MINOR_VERSION>=4)
-        {
-            $this->logger->debug("Using JSON pretty print since php version is ". phpversion(),__FILE__,__LINE__);
+        if ($PHP_MAJOR_VERSION >= 5 && $PHP_MINOR_VERSION >= 4) {
+            $this->logger->debug("Using JSON pretty print since php version is " . phpversion(), __FILE__, __LINE__);
             $json = json_encode($this->toArray(), JSON_PRETTY_PRINT);
 //            $this->logger->debug("HI!!",__FILE__,__LINE__);
 
 //            $this->logger->debug($json,__FILE__,__LINE__);
             return $json;
-        }
-        else
-        {
-            $this->logger->debug("Do not use JSON pretty print since php version is ". phpversion(),__FILE__,__LINE__);
-            $json =  json_encode($this->toArray());
+        } else {
+            $this->logger->debug("Do not use JSON pretty print since php version is " . phpversion(), __FILE__, __LINE__);
+            $json = json_encode($this->toArray());
 //            $this->logger->debug("HI!!",__FILE__,__LINE__);
 //            $this->logger->debug($json,__FILE__,__LINE__);
             return $json;
@@ -1120,7 +1150,8 @@ class sessionObject extends sessionObjectSave
      * Export the object to a XML representation
      * @return string
      */
-    public function toXML()
+    public
+    function toXML()
     {
         include 'ArrayToXML.php';
         $xmlObj = new ArrayToXML();
@@ -1130,7 +1161,8 @@ class sessionObject extends sessionObjectSave
     /**
      * Print the session object to screen for debug purpose.
      */
-    public function printObject()
+    public
+    function printObject()
     {
         echo "areas:";
         print_r($this->areas);
@@ -1175,7 +1207,6 @@ class sessionObject extends sessionObjectSave
         echo "setup_percent:" . $this->setup_percent . "\n"; //Int
         echo "software:" . $this->software . "\n"; //Text
         echo "softwareuseautofetched:";
-        print_r($this->softwareuseautofetched);
         echo "\n";
         echo "sprintname:" . $this->sprintname . "\n"; //Text
         echo "teamname:" . $this->teamname . "\n"; //Text
@@ -1187,25 +1218,50 @@ class sessionObject extends sessionObjectSave
         echo "versionid:" . $this->versionid . "\n"; //Int
     }
 
-    private function setSessionExist($sessionExist)
+    private
+    function setSessionExist($sessionExist)
     {
         $this->sessionExist = $sessionExist;
     }
 
-    public function getSessionExist()
+    public
+    function getSessionExist()
     {
         return $this->sessionExist;
+    }
+
+    private
+    function generateStatusAsText()
+    {
+
+        $status = "Not Executed";
+        if ($this->executed == 0 && $this->notes != null) {
+            $status = "In progress";
+            //echo "notes'".$notes."'";
+            //$status = "Executed";
+        }
+        if ($this->executed == 1) {
+            $status = "Executed";
+        }
+        if ($this->debriefed == 1) {
+            $status = "Debriefed";
+        }
+        if ($this->closed == 1) {
+            $status = "Closed";
+        }
+        return $status;
     }
 
     /**
      * Delete a session from the database by delete all rows in all tables that have information about the session
      */
-    public function deleteFromDatabase()
+    public
+    function deleteFromDatabase()
     {
         $con = $this->dbHelper->db_getMySqliConnection();
 
         $versionid = $this->getVersionid();
-        $sessionId =  $this->getSessionid();
+        $sessionId = $this->getSessionid();
 
         $sqlDeleteAttachments = "";
         $sqlDeleteAttachments .= "DELETE FROM mission_attachments ";
@@ -1268,7 +1324,7 @@ class sessionObject extends sessionObjectSave
         $sqlDeleteSessionId .= "WHERE  versionid = $versionid ";
         $this->dbHelper->sw_mysqli_execute($con, $sqlDeleteSessionId, __FILE__, __LINE__);
 
-        $this->logger->info("Deleted session " . $sessionId .  " from database");
+        $this->logger->info("Deleted session " . $sessionId . " from database");
         mysqli_close($con);
 
     }

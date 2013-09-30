@@ -48,6 +48,9 @@ if (isset($_REQUEST['id']) && isset($_REQUEST['sessionid']) && $_REQUEST['id'] !
                 header("HTTP/1.0 200 OK");
                 $response['code'] = ITEM_REMOVED;
                 $response['text'] = "ITEM_REMOVED";
+
+                 $sHelper->updateRemoteStatusForCharterSetDeleted($so,$requirementId);
+
             } else {
                 $logger->debug("Tried to delete a requirement $requirementId but is not mapped to sessionid $sessionid", __FILE__, __LINE__);
                 header("HTTP/1.0 404 Not found");

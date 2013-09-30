@@ -333,7 +333,7 @@ function setSessionData(jsonResponseContent) {
 
     //Title
     $('#input_title').html(jsonResponseContent['title']);
-//    $('#input_title_span').text(jsonResponseContent['title']);
+
     //Team
     $('#idTeam').html(jsonResponseContent['teamname']);
 
@@ -350,11 +350,15 @@ function setSessionData(jsonResponseContent) {
         $('#idAdditionalTester').append(anArea + '<br>');
     });
 
+    PopulateCustomFields(jsonResponseContent['custom_fields']);
+
+
     //testenvironment
     $('#idEnvironment').html(jsonResponseContent['testenvironment']);
 
     //idSoftwareUnderTest
-    $('#idSoftwareUnderTest').html('<pre>'+jsonResponseContent['software']+'</pre>');
+    if (jsonResponseContent['software'] != null)
+        $('#idSoftwareUnderTest').html('<pre>' + jsonResponseContent['software'] + '</pre>');
 
     //DebriefStatus
     if (jsonResponseContent['debriefed'] == 0 && jsonResponseContent['closed'] !== 0) {
@@ -532,9 +536,9 @@ function AddRequirementManager() {
 function PopulateRequirements(req) {
 
 
-        $.each(req, function (index, value) {
+    $.each(req, function (index, value) {
 
-            AddSingleRequirement(value)
+        AddSingleRequirement(value)
     });
 
 }
@@ -645,6 +649,38 @@ function populateMindMaps(mindmaps) {
     });
 //    $('#mindMaps').append('<p class="sw_p" id="' + mindMapId + 'MindMap"><a href="'+url+'" target="_blank">'+mindMapTitle+'</a></p>');
 
+}
+
+function PopulateCustomFields(custom_fields) {
+    if ($("#custom1").length == 1) {
+        if ("custom1" in custom_fields) {
+            var customData = custom_fields['custom1'];
+            $.each(customData, function (index, value) {
+                $("#custom1").append(value['itemname']+"<br>");
+            });
+
+        }
+    }
+
+    if ($("#custom2").length == 1) {
+        if ("custom2" in custom_fields) {
+            var customData = custom_fields['custom2'];
+            $.each(customData, function (index, value) {
+                $("#custom2").append(value['itemname']+"<br>");
+
+            });
+        }
+    }
+
+    if ($("#custom3").length == 1) {
+        if ("custom3" in custom_fields) {
+            var customData = custom_fields['custom3'];
+            $.each(customData, function (index, value) {
+                $("#custom3").append(value['itemname']+"<br>");
+
+            });
+        }
+    }
 }
 
 function PopulateBugs(bugs) {
@@ -833,7 +869,7 @@ function SetContentDebrief(text) {
 
     var editor = CKEDITOR.instances.debriefeditor;
     editor.setData(text);
-    var h = $(document).width()/3;
+    var h = $(document).width() / 3;
     editor.config.width = h;
     editor.on('change', function (e) {
         saveDebriefNotes(sessionID);
