@@ -29,6 +29,7 @@ $versions['22'] = "SessionwebDbLayoutDelta_22-_23.sql";
 $versions['23'] = "SessionwebDbLayoutDelta_23-_24.sql";
 $versions['24'] = "SessionwebDbLayoutDelta_24-_25.sql";
 $versions['25'] = "SessionwebDbLayoutDelta_25-_26.sql";
+$versions['26'] = "SessionwebDbLayoutDelta_26-_27.sql";
 
 
 echo '<div id="container">

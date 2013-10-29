@@ -4,6 +4,27 @@ If you do not know how to install/configure it please use XAMPP Server
 (http://www.apachefriends.org/en/xampp.html)
 To enable some of the feature's please read through README-TipsAndTrixs
 
+==SessionWeb 26==
+Notes:
+Purpose of this release is to fix custom fields that is not populated at all when a charter is loaded.
+
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade.
+DO NOT FORGET TO CREATE A BACKUP BEFORE YOU UPGRADE!
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_25-_26.sql
+to upgrade from 25->26
+
+===Release include (release 26 beta) ===
+ID  Type            Milestone   Summary
+149	Defect	        Release26	Bug/Req with whitespaces is not trimmed before saving to database
+155	Defect	        Release26	Custom fields is not populated when loading an existing charter
+158	Defect	        Release26	Custom fields is not populated when loading an existing charter
+
+
 ==SessionWeb 25==
 Notes:
 This version have is a major update.

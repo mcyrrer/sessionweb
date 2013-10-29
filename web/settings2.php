@@ -82,10 +82,10 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
         <option value="mine" <?php echo $mine;?>>My own sessions</option>
         <option value="team" <?php echo $team;?>>My teams sessions</option>
     </select>
-    <h3>Autosave when edit sessions</h3>
+    <!--<h3>Autosave when edit sessions</h3>
 
-    Enable: <input type="checkbox" id="autosave" <?php echo $autosaveCheckedHtml;?> value="checked">
-
+    Enable: <input type="checkbox" id="autosave" <?php //echo $autosaveCheckedHtml;?> value="checked">
+    -->
     <h3>Settings for new session</h3><br>
     Select default team:
     <?php echoTeamSelect($usersettings['default_team'], true, false, "personal_select_team");?>
