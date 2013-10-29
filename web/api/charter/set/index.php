@@ -6,7 +6,7 @@
  * text=[sprintName]
  * sessionid=[sessionId]
  */
-define('NUMBER_OF_INC_RECORDS_LIMIT', 3);
+define('NUMBER_OF_INC_RECORDS_LIMIT', 100);
 session_start();
 
 require_once('../../../include/validatesession.inc');

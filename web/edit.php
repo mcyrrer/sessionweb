@@ -194,6 +194,7 @@ class Edit
         echo '<iframe src="include/jQuery-File-Upload/index.php?sessionid=' . $sessionId . '" width="100%" height="600" frameborder="0"></iframe>';
         echo '</div></div> ';
         echo '</div>';
+        echo '<div id="inc_saved_versions"><a href="history.php?sessionid='.$this->session->getSessionid().'" target="_blank">Show older versions of charter and notes content</a></div>';
     }
 }
 
