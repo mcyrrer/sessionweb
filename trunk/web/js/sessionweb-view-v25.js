@@ -874,7 +874,6 @@ function SetContentDebrief(text) {
     editor.on('change', function (e) {
         saveDebriefNotes(sessionID);
     });
-    $("#notesStatus").empty().append(" Autosave enabled");
 
     $('#debriefeditor').html(text)
 

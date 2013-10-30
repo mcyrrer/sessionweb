@@ -1260,7 +1260,6 @@ function SetContentsCharter(text) {
     editor.on('change', function (e) {
         saveCharter(sessionID);
     });
-    $("#charterStatus").empty().append(" Autosave enabled");
 
 
     /*   setTimeout(function () {
@@ -1283,7 +1282,6 @@ function SetContentsNotes(text) {
     editor.on('change', function (e) {
         saveNotes(sessionID);
     });
-    $("#notesStatus").empty().append(" Autosave enabled");
 
 }
 
