@@ -2,7 +2,30 @@ $(document).ready(function () {
     var sessionID = $(document).getUrlParam("sessionid");
     var editorsActivated = false;
     var jsonResponseContent = "";
+    var userSettings = "";
     $('#ui-master').hide();
+
+    $.ajax({
+        type: "GET",
+        url: 'api/user/settings/index.php',
+        complete: function (data) {
+
+            if (data.status == '200') {
+                userSettings = jQuery.parseJSON(data.responseText);
+                ChooseUserSettingsValuesInDialogs(userSettings);
+
+            } else if (data.status == '400') {
+                alert('Error loading user settings');
+            } else if (data.status == '401') {
+                alert('Error loading user settings');
+            } else if (data.status == '409') {
+                alert('Error loading user settings');
+            } else if (data.status == '500') {
+                alert('Error loading user settings');
+            }
+        }
+    });
+
     $.ajax({
         type: "GET",
         data: {
@@ -28,14 +51,6 @@ $(document).ready(function () {
                 $('#ui-master').fadeIn();
 
 
-            } else if (data.status == '400') {
-                $('#message').prepend('<div class="log_div">Error: Some parameters was missing in request.</div>');
-            } else if (data.status == '401') {
-                $('#message').prepend('<div class="log_div">Error: Unauthorized.</div>');
-            } else if (data.status == '409') {
-                $('#message').prepend('<div class="log_div">Warning: User ' + $('#user_username').val() + 'already exist!</div>');
-            } else if (data.status == '500') {
-                $('#message').prepend('<div class="log_div">Error: User not added due to internal server error.</div>');
             }
         }
     });
@@ -72,11 +87,26 @@ $(document).ready(function () {
     ChangeOfTitle();
     ExecutedButtonPressed();
     UnExecutedButtonPressed();
+
     //Save notes and charter before exit page..
     $(window).bind("beforeunload", function () {
         return saveBeforeExit(sessionID, editorsActivated, jsonResponseContent);
     })
 });
+
+function ChooseUserSettingsValuesInDialogs(userSettings)
+{
+    $('#choose_user_config').click(function () {
+        //Team
+        $('#idTeam').val(userSettings['default_team']);
+
+        //Sprint
+        $('#idSprint').val(userSettings['default_sprint']);
+
+        //Area
+        $('#idArea').val(userSettings['default_area']);
+    });
+}
 
 function ExecutedButtonPressed() {
 

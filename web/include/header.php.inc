@@ -48,7 +48,7 @@ if (strstr($_SERVER['PHP_SELF'], "edit.php") != false) {
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/config.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor4/styles.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-edit-v25.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-edit-v26.js\"></script>\n";
 //    echo "     <script type=\"text/javascript\" src=\"js/jQuery.labelify-1.3.js\"></script>\n";
 
     echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"ckeditor4/contents.css\">\n";

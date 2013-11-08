@@ -1108,7 +1108,7 @@ function getUserSettings($createConnection = true)
 
     if ($createConnection)
         mysql_close($con);
-    return mysql_fetch_array($result);
+    return mysql_fetch_array($result,MYSQL_ASSOC);
 }
 
 function getSettings($createConnection = true)
