@@ -16,8 +16,8 @@ require_once('../../../include/validatesession.inc');
 //error_reporting(0);
 
 require_once('../../../config/db.php.inc');
-require_once ('../../../include/commonFunctions.php.inc');
-require_once ('../../../include/db.php');
+require_once('../../../include/commonFunctions.php.inc');
+require_once('../../../include/db.php');
 require_once('../../../classes/sessionHelper.php');
 require_once('../../../classes/logging.php');
 require_once('../../../classes/dbHelper.php');
@@ -45,9 +45,11 @@ if (isset($_REQUEST['sessionid'])) {
             if ($so->getExecuted()) {
                 if (strcmp($debriefed, 'true') == 0) {
                     $sql = "UPDATE mission_status SET debriefed=1, debriefed_timestamp=NOW(), closed=0 WHERE versionid='" . $so->getVersionid() . "'";
+                    incremental_save_delete($so, $con, $logger, $sessionid);
 
                 } elseif (strcmp($closed, 'true') == 0) {
                     $sql = "UPDATE mission_status SET debriefed=0, debriefed_timestamp=NOW(), closed=1 WHERE versionid='" . $so->getVersionid() . "'";
+                    incremental_save_delete($so, $con, $logger, $sessionid);
 
                 } else {
                     $sql = "UPDATE mission_status SET debriefed=0, debriefed_timestamp=null, closed=0 WHERE versionid='" . $so->getVersionid() . "'";
@@ -89,3 +91,11 @@ if (isset($_REQUEST['sessionid'])) {
 }
 
 echo json_encode($response);
+
+function incremental_save_delete(sessionObject $so, $con, logging $logger, $sessionid)
+{
+    $sqlDeleteIncSaves = "DELETE FROM mission_incremental_save WHERE versionid=" . $so->getVersionid();
+    $nbrOfRowResult = dbHelper::sw_mysqli_execute($con, $sqlDeleteIncSaves, __FILE__, __LINE__);
+    $logger->debug("Incremental save table clean up for session $sessionid executed, cleaned all rows since it is closed/debriefed", __FILE__, __LINE__);
+
+}

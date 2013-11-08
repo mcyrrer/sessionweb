@@ -21,7 +21,7 @@ $pageTimer->startMeasurePageLoadTime();
 
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-  <head>                                    jquery-1.9.1.js
+  <head>
           <meta http-equiv="Content-type" content="text/html;charset=latin-1">
       <title>Sessionweb</title>
 
@@ -34,9 +34,9 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
            <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.10.0.custom.css">
            <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
            <script src="../js/jqueryui/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
-           <script type="text/javascript" src="../js/highcharts/highcharts.js"></script>
-           <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>
            <script type="text/javascript" src="../js/highstock/highstock.js"></script>
+           <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>
+
            <script type="text/javascript" src="../js/DataTables/js/jquery.dataTables.min.js"></script>
            <script type="text/javascript" src="../js/DataTables/js/TableTools.min.js"></script>
            <script type="text/javascript" src="../js/DataTables/js/ZeroClipboard.js"></script>
