@@ -1,6 +1,6 @@
 <?php
 require_once 'PathHelper.php';
-$rootPath = PathHelper::getRootPath("");
+$rootPath = PathHelper::getRootPath_v2();
 require_once 'logging.php';
 require_once 'pagetimer.php';
 require_once $rootPath.'/config/db.php.inc';

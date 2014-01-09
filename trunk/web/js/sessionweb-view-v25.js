@@ -358,7 +358,7 @@ function setSessionData(jsonResponseContent) {
 
     //idSoftwareUnderTest
     if (jsonResponseContent['software'] != null)
-        $('#idSoftwareUnderTest').html('<pre>' + jsonResponseContent['software'] + '</pre>');
+        $('#idSoftwareUnderTest').html('<div id="softwareUnderTestDiv"><pre>' + jsonResponseContent['software'] + '</pre></div>');
 
     //DebriefStatus
     if (jsonResponseContent['debriefed'] == 0 && jsonResponseContent['closed'] !== 0) {
@@ -854,12 +854,12 @@ function updateAreas() {
 
 //EDITOR MANAGER
 function SetContentsCharter(text) {
-    $('#chartereditor').html(text)
+    $('#charterviewer').html(text)
 
 }
 
 function SetContentsNotes(text) {
-    $('#noteseditor').html(text)
+    $('#notesviewer').html(text)
 }
 
 function SetContentDebrief(text) {

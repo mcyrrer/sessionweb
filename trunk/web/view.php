@@ -140,7 +140,7 @@ class View
 
             <div id="tabs-2">';
 
-        echo '<div id="idcharter"><span class="larger">Charter</span> <span id="charterStatus"></span><br><div id="chartereditor"></div></div>';
+        echo '<div id="idcharter"><span class="larger">Charter</span> <span id="charterStatus"></span><br><div id="charterviewer"></div></div>';
 
         echo '</div>
             <div id="tabs-3">';
@@ -148,7 +148,7 @@ class View
         echo '<div id="idnotes">
                     <span class="larger">Notes</span>
                     <span id="notesStatus"></span>
-                    <div id="noteseditor"></div>
+                    <div id="notesviewer"></div>
               </div></td>';
 //        if (AccessManagement::isCurrentUserAllowedToDebiref() && isset($_REQUEST['debrief'])) {
 //
