@@ -1,4 +1,8 @@
 <?php
+if (!file_exists('config/db.php.inc')) {
+    header("Location: install/install.php");
+    exit();
+}
 
 require_once('classes/logging.php');
 
@@ -12,10 +16,7 @@ session_start();
 include_once('include/db.php');
 include_once('config/auth.php.inc');
 
-if (!file_exists('config/db.php.inc')) {
-    header("Location: install/install.php");
-    exit();
-}
+
 
 if (isset($_GET["logout"])) {
     $logout = $_GET["logout"];

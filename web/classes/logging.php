@@ -1,5 +1,5 @@
 <?php
-require_once ('dbHelper.php');
+//require_once ('dbHelper.php');
 /**
  * Created by IntelliJ IDEA.
  * User: mcyrrer
@@ -145,24 +145,24 @@ class logging
         }
     }
 
-    private function writeMessageToDb($loglevel, $logmessage, $filename, $line)
-    {
-        $this->dbHelper = new dbHelper();
-        $dbCon = $this->dbHelper->db_getMySqliConnection();
-        if (isset($_SESSION['username']))
-            $username = $_SESSION['username'];
-        else
-            $username = "";
-
-        $loglevel=$this->dbHelper->escape($dbCon,$loglevel);
-        $logmessage=$this->dbHelper->escape($dbCon,$logmessage);
-        $logLine =  $this->getFileName($filename) . ":" . $line;
-        if (in_array($loglevel, $this->loglevel)) {
-            $query="INSERT INTO sessionweb_log (level, line, logrow, user) VALUES ('".$loglevel."', '".$logLine."', '".$logmessage."', '".$username."')";
-            $this->dbHelper->sw_mysqli_execute($dbCon,$query);
-        }
-       mysqli_close($dbCon);
-    }
+//    private function writeMessageToDb($loglevel, $logmessage, $filename, $line)
+//    {
+//        $this->dbHelper = new dbHelper();
+//        $dbCon = $this->dbHelper->db_getMySqliConnection();
+//        if (isset($_SESSION['username']))
+//            $username = $_SESSION['username'];
+//        else
+//            $username = "";
+//
+//        $loglevel=$this->dbHelper->escape($dbCon,$loglevel);
+//        $logmessage=$this->dbHelper->escape($dbCon,$logmessage);
+//        $logLine =  $this->getFileName($filename) . ":" . $line;
+//        if (in_array($loglevel, $this->loglevel)) {
+//            $query="INSERT INTO sessionweb_log (level, line, logrow, user) VALUES ('".$loglevel."', '".$logLine."', '".$logmessage."', '".$username."')";
+//            $this->dbHelper->sw_mysqli_execute($dbCon,$query);
+//        }
+//       mysqli_close($dbCon);
+//    }
 
     private function writeSQLMessageToLog($loglevel, $logmessage, $filename, $line)
     {

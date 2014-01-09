@@ -40,7 +40,7 @@ table, th, td {
     cursor: pointer;
 }
 
-.sw_p .delReqLink{
+.sw_p .delReqLink {
     text-decoration: none;
     margin-bottom: 0px;
     margin-top: 0px;
@@ -62,4 +62,18 @@ a {
 
 .session_mode {
     border: 2px solid white;
+}
+
+#softwareUnderTestDiv {
+    width: 350px;
+    word-wrap: break-word;
+
+}
+
+#notesviewer {
+    word-wrap: break-word;
+}
+
+#charterviewer {
+    word-wrap: break-word;
 }
