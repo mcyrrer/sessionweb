@@ -225,6 +225,27 @@ class sessionObjectSave
      */
     private function  saveToMissionStatusTable_Insert($missionDataArray, $con)
     {
+        if (isset($missionDataArray['executed']) && strcmp("", $missionDataArray['executed']) != 0) {
+            $executed = $missionDataArray['executed'];
+        } else {
+            $executed = 0;
+        }
+        if (isset($missionDataArray['closed']) && strcmp("", $missionDataArray['closed']) != 0) {
+            $closed = $missionDataArray['closed'];
+        } else {
+            $closed = 0;
+        }
+        if (isset($missionDataArray['debriefed']) && strcmp("", $missionDataArray['debriefed']) != 0) {
+            $debriefed = $missionDataArray['debriefed'];
+        } else {
+            $debriefed = 0;
+        }
+        if (isset($missionDataArray['masterdibriefed']) && strcmp("", $missionDataArray['masterdibriefed']) != 0) {
+            $masterdibriefed = $missionDataArray['masterdibriefed'];
+        } else {
+            $masterdibriefed = 0;
+        }
+
         $sqlInsert = "";
         $sqlInsert .= "INSERT INTO mission_status ";
         $sqlInsert .= "            (`versionid`, ";
@@ -234,19 +255,13 @@ class sessionObjectSave
         $sqlInsert .= "             `masterdibriefed`, ";
         $sqlInsert .= "             `debriefed_timestamp`, ";
         $sqlInsert .= "             `executed_timestamp` ) ";
-        $sqlInsert .= "VALUES      ('" . $missionDataArray['versionid'] . "', ";
-        $sqlInsert .= "             '" . $missionDataArray['executed'] . "', ";
-        $sqlInsert .= "             '" . $missionDataArray['closed'] . "', ";
-        $sqlInsert .= "             '" . $missionDataArray['debriefed'] . "', ";
-        $sqlInsert .= "             '" . $missionDataArray['masterdibriefed'] . "', ";
-        if (strcasecmp($missionDataArray['debriefed_timestamp'], "NOW()") == 0)
-            $sqlInsert .= "             " . $missionDataArray['debriefed_timestamp'] . ", ";
-        else
-            $sqlInsert .= "             '" . $missionDataArray['debriefed_timestamp'] . "', ";
-        if (strcasecmp($missionDataArray['executed_timestamp'], "NOW()") == 0)
-            $sqlInsert .= "             " . $missionDataArray['executed_timestamp'] . ")";
-        else
-            $sqlInsert .= "             '" . $missionDataArray['executed_timestamp'] . "')";
+        $sqlInsert .= "VALUES      (" . $missionDataArray['versionid'] . ", ";
+        $sqlInsert .= "             " . $executed . ", ";
+        $sqlInsert .= "             " . $closed . ", ";
+        $sqlInsert .= "             " . $debriefed . ", ";
+        $sqlInsert .= "             " . $masterdibriefed . ", ";
+        $sqlInsert .= "               null , ";
+        $sqlInsert .= "               null)";
 
         return $this->executeInsert($sqlInsert, $con, __FILE__, __LINE__);
     }
@@ -398,12 +413,44 @@ class sessionObjectSave
         $sqlDelete = "DELETE FROM mission_sessionmetrics WHERE mission_sessionmetrics.versionid = $versionId";
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
 
-        $setup = $missionDataArray['setup_percent'];
-        $test = $missionDataArray['test_percent'];
-        $bug = $missionDataArray['bug_percent'];
-        $opp = $missionDataArray['opportunity_percent'];
-        $duration = $missionDataArray['duration_time'];
-        $mood = $missionDataArray['mood'];
+        if (isset($missionDataArray['setup_percent']) && strcmp("", $missionDataArray['setup_percent']) != 0) {
+            $setup = $missionDataArray['setup_percent'];
+        } else {
+            $setup = 0;
+        }
+
+
+        if (isset($missionDataArray['test_percent']) && strcmp("", $missionDataArray['test_percent']) != 0) {
+            $test = $missionDataArray['test_percent'];
+        } else {
+            $test = 0;
+        }
+
+        if (isset($missionDataArray['bug_percent']) && strcmp("", $missionDataArray['bug_percent']) != 0) {
+            $bug = $missionDataArray['bug_percent'];
+        } else {
+            $bug = 0;
+        }
+
+        if (isset($missionDataArray['opportunity_percent']) && strcmp("", $missionDataArray['opportunity_percent']) != 0) {
+            $opp = $missionDataArray['opportunity_percent'];
+        } else {
+            $opp = 0;
+        }
+
+
+        if (isset($missionDataArray['duration_time']) && strcmp("", $missionDataArray['duration_time']) != 0) {
+            $duration = $missionDataArray['duration_time'];
+        } else {
+            $duration = 15;
+        }
+
+        if (isset($missionDataArray['mood']) && strcmp("", $missionDataArray['mood']) != 0) {
+            $mood = $missionDataArray['mood'];
+        } else {
+            $mood = 0;
+        }
+
 
         $this->executeDelete($sqlDelete, $con, __FILE__, __LINE__);
 
@@ -464,7 +511,7 @@ class sessionObjectSave
      */
     private function executeInsert($sqlInsert, $con, $file, $line)
     {
-          return $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, __FILE__, __LINE__);
+        return $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, __FILE__, __LINE__);
 
 //        /** @noinspection PhpVoidFunctionResultUsedInspection */
 //        $result = $this->dbHelper->sw_mysqli_execute($con, $sqlInsert, $file, $line);

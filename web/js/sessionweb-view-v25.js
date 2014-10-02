@@ -163,8 +163,8 @@ function UnExecutedButtonPressed() {
 function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
     if (editorsActivated == true) {
         var currentText = GetContentsDebriefNotes();
-        var orgText = jsonResponseContent['debrief_notes'];
-        if (contentChanged) {
+//        var orgText = jsonResponseContent['debrief_notes'];
+//        if (contentChanged) {
             $.ajax({
                 type: "POST",
                 data: {
@@ -180,7 +180,7 @@ function saveBeforeExit(sessionID, editorsActivated, jsonResponseContent) {
                 },
                 async: false
             });
-        }
+//        }
     }
 }
 

@@ -347,7 +347,7 @@ function getSessions($con,$dbManager,$data, $whereSql, $StringSearchSql)
         $sql = "SELECT * FROM mission_debriefnotes WHERE notes NOT LIKE '' AND versionid = $versionid";
         $resultDoesNotesExist = $dbManager->sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
         if (strstr($status, "Executed") != false && mysqli_num_rows($resultDoesNotesExist) != 0) {
-            $debriefComments = "<img src='pictures/notify-star.png' alt='Debrief comments exists'>";
+            $debriefComments = "<img src='pictures/debrief_comments.png' alt='Debrief comments exists'>";
         } else {
             $debriefComments = "";
         }
