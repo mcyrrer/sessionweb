@@ -225,6 +225,10 @@ function filterSession() {
         $("#filterbox").fadeOut("slow");
 }
 
+function reloadSession() {
+    $('#flexgrid1').flexOptions({newp: 1}).flexReload();
+}
+
 function searchSession() {
     if ($("#searchbox").is(':hidden'))
         $("#searchbox").fadeIn("slow");
@@ -261,7 +265,8 @@ $(function () {
             {name: 'Debrief', bclass: 'debrief', onpress: debirefSession},
             {name: 'Reassign', bclass: 'reassign', onpress: reassignSession},
             {name: 'Filter', bclass: 'filter', onpress: filterSession},
-            {name: 'Search', bclass: 'search', onpress: searchSession}
+            {name: 'Search', bclass: 'search', onpress: searchSession},
+            {name: 'Reload', bclass: 'reload', onpress: reloadSession}
 
         ],
         sortname: "updated",
@@ -357,6 +362,8 @@ $(document).ready(function () {
         $('#flexgrid1').flexOptions({newp: 1}).flexReload();
         setPermSearchUrl();
     });
+
+
 
     $('#searchSessionsRef').click(function () {
         $('#flexgrid1').flexOptions({newp: 1}).flexReload();
