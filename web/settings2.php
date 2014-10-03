@@ -310,25 +310,25 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
                     <td><input type="checkbox" id="app_env" name="env" checked="checked" value="checked">
                     </td>
                 </tr>
-                <tr>
-                    <td>Public view
-                    </td>
-                    <td><input type="checkbox" id="app_publicview" name="publicview" checked="checked" value="checked">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                    </td>
-                    <td><span class='italic'>Public view makes it possible for a person that does not have a Sessionweb account to view a session.
-            This is made by sharing the public link that contains a unique key for that specific session.</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Word Cloud in session view
-                    </td>
-                    <td><input type="checkbox" id="app_wordcloud" name="wordcloud" checked="checked" value="checked">
-                    </td>
-                </tr>
+<!--                <tr>-->
+<!--                    <td>Public view-->
+<!--                    </td>-->
+<!--                    <td><input type="checkbox" id="app_publicview" name="publicview" checked="checked" value="checked">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>-->
+<!--                    </td>-->
+<!--                    <td><span class='italic'>Public view makes it possible for a person that does not have a Sessionweb account to view a session.-->
+<!--            This is made by sharing the public link that contains a unique key for that specific session.</span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Word Cloud in session view-->
+<!--                    </td>-->
+<!--                    <td><input type="checkbox" id="app_wordcloud" name="wordcloud" checked="checked" value="checked">-->
+<!--                    </td>-->
+<!--                </tr>-->
                 <tr>
                     <td>
                     </td>

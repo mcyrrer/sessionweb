@@ -44,24 +44,23 @@ echo "     <script src=\"js/jquery.colorbox-min.js\" type=\"text/javascript\"></
 //}
 if (strstr($_SERVER['PHP_SELF'], "edit.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionweb2.css\">\n";
-
-    echo "     <script type=\"text/javascript\" src=\"ckeditor4/ckeditor.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor4/config.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor4/styles.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/ckeditor/ckeditor.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/ckeditor/config.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/ckeditor/styles.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"js/sessionweb-edit-v26.js\"></script>\n";
 //    echo "     <script type=\"text/javascript\" src=\"js/jQuery.labelify-1.3.js\"></script>\n";
 
-    echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"ckeditor4/contents.css\">\n";
+    echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"js/ckeditor/contents.css\">\n";
 
 
 } elseif(strstr($_SERVER['PHP_SELF'], "view.php") != false)
 {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionweb2.css\">\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor4/ckeditor.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor4/config.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor4/styles.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/ckeditor/ckeditor.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"ckeditor/config.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"ckeditor/styles.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"js/sessionweb-view-v25.js\"></script>\n";
-    echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"ckeditor4/contents.css\">\n";
+    echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"js/ckeditor/contents.css\">\n";
 
 }
 else

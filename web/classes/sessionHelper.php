@@ -204,7 +204,7 @@ class sessionHelper
                 require_once($patToWebRoot . 'include/customfunctions.php.inc');
 
                 updateCharterStatusOnRemoteServer($so->getSessionid(), $requirementIdentifier, $so->getTitle(), $so->getFullUsername(), "Requirement unlinked", $so->getUpdated());
-                $this->logger->debug("Updated remote server with new information about session " . $so->getSessionid(), __FILE__, __LINE__);
+                $this->logger->debug("Updated remote server with new information about session(Requirement unlinked) " . $so->getSessionid(), __FILE__, __LINE__);
 
             } else {
                 $this->logger->debug("Could not find customfunctions.php.inc" . $so->getSessionid(), __FILE__, __LINE__);

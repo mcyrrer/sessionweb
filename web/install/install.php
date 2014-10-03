@@ -7,7 +7,7 @@ require_once ('../classes/logging.php');
 include ('headerinstall.php');
 $logger = new logging();
 
-define("INSTALLATION_SCRIPT", "SessionwebDbLayout_26.sql");
+define("INSTALLATION_SCRIPT", "SessionwebDbLayout_27.sql");
 ?>
 <div id="container">
     <div><H1>Installation of Sessionweb</H1></div>
