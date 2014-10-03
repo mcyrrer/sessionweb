@@ -88,7 +88,7 @@ class Edit
             </ul>
           <div id="tabs-1">';
         echo '<table class="sTable"><tr><td>';
-        echo "<p id='choose_user_config'><img src='pictures/notify-star.png'> Insert default team, sprint and area</p>";
+        echo "<p id='choose_user_config'><img src='pictures/arrow-right-16.png'> Insert default team, sprint and area</p>";
         if ($_SESSION['settings']['sprint'] == 1) {
             echo "<span class='sH3'>Sprint:</span>  <p>" . $this->formHelper->getSprintSelect() . "<span class='minmax' id='minimizeSprint'>[&uarr;]</span><span class='minmax' id='maximizeSprint'>[&darr;]</span></p>";
         }

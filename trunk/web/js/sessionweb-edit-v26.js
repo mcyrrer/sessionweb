@@ -3,6 +3,7 @@ $(document).ready(function () {
     var editorsActivated = false;
     var jsonResponseContent = "";
     var userSettings = "";
+
     $('#ui-master').hide();
 
     $.ajax({
@@ -42,8 +43,8 @@ $(document).ready(function () {
                     beforeActivate: function (event, ui) {
                         //activate: function (event, ui) {
                         if (editorsActivated == false) {
-                            SetContentsCharter(jsonResponseContent['charter']);
                             SetContentsNotes(jsonResponseContent['notes']);
+                            SetContentsCharter(jsonResponseContent['charter']);
                             editorsActivated = true;
                         }
                     }
@@ -94,8 +95,7 @@ $(document).ready(function () {
     })
 });
 
-function ChooseUserSettingsValuesInDialogs(userSettings)
-{
+function ChooseUserSettingsValuesInDialogs(userSettings) {
     $('#choose_user_config').click(function () {
         //Team
         $('#idTeam').val(userSettings['default_team']);
@@ -790,7 +790,7 @@ function PopulateAutofetchedSoftware(softwareids) {
 function AddSingelAutofetchedSoftware(aId, env, updated) {
     var linkName = env + '(' + updated + ')';
     $('#autoSoftwareVersions').append(
-        '<p class="sw_p" id="' + aId + '_sw">' +
+            '<p class="sw_p" id="' + aId + '_sw">' +
             '    <span onClick="onSoftwareAutoFetchedDeleteClick(\'' + aId + '\')">[-]</span>' +
             '    <span onClick="onSoftwareAutoFetchedClick(\'' + aId + '\')" href="api/softwareautofetched/get/index.php?id=' + aId + '">' + linkName + '</span>' +
             "</p>");
@@ -1280,37 +1280,33 @@ function updateAreas() {
 //EDITOR MANAGER
 function SetContentsCharter(text) {
     var sessionID = $(document).getUrlParam("sessionid");
-    var config = { extraPlugins: 'onchange'};
-    CKEDITOR.replace('chartereditor', config);
+    CKEDITOR.replace('chartereditor');
 
     var editor = CKEDITOR.instances.chartereditor;
 
     editor.setData(text);
 
     editor.on('change', function (e) {
-        saveCharter(sessionID);
+        var d = new Date();
+        if(this.charLastSavedTime==null || d.getTime()-this.charLastSavedTime>30000) {
+            saveCharter(sessionID);
+            this.charLastSavedTime = d.getTime();
+        }
     });
-
-
-    /*   setTimeout(function () {
-     editor.on('change', function (e) {
-     saveCharter(sessionID);
-     });
-     $("#charterStatus").empty().append(" Autosave enabled");
-
-     }, 500);*/
 }
 
 function SetContentsNotes(text) {
     var sessionID = $(document).getUrlParam("sessionid");
-    var config = { extraPlugins: 'onchange'};
     CKEDITOR.replace('noteseditor');//, config);
 
     var editor = CKEDITOR.instances.noteseditor;
     editor.setData(text);
-
     editor.on('change', function (e) {
-        saveNotes(sessionID);
+        var d = new Date();
+        if(this.notesLastSavedTime==null || d.getTime()-this.notesLastSavedTime>30000) {
+            saveNotes(sessionID);
+            this.notesLastSavedTime = d.getTime();
+        }
     });
 
 }

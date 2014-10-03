@@ -513,13 +513,16 @@ INSERT INTO `sessionwebos`.`settings` (`id`, `normalized_session_time`, `team`, 
 COMMIT;
 
 -- -----------------------------------------------------
--- Data for table `sessionwebos`.`user_settings`
+-- Da ta for table `sessionwebos`.`user_settings`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `sessionwebos`;
+USE  `sessionwebos`;
 INSERT INTO `sessionwebos`.`user_settings` (`username`, `teamname`, `list_view`, `autosave`, `default_team`, `default_sprint`, `default_teamsprint`, `default_area`, `project`) VALUES ('admin', '(null)', 'all', 1, '(null)', '(null)', '(null)', '(null)', '0');
 
 COMMIT;
+
+
+
 
 -- -----------------------------------------------------
 -- Data for table `sessionwebos`.`version`
