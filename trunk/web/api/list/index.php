@@ -347,12 +347,12 @@ function getSessions($con,$dbManager,$data, $whereSql, $StringSearchSql)
         $sql = "SELECT * FROM mission_debriefnotes WHERE notes NOT LIKE '' AND versionid = $versionid";
         $resultDoesNotesExist = $dbManager->sw_mysqli_execute($con,$sql,__FILE__,__LINE__);
         if (strstr($status, "Executed") != false && mysqli_num_rows($resultDoesNotesExist) != 0) {
-            $debriefComments = "<img src='pictures/debrief_comments.png' alt='Debrief comments exists'>";
+            $debriefComments = "<img src='pictures/debrief_comments.png' class='qview' onclick='javascript: quickViewDebriefComments($sessionid);' alt='Debrief comments exists'>";
         } else {
             $debriefComments = "";
         }
 
-        $sessionid = "<img src='pictures/quickview.png' class='qview' onclick='javascript: quickView($sessionid);' alt='Debrief comments exists'>".$sessionid;
+        $sessionid = "<img src='pictures/quickview.png' class='qview' onclick='javascript: quickView($sessionid);' alt='View Charter/Notes'>".$sessionid;
 
 
         $data['rows'][] = array('id' => "1", 'cell' => array("$sessionid", "$status", "$debriefComments $title", "$fullname", "$sprintname", "$teamname", "$areas", "$updated", "$executed_timestamp"));
