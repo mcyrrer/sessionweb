@@ -311,6 +311,7 @@ function quickView(sessionid) {
         html = html + "<b>" + data['title'] + "</b>";
         html = html + "<H2>Charter</H2>" + data['charter'];
         html = html + "<H2>Notes</H2>" + data['notes'];
+        $('.qview').html('');
         $('.qview').colorbox({
             html: html,
             open: true,
@@ -320,6 +321,24 @@ function quickView(sessionid) {
     });
 
 }
+
+function quickViewDebriefComments(sessionid) {
+    $.get('api/debriefnotes/get/?sessionid=' + sessionid, function (data) {
+//        alert(data);
+        var html = "<H1>Quick view of debrief notes</H1>";
+        html = html + data;
+        $('.qview').html('');
+        $('.qview').colorbox({
+            html: html,
+            open: true,
+            width: "80%",
+            height: "80%"
+        });
+    });
+
+}
+
+
 document.onkeypress = stopRKey;
 
 
@@ -427,7 +446,7 @@ $(document).ready(function () {
                 }
                 else if (status == "Debriefed") {
                     command = "view";
-                    var url = "session.php?sessionid=" + id + "&command=" + command;
+                    var url = "view.php?sessionid=" + id + "&command=" + command;
 
                 }
                 else {
