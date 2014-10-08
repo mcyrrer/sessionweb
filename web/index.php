@@ -88,7 +88,7 @@ include("include/footer.php.inc");
 function printLast10SessionsTable()
 {
     echo "<div id='last10sessions'>";
-    echo "<h2>10 sessions yet to completed</h2>";
+    echo "<h2>10 sessions yet to be completed</h2>";
     $con = getMySqlConnection();
 
 
