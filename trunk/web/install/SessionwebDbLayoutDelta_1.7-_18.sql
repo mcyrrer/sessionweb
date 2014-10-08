@@ -13,18 +13,18 @@ ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
 
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings_new` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` INT(11) NOT NULL ,
-  `value` VARCHAR(1000) NOT NULL ,
-  `type` VARCHAR(45) NOT NULL ,
-  `updated` TIMESTAMP NULL DEFAULT NOW() ,
-  INDEX `fk_debriefnotes_mission1` (`name` ASC) ,
-  INDEX `fk_mission_debriefnotes_copy1_areas1` (`value` ASC) ,
-  PRIMARY KEY (`id`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
+-- CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings_new` (
+--   `id` INT(11) NOT NULL AUTO_INCREMENT ,
+--   `name` INT(11) NOT NULL ,
+--   `value` VARCHAR(1000) NOT NULL ,
+--   `type` VARCHAR(45) NOT NULL ,
+--   `updated` TIMESTAMP NULL DEFAULT NOW() ,
+--   INDEX `fk_debriefnotes_mission1` (`name` ASC) ,
+--   INDEX `fk_mission_debriefnotes_copy1_areas1` (`value` ASC) ,
+--   PRIMARY KEY (`id`) )
+-- ENGINE = MyISAM
+-- DEFAULT CHARACTER SET = utf8
+-- COLLATE = utf8_general_ci;
 
 ALTER TABLE `sessionwebos`.`mission` ENGINE = MyISAM ;
 ALTER TABLE `sessionwebos`.`mission` ADD FULLTEXT(notes, charter, title,software);

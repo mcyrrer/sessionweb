@@ -4,6 +4,36 @@ If you do not know how to install/configure it please use XAMPP Server
 (http://www.apachefriends.org/en/xampp.html)
 To enable some of the feature's please read through README-TipsAndTrixs
 
+==SessionWeb27==
+Notes:
+Purpose of this release is to fix custom fields that is not populated at all when a charter is loaded.
+
+Installation/Upgrade from any previous version:
+Go to your installation dir through a web browser (e.g http://localhost/sessionweb/install) to install/upgrade.
+DO NOT FORGET TO CREATE A BACKUP BEFORE YOU UPGRADE!
+
+Upgrade manually:
+If you can not upgrade please manually execute
+
+install/SessionwebDbLayoutDelta_26-_27.sql
+to upgrade from 26->27
+
+===Release include (release 26 beta) ===
+ID	Type	    Milestone	Summary
+150	Defect	    Release27	Search on bug/req id does not work
+159	Defect	    Release27	Implement incremental save for notes and charter text
+160	Defect	    Release27	Remove autosave check box from user settings
+171	Defect	    Release27	Application report and Area grid report have a js error preventing it from displaying one of the graphs
+173	Defect	    Release27	save on exit from page for debrief notes does not work.
+174	Defect	    Release27	I am Trying to Disable Autosave for sessions but actually it is not happening
+175	Defect	    Release27	Missing word in sentence/statement
+176	Enhancement	Release27	Add reload button on list page
+177	Defect	    Release27	change debrief comment icon from start to text icon
+178	Defect	    Release27	double click on debriefed session ends up on edit session
+179	Defect	    Release27	Add quickview of debrief comments from list view
+180	Enhancement	Release27	Add api to get debrief comments
+
+
 ==SessionWeb 26==
 Notes:
 Purpose of this release is to fix custom fields that is not populated at all when a charter is loaded.
