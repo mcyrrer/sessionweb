@@ -864,18 +864,20 @@ function SetContentsNotes(text) {
 
 function SetContentDebrief(text) {
     var sessionID = $(document).getUrlParam("sessionid");
-    var config = { extraPlugins: 'onchange'};
-    CKEDITOR.replace('debriefeditor');//, config);
+    CKEDITOR.replace('debriefeditor');
 
     var editor = CKEDITOR.instances.debriefeditor;
+
     editor.setData(text);
-    var h = $(document).width() / 3;
-    editor.config.width = h;
+
     editor.on('change', function (e) {
-        saveDebriefNotes(sessionID);
+        var d = new Date();
+        if(this.saveDebriefNotes==null || d.getTime()-this.saveDebriefNotes>5000) {
+            saveDebriefNotes(sessionID);
+            this.saveDebriefNotes = d.getTime();
+        }
     });
 
-    $('#debriefeditor').html(text)
 
 }
 

@@ -99,12 +99,16 @@ function ChooseUserSettingsValuesInDialogs(userSettings) {
     $('#choose_user_config').click(function () {
         //Team
         $('#idTeam').val(userSettings['default_team']);
+        $('#idTeam').trigger('change');
 
         //Sprint
         $('#idSprint').val(userSettings['default_sprint']);
+        $('#idSprint').trigger('change');
 
         //Area
         $('#idArea').val(userSettings['default_area']);
+        $('#idArea').trigger('change');
+
     });
 }
 
