@@ -18,7 +18,7 @@ If you can not upgrade please manually execute
 install/SessionwebDbLayoutDelta_26-_27.sql
 to upgrade from 26->27
 
-===Release include (release 26 beta) ===
+===Release include (release 27 ===
 ID	Type	    Milestone	Summary
 150	Defect	    Release27	Search on bug/req id does not work
 159	Defect	    Release27	Implement incremental save for notes and charter text
