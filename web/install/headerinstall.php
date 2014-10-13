@@ -1,5 +1,5 @@
 <?php
-echo'
+echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,8 +14,8 @@ echo'
     <script src="../js/jquery.validate.js" type="text/javascript"></script>
     <script src="../js/jquery.getparams.js" type="text/javascript"></script>
     <script src="../js/jquery.colorbox-min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../js/sessionwebjs-v25.js"></script>
-    <script type="text/javascript" src="../js/sessionwebjquery-v25.js"></script>
+    <script type="text/javascript" src="../js/sessionwebjs-v27.js"></script>
+    <script type="text/javascript" src="../js/sessionwebjquery-v27.js"></script>
 </head>
 <body>
   <div id="outer">

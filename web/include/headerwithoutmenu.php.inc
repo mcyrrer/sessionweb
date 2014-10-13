@@ -19,8 +19,8 @@ echo "     <script src=\"".$basepathcss."js/jquery.autosave.js\" type=\"text/jav
 echo "     <script src=\"".$basepathcss."js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"".$basepathcss."js/jquery.getparams.js\" type=\"text/javascript\"></script>\n";
 echo "     <script src=\"".$basepathcss."js/jquery.colorbox-min.js\" type=\"text/javascript\"></script>\n";
-echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjs-v25.js\"></script>\n";
-echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjquery-v25.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjs-v27.js\"></script>\n";
+echo "     <script type=\"text/javascript\" src=\"".$basepathcss."js/sessionwebjquery-v27.js\"></script>\n";
 if ($_SESSION['settings']['analyticsid'] != "") {
     echo " <script type=\"text/javascript\">\n";
 
