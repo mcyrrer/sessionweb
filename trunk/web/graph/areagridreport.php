@@ -40,7 +40,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
            <script type="text/javascript" src="../js/DataTables/js/jquery.dataTables.min.js"></script>
            <script type="text/javascript" src="../js/DataTables/js/TableTools.min.js"></script>
            <script type="text/javascript" src="../js/DataTables/js/ZeroClipboard.js"></script>
-           <script src="../js/sessionweb-graph-generic-v20.js" type="text/javascript"></script>
+           <script src="../js/sessionweb-graph-generic-v27.js" type="text/javascript"></script>
            <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
             TableTools.DEFAULTS.sSwfPath = "../js/DataTables/swf/copy_csv_xls_pdf.swf";

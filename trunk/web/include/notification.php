@@ -16,7 +16,7 @@ include_once('commonFunctions.php.inc');
     <link rel="stylesheet" type="text/css" media="all" href="../js/niceforms/niceforms-default.css"/>
 
     <script language="javascript" type="text/javascript" src="../js/jquery-1.4.4.js"></script>
-    <script language="javascript" type="text/javascript" src="../js/sessionwebjquery-v25.js"></script>
+    <script language="javascript" type="text/javascript" src="../js/sessionwebjquery-v27.js"></script>
 </head>
 <div>
     <!--    <img src='../pictures/notify-large.png' border='0' alt='Add notification' title='Notify'>-->
