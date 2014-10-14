@@ -69,6 +69,7 @@ class sessionObject extends sessionObjectSave
         $this->dbHelper = new dbHelper();
         $this->sh = new sessionHelper();
         $this->sh = new sessionHelper();
+     //   $sessionwebSettings = getSessionWebSettings();
         //     if(!is_int($sessionid) && !is_null($sessionid))
         //   {
         //       $this->logger->error("sessionid is not an integer. Sessionid=".$sessionid,__FILE__,__LINE__);
@@ -81,6 +82,10 @@ class sessionObject extends sessionObjectSave
             $this->logger->debug("Created a new charter with sessionid " . $this->getSessionid(), __FILE__, __LINE__);
             $this->setSessionExist(true);
             $this->setUsername($_SESSION['username']);
+//            $this->logger->debug($_SESSION['settings']['chartertext'], __FILE__, __LINE__);
+//            $this->logger->debug(print_r($_SESSION['settings'],true), __FILE__, __LINE__);
+
+            $this->setCharter($_SESSION['settings']['chartertext']);
         } else {
             if ($this->doesSessionExist($sessionid)) {
                 $this->setSessionExist(true);
