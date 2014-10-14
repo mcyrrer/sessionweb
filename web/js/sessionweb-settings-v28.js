@@ -58,6 +58,7 @@ function addNewUser() {
                                     }
                                     else if (data.status == '401') {
                                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                                        window.location.replace("index.php?logout=yes");
                                     }
                                     else if (data.status == '409') {
                                         $('#log').prepend('<div class="log_div">Warning: User ' + $('#user_username').val() + 'already exist!</div>');
@@ -103,6 +104,7 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
                 }
                 else if (data.status == '500') {
                     $('#log').prepend('<div class="log_div">Error: Internal server error. More information exist in server log file.</div>');
@@ -128,6 +130,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
                     }
                     else if (data.status == '500') {
                         $('#log').prepend('<div class="log_div">Error: Internal server error. More information exist in server log file.</div>');
@@ -167,6 +171,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -201,6 +207,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -232,6 +240,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -261,6 +271,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -297,6 +309,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -333,6 +347,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -367,6 +383,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -392,6 +410,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -417,6 +437,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -439,6 +461,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -463,6 +487,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -487,6 +513,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -563,6 +591,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -709,6 +739,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -737,6 +769,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -769,6 +803,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -803,6 +839,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -833,6 +871,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -863,6 +903,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -889,6 +931,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -917,6 +961,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -947,6 +993,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -972,6 +1020,8 @@ function deleteUser() {
                 }
                 else if (data.status == '401') {
                     $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                    window.location.replace("index.php?logout=yes");
+
 
                 }
                 else if (data.status == '500') {
@@ -1003,6 +1053,8 @@ function deleteUser() {
                         }
                         else if (data.status == '401') {
                             $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                            window.location.replace("index.php?logout=yes");
+
 
                         }
                         else if (data.status == '409') {
@@ -1033,6 +1085,8 @@ function deleteUser() {
                     }
                     else if (data.status == '401') {
                         $('#log').prepend('<div class="log_div">Error: Unauthorized.</div>');
+                        window.location.replace("index.php?logout=yes");
+
 
                     }
                     else if (data.status == '500') {
@@ -1067,6 +1121,8 @@ function deleteUser() {
                                 }
                                 else if (data.status == '401') {
                                     $('#log').prepend('<div class="log_div">Error: Wrong password provided.</div>');
+                                    window.location.replace("index.php?logout=yes");
+
 
                                 }
                                 else if (data.status == '500') {

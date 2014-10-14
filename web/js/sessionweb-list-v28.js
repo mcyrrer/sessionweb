@@ -281,7 +281,18 @@ $(function () {
         height: 740,
         onSubmit: addFormData,
         onSuccess: flexi_colorGridRows, //change row colours here
-        singleSelect: true
+        singleSelect: true,
+        onError: function(data){
+            if(data['status']==401) {
+                alert('You have been logged out');
+                window.location.replace("index.php?logout=yes");
+            }
+            else
+            {
+                alert('Something whent wrong, http status code '+data['status'])
+            }
+        }
+
     });
 });
 

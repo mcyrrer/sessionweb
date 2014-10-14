@@ -26,12 +26,12 @@ if (strstr($_SERVER['PHP_SELF'], "list.php") != false) {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid.css\">\n";
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/flexigrid-sessionweb.css\">\n";
     echo "     <script src=\"js/flexigrid.js\" type=\"text/javascript\"></script>\n";
-    echo "     <script src=\"js/sessionweb-list-v27.js\" type=\"text/javascript\"></script>\n";
+    echo "     <script src=\"js/sessionweb-list-v28.js\" type=\"text/javascript\"></script>\n";
 }
 
 if (strstr($_SERVER['PHP_SELF'], "settings2.php") != false) {
 
-    echo "     <script src=\"js/sessionweb-settings-v27.js\" type=\"text/javascript\"></script>\n";
+    echo "     <script src=\"js/sessionweb-settings-v28.js\" type=\"text/javascript\"></script>\n";
 }
 echo "     <script src=\"js/jquery.autosave.js\" type=\"text/javascript\"></script>\n";
 ////echo "     <script src=\"js/jquery.validate.js\" type=\"text/javascript\"></script>\n";
@@ -47,7 +47,7 @@ if (strstr($_SERVER['PHP_SELF'], "edit.php") != false) {
     echo "     <script type=\"text/javascript\" src=\"js/ckeditor/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"js/ckeditor/config.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"js/ckeditor/styles.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-edit-v27.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-edit-v28.js\"></script>\n";
 //    echo "     <script type=\"text/javascript\" src=\"js/jQuery.labelify-1.3.js\"></script>\n";
 
     echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"js/ckeditor/contents.css\">\n";
@@ -59,7 +59,7 @@ if (strstr($_SERVER['PHP_SELF'], "edit.php") != false) {
     echo "     <script type=\"text/javascript\" src=\"js/ckeditor/ckeditor.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor/config.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"ckeditor/styles.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-view-v27.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/sessionweb-view-v28.js\"></script>\n";
     echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"js/ckeditor/contents.css\">\n";
 
 }

@@ -959,6 +959,9 @@ function saveDebriefNotes(sessionID) {
         url: 'api/debriefnotes/set/index.php',
         complete: function (data) {
             if (data.status != '200') {
+                if (data.status == '401') {
+                    window.location.replace("index.php?logout=yes");
+                }
                 alert("Could not save notes");
             }
             else {
