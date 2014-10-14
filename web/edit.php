@@ -10,6 +10,7 @@ require_once('classes/logging.php');
 require_once('classes/sessionObject.php');
 require_once('config/db.php.inc');
 require_once ('classes/pagetimer.php');
+
 if (is_file("include/customfunctions.php.inc")) {
     include "include/customfunctions.php.inc";
 }

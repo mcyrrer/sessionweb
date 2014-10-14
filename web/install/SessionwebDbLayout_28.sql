@@ -296,36 +296,39 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `sessionwebos`.`settings` ;
 
-CREATE  TABLE IF NOT EXISTS `sessionwebos`.`settings` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `normalized_session_time` INT(11) NULL DEFAULT NULL ,
-  `team` TINYINT(1) NULL DEFAULT NULL ,
-  `sprint` TINYINT(1) NULL DEFAULT NULL ,
-  `teamsprint` TINYINT(1) NULL DEFAULT NULL ,
-  `area` TINYINT(1) NULL DEFAULT NULL ,
-  `testenvironment` TINYINT(1) NULL DEFAULT NULL ,
-  `publicview` TINYINT(1) NULL DEFAULT NULL ,
-  `analyticsid` VARCHAR(45) NULL DEFAULT NULL COMMENT 'google analytics id' ,
-  `url_to_dms` VARCHAR(500) NULL DEFAULT NULL ,
-  `url_to_rms` VARCHAR(500) NULL DEFAULT NULL ,
-  `wordcloud` TINYINT(1) NULL DEFAULT '1' ,
-  `custom1` TINYINT(1) NULL DEFAULT NULL ,
-  `custom1_name` VARCHAR(100) NULL DEFAULT NULL ,
-  `custom1_multiselect` TINYINT(1) NULL DEFAULT NULL ,
-  `custom2` TINYINT(1) NULL DEFAULT NULL ,
-  `custom2_name` VARCHAR(100) NULL DEFAULT NULL ,
-  `custom2_multiselect` TINYINT(1) NULL DEFAULT NULL ,
-  `custom3` TINYINT(1) NULL DEFAULT NULL ,
-  `custom3_name` VARCHAR(100) NULL DEFAULT NULL ,
-  `custom3_multiselect` TINYINT(1) NULL DEFAULT NULL ,
-  `project` VARCHAR(45) NOT NULL ,
-  `wisemapping_url` VARCHAR(45) NULL DEFAULT NULL ,
-  `wisemapping_user` VARCHAR(45) NULL DEFAULT NULL ,
-  `wisemapping_password` VARCHAR(45) NULL DEFAULT NULL ,
-  `wisemapping` TINYINT(1) NULL DEFAULT '0' ,
-  PRIMARY KEY (`id`) )
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE
+    IF NOT EXISTS `sessionwebos`.`settings`
+    (
+        id INT NOT NULL AUTO_INCREMENT,
+        normalized_session_time INT,
+        team TINYINT(1),
+        sprint TINYINT(1),
+        teamsprint TINYINT(1),
+        area TINYINT(1),
+        testenvironment TINYINT(1),
+        publicview TINYINT(1),
+        analyticsid VARCHAR(45) COMMENT 'google analytics id',
+        url_to_dms VARCHAR(500),
+        url_to_rms VARCHAR(500),
+        wordcloud TINYINT(1) DEFAULT '1',
+        custom1 TINYINT(1),
+        custom1_name VARCHAR(100),
+        custom1_multiselect TINYINT(1),
+        custom2 TINYINT(1),
+        custom2_name VARCHAR(100),
+        custom2_multiselect TINYINT(1),
+        custom3 TINYINT(1),
+        custom3_name VARCHAR(100),
+        custom3_multiselect TINYINT(1),
+        project VARCHAR(45) NOT NULL,
+        wisemapping_url VARCHAR(45),
+        wisemapping_user VARCHAR(45),
+        wisemapping_password VARCHAR(45),
+        wisemapping TINYINT(1) DEFAULT '0',
+        chartertext VARCHAR(1000),
+        PRIMARY KEY (id)
+    )
+    ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
