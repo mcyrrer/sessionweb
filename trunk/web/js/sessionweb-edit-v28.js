@@ -229,6 +229,9 @@ function ChangeOfCustomField() {
             url: 'api/customfields/set/index.php',
             complete: function (data) {
                 if (data.status != '201') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update custom field " + this.id);
                 }
                 else {
@@ -278,6 +281,9 @@ function ChangeOfAdditionalTester() {
                 url: 'api/testers/set/index.php',
                 complete: function (data) {
                     if (data.status != '200') {
+                        if (data.status == '401') {
+                            window.location.replace("index.php?logout=yes");
+                        }
                         alert("Could not update additional testers names");
                     }
                     else {
@@ -304,6 +310,9 @@ function ChangeOfArea() {
                 url: 'api/area/set/index.php',
                 complete: function (data) {
                     if (data.status != '200') {
+                        if (data.status == '401') {
+                            window.location.replace("index.php?logout=yes");
+                        }
                         alert("Could not update areas");
                     }
                     else {
@@ -327,6 +336,9 @@ function ChangeOfSprint() {
             url: 'api/sprint/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update sprint name");
                 }
                 else {
@@ -349,6 +361,9 @@ function ChangeOfCharter() {
             url: 'api/software/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update software information");
                 }
                 else {
@@ -371,6 +386,9 @@ function ChangeOfSwUnderTest() {
             url: 'api/software/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update software information");
                 }
                 else {
@@ -393,6 +411,9 @@ function ChangeOfTestenvironment() {
             url: 'api/testenvironment/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update testenvironment name");
                 }
                 else {
@@ -415,6 +436,9 @@ function ChangeOfTeam() {
             url: 'api/team/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update team name");
                 }
                 else {
@@ -438,6 +462,9 @@ function ChangeOfDuration() {
             url: 'api/duration/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update duration");
                 }
                 else {
@@ -472,6 +499,9 @@ function ChangeOfMetrics() {
                 url: 'api/metrics/set/index.php',
                 complete: function (data) {
                     if (data.status != '200') {
+                        if (data.status == '401') {
+                            window.location.replace("index.php?logout=yes");
+                        }
                         alert("Could not update metrics");
                     }
                     else {
@@ -500,6 +530,9 @@ function ChangeOfMode() {
             url: 'api/mood/set/index.php',
             complete: function (data) {
                 if (data.status != '200') {
+                    if (data.status == '401') {
+                        window.location.replace("index.php?logout=yes");
+                    }
                     alert("Could not update mood");
                 }
                 else {
