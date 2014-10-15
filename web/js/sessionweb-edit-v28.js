@@ -1317,7 +1317,10 @@ function updateAreas() {
 //EDITOR MANAGER
 function SetContentsCharter(text) {
     var sessionID = $(document).getUrlParam("sessionid");
-    CKEDITOR.replace('chartereditor');
+
+    var h = $(document).height() -500;
+    var config = { height: h};
+    CKEDITOR.replace('chartereditor',config);
 
     var editor = CKEDITOR.instances.chartereditor;
 
@@ -1334,7 +1337,10 @@ function SetContentsCharter(text) {
 
 function SetContentsNotes(text) {
     var sessionID = $(document).getUrlParam("sessionid");
-    CKEDITOR.replace('noteseditor');//, config);
+
+    var h = $(document).height() -500;
+    var config = { height: h};
+    CKEDITOR.replace('noteseditor',config);
 
     var editor = CKEDITOR.instances.noteseditor;
     editor.setData(text);
