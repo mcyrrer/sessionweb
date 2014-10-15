@@ -864,7 +864,11 @@ function SetContentsNotes(text) {
 
 function SetContentDebrief(text) {
     var sessionID = $(document).getUrlParam("sessionid");
-    CKEDITOR.replace('debriefeditor');
+
+    var h = $(document).height() -500;
+    var config = { height: h};
+    
+    CKEDITOR.replace('debriefeditor',config);
 
     var editor = CKEDITOR.instances.debriefeditor;
 
