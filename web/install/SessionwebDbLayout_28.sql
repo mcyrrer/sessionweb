@@ -325,7 +325,7 @@ CREATE TABLE
         wisemapping_user VARCHAR(45),
         wisemapping_password VARCHAR(45),
         wisemapping TINYINT(1) DEFAULT '0',
-        chartertext VARCHAR(1000),
+        chartertext VARCHAR(1000) DEFAULT '<h2 style=\"text-align: left;\"><strong>Background:</strong></h2>  <p style=\"text-align:left\">&nbsp;</p>  <h2 style=\"text-align: left;\"><strong>Mission</strong>:</h2>  <p style=\"text-align:left\">&nbsp;</p>  <h2 style=\"text-align: left;\"><strong>Strategy/Heuristic</strong>s</h2>  <p style=\"text-align:left\">&nbsp;</p> ',
         PRIMARY KEY (id)
     )
     ENGINE=MyISAM DEFAULT CHARSET=utf8;

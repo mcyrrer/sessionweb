@@ -1,6 +1,7 @@
 <?php
 
 require_once 'logging.php';
+require_once 'sessionReadObject.php';
 class statistics
 {
        private $logger;
@@ -213,19 +214,15 @@ $(function() {
 
             $htmlReturn .= "
         <tr>
-            <td><a href='../session.php?sessionid=$sessionId&command=view'>$sessionId</a></td>
+            <td><a href='view.php?sessionid=$sessionId'>$sessionId</a></td>
             <td>$title</td>
             <td>" . getTesterFullName($testerArray[$sessionId], true) . "</td>
         </tr>";
-
-
-            //        $htmlReturn .= "<div id =\"div_" . $areaName . "\" style=\"min-width: 1200px; height: 400px; margin: 0 auto\"></div>";
         }
         $htmlReturn .= "
     </tbody>
     </table>
     </div>";
-        //    print_r($sessionCountForOneArea);
         return $htmlReturn;
     }
 
@@ -353,4 +350,49 @@ $(function() {
         return $htmlString;
 
     }
+
+    public static function generateSqlToGetAllSessionsForStatistics()
+    {
+        $sql = "SELECT sessionid "; //" FROM mission ";
+        $addWhere = true;
+        $sql .= "FROM sessioninfo  ";
+        $sql .= "WHERE (executed = 1 OR debriefed = 1 OR closed = 1)  ";
+
+        if (strcmp($_REQUEST['sprint'], "") != 0) {
+            $sql .= " AND ";
+            $sql .= " sprintname = \"" . $_REQUEST['sprint'] . "\" ";
+            $addWhere = false;
+        }
+        if (strcmp($_REQUEST['from'], "") != 0 && strcmp($_REQUEST['to'], "") != 0) {
+//        if ($addWhere) {
+//            $sql .= "WHERE ";
+//            $addWhere = false;
+//        }
+//        else
+//        {
+            $sql .= " AND ";
+
+//        }
+            $sql .= "`updated` > '" . $_REQUEST['from'] . " 00:00:00' AND `updated`  <  '" . $_REQUEST['to'] . " 00:00:00' ";
+        }
+        $sql .= " LIMIT 0,10000";
+
+        return $sql;
+    }
+
+    public function generateSessionObjectsForStatistics()
+    {
+        $dbh=new dbHelper();
+        $sql = self::generateSqlToGetAllSessionsForStatistics();
+        $results =dbHelper::sw_mysqli_execute($con=$dbh->db_getMySqliConnection(),$sql,__FILE__,__LINE__);
+        $allSessions=null;
+        while ($row = mysqli_fetch_array($results)) {
+            $aSessionObject = new sessionReadObject($row['sessionid']);
+            $allSessions[$row['sessionid']] = $aSessionObject->getSession();
+        }
+        mysqli_close($con);
+        return $allSessions;
+
+    }
+
 }

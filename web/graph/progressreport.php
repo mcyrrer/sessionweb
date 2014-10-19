@@ -77,6 +77,7 @@ $(function() {
 	$.getJSON('../api/statistics/progress/index.php?'+params+'&callback=?', function(data) {
 		// Create the chart
 		window.chart = new Highcharts.StockChart({
+		    
 			chart : {
 				renderTo : 'container'
 			},
@@ -95,7 +96,17 @@ $(function() {
 				tooltip: {
 					valueDecimals: 2
 				}
-			}]
+			}],
+			xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }
+			}
 		});
 	});
 

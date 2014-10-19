@@ -77,6 +77,25 @@ class dbHelper
         return mysqli_real_escape_string($con,$toEscape);
     }
 
+    public function escapeAllRequestParameters($con=null)
+    {
+        $closeCon=null;
+        if($con==null)
+        {
+            $con= self::db_getMySqliConnection();
+            $closeCon=true;
+        }
+        foreach($_REQUEST as $key=>$value)
+        {
+            $_REQUEST[$key] = mysqli_real_escape_string($con,$value);
+        }
+        if($closeCon)
+        {
+            mysqli_close($con);
+        }
+        return;
+    }
+
     static function sw_mysqli_fetch_all($mysqli_result) {
         $resultAsArray = array();
         while ($row = mysqli_fetch_assoc($mysqli_result)) {
