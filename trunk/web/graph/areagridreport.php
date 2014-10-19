@@ -27,17 +27,19 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 
            <link rel="stylesheet" type="text/css" href="../css/sprintreport.css">
            <link rel="stylesheet" type="text/css" href="../css/sessionwebcss.css">
-           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_page.css">
-           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_table.css">
-           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/TableTools.css">
+
+
+
+           <script type="text/javascript" src="../js/highstock/highstock.js"></script>
+<!--           <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>-->
 
            <link rel="stylesheet" type="text/css" href="../js/jqueryui/jquery-ui-1.10.0.custom.css">
            <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
            <script src="../js/jqueryui/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
-           <script type="text/javascript" src="../js/highstock/highstock.js"></script>
-<!--           <script type="text/javascript" src="../js/highcharts/modules/exporting.js"></script>-->
-
            <script type="text/javascript" src="../js/DataTables/js/jquery.dataTables.min.js"></script>
+           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_page.css">
+           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/demo_table.css">
+           <link rel="stylesheet" type="text/css" href="../js/DataTables/css/TableTools.css">
            <script type="text/javascript" src="../js/DataTables/js/TableTools.min.js"></script>
            <script type="text/javascript" src="../js/DataTables/js/ZeroClipboard.js"></script>
            <script src="../js/sessionweb-graph-generic-v27.js" type="text/javascript"></script>
@@ -65,7 +67,10 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
                  "aLengthMenu": [[-1,10, 25, 50,100], ["All",10, 25, 50,100]],
                  "iDisplayLength": 50,
                 "sPaginationType": "full_numbers",
-                "sDom": "T<\"clear\">lfrtip"
+                "sDom": "T<\"clear\">lfrtip",
+                "tableTools": {
+                 "sSwfPath": "js/DataTables-1.10.3/extensions/TableTools/swf"
+        }
             });
 
             $("#bugTable").dataTable({

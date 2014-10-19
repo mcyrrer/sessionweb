@@ -867,7 +867,7 @@ function SetContentDebrief(text) {
 
     var h = $(document).height() -500;
     var config = { height: h};
-    
+
     CKEDITOR.replace('debriefeditor',config);
 
     var editor = CKEDITOR.instances.debriefeditor;
@@ -881,8 +881,6 @@ function SetContentDebrief(text) {
             this.saveDebriefNotes = d.getTime();
         }
     });
-
-
 }
 
 function GetContentsCharter() {

@@ -58,9 +58,10 @@ function checkIfRootFolder($pathToRoot)
  */
 function checkIfValidUserAndPasswordWithHttpBasicAuth()
 {
-    $myusername = $_SERVER['PHP_AUTH_USER'];
-    $mypassword = $_SERVER['PHP_AUTH_PW'];
-    $con = getMySqlConnection();
+    $con = getMySqliConnection();
+
+    $myusername = mysqli_real_escape_string($con,$_SERVER['PHP_AUTH_USER']);
+    $mypassword = mysqli_real_escape_string($con,$_SERVER['PHP_AUTH_PW']);
     //encrypt password
     $mypassword = md5($mypassword);
 
@@ -71,11 +72,12 @@ function checkIfValidUserAndPasswordWithHttpBasicAuth()
     $sql .= "       AND PASSWORD = '$mypassword' ";
     $sql .= "       AND active = 1 ";
 
-    $result = mysql_query($sql);
+    $result = mysqli_query($con,$sql);
 
     if ($result != FALSE) {
-        $count = mysql_num_rows($result);
+        $count = mysqli_num_rows($result);
     }
+    mysqli_close($con);
     // Mysql_num_row is counting table row
 
 

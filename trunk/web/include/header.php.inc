@@ -53,7 +53,21 @@ if (strstr($_SERVER['PHP_SELF'], "edit.php") != false) {
     echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"js/ckeditor/contents.css\">\n";
 
 
-} elseif(strstr($_SERVER['PHP_SELF'], "view.php") != false)
+}
+elseif(strstr($_SERVER['PHP_SELF'], "statistics.php") != false)
+{
+    echo '     <script type="text/javascript" src="js/highcharts/highcharts.js"></script>
+            <link rel="stylesheet" type="text/css" href="js/jqueryui/jquery-ui-1.10.0.custom.css">
+            <link rel="stylesheet" type="text/css" href="js/DataTables-1.10.3/media/css/jquery.dataTables.min.css">
+           <script src="js/jqueryui/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
+           <script src="js/DataTables-1.10.3/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+
+
+           <script src="js/sessionweb-graph-generic-v27.js" type="text/javascript"></script>
+';
+
+}
+elseif(strstr($_SERVER['PHP_SELF'], "view.php") != false)
 {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionweb2.css\">\n";
     echo "     <script type=\"text/javascript\" src=\"js/ckeditor/ckeditor.js\"></script>\n";
