@@ -71,8 +71,8 @@ elseif(strstr($_SERVER['PHP_SELF'], "view.php") != false)
 {
     echo "      <link rel=\"stylesheet\" type=\"text/css\" href=\"css/sessionweb2.css\">\n";
     echo "     <script type=\"text/javascript\" src=\"js/ckeditor/ckeditor.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor/config.js\"></script>\n";
-    echo "     <script type=\"text/javascript\" src=\"ckeditor/styles.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/ckeditor/config.js\"></script>\n";
+    echo "     <script type=\"text/javascript\" src=\"js/ckeditor/styles.js\"></script>\n";
     echo "     <script type=\"text/javascript\" src=\"js/sessionweb-view-v28.js\"></script>\n";
     echo "     <link rel=\"stylesheet\" type=\"text/css\" href=\"js/ckeditor/contents.css\">\n";
 
