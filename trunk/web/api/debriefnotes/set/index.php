@@ -14,8 +14,8 @@ require_once('../../../include/validatesession.inc');
 //error_reporting(0);
 
 require_once('../../../config/db.php.inc');
-require_once ('../../../include/commonFunctions.php.inc');
-require_once ('../../../include/db.php');
+require_once('../../../include/commonFunctions.php.inc');
+require_once('../../../include/db.php');
 require_once('../../../classes/AccessManagement.php');
 require_once('../../../classes/sessionHelper.php');
 require_once('../../../classes/logging.php');
@@ -30,17 +30,18 @@ if (isset($_REQUEST['text']) && isset($_REQUEST['sessionid'])) {
     $con = $dbManager->db_getMySqliConnection();
     $sessionid = dbHelper::escape($con, $_REQUEST['sessionid']);
     $notes = dbHelper::escape($con, $_REQUEST['text']);
-    if(isset($_REQUEST['final']) && $_REQUEST['final'] == true)
-    {
-        $notes = 'Notes added by: '.$sHelper->getUserFullName() . '<br>'.$notes;
-    }
+
     $so = new sessionObject($sessionid);
 
     header("HTTP/1.0 501 Internal Server Error");
 
     if ($so->getSessionExist()) {
         $versionid = $so->getVersionid();
-        if (AccessManagement::isCurrentUserAllowedToDebiref()) {
+        if (strcmp("",$notes)!=0) {
+            if (isset($_REQUEST['final']) && $_REQUEST['final'] == true) {
+                $notes = 'Notes added by: ' . $sHelper->getUserFullName() . '<br>' . $notes;
+            }
+            if (AccessManagement::isCurrentUserAllowedToDebiref()) {
 
                 $sql = "INSERT IGNORE
                         INTO
@@ -52,22 +53,28 @@ if (isset($_REQUEST['text']) && isset($_REQUEST['sessionid'])) {
                             )
                             VALUES
                             (
-                                ".$versionid.",
-                                '".$notes."',
-                                '".$sHelper->getUserName()."'
-                            ) ON DUPLICATE KEY UPDATE notes='".$notes."', debriefedby='".$sHelper->getUserName()."'";
+                                " . $versionid . ",
+                                '" . $notes . "',
+                                '" . $sHelper->getUserName() . "'
+                            ) ON DUPLICATE KEY UPDATE notes='" . $notes . "', debriefedby='" . $sHelper->getUserName() . "'";
 
                 $result = dbHelper::sw_mysqli_execute($con, $sql, __FILE__, __LINE__);
-                $logger->debug("Added/updated debrief notes content for session $sessionid",__FILE__, __LINE__);
+                $logger->debug("Added/updated debrief notes content for session $sessionid", __FILE__, __LINE__);
                 header("HTTP/1.0 200 OK");
                 $response['code'] = ITEM_UPDATED;
                 $response['text'] = "ITEM_UPDATED";
+            } else {
+                header("HTTP/1.0 401 Unauthorized");
+                $response['code'] = UNAUTHORIZED;
+                $response['text'] = "UNAUTHORIZED";
+            }
         }
         else
         {
-            header("HTTP/1.0 401 Unauthorized");
-            $response['code'] = UNAUTHORIZED;
-            $response['text'] = "UNAUTHORIZED";
+            $logger->debug($sessionid.' has no notes to save', __FILE__, __LINE__);
+            header("HTTP/1.0 200 OK");
+            $response['code'] = ITEM_UPDATED;
+            $response['text'] = "ITEM_UPDATED";
         }
     } else {
         $logger->debug("Tried to change debrief notes content but sessionid $sessionid does not exist", __FILE__, __LINE__);
