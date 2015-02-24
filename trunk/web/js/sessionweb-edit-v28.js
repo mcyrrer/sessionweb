@@ -932,6 +932,8 @@ function CreateRequirement(requirementId) {
 }
 
 function AddSingleRequirement(aReq) {
+    aReq=$.trim(aReq);
+
 //    aReq = aReq.replace("#", "");
     var aReqID = aReq.replace("#", "--");
     aReqID = aReqID.replace(",", "--");
@@ -1043,6 +1045,7 @@ function CreateBug(bugId) {
 }
 
 function AddSingleBug(aBug) {
+    aBug=$.trim(aBug);
     var aBugID = aBug.replace("#", "--");
     aBugID = aBugID.replace(",", "--");
     aBugID = aBugID.replace(".", "--");
@@ -1063,12 +1066,12 @@ function AddSingleBug(aBug) {
                 if (title == "") {
                     title = aBug;
                 }
-                var html = '<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span>' + aBug + ': <a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + title + '</a></span><br></span>';
+                var html = '<span id="bug_del_' + aBugID + '"><span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span>' + $.trim(aBug) + ': <a class="sw_p" href="' + url_to_dms + '' + $.trim(aBug) + '" target="_blank">' + title + '</a></span><br></span>';
                 $('#' + aBugID + 'BUG').html(html);
-//                console.debug(html);
+                console.debug(html);
             }
             else {
-                $('#' + aBugID + 'BUG').html('<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + aBug + '" target="_blank">' + aBug + '</a></span><br></span>');
+                $('#' + aBugID + 'BUG').html('<span id="bug_del_' + aBugID + '>"<span onClick="onBugLinkDeleteClick(\'' + aBugID + '\')">[-]</span><a class="sw_p" href="' + url_to_dms + '' + $.trim(aBug) + '" target="_blank">' + $.trim(aBug) + '</a></span><br></span>');
 
             }
         }
@@ -1208,6 +1211,7 @@ function CreateSessionLink(sessionIdToLinkTo) {
 }
 
 function AddSingleSessionLink(aLink) {
+    aLink=$.trim(aLink);
     var aLinkID = aLink.replace("#", "--");
     aLinkID = aLinkID.replace(",", "--");
     aLinkID = aLinkID.replace(".", "--");
