@@ -38,15 +38,15 @@ class dbHelper
                 $this->logger->debug("DB " . "DB_2" . " is active will try to connect to it", __FILE__, __LINE__);
                 $con = $this->connectToDb(DB_HOST_SESSIONWEB_2, DB_USER_SESSIONWEB_2, DB_PASS_SESSIONWEB_2, DB_NAME_SESSIONWEB_2);
             }
-            if ($con == null) {
-                $this->logger->error("Could not connect to database " . $_SESSION['localdbhost'], __FILE__, __LINE__);
-                if (String::is("DB_1", $_SESSION['localdbhost'])) {
-                    $this->logger->addInfo("2:nd choice DB " . "DB_2" . ": will try to connect to it", __FILE__, __LINE__);
+            if ($con == false) {
+                $this->logger->warn("Could not connect to database " . $_SESSION['localdbhost'], __FILE__, __LINE__);
+                if (strcmp("DB_1", $_SESSION['localdbhost'])==0) {
+                   $this->logger->info("2:nd choice DB at " . DB_HOST_SESSIONWEB_2 . ": will try to connect to it", __FILE__, __LINE__);
                     $con = $this->connectToDb(DB_HOST_SESSIONWEB_2, DB_USER_SESSIONWEB_2, DB_PASS_SESSIONWEB_2, DB_NAME_SESSIONWEB_2);
                     $_SESSION['localdbhost'] = "DB_2";
 
                 } else {
-                    $this->logger->addInfo("2:nd choice DB " . "DB_1" . ": will try to connect to it", __FILE__, __LINE__);
+                    $this->logger->info("1:nd choice DB at " . DB_USER_SESSIONWEB . ": will try to connect to it", __FILE__, __LINE__);
                     $con = $this->connectToDb(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB, DB_NAME_SESSIONWEB);
                     $_SESSION['localdbhost'] = "DB_1";
                 }

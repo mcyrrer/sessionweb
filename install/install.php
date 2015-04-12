@@ -85,7 +85,7 @@ function install()
         unlink($tmpInstallationFile);
         $logger->info("Removed installation temp file ". $tmpInstallationFile);
 
-        if (countr($resultOfSql) == 0) {
+        if (count($resultOfSql) == 0) {
             echo "Database created and installed<br>";
             $logger->info("Database $dbname created",__FILE__,__LINE__);
             createDbConfigFile($dbuser, $dbpassword, $dbname);
@@ -173,10 +173,20 @@ function createDbConfigFile($dbuser, $dbpassword, $dbname)
 {
 
     $configfileString = "<?php
+        //SITE 1
         define('DB_HOST_SESSIONWEB', 'localhost');
         define('DB_USER_SESSIONWEB', '$dbuser');
         define('DB_PASS_SESSIONWEB', '$dbpassword');
         define('DB_NAME_SESSIONWEB', '$dbname');
+
+
+        //SITE 2 (leave this as it is if you don't know anything about mysql replication)
+        //sessionweb supports mysql master-master replication. change settings below to enable
+        //automatic failover between site 1 and 2
+        define('DB_HOST_SESSIONWEB_2', 'localhost');
+        define('DB_USER_SESSIONWEB_2', '$dbuser');
+        define('DB_PASS_SESSIONWEB_2', '$dbpassword');
+        define('DB_NAME_SESSIONWEB_2', '$dbname');
         ?>";
     $sessionwebPath = str_replace("\\", "/", getcwd());
     $sessionwebPath = substr($sessionwebPath, 0, strlen($sessionwebPath) - 8);
