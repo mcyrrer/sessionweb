@@ -1320,7 +1320,7 @@ function updateAreas() {
 
 //EDITOR MANAGER
 function SetContentsCharter(text) {
-    var secondsBetweenSaves = 5000;
+    var milliSecondsBetweenSaves = 30000;
 
     var sessionID = $(document).getUrlParam("sessionid");
 
@@ -1334,7 +1334,7 @@ function SetContentsCharter(text) {
 
     editor.on('change', function (e) {
         var d = new Date();
-        if (this.charLastSavedTime == null || d.getTime() - this.charLastSavedTime > secondsBetweenSaves) {
+        if (this.charLastSavedTime == null || d.getTime() - this.charLastSavedTime > milliSecondsBetweenSaves) {
             saveCharter(sessionID);
             this.charLastSavedTime = d.getTime();
         }
@@ -1342,7 +1342,7 @@ function SetContentsCharter(text) {
 }
 
 function SetContentsNotes(text) {
-    var secondsBetweenSaves = 5000;
+    var milliSecondsBetweenSaves = 30000;
 
     var sessionID = $(document).getUrlParam("sessionid");
 
@@ -1354,7 +1354,7 @@ function SetContentsNotes(text) {
     editor.setData(text);
     editor.on('change', function (e) {
         var d = new Date();
-        if (this.notesLastSavedTime == null || d.getTime() - this.notesLastSavedTime > secondsBetweenSaves) {
+        if (this.notesLastSavedTime == null || d.getTime() - this.notesLastSavedTime > milliSecondsBetweenSaves) {
             saveNotes(sessionID);
             this.notesLastSavedTime = d.getTime();
         }

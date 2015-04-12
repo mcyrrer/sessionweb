@@ -86,7 +86,7 @@ function pieTimeDistribution()
         $bug = round($row['bug'], 2);
         $opportunity = round($row['opportunity'], 2);
         $numberOfSessions = $row['numberOfSessions'];
-        $tester = QueryHelper::getTesterFullName($_REQUEST['tester']);
+        $tester = QueryHelper::getTesterFullName(null,$_REQUEST['tester']);
         $team = $_REQUEST['team'];
         $sprint = $_REQUEST['sprint'];
         $title = " | $tester | $team | $sprint |";

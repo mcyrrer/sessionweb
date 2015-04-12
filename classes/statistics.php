@@ -216,7 +216,7 @@ $(function() {
         <tr>
             <td><a href='view.php?sessionid=$sessionId'>$sessionId</a></td>
             <td>$title</td>
-            <td>" . QueryHelper::getTesterFullName($testerArray[$sessionId]) . "</td>
+            <td>" . QueryHelper::getTesterFullName(null,$testerArray[$sessionId]) . "</td>
         </tr>";
         }
         $htmlReturn .= "

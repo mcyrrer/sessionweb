@@ -89,11 +89,11 @@ function update()
 function tryDbConnection($user, $password, $host = 'localhost')
 {
     try {
-        $con = @ mysql_connect($host, $user, $password);
-        mysql_query("SET NAMES utf8");
-        mysql_query("SET CHARACTER SET utf8");
+        $con = @ mysqli_connect($host, $user, $password);
+        mysqli_query($con,"SET NAMES utf8");
+        mysqli_query($con,"SET CHARACTER SET utf8");
         if ($con) {
-            mysql_close($con);
+            mysqli_close($con);
             return true;
         } else {
             echo "Could not connect to MySql database, please check your user and password";

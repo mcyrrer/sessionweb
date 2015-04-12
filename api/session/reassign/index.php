@@ -9,9 +9,10 @@ $dbm = new dbHelper();
 
 $con = $dbm->connectToLocalDb();
 
-$sessionInfo = (getSessionData($_REQUEST["sessionid"]));
-$title = $sessionInfo["title"];
-if (strcmp($_SESSION['username'], $sessionInfo['username']) == 0 || $_SESSION['superuser'] == 1 || $_SESSION['useradmin'] == 1) {
+//$sessionInfo = (getSessionData($_REQUEST["sessionid"]));
+$sessionInfo = new sessionObject($_REQUEST["sessionid"]);
+$title = $sessionInfo->getTitle();
+if (strcmp($_SESSION['username'], $sessionInfo->getUsername()) == 0 || $_SESSION['superuser'] == 1 || $_SESSION['useradmin'] == 1) {
 
     if (!isset($_REQUEST['tester'])) {
         $sessionid = $_REQUEST["sessionid"];
@@ -21,7 +22,7 @@ if (strcmp($_SESSION['username'], $sessionInfo['username']) == 0 || $_SESSION['s
         echo "<p>Title: $title</p>";
         echo "Reassign session $sessionid to:\n";
         echo "<form id=\"reassignform\" name=\"reassignform\" action=\"index.php?sessionid=$sessionid\" method=\"POST\" accept-charset=\"utf-8\">\n";
-        echoTesterFullNameSelect("", true);
+        HtmlFunctions::echoTesterFullNameSelect("", true);
         echo "<input type=\"hidden\" name=\"sessionid\" value=\"" . $_GET["sessionid"] . "\">\n";
         echo "<p><input type=\"submit\" value=\"Continue\" /></p>\n";
         echo "</form>\n";
@@ -33,14 +34,16 @@ if (strcmp($_SESSION['username'], $sessionInfo['username']) == 0 || $_SESSION['s
     $sessionid = $_REQUEST["sessionid"];
     $tester = $_REQUEST["tester"];
 
-    $result = updateSessionOwner($sessionid, $tester);
+    //./web/include/session_database_functions.php.inc
+    //move into new class!
+    $result = QueryHelper::updateSessionOwner($con,$sessionid, $tester);
 
     if ($result) {
         echo "<center>";
         echo "<img src='../../../pictures/multiUserIcon.jpg' alt=''>";
 
         echo "<h2>Session reassigned</h2>";
-        $tester = getTesterFullName($tester);
+        $tester = QueryHelper::getTesterFullName($con,$tester);
         echo "Session was reassigned to $tester.";
 
         echo "</center>";

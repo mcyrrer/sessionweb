@@ -78,14 +78,14 @@ function validateUserAsLdapUser($con)
                 $username = $resultLdap['samaccountname'];
                 $md5password = md5(rand());
                 $sqlInsert = "";
-                $sqlInsert .= "INSERT INTO `members` ";
-                $sqlInsert .= "            (`username`, ";
-                $sqlInsert .= "             `password`, ";
-                $sqlInsert .= "             `fullname`, ";
-                $sqlInsert .= "             `adaccount`, ";
-                $sqlInsert .= "             `active`, ";
-                $sqlInsert .= "             `admin`, ";
-                $sqlInsert .= "             `superuser`) ";
+                $sqlInsert .= "INSERT INTO members ";
+                $sqlInsert .= "            (username, ";
+                $sqlInsert .= "             password, ";
+                $sqlInsert .= "             fullname, ";
+                $sqlInsert .= "             adaccount, ";
+                $sqlInsert .= "             active, ";
+                $sqlInsert .= "             admin, ";
+                $sqlInsert .= "             superuser) ";
                 $sqlInsert .= "VALUES      ('$username', ";
                 $sqlInsert .= "             '$md5password', ";
                 $sqlInsert .= "             '$fullname', ";
@@ -102,11 +102,11 @@ function validateUserAsLdapUser($con)
                 }
 
                 $sqlInsert = "";
-                $sqlInsert .= "INSERT INTO `user_settings` ";
-                $sqlInsert .= "            (`username`, ";
-                $sqlInsert .= "             `teamname`, ";
-                $sqlInsert .= "             `default_team`, ";
-                $sqlInsert .= "             `list_view`) ";
+                $sqlInsert .= "INSERT INTO user_settings ";
+                $sqlInsert .= "            (username, ";
+                $sqlInsert .= "             teamname, ";
+                $sqlInsert .= "             default_team, ";
+                $sqlInsert .= "             list_view) ";
                 $sqlInsert .= "VALUES      ('$username', ";
                 $sqlInsert .= "             '', ";
                 $sqlInsert .= "             '', ";

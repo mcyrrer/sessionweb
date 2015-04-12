@@ -10,7 +10,7 @@ class UserSettings
         $this->dbHelper = new dbHelper();
     }
 
-    public static function getUserSettings($createConnection = true)
+    public static function getUserSettings()
     {
         $dbm = new dbHelper();
         $con = $dbm->connectToLocalDb();

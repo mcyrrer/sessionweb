@@ -3,8 +3,11 @@ $pathInfo = pathinfo(__FILE__);
 $dir = $pathInfo['dirname'] . '/';
 
 if (!file_exists($dir . '/../config/db.php.inc')) {
-    header("Location: install/install.php");
-    exit();
+
+    if (strpos($_SERVER['PHP_SELF'], "install.php") == false) {
+        header("Location: install/install.php");
+        exit();
+    }
 }
 
 spl_autoload_register('my_autoloader');
@@ -37,9 +40,10 @@ function my_autoloader($class_name)
     $pathInfo = pathinfo(__FILE__);
     $dir = $pathInfo['dirname'] . '/';
 
-    require_once($dir . '/../config/db.php.inc');
-    include_once($dir . '/../config/auth.php.inc');
-
+    if (file_exists($dir . '/../config/db.php.inc')) {
+        require_once($dir . '/../config/db.php.inc');
+        include_once($dir . '/../config/auth.php.inc');
+    }
 
     if (file_exists($dir . $class_name . '.php')) {
         require_once($dir . $class_name . '.php');

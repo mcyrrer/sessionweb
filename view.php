@@ -40,7 +40,7 @@ class View
             if ($this->sessionHelper->isUserAllowedToDebriefSession($this->session)) {
                 $this->showHtmlAllowedToViewDebriefSession();
             } else {
-                echo "You are not allowed to debrief session, only superuser or admin can do a debrief.";
+                echo "You are not allowed to debrief session, only a superuser or an admin can do a debrief.";
             }
         } else {
             $this->showHtmlAllowedToViewDebriefSession();

@@ -13,31 +13,26 @@ $response = array();
 if (isset($_REQUEST['listsettings'])) {
     $con = $dbm->connectToLocalDb();
 
-    $envName = mysqli_real_escape_string($con, $_REQUEST['environment']);
-    $envautofetchurl = mysqli_real_escape_string($con, $_REQUEST["url"]);
-    $envusername = mysqli_real_escape_string($con, $_REQUEST["username"]);
-    $envpassword = mysqli_real_escape_string($con, $_REQUEST["password"]);
-
     $sqlUpdate = "";
     $sqlUpdate .= "UPDATE `user_settings` ";
-    $sqlUpdate .= "SET    `list_view` ='" . mysqli_real_escape_string($con, $_REQUEST['listsettings']) . "' ,";
+    $sqlUpdate .= "SET    `list_view` ='" . mysqli_real_escape_string($con, mysqli_real_escape_string($con,$_REQUEST['listsettings'])) . "' ,";
     if ($_REQUEST['team'] != '')
-        $sqlUpdate .= "       `default_team` ='" . $_REQUEST['team'] . "' , ";
+        $sqlUpdate .= "       `default_team` ='" . mysqli_real_escape_string($con,$_REQUEST['team']) . "' , ";
     else
         $sqlUpdate .= "       `default_team` =null , ";
 
     if ($_REQUEST['sprint'] != '')
-        $sqlUpdate .= "       `default_sprint` ='" . $_REQUEST['sprint'] . "' , ";
+        $sqlUpdate .= "       `default_sprint` ='" . mysqli_real_escape_string($con,$_REQUEST['sprint']) . "' , ";
     else
         $sqlUpdate .= "       `default_sprint` =null , ";
-
-    if ($_REQUEST['teamsprint'] != '')
-        $sqlUpdate .= "       `default_teamsprint` ='" . $_REQUEST['teamsprint'] . "' , ";
-    else
-        $sqlUpdate .= "       `default_teamsprint` =null , ";
+//
+//    if ($_REQUEST['teamsprint'] != '')
+//        $sqlUpdate .= "       `default_teamsprint` ='" . mysqli_real_escape_string($con,$_REQUEST['teamsprint']) . "' , ";
+//    else
+//        $sqlUpdate .= "       `default_teamsprint` =null , ";
 
     if ($_REQUEST['area'] != '')
-        $sqlUpdate .= "       `default_area` ='" . $_REQUEST['area'] . "' , ";
+        $sqlUpdate .= "       `default_area` ='" . mysqli_real_escape_string($con,$_REQUEST['area']) . "' , ";
     else
         $sqlUpdate .= "       `default_area` =null , ";
 
@@ -66,9 +61,7 @@ if (isset($_REQUEST['listsettings'])) {
         header("HTTP/1.0 201 Created");
         $response['code'] = ITEM_UPDATED;
         $response['text'] = "ITEM_UPDATED";
-        $_SESSION['settings'] = getSessionWebSettings();
-
-
+       // $_SESSION['settings'] = UserSettings::getUserSettings();
     }
 
 

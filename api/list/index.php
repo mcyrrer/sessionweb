@@ -3,8 +3,8 @@ require_once('../../classes/autoloader.php');
 
 $logger = new logging();
 
-$dbh = new dbHelper();
-$con = $dbh->connectToLocalDb();
+$dbm = new dbHelper();
+$con = $dbm->connectToLocalDb();
 
 $whereSql = "";
 $StringSearchSql = null;
@@ -93,9 +93,9 @@ if (isset($_REQUEST['searchstringref']) && $_REQUEST['searchstringref'] != "") {
     $data['page'] = (int)$_REQUEST['page'];
 //$data['total'] = 500;
 
-    $data = getNumberOfSessions($con, $dbh, $data, $whereSql, $StringSearchSql);
+    $data = getNumberOfSessions($con, $dbm, $data, $whereSql, $StringSearchSql);
 
-    $data = getSessions($con, $dbh, $data, $whereSql, $StringSearchSql);
+    $data = getSessions($con, $dbm, $data, $whereSql, $StringSearchSql);
 
 
 }

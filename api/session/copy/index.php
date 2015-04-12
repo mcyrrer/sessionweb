@@ -8,60 +8,24 @@ $dbm = new dbHelper();
 
 $con = $dbm->connectToLocalDb();
 
+$oldSo = new sessionObject($_REQUEST["sessionid"]);
+$newSo = new sessionObject();
 
-$sessionDataToCopy = (getSessionData($_REQUEST["sessionid"]));
+$newSo->setTitle('(Copy)'.$oldSo->getTitle());
+$newSo->setAreas($oldSo->getAreas());
+$newSo->setCharter($oldSo->getCharter());
+$newSo->setRequirements($oldSo->getRequirements());
+$newSo->saveObjectToDb();
 
-$sessionIdToCopy = $_REQUEST["sessionid"];
+$logger->info("Copied session " . $oldSo->getSessionid() . " into new sessionid " . $newSo->getSessionid(), __FILE__, __LINE__);
 
-//Create a new random key
-$sessionDataToCopy["publickey"] = md5(rand());
-
-//Will create a new session id to map to a session
-saveSession_CreateNewSessionId();
-
-//Get the new session id for user x
-$sessionid = saveSession_GetSessionIdForNewSession();
-//Insert sessiondata to mission table
-
-copySession_InsertSessionDataToDb($sessionid, $sessionDataToCopy);
-
-//Get versionId from db
-$versionid = saveSession_GetVersionIdForNewSession();
-
-$versionIdToCopy = getSessionVersionId($sessionIdToCopy);
-
-//Create missionstatus record in Db
-$executed = false;
-if (isset($_REQUEST["executed"]) && $_REQUEST["executed"] != "") {
-    $executed = true;
-}
-saveSession_InsertSessionStatusToDb($versionid, $executed);
-
-//Create metrics record for session
-$metrics = array();
-$metrics["setuppercent"] = null;
-$metrics["testpercent"] = null;
-$metrics["bugpercent"] = null;
-$metrics["oppertunitypercent"] = null;
-$metrics["duration"] = null;
-$metrics["mood"] = null;
-saveSession_InsertSessionMetricsToDb($versionid, $metrics);
-
-
-//Create areas for session
-
-$areasFromOldSession = getSessionAreas($versionIdToCopy);
-
-saveSession_InsertSessionAreaToDb($versionid, $areasFromOldSession);
-$logger->info("Copied session " . $_REQUEST["sessionid"] . " into new sessionid " . $sessionid, __FILE__, __LINE__);
-$title = $sessionDataToCopy["title"];
 echo "<center>";
 echo "<img src='../../../pictures/edit-copy-9-medium.png' alt=''>";
 
 echo "<h2>Copy session</h2>";
-echo "<p>Title of copy:" . $sessionDataToCopy["title"] . "(Copy)</p>";
+echo "<p>Title of copy: " . $newSo->getTitle() . "</p>";
 echo "<p>Copy created</p>";
-echo "<div id='editCopy'><a href='../../../edit.php?sessionid=$sessionid' target='_top'>Edit session</a></div>";
+echo "<div id='editCopy'><a href='../../../edit.php?sessionid=".$newSo->getSessionid()."' target='_top'>Edit session</a></div>";
 echo "</center>";
 
 ?>

@@ -66,7 +66,7 @@ function install()
 
     if (tryDbConnection($adminuser, $adminpassword)) {
         $dbm = new dbHelper();
-        $con = @ mysqli_connect("localhost", $adminuser, $adminpassword);
+        $con = mysqli_connect("localhost", $adminuser, $adminpassword);
         $dbm->executeQuery($con,"SET NAMES utf8");
         $dbm->executeQuery($con,"SET CHARACTER SET utf8");
         $MySqliExecuter = new MySqliExecuter();
@@ -81,16 +81,18 @@ function install()
         file_put_contents($tmpInstallationFile,$newInstallationSql);
         $logger->info("Created temporary installation sql file at $tmpInstallationFile",__FILE__,__LINE__);
 
-        $resultOfSql = $MySqliExecuter->multiQueryFromFile($tmpInstallationFile, $dbname, $createDb);
+        $resultOfSql = $MySqliExecuter->multiQueryFromFile($con,$tmpInstallationFile, $dbname, $createDb);
+        unlink($tmpInstallationFile);
+        $logger->info("Removed installation temp file ". $tmpInstallationFile);
 
-        if (sizeof($resultOfSql) == 0) {
+        if (countr($resultOfSql) == 0) {
             echo "Database created and installed<br>";
             $logger->info("Database $dbname created",__FILE__,__LINE__);
             createDbConfigFile($dbuser, $dbpassword, $dbname);
             $logger->info("Database configuration file created",__FILE__,__LINE__);
 
             if (strcmp($dbcreateuser, "true") == 0)
-                createDbUser($dbuser, $dbpassword, $dbname);
+                createDbUser($con,$dbuser, $dbpassword, $dbname);
         else {
                 echo "User not created since checkbox was unchecked.<br>";
                 $logger->info("Database ".$dbname."user not created since checkbox was unchecked");
@@ -118,7 +120,7 @@ function install()
                 <legend>Attachment information</legend>
                 <dl>
                     <dd>';
-    checkForMaxAttachmentSize(true);
+    SystemCheck::checkForMaxAttachmentSize(true);
     echo '</dd>
                 </dl>
             </fieldset>
@@ -127,13 +129,14 @@ function install()
 
 }
 
-function createDbUser($dbuser, $dbpassword, $dbname)
+function createDbUser($con,$dbuser, $dbpassword, $dbname)
 {
     $logger = new logging();
+    $dbm = new dbHelper();
     $sqlCreateUser = "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword'";
     $sqlGrantUsage = "GRANT USAGE ON * . * TO  '$dbuser'@'localhost' IDENTIFIED BY  '$dbpassword' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
     $sqlGrantSessionweb = "GRANT SELECT , INSERT , UPDATE , DELETE, SHOW VIEW ON  `$dbname` . * TO  '$dbuser'@'localhost'";
-    if ( $dbm->executeQuery($sqlCreateUser) === false) {
+    if ( $dbm->executeQuery($con,$sqlCreateUser) === false) {
         echo "failed to create $dbuser user<br>";
         $logger->error("Failed to create user $dbuser.Does it already exist? ", __FILE__, __LINE__);
         $logger->sql($sqlCreateUser, __FILE__, __LINE__);
@@ -142,7 +145,7 @@ function createDbUser($dbuser, $dbpassword, $dbname)
         $logger->info("Create user $dbuser ", __FILE__, __LINE__);
 
     }
-    if ( $dbm->executeQuery($sqlGrantUsage) === false) {
+    if ( $dbm->executeQuery($con,$sqlGrantUsage) === false) {
         echo "failed to grant usage for $dbuser user<br>";
         $logger->error("Failed to grant usage for $dbuser", __FILE__, __LINE__);
         $logger->sql($sqlGrantUsage, __FILE__, __LINE__);
@@ -153,7 +156,7 @@ function createDbUser($dbuser, $dbpassword, $dbname)
         $logger->info("Granted usage for $dbuser added", __FILE__, __LINE__);
 
     }
-    if ( $dbm->executeQuery($sqlGrantSessionweb) === false) {
+    if ( $dbm->executeQuery($con,$sqlGrantSessionweb) === false) {
         echo "failed to grant usage for sessionweb for $dbuser user<br>";
         $logger->error("Failed to usage for sessionweb for $dbuser", __FILE__, __LINE__);
         $logger->sql($sqlGrantSessionweb, __FILE__, __LINE__);
@@ -189,7 +192,7 @@ function tryDbConnection($user, $password, $host = 'localhost')
     $logger = new logging();
     try {
         $dbm = new dbHelper();
-        $con = $dbm->connectToLocalDb();
+        $con = mysqli_connect($host,$user,$password);
         $dbm->executeQuery($con,"SET NAMES utf8");
         $dbm->executeQuery($con,"SET CHARACTER SET utf8");
         if ($con) {

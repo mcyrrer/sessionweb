@@ -8,7 +8,7 @@ class MySqliExecuter
      * @param string $sqldelimiter
      * @return array|null array with errors or null if file does not exist
      */
-    function multiQueryFromFile($sqlfileName, $dbname, $createDb=false, $sqldelimiter = ';')
+    function multiQueryFromFile($con,$sqlfileName, $dbname, $createDb=false, $sqldelimiter = ';')
     {
         $error_log_from_sql_execution = array();
         set_time_limit(0);
@@ -38,8 +38,8 @@ class MySqliExecuter
                         }
 
                         if ($skipQuery == false) {
-                            if (mysql_query($query) === false) {
-                                $error = "SQL: " . $query . "<br> Error Msg: " . mysql_error();
+                            if (mysqli_query($con,$query) === false) {
+                                $error = "SQL: " . $query . "<br> Error Msg: " . mysqli_error($con);
                                 array_push($error_log_from_sql_execution, $error);
                                 //echo '<tr><td>ERROR:</td><td> ' . $query . '</td></tr>';
                             } else {

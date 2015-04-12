@@ -230,10 +230,14 @@ class QueryHelper
         return $appNames;
     }
 
-    public static function getTesterFullName($username)
+    public static function getTesterFullName($con,$username)
     {
         $dbm = new dbHelper();
-        $con = $dbm->connectToLocalDb();
+//        $close_mysqli_connection = false;
+        if($con==null)
+        {
+            $con = $_SESSION['mysqliCon'];
+        }
         $sqlSelect = "";
         $sqlSelect .= "SELECT fullname ";
         $sqlSelect .= "FROM   members ";
@@ -243,6 +247,10 @@ class QueryHelper
         $result = $dbm->executeQuery($con,$sqlSelect);
 
         $row = mysqli_fetch_row($result);
+//        if($close_mysqli_connection)
+//        {
+//            mysqli_close($con);
+//        }
 
         return $row[0];
     }
@@ -264,6 +272,27 @@ class QueryHelper
 
         return $result;
     }
+
+    public static function updateSessionOwner($con, $sessionid, $tester)
+    {
+        $dbm = new dbHelper();
+
+        $sqlUpdate = "";
+        $sqlUpdate .= "UPDATE `mission` ";
+        $sqlUpdate .= "SET    `username` = '$tester' ";
+        $sqlUpdate .= "WHERE  `sessionid` = '$sessionid'";
+
+        $result = $dbm->executeQuery($con, $sqlUpdate);
+
+        if (!$result) {
+            echo "updateSessionOwner: " . mysqli_error($con) . "<br/>";
+            return false;
+        }
+
+        return true;
+
+    }
+
 }
 
 ?>

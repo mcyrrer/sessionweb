@@ -1,6 +1,5 @@
 <?php
 require_once('classes/autoloader.php');
-
 require_once("include/header.php.inc");
 echo "<h1>Statistics/Graphs</h1>";
 

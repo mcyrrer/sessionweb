@@ -89,7 +89,7 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
     -->
                         <h3>Settings for new session</h3><br>
                         Select default team:
-                        <?php HtmlFunctions::echoTeamSelect($usersettings['default_team'], true, false, "personal_select_team"); ?>
+                        <?php HtmlFunctions::echoTeamSelect($usersettings['default_team'], true, "personal_select_team"); ?>
 
                         <br>
                         Select default sprint:
@@ -347,9 +347,6 @@ list($c1, $c2, $c3, $ce1, $ce2, $ce3) = getCustomFieldProperties($settings);
                                     <!--                </tr>-->
                                     <tr>
                                         <td>
-                                        </td>
-                                        <td><span class='italic'>In some cases a word cloud makes it easier to get a quick overview of a session.
-            A word cloud is a presentation of the top 100 words used in the session and the higher the count is the larger font is used.</span>
                                         </td>
                                     </tr>
                                 </table>
