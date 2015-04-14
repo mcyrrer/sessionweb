@@ -4,7 +4,7 @@ require_once ('../classes/autoloader.php');
 include ('headerinstall.php');
 $logger = new logging();
 
-define("INSTALLATION_SCRIPT", "SessionwebDbLayout_28.sql");
+define("INSTALLATION_SCRIPT", "SessionwebDbLayout_29.sql");
 ?>
 <div id="container">
     <div><H1>Installation of Sessionweb</H1></div>

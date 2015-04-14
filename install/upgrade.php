@@ -23,6 +23,7 @@ $versions['24'] = "SessionwebDbLayoutDelta_24-_25.sql";
 $versions['25'] = "SessionwebDbLayoutDelta_25-_26.sql";
 $versions['26'] = "SessionwebDbLayoutDelta_26-_27.sql";
 $versions['27'] = "SessionwebDbLayoutDelta_27-_28.sql";
+$versions['28'] = "SessionwebDbLayoutDelta_28-_29.sql";
 
 
 echo '<div id="container">
@@ -101,11 +102,11 @@ function upgrade($versions)
             {
                 require_once('correctTableAttachmentsSessionIdToVersionid.inc');
             }
-            $resultOfSql = $MySqliExecuter->multiQueryFromFile($versions[$currentVersion], DB_NAME_SESSIONWEB);
+            $resultOfSql = $MySqliExecuter->multiQueryFromFile($con,$versions[$currentVersion], DB_NAME_SESSIONWEB);
             mysqli_close($con);
 
             if (sizeof($resultOfSql) == 0) {
-                $versionAfterUpgrade = getSessionWebVersion();
+                $versionAfterUpgrade = ApplicationSettings::getSessionWebVersion();
                 echo "Upgraded to version <b>$versionAfterUpgrade</b><br>";
                 $logger->info('Upgraded to ' . $versionAfterUpgrade . ' done.', __FILE__, __LINE__);
 
