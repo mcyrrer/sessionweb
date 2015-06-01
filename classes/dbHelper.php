@@ -62,7 +62,7 @@ class dbHelper
             error_reporting($orgErrorLevel);
 
             $_SESSION['mysqliCon'] = $con;
-
+            mysqli_set_charset($con, 'utf8');
             return $con;
         }
     }
@@ -79,7 +79,7 @@ class dbHelper
         $callingInfo[0] = debug_backtrace()[0]['file'];
         $callingInfo[1] = debug_backtrace()[0]['line'];
 
-        mysqli_set_charset($con, 'utf8');
+
 
         $before = microtime(true);
 

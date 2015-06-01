@@ -73,7 +73,7 @@ function incremental_save_sessions(sessionObject $so, $con, logging $logger, $se
     $con = $dbm->connectToLocalDb();
     $sqlIncSave = "INSERT INTO mission_incremental_save (versionid, title, charter, notes) VALUES ('" . $so->getVersionid() . "', '" . $so->getTitle() . "', '" . $so->getCharter() . "', '" . $so->getNotes() . "')";
     $dbm->executeQuery($con, $sqlIncSave);
-    $logger->debug("Saved backup of $sessionid (title,charter and notes) since it will be deleted", __FILE__, __LINE__);
+    $logger->debug("Saved backup of $sessionid (versionid= ".$so->getVersionid().") (title,charter and notes) since it will be deleted", __FILE__, __LINE__);
 
     $sqlNbrOfRow = "SELECT count(*) as NbrOfRows FROM mission_incremental_save WHERE versionid=" . $so->getVersionid() . " AND notes NOT LIKE ''";
     $nbrOfRowResult = $dbm->executeQuery($con, $sqlNbrOfRow);
@@ -84,6 +84,6 @@ function incremental_save_sessions(sessionObject $so, $con, logging $logger, $se
         $nbrOfRowToCleanUp = $nbrOfRow - NUMBER_OF_INC_RECORDS_LIMIT;
         $sqlDeleteIncSaves = "DELETE FROM mission_incremental_save WHERE versionid=" . $so->getVersionid() . " AND notes NOT LIKE '' ORDER BY id ASC LIMIT " . $nbrOfRowToCleanUp . "";
         $nbrOfRowResult = $dbm->executeQuery($con, $sqlDeleteIncSaves);
-        $logger->debug("Saved backup of $sessionid, and cleaned " . $nbrOfRowToCleanUp . " rows", __FILE__, __LINE__);
+        $logger->debug("Saved backup of $sessionid (versionid= ".$so->getVersionid()."), and cleaned " . $nbrOfRowToCleanUp . " rows", __FILE__, __LINE__);
     }
 }
