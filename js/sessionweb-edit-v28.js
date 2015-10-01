@@ -89,6 +89,10 @@ $(document).ready(function () {
     ExecutedButtonPressed();
     UnExecutedButtonPressed();
 
+    $('#saveSession').click(function () {
+        saveButtonExecute($(document).getUrlParam("sessionid"));
+    });
+
     //Save notes and charter before exit page..
     $(window).bind("beforeunload", function () {
         return saveBeforeExit(sessionID, editorsActivated, jsonResponseContent);
@@ -1401,6 +1405,13 @@ function saveCharter(sessionID) {
             }
         }
     });
+}
+
+
+function saveButtonExecute(sessionID)
+{
+    saveNotes(sessionID);
+    saveCharter(sessionID);
 }
 
 function saveNotes(sessionID) {

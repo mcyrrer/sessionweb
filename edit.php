@@ -68,6 +68,7 @@ class Edit
               <label for="input_title" >Session title:</label>
               <input type="text" id="input_title" size="80" class="sInput" title="Company name or ticker">';
         echo '<button id="setExecuted">Mark as executed</button><button id="unsetExecuted">Mark as in progress</button>';
+        echo '<button id="saveSession">Save</button>';
         echo '</div>';
         echo '
         <div id="tabs">
