@@ -20,51 +20,51 @@ class dbHelper
 
     function connectToLocalDb()
     {
-       if (isset($_SESSION['mysqliCon'])
-           && mysqli_ping($_SESSION['mysqliCon'])) {
-            return $_SESSION['mysqliCon'];
-        } else {
-            $orgErrorLevel = error_reporting();
-            error_reporting(0);
-            if (!isset($_SESSION['localdbhost'])) {
-                $_SESSION['localdbhost'] = "DB_1";
-                $this->logger->debug("SESSION info about localdbhost not set will set db to DB_1", __FILE__, __LINE__);
-            }
-
-            if (isset($_SESSION['localdbhost']) && strcmp("DB_1", $_SESSION['localdbhost']) == 0) {
-                $this->logger->debug("DB " . "DB_1" . " is active will try to connect to it", __FILE__, __LINE__);
-                $con = $this->connectToDb(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB, DB_NAME_SESSIONWEB);
+           if (isset($_SESSION['mysqliCon'])
+               && mysqli_ping($_SESSION['mysqliCon'])) {
+                return $_SESSION['mysqliCon'];
             } else {
-                $this->logger->debug("DB " . "DB_2" . " is active will try to connect to it", __FILE__, __LINE__);
-                $con = $this->connectToDb(DB_HOST_SESSIONWEB_2, DB_USER_SESSIONWEB_2, DB_PASS_SESSIONWEB_2, DB_NAME_SESSIONWEB_2);
-            }
-            if ($con == false) {
-                $this->logger->warn("Could not connect to database " . $_SESSION['localdbhost'], __FILE__, __LINE__);
-                if (strcmp("DB_1", $_SESSION['localdbhost'])==0) {
-                   $this->logger->info("2:nd choice DB at " . DB_HOST_SESSIONWEB_2 . ": will try to connect to it", __FILE__, __LINE__);
-                    $con = $this->connectToDb(DB_HOST_SESSIONWEB_2, DB_USER_SESSIONWEB_2, DB_PASS_SESSIONWEB_2, DB_NAME_SESSIONWEB_2);
-                    $_SESSION['localdbhost'] = "DB_2";
-
-                } else {
-                    $this->logger->info("1:nd choice DB at " . DB_USER_SESSIONWEB . ": will try to connect to it", __FILE__, __LINE__);
-                    $con = $this->connectToDb(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB, DB_NAME_SESSIONWEB);
+                $orgErrorLevel = error_reporting();
+                error_reporting(0);
+                if (!isset($_SESSION['localdbhost'])) {
                     $_SESSION['localdbhost'] = "DB_1";
+                    $this->logger->debug("SESSION info about localdbhost not set will set db to DB_1", __FILE__, __LINE__);
                 }
-            }
-            if ($con == null) {
-                $this->logger->error("Could not connect to DB_1 or DB_2.. will die ", __FILE__, __LINE__);
-                die("Could not connect to application database");
-            } else {
-                $this->logger->info("Mysqli application db: Connected to " . mysqli_get_host_info($con), __FILE__, __LINE__);
 
-            }
-            $this->logger->debug("Connected to db", __FILE__, __LINE__);
-            error_reporting($orgErrorLevel);
+                if (isset($_SESSION['localdbhost']) && strcmp("DB_1", $_SESSION['localdbhost']) == 0) {
+                    $this->logger->debug("DB " . "DB_1" . " is active will try to connect to it", __FILE__, __LINE__);
+                    $con = $this->connectToDb(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB, DB_NAME_SESSIONWEB);
+                } else {
+                    $this->logger->debug("DB " . "DB_2" . " is active will try to connect to it", __FILE__, __LINE__);
+                    $con = $this->connectToDb(DB_HOST_SESSIONWEB_2, DB_USER_SESSIONWEB_2, DB_PASS_SESSIONWEB_2, DB_NAME_SESSIONWEB_2);
+                }
+                if ($con == false) {
+                    $this->logger->warn("Could not connect to database " . $_SESSION['localdbhost'], __FILE__, __LINE__);
+                    if (strcmp("DB_1", $_SESSION['localdbhost'])==0) {
+                       $this->logger->info("2:nd choice DB at " . DB_HOST_SESSIONWEB_2 . ": will try to connect to it", __FILE__, __LINE__);
+                        $con = $this->connectToDb(DB_HOST_SESSIONWEB_2, DB_USER_SESSIONWEB_2, DB_PASS_SESSIONWEB_2, DB_NAME_SESSIONWEB_2);
+                        $_SESSION['localdbhost'] = "DB_2";
 
-            $_SESSION['mysqliCon'] = $con;
-            mysqli_set_charset($con, 'utf8');
-            return $con;
-        }
+                    } else {
+                        $this->logger->info("1:nd choice DB at " . DB_USER_SESSIONWEB . ": will try to connect to it", __FILE__, __LINE__);
+                        $con = $this->connectToDb(DB_HOST_SESSIONWEB, DB_USER_SESSIONWEB, DB_PASS_SESSIONWEB, DB_NAME_SESSIONWEB);
+                        $_SESSION['localdbhost'] = "DB_1";
+                    }
+                }
+                if ($con == null) {
+                    $this->logger->error("Could not connect to DB_1 or DB_2.. will die ", __FILE__, __LINE__);
+                    die("Could not connect to application database");
+                } else {
+                    $this->logger->info("Mysqli application db: Connected to " . mysqli_get_host_info($con), __FILE__, __LINE__);
+
+                }
+                $this->logger->debug("Connected to db", __FILE__, __LINE__);
+                error_reporting($orgErrorLevel);
+
+                $_SESSION['mysqliCon'] = $con;
+                mysqli_set_charset($con, 'utf8');
+                return $con;
+            }
     }
 
 
